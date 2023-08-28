@@ -25,8 +25,8 @@ const _utf8Encoder = Utf8Encoder();
 final _salt = _utf8Encoder.convert("eh-downloader-salt");
 
 @RestApi()
-abstract class EHApi {
-  factory EHApi(Dio dio, {String baseUrl}) = _EHApi;
+abstract class _EHApi {
+  factory _EHApi(Dio dio, {required String baseUrl}) = __EHApi;
 
   @PUT('/user')
   Future<ApiResult<int>> createUser(
@@ -48,6 +48,14 @@ abstract class EHApi {
       @Query("set_cookie") bool? setCookie,
       @Query("http_only") bool? httpOnly,
       @Query("secure") bool? secure});
+  @DELETE('/token')
+  Future<ApiResult<bool>> deleteToken({@Query("token") String? token});
+  @GET('/token')
+  Future<ApiResult<Token>> getToken({@Query("token") String? token});
+}
+
+class EHApi extends __EHApi {
+  EHApi(Dio dio, {required String baseUrl}): super(dio, baseUrl: baseUrl);
   Future<ApiResult<Token>> createToken(
       {required String username,
       required String password,
@@ -68,8 +76,4 @@ abstract class EHApi {
         httpOnly: httpOnly,
         secure: secure);
   }
-  @DELETE('/token')
-  Future<ApiResult<bool>> deleteToken({@Query("token") String? token});
-  @GET('/token')
-  Future<ApiResult<Token>> getToken({@Query("token") String? token});
 }
