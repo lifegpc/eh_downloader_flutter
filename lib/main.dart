@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'globals.dart';
+import 'home.dart';
 
-void main() {
+final _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: HomePage.routeName,
+      builder: (context, state) => const HomePage(),
+    ),
+  ],
+);
+
+
+void main() async {
+  await prepareJar();
   runApp(const MainApp());
 }
 
@@ -9,12 +23,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
+    return MaterialApp.router(routerConfig: _router);
   }
 }
