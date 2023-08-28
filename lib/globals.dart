@@ -6,7 +6,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api/client.dart';
 
-final dio = Dio()..options.validateStatus = (int? _) {return true;};
+final dio = Dio()
+  ..options.validateStatus = (int? _) {
+    return true;
+  }
+  ..options.extra['withCredentials'] = true;
 SharedPreferences? _prefs;
 EHApi? _api;
 
