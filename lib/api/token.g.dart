@@ -23,3 +23,26 @@ Map<String, dynamic> _$TokenToJson(Token instance) => <String, dynamic>{
       'http_only': instance.httpOnly,
       'secure': instance.secure,
     };
+
+TokenWithUserInfo _$TokenWithUserInfoFromJson(Map<String, dynamic> json) =>
+    TokenWithUserInfo(
+      token: Token.fromJson(json['token'] as Map<String, dynamic>),
+      name: json['name'] as String,
+      isAdmin: json['is_admin'] as bool,
+      permissions: $enumDecode(_$UserPermissionEnumMap, json['permissions']),
+    );
+
+Map<String, dynamic> _$TokenWithUserInfoToJson(TokenWithUserInfo instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+      'name': instance.name,
+      'is_admin': instance.isAdmin,
+      'permissions': _$UserPermissionEnumMap[instance.permissions]!,
+    };
+
+const _$UserPermissionEnumMap = {
+  UserPermission.none: 0,
+  UserPermission.readGallery: 1,
+  UserPermission.editGallery: 2,
+  UserPermission.all: 3,
+};

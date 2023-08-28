@@ -203,14 +203,14 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<Token>> getToken({String? token}) async {
+  Future<ApiResult<TokenWithUserInfo>> getToken({String? token}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'token': token};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<TokenWithUserInfo>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -226,11 +226,76 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Token>.fromJson(
+    final value = ApiResult<TokenWithUserInfo>.fromJson(
       _result.data!,
-      (json) => Token.fromJson(json as Map<String, dynamic>),
+      (json) => TokenWithUserInfo.fromJson(json as Map<String, dynamic>),
     );
     return value;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> getFile(int id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/file/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> getRandomFile({
+    bool? isNsfw,
+    bool? isAd,
+    bool? thumb,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'is_nsfw': isNsfw,
+      r'is_ad': isAd,
+      r'thumb': thumb,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/file/random',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

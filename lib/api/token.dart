@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'user.dart';
 
 part 'token.g.dart';
 
@@ -24,4 +25,21 @@ class Token {
   static String _toJson(DateTime d) => d.toIso8601String();
   factory Token.fromJson(Map<String, dynamic> json) => _$TokenFromJson(json);
   Map<String, dynamic> toJson() => _$TokenToJson(this);
+}
+
+@JsonSerializable()
+class TokenWithUserInfo {
+  const TokenWithUserInfo({
+    required this.token,
+    required this.name,
+    required this.isAdmin,
+    required this.permissions,
+  });
+  final Token token;
+  final String name;
+  @JsonKey(name: 'is_admin')
+  final bool isAdmin;
+  final UserPermission permissions;
+  factory TokenWithUserInfo.fromJson(Map<String, dynamic> json) => _$TokenWithUserInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$TokenWithUserInfoToJson(this);
 }

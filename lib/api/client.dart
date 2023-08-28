@@ -51,7 +51,12 @@ abstract class _EHApi {
   @DELETE('/token')
   Future<ApiResult<bool>> deleteToken({@Query("token") String? token});
   @GET('/token')
-  Future<ApiResult<Token>> getToken({@Query("token") String? token});
+  Future<ApiResult<TokenWithUserInfo>> getToken({@Query("token") String? token});
+
+  @GET('/file/{id}')
+  Future<HttpResponse> getFile(@Path("id") int id);
+  @GET('/file/random')
+  Future<HttpResponse> getRandomFile({@Query("is_nsfw") bool? isNsfw, @Query("is_ad") bool? isAd, @Query("thumb") bool? thumb});
 }
 
 class EHApi extends __EHApi {
