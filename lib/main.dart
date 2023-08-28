@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'globals.dart';
 import 'home.dart';
+import 'set_server.dart';
 
 final _router = GoRouter(
   routes: [
@@ -9,12 +11,17 @@ final _router = GoRouter(
       path: HomePage.routeName,
       builder: (context, state) => const HomePage(),
     ),
+    GoRoute(
+      path: SetServerPage.routeName,
+      builder: (context, state) => const SetServerPage(),
+    ),
   ],
 );
 
 
 void main() async {
-  await prepareJar();
+  if (!kIsWeb) await prepareJar();
+  await preparePrefs();
   runApp(const MainApp());
 }
 
