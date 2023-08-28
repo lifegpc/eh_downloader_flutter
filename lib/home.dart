@@ -19,6 +19,7 @@ class HomePage extends HookWidget {
         });
         return;
       }
+      initApi(baseUrl);
       return;
     }, []);
     return const Scaffold(

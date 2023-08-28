@@ -18,12 +18,13 @@ class BUser {
   const BUser({
     required this.id,
     required this.username,
-    required this.is_admin,
+    required this.isAdmin,
     required this.permissions,
   });
   final int id;
   final String username;
-  final bool is_admin;
+  @JsonKey(name: 'is_admin')
+  final bool isAdmin;
   final UserPermission permissions;
   factory BUser.fromJson(Map<String, dynamic> json) => _$BUserFromJson(json);
   Map<String, dynamic> toJson() => _$BUserToJson(this);

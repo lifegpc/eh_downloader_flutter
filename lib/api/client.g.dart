@@ -19,20 +19,98 @@ class _EHApi implements EHApi {
   String? baseUrl;
 
   @override
-  Future<ApiResult<BUser>> getUser() async {
+  Future<ApiResult<int>> createUser(
+    String name,
+    String password, {
+    bool? isAdmin,
+    int? permissions,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'name': name,
+      r'password': password,
+      r'is_admin': isAdmin,
+      r'permissions': permissions,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<int>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<int>.fromJson(
+      _result.data!,
+      (json) => json as int,
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<BUser>> getUser({
+    int? id,
+    String? username,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'id': id,
+      r'username': username,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<BUser>.fromJson(
+      _result.data!,
+      (json) => BUser.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<ServerStatus>> getStatus() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<ServerStatus>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/user',
+              '/status',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -41,25 +119,43 @@ class _EHApi implements EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = await compute(deserializeApiResult<BUser>, _result.data!);
+    final value = ApiResult<ServerStatus>.fromJson(
+      _result.data!,
+      (json) => ServerStatus.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
   @override
-  Future<ApiResult<BUser>> getUserById(int id) async {
+  Future<ApiResult<Token>> _createToken({
+    required String username,
+    required String password,
+    required int t,
+    bool? setCookie,
+    bool? httpOnly,
+    bool? secure,
+  }) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'id': id};
+    final queryParameters = <String, dynamic>{
+      r'username': username,
+      r'password': password,
+      r't': t,
+      r'set_cookie': setCookie,
+      r'http_only': httpOnly,
+      r'secure': secure,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
-      method: 'GET',
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
+      method: 'PUT',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/user',
+              '/token',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -68,25 +164,29 @@ class _EHApi implements EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = await compute(deserializeApiResult<BUser>, _result.data!);
+    final value = ApiResult<Token>.fromJson(
+      _result.data!,
+      (json) => Token.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 
   @override
-  Future<ApiResult<BUser>> getUserByUsername(String username) async {
+  Future<ApiResult<bool>> deleteToken({String? token}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'username': username};
+    final queryParameters = <String, dynamic>{r'token': token};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
-      method: 'GET',
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<bool>>(Options(
+      method: 'DELETE',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/user',
+              '/token',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -95,7 +195,41 @@ class _EHApi implements EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = await compute(deserializeApiResult<BUser>, _result.data!);
+    final value = ApiResult<bool>.fromJson(
+      _result.data!,
+      (json) => json as bool,
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<Token>> getToken({String? token}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'token': token};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/token',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<Token>.fromJson(
+      _result.data!,
+      (json) => Token.fromJson(json as Map<String, dynamic>),
+    );
     return value;
   }
 

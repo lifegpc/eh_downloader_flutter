@@ -9,14 +9,14 @@ part of 'user.dart';
 BUser _$BUserFromJson(Map<String, dynamic> json) => BUser(
       id: json['id'] as int,
       username: json['username'] as String,
-      is_admin: json['is_admin'] as bool,
+      isAdmin: json['is_admin'] as bool,
       permissions: $enumDecode(_$UserPermissionEnumMap, json['permissions']),
     );
 
 Map<String, dynamic> _$BUserToJson(BUser instance) => <String, dynamic>{
       'id': instance.id,
       'username': instance.username,
-      'is_admin': instance.is_admin,
+      'is_admin': instance.isAdmin,
       'permissions': _$UserPermissionEnumMap[instance.permissions]!,
     };
 
