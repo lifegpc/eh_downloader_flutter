@@ -42,9 +42,9 @@ abstract class EHApi {
 
   @PUT('/token')
   Future<ApiResult<Token>> _createToken(
-      {@Query("username") String username,
-      @Query("password") String password,
-      @Query("t") int t,
+      {@Query("username") required String username,
+      @Query("password") required String password,
+      @Query("t") required int t,
       @Query("set_cookie") bool? setCookie,
       @Query("http_only") bool? httpOnly,
       @Query("secure") bool? secure});
