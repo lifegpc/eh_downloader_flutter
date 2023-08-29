@@ -27,7 +27,6 @@ void main() async {
   if (isDesktop) {
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
-    await windowManager.setTitle("E-Hentai Downloader Dashboard");
   }
   runApp(const MainApp());
 }

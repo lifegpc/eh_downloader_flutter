@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'globals.dart';
 
@@ -71,9 +72,9 @@ class _SetServerPageState extends State<SetServerPage> {
                   Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'EH Downloader Server URL',
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context)!.serverHost,
                         ),
                         initialValue: _serverUrl,
                         onChanged: _serverUrlChanged,
@@ -81,9 +82,9 @@ class _SetServerPageState extends State<SetServerPage> {
                   Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'API Path',
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context)!.apiPath,
                         ),
                         initialValue: _apiPath,
                         onChanged: _apiPathChanged,
