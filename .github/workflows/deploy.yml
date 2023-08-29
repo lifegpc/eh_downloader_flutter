@@ -23,5 +23,5 @@ jobs:
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: wrangler pages deploy build/web --branch=dev
+        run: wrangler pages deploy build/web --name=ehf --branch=dev
     
