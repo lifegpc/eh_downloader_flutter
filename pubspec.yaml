@@ -14,7 +14,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_hooks: ^0.20.0
+  flutter_localizations:
+    sdk: flutter
   go_router: ^10.1.0
+  intl: any
   json_annotation: ^4.8.1
   path_provider: ^2.1.0
   retrofit: ^4.0.1
@@ -30,4 +33,5 @@ dev_dependencies:
   json_serializable: ^6.7.1
 
 flutter:
+  generate: true
   uses-material-design: true

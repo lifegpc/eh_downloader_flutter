@@ -1,11 +1,12 @@
-import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 import 'globals.dart';
 import 'home.dart';
 import 'set_server.dart';
+import 'utils.dart';
 
 final _router = GoRouter(
   routes: [
@@ -23,7 +24,7 @@ final _router = GoRouter(
 void main() async {
   if (!kIsWeb) await prepareJar();
   await preparePrefs();
-  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+  if (isDesktop) {
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
     await windowManager.setTitle("E-Hentai Downloader Dashboard");
@@ -37,6 +38,16 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        routerConfig: _router, title: "E-Hentai Downloader Dashboard");
+      routerConfig: _router,
+      onGenerateTitle: (context) {
+        final title = AppLocalizations.of(context).title;
+        if (isDesktop) {
+          windowManager.setTitle(title);
+        }
+        return title;
+      },
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+    );
   }
 }
