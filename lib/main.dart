@@ -18,7 +18,6 @@ final _router = GoRouter(
   ],
 );
 
-
 void main() async {
   if (!kIsWeb) await prepareJar();
   await preparePrefs();
@@ -30,6 +29,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: _router);
+    return MaterialApp.router(
+        routerConfig: _router, title: "E-Hentai Downloader Dashboard");
   }
 }
