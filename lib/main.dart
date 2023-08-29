@@ -40,7 +40,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: _router,
       onGenerateTitle: (context) {
-        final title = AppLocalizations.of(context).title;
+        final title = AppLocalizations.of(context)!.title;
         if (isDesktop) {
           windowManager.setTitle(title);
         }
