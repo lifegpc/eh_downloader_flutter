@@ -21,7 +21,6 @@ jobs:
         run: flutter build web
       - name: Upload
         env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: wrangler pages deploy build/web --project-name=ehf --branch=dev
-    
+        run: wrangler pages deploy build/web --project-name=ehf --branch=dev "--commit-hash=${{ github.sha }}"
