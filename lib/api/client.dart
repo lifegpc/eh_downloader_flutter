@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
+import 'package:eh_downloader_flutter/api/file.dart';
 import 'package:retrofit/retrofit.dart';
 import 'api_result.dart';
 import 'status.dart';
@@ -41,26 +42,41 @@ abstract class _EHApi {
   Future<ApiResult<ServerStatus>> getStatus();
 
   @PUT('/token')
+  // ignore: unused_element
   Future<ApiResult<Token>> _createToken(
       {@Query("username") required String username,
       @Query("password") required String password,
       @Query("t") required int t,
+      // ignore: unused_element
       @Query("set_cookie") bool? setCookie,
+      // ignore: unused_element
       @Query("http_only") bool? httpOnly,
+      // ignore: unused_element
       @Query("secure") bool? secure});
   @DELETE('/token')
   Future<ApiResult<bool>> deleteToken({@Query("token") String? token});
   @GET('/token')
-  Future<ApiResult<TokenWithUserInfo>> getToken({@Query("token") String? token});
+  Future<ApiResult<TokenWithUserInfo>> getToken(
+      {@Query("token") String? token});
 
   @GET('/file/{id}')
   Future<HttpResponse> getFile(@Path("id") int id);
+  @GET('/file/{id}')
+  // ignore: unused_element
+  Future<ApiResult<EhFileExtend>> _getFileData(
+      @Path("id") int id, @Query("data") bool data);
   @GET('/file/random')
-  Future<HttpResponse> getRandomFile({@Query("is_nsfw") bool? isNsfw, @Query("is_ad") bool? isAd, @Query("thumb") bool? thumb});
+  Future<HttpResponse> getRandomFile(
+      {@Query("is_nsfw") bool? isNsfw,
+      @Query("is_ad") bool? isAd,
+      @Query("thumb") bool? thumb});
+  @GET('/files/{token}')
+  // ignore: unused_element
+  Future<ApiResult<EhFiles>> _getFiles(@Path("token") String token);
 }
 
 class EHApi extends __EHApi {
-  EHApi(Dio dio, {required String baseUrl}): super(dio, baseUrl: baseUrl);
+  EHApi(Dio dio, {required String baseUrl}) : super(dio, baseUrl: baseUrl);
   Future<ApiResult<Token>> createToken(
       {required String username,
       required String password,
@@ -80,5 +96,13 @@ class EHApi extends __EHApi {
         setCookie: setCookie,
         httpOnly: httpOnly,
         secure: secure);
+  }
+
+  Future<ApiResult<EhFileExtend>> getFileData(int id) {
+    return _getFileData(id, true);
+  }
+
+  Future<ApiResult<EhFiles>> getFiles(List<String> tokens) {
+    return _getFiles(tokens.join(","));
   }
 }
