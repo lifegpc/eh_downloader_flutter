@@ -70,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    tryInitApi(context);
     return Scaffold(
       body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 100),

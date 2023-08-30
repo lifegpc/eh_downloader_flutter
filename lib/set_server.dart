@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'globals.dart';
@@ -61,6 +62,12 @@ class _SetServerPageState extends State<SetServerPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool? skipBaseUrl = const bool.fromEnvironment("skipBaseUrl");
+    if (skipBaseUrl == true) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        context.go("/");
+      });
+    }
     return Scaffold(
       body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 100),
