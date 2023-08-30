@@ -42,6 +42,7 @@ Future<void> initLogger() async {
 }
 
 void main() async {
+  if (!kIsWeb) WidgetsFlutterBinding.ensureInitialized();
   bool? usePathUrl = const bool.fromEnvironment("usePathUrl");
   if (usePathUrl == true && kIsWeb) {
     usePathUrlStrategy();
@@ -49,7 +50,6 @@ void main() async {
   if (!kIsWeb) await prepareJar();
   await preparePrefs();
   if (isDesktop) {
-    WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
   }
   await initLogger();

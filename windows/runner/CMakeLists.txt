@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
 project(runner LANGUAGES CXX)
 
+set(ENABLE_ICONV OFF CACHE BOOL "Libiconv is not needed.")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../../utils" "${CMAKE_BINARY_DIR}/utils")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../utils")
+
 # Define the application target. To change its name, change BINARY_NAME in the
 # top-level CMakeLists.txt, not the value here, or `flutter run` will no longer
 # work.
@@ -34,6 +38,7 @@ target_compile_definitions(${BINARY_NAME} PRIVATE "NOMINMAX")
 # dependencies here.
 target_link_libraries(${BINARY_NAME} PRIVATE flutter flutter_wrapper_app)
 target_link_libraries(${BINARY_NAME} PRIVATE "dwmapi.lib")
+target_link_libraries(${BINARY_NAME} PRIVATE utils)
 target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 # Run the Flutter tool portions of the build. This must not be removed.

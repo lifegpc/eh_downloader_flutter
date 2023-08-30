@@ -1,8 +1,18 @@
 #include "flutter_window.h"
+#include <flutter/event_channel.h>
+#include <flutter/event_sink.h>
+#include <flutter/event_stream_handler_functions.h>
+#include <flutter/method_channel.h>
+#include <flutter/standard_method_codec.h>
+#include <windows.h>
 
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
+
+#include "wchar_util.h"
+
+#define MAX_PATH_SIZE 32768
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
@@ -25,6 +35,30 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+
+  flutter::MethodChannel<> channel(
+      flutter_controller_->engine()->messenger(), "lifegpc.eh_downloader_flutter/path",
+      &flutter::StandardMethodCodec::GetInstance());
+  channel.SetMethodCallHandler(
+      [](const flutter::MethodCall<>& call,
+         std::unique_ptr<flutter::MethodResult<>> result) {
+        if (call.method_name() == "getCurrentExe") {
+          std::string current;
+          wchar_t tmp[MAX_PATH_SIZE];
+          if (!GetModuleFileNameW(nullptr, tmp, MAX_PATH_SIZE)) {
+            result->Error("UNAVAILABLE", "Failed to get module file name.");
+            return;
+          }
+          if (!wchar_util::wstr_to_str(current, tmp, CP_UTF8)) {
+            result->Error("UNAVAILABLE", "Failed to convert module file name to UTF-8.");
+            return;
+          }
+          result->Success(current);
+        } else {
+          result->NotImplemented();
+        }
+      });
+
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {

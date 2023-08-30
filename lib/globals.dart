@@ -9,13 +9,18 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api/client.dart';
 import 'auth.dart';
+import 'config/base.dart';
+import 'config/shared_preferences.dart';
+import 'config/windows.dart';
+import 'platform/path.dart';
+import 'utils.dart';
 
 final dio = Dio()
   ..options.validateStatus = (int? _) {
     return true;
   }
   ..options.extra['withCredentials'] = true;
-SharedPreferences? _prefs;
+Config? _prefs;
 EHApi? _api;
 
 Future<void> prepareJar() async {
@@ -28,10 +33,20 @@ Future<void> prepareJar() async {
 }
 
 Future<void> preparePrefs() async {
-  _prefs = await SharedPreferences.getInstance();
+  if (isWindows) {
+    try {
+      var tmp = WindowsConfig();
+      tmp.reload();
+      _prefs = tmp;
+      return;
+    } catch (e) {
+      // Do nothing.
+    }
+  }
+  _prefs = SharedPreferencesConfig(await SharedPreferences.getInstance());
 }
 
-SharedPreferences get prefs {
+Config get prefs {
   if (_prefs == null) {
     throw Exception('SharedPreferences not initialized');
   }
@@ -77,3 +92,4 @@ EHApi get api {
 }
 
 final AuthInfo auth = AuthInfo();
+final Path platformPath = Path();
