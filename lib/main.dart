@@ -2,6 +2,7 @@ import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
@@ -41,6 +42,10 @@ Future<void> initLogger() async {
 }
 
 void main() async {
+  bool? usePathUrl = const bool.fromEnvironment("usePathUrl");
+  if (usePathUrl == true && kIsWeb) {
+    usePathUrlStrategy();
+  }
   if (!kIsWeb) await prepareJar();
   await preparePrefs();
   if (isDesktop) {
