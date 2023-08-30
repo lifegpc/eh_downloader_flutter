@@ -1,5 +1,9 @@
 {
     "title": "E-Hentai Downloader Dashboard",
     "serverHost": "EH Downloader Server Host",
-    "apiPath": "API Path"
+    "apiPath": "API Path",
+    "username": "Username",
+    "password": "Password",
+    "save": "Save",
+    "login": "Login"
 }

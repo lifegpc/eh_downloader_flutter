@@ -19,4 +19,18 @@ class ApiResult<T> {
   final String? error;
   Map<String, dynamic> toJson(Object? Function(T) toJsonT) =>
       _$ApiResultToJson(this, toJsonT);
+  T unwrap() {
+    if (ok) {
+      return data!;
+    } else {
+      return throw error!;
+    }
+  }
+  (int, String) unwrapErr() {
+    if (ok) {
+      return throw 'unwrap_err called on ok ApiResult';
+    } else {
+      return (status, error!);
+    }
+  }
 }

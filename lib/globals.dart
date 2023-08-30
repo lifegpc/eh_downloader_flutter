@@ -5,6 +5,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api/client.dart';
+import 'auth.dart';
 
 final dio = Dio()
   ..options.validateStatus = (int? _) {
@@ -48,3 +49,5 @@ EHApi get api {
   }
   return _api!;
 }
+
+final AuthInfo auth = AuthInfo();

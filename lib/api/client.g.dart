@@ -26,20 +26,36 @@ class __EHApi implements _EHApi {
     int? permissions,
   }) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'name': name,
-      r'password': password,
-      r'is_admin': isAdmin,
-      r'permissions': permissions,
-    };
+    final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'name',
+      name,
+    ));
+    _data.fields.add(MapEntry(
+      'password',
+      password,
+    ));
+    if (isAdmin != null) {
+      _data.fields.add(MapEntry(
+        'is_admin',
+        isAdmin.toString(),
+      ));
+    }
+    if (permissions != null) {
+      _data.fields.add(MapEntry(
+        'permissions',
+        permissions.toString(),
+      ));
+    }
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<int>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
+      contentType: 'multipart/form-data',
     )
             .compose(
               _dio.options,
@@ -136,22 +152,46 @@ class __EHApi implements _EHApi {
     bool? secure,
   }) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'username': username,
-      r'password': password,
-      r't': t,
-      r'set_cookie': setCookie,
-      r'http_only': httpOnly,
-      r'secure': secure,
-    };
+    final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'username',
+      username,
+    ));
+    _data.fields.add(MapEntry(
+      'password',
+      password,
+    ));
+    _data.fields.add(MapEntry(
+      't',
+      t.toString(),
+    ));
+    if (setCookie != null) {
+      _data.fields.add(MapEntry(
+        'set_cookie',
+        setCookie.toString(),
+      ));
+    }
+    if (httpOnly != null) {
+      _data.fields.add(MapEntry(
+        'http_only',
+        httpOnly.toString(),
+      ));
+    }
+    if (secure != null) {
+      _data.fields.add(MapEntry(
+        'secure',
+        secure.toString(),
+      ));
+    }
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
+      contentType: 'multipart/form-data',
     )
             .compose(
               _dio.options,
@@ -174,15 +214,22 @@ class __EHApi implements _EHApi {
   @override
   Future<ApiResult<bool>> deleteToken({String? token}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'token': token};
+    final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    final _data = FormData();
+    if (token != null) {
+      _data.fields.add(MapEntry(
+        'token',
+        token,
+      ));
+    }
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<bool>>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
+      contentType: 'multipart/form-data',
     )
             .compose(
               _dio.options,

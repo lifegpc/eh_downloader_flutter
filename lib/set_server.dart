@@ -96,7 +96,7 @@ class _SetServerPageState extends State<SetServerPage> {
                               context.go('/');
                             }
                           : null,
-                      child: const Text("Save")),
+                      child: Text(AppLocalizations.of(context)!.save)),
                 ],
               ))),
     );

@@ -1,5 +1,9 @@
 {
     "title": "E-Hentai 下载器面板",
     "serverHost": "EH Downloader 服务器主机",
-    "apiPath": "API 路径"
+    "apiPath": "API 路径",
+    "username": "用户名",
+    "password": "密码",
+    "save": "保存",
+    "login": "登录"
 }

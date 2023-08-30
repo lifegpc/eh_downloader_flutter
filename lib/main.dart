@@ -1,10 +1,13 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'globals.dart';
 import 'home.dart';
+import 'login.dart';
 import 'set_server.dart';
 import 'utils.dart';
 
@@ -18,8 +21,24 @@ final _router = GoRouter(
       path: SetServerPage.routeName,
       builder: (context, state) => const SetServerPage(),
     ),
+    GoRoute(
+      path: LoginPage.routeName,
+      builder: (context, state) => const LoginPage(),
+    ),
   ],
 );
+
+Future<void> initLogger() async {
+  var logLevel = prefs.getInt("logLevel");
+  var logLevelName = prefs.getString("logLevelName");
+  if (logLevel != null && logLevelName != null) {
+    Logger.root.level = Level(logLevelName, logLevel);
+  }
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+  return;
+}
 
 void main() async {
   if (!kIsWeb) await prepareJar();
@@ -28,6 +47,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
   }
+  await initLogger();
   runApp(const MainApp());
 }
 
@@ -36,6 +56,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = ThemeData();
     return MaterialApp.router(
       routerConfig: _router,
       onGenerateTitle: (context) {
@@ -47,6 +68,7 @@ class MainApp extends StatelessWidget {
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      theme: (kIsWeb || isWindows) ? theme.useSystemChineseFont() : theme,
     );
   }
 }

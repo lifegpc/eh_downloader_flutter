@@ -30,10 +30,11 @@ abstract class _EHApi {
   factory _EHApi(Dio dio, {required String baseUrl}) = __EHApi;
 
   @PUT('/user')
+  @MultiPart()
   Future<ApiResult<int>> createUser(
-      @Query("name") String name, @Query("password") String password,
-      {@Query("is_admin") bool? isAdmin,
-      @Query("permissions") int? permissions});
+      @Part(name: "name") String name, @Part(name: "password") String password,
+      {@Part(name: "is_admin") bool? isAdmin,
+      @Part(name: "permissions") int? permissions});
   @GET('/user')
   Future<ApiResult<BUser>> getUser(
       {@Query("id") int? id, @Query("username") String? username});
@@ -42,19 +43,21 @@ abstract class _EHApi {
   Future<ApiResult<ServerStatus>> getStatus();
 
   @PUT('/token')
+  @MultiPart()
   // ignore: unused_element
   Future<ApiResult<Token>> _createToken(
-      {@Query("username") required String username,
-      @Query("password") required String password,
-      @Query("t") required int t,
+      {@Part(name: "username") required String username,
+      @Part(name: "password") required String password,
+      @Part(name: "t") required int t,
       // ignore: unused_element
-      @Query("set_cookie") bool? setCookie,
+      @Part(name: "set_cookie") bool? setCookie,
       // ignore: unused_element
-      @Query("http_only") bool? httpOnly,
+      @Part(name: "http_only") bool? httpOnly,
       // ignore: unused_element
-      @Query("secure") bool? secure});
+      @Part(name: "secure") bool? secure});
   @DELETE('/token')
-  Future<ApiResult<bool>> deleteToken({@Query("token") String? token});
+  @MultiPart()
+  Future<ApiResult<bool>> deleteToken({@Part(name: "token") String? token});
   @GET('/token')
   Future<ApiResult<TokenWithUserInfo>> getToken(
       {@Query("token") String? token});
