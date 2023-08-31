@@ -9,6 +9,8 @@ class AuthInfo {
   ServerStatus? _status;
   ServerStatus? get status => _status;
   bool get isAuthed => (_user != null);
+  bool _checked = false;
+  bool get checked => _checked;
 
   Future<void> getServerStatus() async {
     _status = (await api.getStatus()).unwrap();
@@ -21,6 +23,7 @@ class AuthInfo {
     } else {
       _user = null;
     }
+    _checked = true;
     await getServerStatus();
     return re.ok;
   }

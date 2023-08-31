@@ -36,7 +36,9 @@ Future<void> initLogger() async {
     Logger.root.level = Level(logLevelName, logLevel);
   }
   Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
+    final stack = record.stackTrace != null ? '\n${record.stackTrace}' : '';
+    print(
+        '${record.level.name}: ${record.time}: ${record.message}${record.error}$stack');
   });
   return;
 }

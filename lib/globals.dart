@@ -5,6 +5,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api/client.dart';
@@ -23,12 +24,24 @@ final dio = Dio()
 Config? _prefs;
 EHApi? _api;
 
-Future<void> prepareJar() async {
+Future<String> _getJarPath() async {
+  if (isWindows) {
+    try {
+      final p = await platformPath.getCurrentExe();
+      if (p != null) {
+        return path.join(path.dirname(p), "cookies");
+      }
+    } catch (e) {
+      // Do nothing
+    }
+  }
   final Directory appDocDir = await getApplicationDocumentsDirectory();
   final String appDocPath = appDocDir.path;
-  final jar = PersistCookieJar(
-    storage: FileStorage('$appDocPath/.eh-cookies/'),
-  );
+  return '$appDocPath/.eh-cookies/';
+}
+
+Future<void> prepareJar() async {
+  final jar = PersistCookieJar(storage: FileStorage(await _getJarPath()));
   dio.interceptors.add(CookieManager(jar));
 }
 

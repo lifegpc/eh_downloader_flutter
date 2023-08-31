@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'globals.dart';
+
+final _log = Logger("LoginPage");
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _passwordVisible = false;
   bool _isValid = false;
   bool _isLogin = false;
+  bool _checkAuth = false;
 
   @override
   void initState() {
@@ -68,9 +73,32 @@ class _LoginPageState extends State<LoginPage> {
     return re.ok;
   }
 
+  void _checkStatus(BuildContext build) {
+    if (auth.isAuthed) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        build.go("/");
+      });
+      return;
+    }
+    if (!auth.checked) {
+      if (_checkAuth) return;
+      _checkAuth = true;
+      auth.checkAuth().then((re) {
+        _checkAuth = false;
+        if (re) {
+          build.go("/");
+        }
+      }).catchError((e) {
+        _log.severe("Failed to check auth info:", e);
+        _checkAuth = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     tryInitApi(context);
+    _checkStatus(context);
     return Scaffold(
       body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 100),
@@ -124,6 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                                     });
                                   }
                                 }).catchError((e) {
+                                  _log.severe("Failed to login:", e);
                                   setState(() {
                                     _isLogin = false;
                                   });
