@@ -9,6 +9,7 @@ import 'package:window_manager/window_manager.dart';
 import 'globals.dart';
 import 'home.dart';
 import 'login.dart';
+import 'logs/file.dart';
 import 'set_server.dart';
 import 'utils.dart';
 
@@ -29,17 +30,33 @@ final _router = GoRouter(
   ],
 );
 
+void defaultLogger(LogRecord record) {
+  final stack = record.stackTrace != null ? '\n${record.stackTrace}' : '';
+  final error = record.error != null ? '${record.error}' : '';
+  // ignore: avoid_print
+  print(
+      '${record.level.name}: ${record.loggerName}: ${record.time}: ${record.message}$error$stack');
+}
+
 Future<void> initLogger() async {
   var logLevel = prefs.getInt("logLevel");
   var logLevelName = prefs.getString("logLevelName");
   if (logLevel != null && logLevelName != null) {
     Logger.root.level = Level(logLevelName, logLevel);
   }
-  Logger.root.onRecord.listen((record) {
-    final stack = record.stackTrace != null ? '\n${record.stackTrace}' : '';
-    print(
-        '${record.level.name}: ${record.time}: ${record.message}${record.error}$stack');
-  });
+  if (!kIsWeb) {
+    try {
+      final logFile = LogsFile();
+      await logFile.init();
+      Logger.root.onRecord.listen((record) {
+        if (!logFile.log(record)) defaultLogger(record);
+      });
+      return;
+    } catch (_) {
+      // Do nothing
+    }
+  }
+  Logger.root.onRecord.listen(defaultLogger);
   return;
 }
 
