@@ -35,7 +35,7 @@ void defaultLogger(LogRecord record) {
   final error = record.error != null ? '${record.error}' : '';
   // ignore: avoid_print
   print(
-      '${record.level.name}: ${record.loggerName}: ${record.time}: ${record.message}$error$stack');
+      '${record.time}: ${record.level.name}: ${record.loggerName}: ${record.message}$error$stack');
 }
 
 Future<void> initLogger() async {

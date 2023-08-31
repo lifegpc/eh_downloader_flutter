@@ -76,7 +76,7 @@ class LogsFile {
 
   bool log(LogRecord record) {
     final stack = record.stackTrace != null ? '\n${record.stackTrace}' : '';
-    final error = record.error != null ? '${record.error}' : '';
+    final error = record.error != null ? ' ${record.error}' : '';
     final t = record.time;
     final hour = t.hour.toString().padLeft(2, '0');
     final minute = t.minute.toString().padLeft(2, '0');
@@ -84,7 +84,7 @@ class LogsFile {
     final millisecond = t.millisecond.toString().padLeft(3, '0');
     final time = "$hour:$minute:$second.$millisecond";
     final logText =
-        '${record.level.name}: ${record.loggerName}: $time: ${record.message}$error$stack';
+        '$time: ${record.level.name}: ${record.loggerName}: ${record.message}$error$stack';
     try {
       final file = _file(record.time);
       if (file == null) {
