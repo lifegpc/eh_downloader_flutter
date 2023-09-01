@@ -75,12 +75,40 @@ void main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+final _log = Logger("MainApp");
+
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainApp();
+  // ignore: library_private_types_in_public_api
+  static _MainApp of(BuildContext context) =>
+      context.findAncestorStateOfType<_MainApp>()!;
+}
+
+class _MainApp extends State<MainApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+  ThemeData _themeData = ThemeData();
+  ThemeData _darkThemeData = ThemeData.dark();
+  ThemeMode get themeMode => _themeMode;
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      _themeMode = ThemeMode.values[prefs.getInt("themeMode") ?? 0];
+    } catch (e) {
+      _log.warning("Failed to read themeMode from prefs:", e);
+    }
+    if (kIsWeb || isWindows) {
+      _themeData = _themeData.useSystemChineseFont();
+      _darkThemeData = _darkThemeData.useSystemChineseFont();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var theme = ThemeData();
     return MaterialApp.router(
       routerConfig: _router,
       onGenerateTitle: (context) {
@@ -92,7 +120,16 @@ class MainApp extends StatelessWidget {
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: (kIsWeb || isWindows) ? theme.useSystemChineseFont() : theme,
+      theme: _themeData,
+      darkTheme: _darkThemeData,
+      themeMode: _themeMode,
     );
+  }
+
+  void changeThemeMode(ThemeMode mode) {
+    prefs.setInt("themeMode", mode.index);
+    setState(() {
+      _themeMode = mode;
+    });
   }
 }

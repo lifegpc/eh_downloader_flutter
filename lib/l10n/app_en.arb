@@ -5,5 +5,6 @@
     "username": "Username",
     "password": "Password",
     "save": "Save",
-    "login": "Login"
+    "login": "Login",
+    "titleBar": "EH Downloader"
 }
