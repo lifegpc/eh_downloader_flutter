@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'globals.dart';
+
+final _log = Logger("SetServerPage");
 
 class SetServerPage extends StatefulWidget {
   const SetServerPage({Key? key}) : super(key: key);
@@ -13,7 +16,7 @@ class SetServerPage extends StatefulWidget {
   State<SetServerPage> createState() => _SetServerPageState();
 }
 
-class _SetServerPageState extends State<SetServerPage> {
+class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
   String _serverUrl = "";
   String _apiPath = "/api/";
   bool _isValid = false;
@@ -30,7 +33,7 @@ class _SetServerPageState extends State<SetServerPage> {
         _apiPath = url.path;
         _isValid = true;
       } catch (e) {
-        // Do nothing.
+        _log.warning("Failed to parse baseUrl:", e);
       }
     }
   }
@@ -68,9 +71,26 @@ class _SetServerPageState extends State<SetServerPage> {
         context.go("/");
       });
     }
+    final bool hasBaseUrl = prefs.getString('baseUrl') != null;
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.setServerUrl),
+        leading: hasBaseUrl
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  context.canPop() ? context.pop() : context.go("/");
+                },
+              )
+            : null,
+        actions: [
+          buildThemeModeIcon(context),
+        ],
+      ),
       body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 100),
+          padding: MediaQuery.of(context).size.width > 810
+              ? const EdgeInsets.symmetric(horizontal: 100)
+              : null,
           child: Form(
               key: _formKey,
               child: Column(

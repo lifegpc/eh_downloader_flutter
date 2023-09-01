@@ -8,12 +8,6 @@ import 'main.dart';
 
 final _log = Logger("HomePage");
 
-ThemeMode _themeModeNext(ThemeMode mode) {
-  if (mode == ThemeMode.system) return ThemeMode.light;
-  if (mode == ThemeMode.dark) return ThemeMode.system;
-  return ThemeMode.dark;
-}
-
 class HomePage extends HookWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -41,7 +35,7 @@ class HomePage extends HookWidget {
         actions: [
           IconButton(
               onPressed: () {
-                final n = _themeModeNext(mode.value);
+                final n = themeModeNext(mode.value);
                 MainApp.of(context).changeThemeMode(n);
                 mode.value = n;
               },
@@ -50,7 +44,21 @@ class HomePage extends HookWidget {
                   : mode.value == ThemeMode.dark
                       ? Icons.dark_mode
                       : Icons.light_mode)),
-          const IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (MoreVertSettings value) {
+              onMoreVertSettingsSelected(context, value);
+            },
+            itemBuilder: (BuildContext build) {
+              var list = <PopupMenuEntry<MoreVertSettings>>[];
+              if (const bool.fromEnvironment("skipBaseUrl") != true) {
+                list.add(PopupMenuItem(
+                    value: MoreVertSettings.setServerUrl,
+                    child: Text(AppLocalizations.of(build)!.setServerUrl)));
+              }
+              return list;
+            },
+          ),
         ],
       ),
       body: const Center(

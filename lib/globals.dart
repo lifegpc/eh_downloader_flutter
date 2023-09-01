@@ -13,6 +13,7 @@ import 'auth.dart';
 import 'config/base.dart';
 import 'config/shared_preferences.dart';
 import 'config/windows.dart';
+import 'main.dart';
 import 'platform/path.dart';
 import 'utils.dart';
 
@@ -89,6 +90,7 @@ bool tryInitApi(BuildContext context) {
   if (_api != null && _api!.baseUrl == baseUrl) {
     return true;
   }
+  auth.clear();
   initApi(baseUrl);
   return true;
 }
@@ -108,3 +110,41 @@ final AuthInfo auth = AuthInfo();
 final Path platformPath = Path();
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
+
+enum MoreVertSettings {
+  setServerUrl,
+}
+
+void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
+  switch (value) {
+    case MoreVertSettings.setServerUrl:
+      context.go("/set_server");
+      break;
+    default:
+      break;
+  }
+}
+
+ThemeMode themeModeNext(ThemeMode mode) {
+  if (mode == ThemeMode.system) return ThemeMode.light;
+  if (mode == ThemeMode.dark) return ThemeMode.system;
+  return ThemeMode.dark;
+}
+
+mixin ThemeModeWidget<T extends StatefulWidget> on State<T> {
+  @protected
+  Widget buildThemeModeIcon(BuildContext context) {
+    final mode = MainApp.of(context).themeMode;
+    return IconButton(
+        onPressed: () {
+          final n = themeModeNext(mode);
+          MainApp.of(context).changeThemeMode(n);
+          setState(() {});
+        },
+        icon: Icon(mode == ThemeMode.system
+            ? Icons.brightness_auto
+            : mode == ThemeMode.dark
+                ? Icons.dark_mode
+                : Icons.light_mode));
+  }
+}

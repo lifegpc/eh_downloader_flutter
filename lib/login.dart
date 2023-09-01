@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
   final _formKey = GlobalKey<FormState>();
   String _username = "";
   String _password = "";
@@ -102,8 +102,16 @@ class _LoginPageState extends State<LoginPage> {
     tryInitApi(context);
     _checkStatus(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.login),
+        actions: [
+          buildThemeModeIcon(context),
+        ],
+      ),
       body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 100),
+          padding: MediaQuery.of(context).size.width > 810
+              ? const EdgeInsets.symmetric(horizontal: 100)
+              : null,
           child: Form(
               key: _formKey,
               child: Column(

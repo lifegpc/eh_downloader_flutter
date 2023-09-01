@@ -9,5 +9,6 @@
     "titleBar": "EH Downloader",
     "incorrectUserPassword": "Incorrect username or password.",
     "networkError": "Network error.",
-    "internalError": "Some internal error occurred. Please send the log file to the developer."
+    "internalError": "Some internal error occurred. Please send the log file to the developer.",
+    "setServerUrl": "Server URL Settings"
 }

@@ -15,6 +15,12 @@ class AuthInfo {
   bool _checked = false;
   bool get checked => _checked;
 
+  void clear() {
+    _user = null;
+    _status = null;
+    _checked = false;
+  }
+
   Future<void> getServerStatus() async {
     _status = (await api.getStatus()).unwrap();
   }
