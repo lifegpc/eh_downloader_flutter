@@ -1,6 +1,9 @@
+import 'package:logging/logging.dart';
 import 'api/status.dart';
 import 'api/user.dart';
 import 'globals.dart';
+
+final _log = Logger("AuthInfo");
 
 class AuthInfo {
   AuthInfo();
@@ -20,8 +23,14 @@ class AuthInfo {
     final re = await api.getUser();
     if (re.ok) {
       _user = re.data!;
+      final u = _user!;
+      _log.info(
+          "Logged in as ${u.username} (${u.id}). isAdmin: ${u.isAdmin}. permissions: ${u.permissions}");
+    } else if (re.status == 401) {
+      _user = null;
     } else {
       _user = null;
+      throw re.unwrapErr();
     }
     _checked = true;
     await getServerStatus();

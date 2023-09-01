@@ -12,6 +12,7 @@ dependencies:
   cryptography_flutter: ^2.3.0
   dio: ^5.3.2
   dio_cookie_manager: ^3.1.0+1
+  enum_flag: ^1.0.2
   file: ^6.1.4
   flutter:
     sdk: flutter

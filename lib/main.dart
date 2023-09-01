@@ -127,7 +127,8 @@ class _MainApp extends State<MainApp> {
   }
 
   void changeThemeMode(ThemeMode mode) {
-    prefs.setInt("themeMode", mode.index);
+    prefs.setInt("themeMode", mode.index).then(
+        (value) => {if (!value) _log.warning("Failed to save themeMode.")});
     setState(() {
       _themeMode = mode;
     });

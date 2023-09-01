@@ -5,7 +5,7 @@ part 'token.g.dart';
 
 @JsonSerializable()
 class Token {
-  const Token ({
+  const Token({
     required this.id,
     required this.uid,
     required this.token,
@@ -39,7 +39,9 @@ class TokenWithUserInfo {
   final String name;
   @JsonKey(name: 'is_admin')
   final bool isAdmin;
-  final UserPermission permissions;
-  factory TokenWithUserInfo.fromJson(Map<String, dynamic> json) => _$TokenWithUserInfoFromJson(json);
+  @JsonKey(fromJson: UserPermissions.fromJson, toJson: UserPermissions.toJson2)
+  final UserPermissions permissions;
+  factory TokenWithUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$TokenWithUserInfoFromJson(json);
   Map<String, dynamic> toJson() => _$TokenWithUserInfoToJson(this);
 }

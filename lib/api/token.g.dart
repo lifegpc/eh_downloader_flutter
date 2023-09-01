@@ -29,7 +29,7 @@ TokenWithUserInfo _$TokenWithUserInfoFromJson(Map<String, dynamic> json) =>
       token: Token.fromJson(json['token'] as Map<String, dynamic>),
       name: json['name'] as String,
       isAdmin: json['is_admin'] as bool,
-      permissions: $enumDecode(_$UserPermissionEnumMap, json['permissions']),
+      permissions: UserPermissions.fromJson(json['permissions'] as int),
     );
 
 Map<String, dynamic> _$TokenWithUserInfoToJson(TokenWithUserInfo instance) =>
@@ -37,12 +37,5 @@ Map<String, dynamic> _$TokenWithUserInfoToJson(TokenWithUserInfo instance) =>
       'token': instance.token,
       'name': instance.name,
       'is_admin': instance.isAdmin,
-      'permissions': _$UserPermissionEnumMap[instance.permissions]!,
+      'permissions': UserPermissions.toJson2(instance.permissions),
     };
-
-const _$UserPermissionEnumMap = {
-  UserPermission.none: 0,
-  UserPermission.readGallery: 1,
-  UserPermission.editGallery: 2,
-  UserPermission.all: 3,
-};

@@ -1,16 +1,35 @@
+import 'package:enum_flag/enum_flag.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
-@JsonEnum(valueField: 'code')
-enum UserPermission {
-  none(0),
-  readGallery(1),
-  editGallery(2),
-  all(3);
+enum UserPermission with EnumFlag {
+  readGallery,
+  editGallery,
+}
 
-  const UserPermission(this.code);
+const userPermissionAll = 3;
+
+class UserPermissions {
+  const UserPermissions(this.code);
   final int code;
+  bool has(UserPermission permission) => code.hasFlag(permission);
+  int toJson() => code;
+  static int toJson2(UserPermissions code) {
+    return code.code;
+  }
+
+  static fromJson(int code) {
+    return UserPermissions(code);
+  }
+
+  @override
+  String toString() {
+    if (code & userPermissionAll != 0) return "all";
+    final set = code.getFlags(UserPermission.values).toSet();
+    if (set.isEmpty) return "none";
+    return set.map((e) => e.name).join("|");
+  }
 }
 
 @JsonSerializable()
@@ -25,7 +44,8 @@ class BUser {
   final String username;
   @JsonKey(name: 'is_admin')
   final bool isAdmin;
-  final UserPermission permissions;
+  @JsonKey(fromJson: UserPermissions.fromJson, toJson: UserPermissions.toJson2)
+  final UserPermissions permissions;
   factory BUser.fromJson(Map<String, dynamic> json) => _$BUserFromJson(json);
   Map<String, dynamic> toJson() => _$BUserToJson(this);
 }
