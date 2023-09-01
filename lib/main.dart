@@ -123,6 +123,7 @@ class _MainApp extends State<MainApp> {
       theme: _themeData,
       darkTheme: _darkThemeData,
       themeMode: _themeMode,
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
     );
   }
 

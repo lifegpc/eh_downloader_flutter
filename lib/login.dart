@@ -70,7 +70,9 @@ class _LoginPageState extends State<LoginPage> {
         setCookie: true,
         httpOnly: true,
         secure: u.scheme == 'https');
-    return re.ok;
+    if (re.ok) return true;
+    if (re.status == 4) return false;
+    throw re.unwrapErr();
   }
 
   void _checkStatus(BuildContext build) {
@@ -147,12 +149,27 @@ class _LoginPageState extends State<LoginPage> {
                                   if (re) {
                                     context.go("/");
                                   } else {
+                                    final snackBar = SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .incorrectUserPassword));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                     setState(() {
                                       _isLogin = false;
                                     });
                                   }
                                 }).catchError((e) {
                                   _log.severe("Failed to login:", e);
+                                  final isNetworkError = e is! (int, String);
+                                  final snackBar = SnackBar(
+                                      content: Text(isNetworkError
+                                          ? AppLocalizations.of(context)!
+                                              .networkError
+                                          : AppLocalizations.of(context)!
+                                              .internalError));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                   setState(() {
                                     _isLogin = false;
                                   });

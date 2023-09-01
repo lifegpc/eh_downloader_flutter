@@ -106,3 +106,5 @@ EHApi get api {
 
 final AuthInfo auth = AuthInfo();
 final Path platformPath = Path();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();

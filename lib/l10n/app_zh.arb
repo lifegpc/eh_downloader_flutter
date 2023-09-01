@@ -6,5 +6,8 @@
     "password": "密码",
     "save": "保存",
     "login": "登录",
-    "titleBar": "EH 下载器"
+    "titleBar": "EH 下载器",
+    "incorrectUserPassword": "不正确的用户名或密码。",
+    "networkError": "网络错误。",
+    "internalError": "出现了内部错误，请将日志发送给开发者。"
 }

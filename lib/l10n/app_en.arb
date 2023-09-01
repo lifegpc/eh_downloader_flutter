@@ -6,5 +6,8 @@
     "password": "Password",
     "save": "Save",
     "login": "Login",
-    "titleBar": "EH Downloader"
+    "titleBar": "EH Downloader",
+    "incorrectUserPassword": "Incorrect username or password.",
+    "networkError": "Network error.",
+    "internalError": "Some internal error occurred. Please send the log file to the developer."
 }
