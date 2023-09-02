@@ -29,6 +29,13 @@ dependencies:
   shared_preferences: ^2.2.0
   window_manager: ^0.3.6
 
+dependency_overrides:
+  cookie_jar:
+    git:
+      url: https://github.com/lifegpc/cookie_jar.git
+      ref: main
+      path: .
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
