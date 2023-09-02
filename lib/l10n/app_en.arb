@@ -13,5 +13,9 @@
     "setServerUrl": "Server URL Settings",
     "createRootUser": "Create Root User",
     "skip": "Skip",
-    "create": "Create"
+    "create": "Create",
+    "settings": "Settings",
+    "lang": "Language",
+    "systemLang": "System Language",
+    "reset": "Reset"
 }

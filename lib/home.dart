@@ -15,7 +15,10 @@ class HomePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tryInitApi(context) && !auth.isAuthed && !auth.checked) {
+    if (tryInitApi(context) &&
+        !auth.isAuthed &&
+        !auth.checked &&
+        !auth.isChecking) {
       auth.checkAuth().then((re) {
         if (!re) {
           if (auth.status!.noUser &&

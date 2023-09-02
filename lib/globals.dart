@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -115,6 +116,7 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 enum MoreVertSettings {
   setServerUrl,
   createRootUser,
+  settings,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -124,6 +126,9 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
       break;
     case MoreVertSettings.createRootUser:
       context.push("/create_root_user");
+      break;
+    case MoreVertSettings.settings:
+      context.push("/settings");
       break;
     default:
       break;
@@ -147,6 +152,11 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     list.add(PopupMenuItem(
         value: MoreVertSettings.createRootUser,
         child: Text(AppLocalizations.of(context)!.createRootUser)));
+  }
+  if (path != "/settings") {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.settings,
+        child: Text(AppLocalizations.of(context)!.settings)));
   }
   return list;
 }
@@ -182,5 +192,24 @@ mixin ThemeModeWidget<T extends StatefulWidget> on State<T> {
             : mode == ThemeMode.dark
                 ? Icons.dark_mode
                 : Icons.light_mode));
+  }
+}
+
+enum Lang {
+  system("System"),
+  english("English"),
+  simplifiedChinese("简体中文");
+
+  const Lang(String lang) : langName = lang;
+  final String langName;
+  Locale toLocale() {
+    switch (this) {
+      case Lang.english:
+        return const Locale("en");
+      case Lang.simplifiedChinese:
+        return const Locale("zh");
+      default:
+        return PlatformDispatcher.instance.locale;
+    }
   }
 }

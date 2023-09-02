@@ -12,6 +12,7 @@ import 'home.dart';
 import 'login.dart';
 import 'logs/file.dart';
 import 'set_server.dart';
+import 'settings.dart';
 import 'utils.dart';
 
 final _router = GoRouter(
@@ -33,6 +34,10 @@ final _router = GoRouter(
     GoRoute(
       path: CreateRootUserPage.routeName,
       builder: (context, state) => const CreateRootUserPage(),
+    ),
+    GoRoute(
+      path: SettingsPage.routeName,
+      builder: (context, state) => const SettingsPage(),
     )
   ],
 );
@@ -99,6 +104,8 @@ class _MainApp extends State<MainApp> {
   ThemeData _themeData = ThemeData();
   ThemeData _darkThemeData = ThemeData.dark();
   ThemeMode get themeMode => _themeMode;
+  Lang _lang = Lang.system;
+  Lang get lang => lang;
 
   @override
   void initState() {
@@ -107,6 +114,11 @@ class _MainApp extends State<MainApp> {
       _themeMode = ThemeMode.values[prefs.getInt("themeMode") ?? 0];
     } catch (e) {
       _log.warning("Failed to read themeMode from prefs:", e);
+    }
+    try {
+      _lang = Lang.values[prefs.getInt("lang") ?? 0];
+    } catch (e) {
+      _log.warning("Failed to read lang from prefs:", e);
     }
     if (kIsWeb || isWindows) {
       _themeData = _themeData.useSystemChineseFont();
@@ -125,6 +137,7 @@ class _MainApp extends State<MainApp> {
         }
         return title;
       },
+      locale: _lang.toLocale(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: _themeData,
@@ -139,6 +152,12 @@ class _MainApp extends State<MainApp> {
         (value) => {if (!value) _log.warning("Failed to save themeMode.")});
     setState(() {
       _themeMode = mode;
+    });
+  }
+
+  void changeLang(Lang lang) {
+    setState(() {
+      _lang = lang;
     });
   }
 }

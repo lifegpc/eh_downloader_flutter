@@ -13,5 +13,9 @@
     "setServerUrl": "服务器地址设置",
     "createRootUser": "创建根用户",
     "skip": "跳过",
-    "create": "创建"
+    "create": "创建",
+    "settings": "设置",
+    "lang": "语言",
+    "systemLang": "系统语言",
+    "reset": "重置"
 }
