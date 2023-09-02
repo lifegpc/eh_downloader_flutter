@@ -16,6 +16,21 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+Future<bool> login(String username, String password) async {
+  String baseUrl = api.baseUrl!;
+  final u = Uri.parse(baseUrl);
+  _log.info("Secure level: ${u.scheme}");
+  final re = await api.createToken(
+      username: username,
+      password: password,
+      setCookie: true,
+      httpOnly: true,
+      secure: u.scheme == 'https');
+  if (re.ok) return true;
+  if (re.status == 4) return false;
+  throw re.unwrapErr();
+}
+
 class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
   final _formKey = GlobalKey<FormState>();
   String _username = "";
@@ -59,20 +74,6 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
     setState(() {
       _passwordVisible = !_passwordVisible;
     });
-  }
-
-  static Future<bool> _login(String username, String password) async {
-    String baseUrl = api.baseUrl!;
-    final u = Uri.parse(baseUrl);
-    final re = await api.createToken(
-        username: username,
-        password: password,
-        setCookie: true,
-        httpOnly: true,
-        secure: u.scheme == 'https');
-    if (re.ok) return true;
-    if (re.status == 4) return false;
-    throw re.unwrapErr();
   }
 
   void _checkStatus(BuildContext build) {
@@ -153,9 +154,12 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
                                 setState(() {
                                   _isLogin = true;
                                 });
-                                _login(_username, _password).then((re) {
+                                login(_username, _password).then((re) {
                                   if (re) {
-                                    context.go("/");
+                                    auth.clear();
+                                    context.canPop()
+                                        ? context.pop()
+                                        : context.go("/");
                                   } else {
                                     final snackBar = SnackBar(
                                         content: Text(

@@ -72,6 +72,10 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
       });
     }
     final bool hasBaseUrl = prefs.getString('baseUrl') != null;
+    var actions = [
+      buildThemeModeIcon(context),
+    ];
+    if (hasBaseUrl) actions.add(buildMoreVertSettingsButon(context));
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setServerUrl),
@@ -83,9 +87,7 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
                 },
               )
             : null,
-        actions: [
-          buildThemeModeIcon(context),
-        ],
+        actions: actions,
       ),
       body: Container(
           padding: MediaQuery.of(context).size.width > 810

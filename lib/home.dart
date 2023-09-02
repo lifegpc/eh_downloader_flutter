@@ -15,19 +15,18 @@ class HomePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      if (!tryInitApi(context)) return;
-      if (!auth.isAuthed) {
-        auth.checkAuth().then((re) {
-          if (!re) {
-            context.go(auth.status!.noUser ? "/create_root_user" : "/login");
-          }
-        }).catchError((err) {
-          _log.log(Level.SEVERE, "Failed to check auth info:", err);
-        });
-      }
-      return;
-    }, []);
+    tryInitApi(context);
+    if (!auth.isAuthed) {
+      auth.checkAuth().then((re) {
+        if (!re) {
+          if (auth.status!.noUser &&
+              prefs.getBool("skipCreateRootUser") == true) return;
+          context.push(auth.status!.noUser ? "/create_root_user" : "/login");
+        }
+      }).catchError((err) {
+        _log.log(Level.SEVERE, "Failed to check auth info:", err);
+      });
+    }
     var mode = useState(MainApp.of(context).themeMode);
     return Scaffold(
       appBar: AppBar(
@@ -44,21 +43,7 @@ class HomePage extends HookWidget {
                   : mode.value == ThemeMode.dark
                       ? Icons.dark_mode
                       : Icons.light_mode)),
-          PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
-            onSelected: (MoreVertSettings value) {
-              onMoreVertSettingsSelected(context, value);
-            },
-            itemBuilder: (BuildContext build) {
-              var list = <PopupMenuEntry<MoreVertSettings>>[];
-              if (const bool.fromEnvironment("skipBaseUrl") != true) {
-                list.add(PopupMenuItem(
-                    value: MoreVertSettings.setServerUrl,
-                    child: Text(AppLocalizations.of(build)!.setServerUrl)));
-              }
-              return list;
-            },
-          ),
+          buildMoreVertSettingsButon(context),
         ],
       ),
       body: const Center(

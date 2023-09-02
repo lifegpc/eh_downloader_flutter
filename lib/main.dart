@@ -6,6 +6,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
+import 'create_root_user.dart';
 import 'globals.dart';
 import 'home.dart';
 import 'login.dart';
@@ -17,7 +18,9 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: HomePage.routeName,
-      builder: (context, state) => const HomePage(),
+      // Add const will cause checkAuth not works when pop to home page.
+      // ignore: prefer_const_constructors
+      builder: (context, state) => HomePage(),
     ),
     GoRoute(
       path: SetServerPage.routeName,
@@ -27,6 +30,10 @@ final _router = GoRouter(
       path: LoginPage.routeName,
       builder: (context, state) => const LoginPage(),
     ),
+    GoRoute(
+      path: CreateRootUserPage.routeName,
+      builder: (context, state) => const CreateRootUserPage(),
+    )
   ],
 );
 

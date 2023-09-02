@@ -32,7 +32,7 @@ class AuthInfo {
       final u = _user!;
       _log.info(
           "Logged in as ${u.username} (${u.id}). isAdmin: ${u.isAdmin}. permissions: ${u.permissions}");
-    } else if (re.status == 401) {
+    } else if (re.status == 401 || re.status == 1 || re.status == 404) {
       _user = null;
     } else {
       _user = null;

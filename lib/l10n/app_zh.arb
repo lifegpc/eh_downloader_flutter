@@ -10,5 +10,8 @@
     "incorrectUserPassword": "不正确的用户名或密码。",
     "networkError": "网络错误。",
     "internalError": "出现了内部错误，请将日志发送给开发者。",
-    "setServerUrl": "服务器地址设置"
+    "setServerUrl": "服务器地址设置",
+    "createRootUser": "创建根用户",
+    "skip": "跳过",
+    "create": "创建"
 }

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -113,16 +114,51 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 enum MoreVertSettings {
   setServerUrl,
+  createRootUser,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
   switch (value) {
     case MoreVertSettings.setServerUrl:
-      context.go("/set_server");
+      context.push("/set_server");
+      break;
+    case MoreVertSettings.createRootUser:
+      context.push("/create_root_user");
       break;
     default:
       break;
   }
+}
+
+List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
+    BuildContext context) {
+  var list = <PopupMenuEntry<MoreVertSettings>>[];
+  var path = GoRouterState.of(context).path;
+  if (const bool.fromEnvironment("skipBaseUrl") != true &&
+      path != "/set_server") {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.setServerUrl,
+        child: Text(AppLocalizations.of(context)!.setServerUrl)));
+  }
+  if (auth.status != null &&
+      auth.status!.noUser &&
+      prefs.getBool("skipCreateRootUser") == true &&
+      path != "/create_root_user") {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.createRootUser,
+        child: Text(AppLocalizations.of(context)!.createRootUser)));
+  }
+  return list;
+}
+
+Widget buildMoreVertSettingsButon(BuildContext context) {
+  return PopupMenuButton(
+    icon: const Icon(Icons.more_vert),
+    onSelected: (MoreVertSettings value) {
+      onMoreVertSettingsSelected(context, value);
+    },
+    itemBuilder: buildMoreVertSettings,
+  );
 }
 
 ThemeMode themeModeNext(ThemeMode mode) {

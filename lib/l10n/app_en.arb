@@ -10,5 +10,8 @@
     "incorrectUserPassword": "Incorrect username or password.",
     "networkError": "Network error.",
     "internalError": "Some internal error occurred. Please send the log file to the developer.",
-    "setServerUrl": "Server URL Settings"
+    "setServerUrl": "Server URL Settings",
+    "createRootUser": "Create Root User",
+    "skip": "Skip",
+    "create": "Create"
 }
