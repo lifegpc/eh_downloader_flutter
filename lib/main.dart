@@ -8,6 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'create_root_user.dart';
 import 'galleries.dart';
+import 'gallery.dart';
 import 'globals.dart';
 import 'home.dart';
 import 'login.dart';
@@ -15,6 +16,8 @@ import 'logs/file.dart';
 import 'set_server.dart';
 import 'settings.dart';
 import 'utils.dart';
+
+final _routerLog = Logger("Router");
 
 final _router = GoRouter(
   routes: [
@@ -41,6 +44,24 @@ final _router = GoRouter(
     GoRoute(
       path: GalleriesPage.routeName,
       builder: (context, state) => const GalleriesPage(),
+    ),
+    GoRoute(
+        path: GalleryPage.routeName,
+        builder: (context, state) => GalleryPage(
+              int.parse(state.pathParameters["gid"]!),
+            ),
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["gid"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse gid:", e);
+            return "/";
+          }
+        }),
+    GoRoute(
+      path: "/gallery",
+      redirect: (context, state) => "/galleries",
     )
   ],
 );
@@ -87,6 +108,7 @@ void main() async {
     await windowManager.ensureInitialized();
   }
   await initLogger();
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(const MainApp());
 }
 

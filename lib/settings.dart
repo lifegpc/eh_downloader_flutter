@@ -18,7 +18,9 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
   Lang _oriLang = Lang.system;
+  bool _oriUseTitleJpn = false;
   Lang _lang = Lang.system;
+  bool _useTitleJpn = false;
   @override
   void initState() {
     super.initState();
@@ -29,6 +31,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _log.warning("Failed to get lang:", e);
       _oriLang = Lang.system;
       _lang = Lang.system;
+    }
+    try {
+      _oriUseTitleJpn = prefs.getBool("useTitleJpn") ?? false;
+      _useTitleJpn = _oriUseTitleJpn;
+    } catch (e) {
+      _log.warning("Failed to get useTitleJpn:", e);
+      _oriUseTitleJpn = false;
+      _useTitleJpn = false;
     }
   }
 
@@ -42,16 +52,25 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
     if (_lang != Lang.system) MainApp.of(context).changeLang(Lang.system);
     setState(() {
       _lang = Lang.system;
+      _useTitleJpn = false;
     });
   }
 
   Future<bool> save() async {
     bool re = true;
-    if (!await prefs.setInt("lang", _lang.index)) {
+    if (_lang != _oriLang && !await prefs.setInt("lang", _lang.index)) {
       re = false;
       _log.warning("Failed to save lang.");
     } else {
       _oriLang = _lang;
+    }
+    if (_oriUseTitleJpn != _useTitleJpn) {
+      if (!await prefs.setBool("useTitleJpn", _useTitleJpn)) {
+        re = false;
+        _log.warning("Failed to save useTitleJpn.");
+      } else {
+        _oriUseTitleJpn = _useTitleJpn;
+      }
     }
     return re;
   }
@@ -110,6 +129,21 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                               : e.langName))
                                       .toList(),
                                   leadingIcon: const Icon(Icons.language),
+                                )),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: CheckboxMenuButton(
+                                  value: _useTitleJpn,
+                                  onChanged: (bool? value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        _useTitleJpn = value;
+                                      });
+                                    }
+                                  },
+                                  child: Text(AppLocalizations.of(context)!
+                                      .useTitleJpn),
                                 )),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

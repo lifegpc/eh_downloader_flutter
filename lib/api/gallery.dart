@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import '../globals.dart';
 
 part 'gallery.g.dart';
 
@@ -48,6 +49,11 @@ class GMeta {
   static int _toJson(DateTime posted) => posted.millisecondsSinceEpoch ~/ 1000;
   factory GMeta.fromJson(Map<String, dynamic> json) => _$GMetaFromJson(json);
   Map<String, dynamic> toJson() => _$GMetaToJson(this);
+  String get preferredTitle => prefs.getBool("useTitleJpn") == true
+      ? titleJpn.isEmpty
+          ? title
+          : titleJpn
+      : title;
 }
 
 @JsonSerializable()

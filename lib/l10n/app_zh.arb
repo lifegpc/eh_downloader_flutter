@@ -19,5 +19,8 @@
     "lang": "语言",
     "systemLang": "系统语言",
     "reset": "重置",
-    "galleries": "画廊"
+    "galleries": "画廊",
+    "loading": "加载中…",
+    "gallery": "画廊",
+    "useTitleJpn": "优先使用日语标题"
 }

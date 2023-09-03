@@ -19,5 +19,8 @@
     "lang": "Language",
     "systemLang": "System Language",
     "reset": "Reset",
-    "galleries": "Galleries"
+    "galleries": "Galleries",
+    "loading": "Loading...",
+    "gallery": "Gallery",
+    "useTitleJpn": "Use Japanese title first"
 }

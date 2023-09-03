@@ -50,6 +50,7 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
 
   @override
   Widget build(BuildContext context) {
+    tryInitApi(context);
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
@@ -69,7 +70,7 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
           builderDelegate: PagedChildBuilderDelegate<GMeta>(
               itemBuilder: (context, item, index) {
             return ListTile(
-              title: SelectableText(item.title),
+              title: Text(item.preferredTitle),
               onTap: () {
                 context.push("/gallery/${item.gid}");
               },
