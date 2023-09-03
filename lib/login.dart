@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
                                 });
                                 login(_username, _password).then((re) {
                                   if (re) {
-                                    auth.clear();
+                                    clearAllStates(context);
                                     context.canPop()
                                         ? context.pop()
                                         : context.go("/");

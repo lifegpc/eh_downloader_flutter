@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -92,8 +93,8 @@ bool tryInitApi(BuildContext context) {
   if (_api != null && _api!.baseUrl == baseUrl) {
     return true;
   }
-  auth.clear();
   initApi(baseUrl);
+  clearAllStates(context);
   return true;
 }
 
@@ -211,5 +212,26 @@ enum Lang {
       default:
         return PlatformDispatcher.instance.locale;
     }
+  }
+}
+
+final _authLog = Logger("AuthLog");
+
+void clearAllStates(BuildContext context) {
+  auth.clear();
+  checkAuth(context);
+}
+
+void checkAuth(BuildContext context) {
+  if (!auth.isAuthed && !auth.checked && !auth.isChecking) {
+    auth.checkAuth().then((re) {
+      if (!re) {
+        if (auth.status!.noUser && prefs.getBool("skipCreateRootUser") == true)
+          return;
+        context.push(auth.status!.noUser ? "/create_root_user" : "/login");
+      }
+    }).catchError((err) {
+      _authLog.log(Level.SEVERE, "Failed to check auth info:", err);
+    });
   }
 }

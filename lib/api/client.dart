@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:eh_downloader_flutter/api/file.dart';
 import 'package:retrofit/retrofit.dart';
 import 'api_result.dart';
+import 'gallery.dart';
 import 'status.dart';
 import 'token.dart';
 import 'user.dart';
@@ -76,6 +77,14 @@ abstract class _EHApi {
   @GET('/files/{token}')
   // ignore: unused_element
   Future<ApiResult<EhFiles>> _getFiles(@Path("token") String token);
+
+  @GET('/gallery/{gid}')
+  Future<ApiResult<GalleryData>> getGallery(@Path("gid") int gid);
+  @GET('/gallery/list')
+  Future<ApiResult<List<GMeta>>> listGalleries(
+      {@Query("all") bool? all,
+      @Query("offset") int? offset,
+      @Query("limit") int? limit});
 }
 
 class EHApi extends __EHApi {

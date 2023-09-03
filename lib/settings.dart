@@ -17,24 +17,24 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
-  Lang _ori_lang = Lang.system;
+  Lang _oriLang = Lang.system;
   Lang _lang = Lang.system;
   @override
   void initState() {
     super.initState();
     try {
-      _ori_lang = Lang.values[prefs.getInt("lang") ?? 0];
-      _lang = _ori_lang;
+      _oriLang = Lang.values[prefs.getInt("lang") ?? 0];
+      _lang = _oriLang;
     } catch (e) {
       _log.warning("Failed to get lang:", e);
-      _ori_lang = Lang.system;
+      _oriLang = Lang.system;
       _lang = Lang.system;
     }
   }
 
   void fallback(BuildContext context) {
-    if (_ori_lang != _lang) {
-      MainApp.of(context).changeLang(_ori_lang);
+    if (_oriLang != _lang) {
+      MainApp.of(context).changeLang(_oriLang);
     }
   }
 
@@ -51,7 +51,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       re = false;
       _log.warning("Failed to save lang.");
     } else {
-      _ori_lang = _lang;
+      _oriLang = _lang;
     }
     return re;
   }

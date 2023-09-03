@@ -15,20 +15,7 @@ class HomePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (tryInitApi(context) &&
-        !auth.isAuthed &&
-        !auth.checked &&
-        !auth.isChecking) {
-      auth.checkAuth().then((re) {
-        if (!re) {
-          if (auth.status!.noUser &&
-              prefs.getBool("skipCreateRootUser") == true) return;
-          context.push(auth.status!.noUser ? "/create_root_user" : "/login");
-        }
-      }).catchError((err) {
-        _log.log(Level.SEVERE, "Failed to check auth info:", err);
-      });
-    }
+    tryInitApi(context);
     var mode = useState(MainApp.of(context).themeMode);
     return Scaffold(
       appBar: AppBar(
@@ -48,8 +35,13 @@ class HomePage extends HookWidget {
           buildMoreVertSettingsButon(context),
         ],
       ),
-      body: const Center(
-        child: Text('Hello World!'),
+      body: Center(
+        child: TextButton(
+          child: Text('Hello World!'),
+          onPressed: () {
+            context.push("/galleries");
+          },
+        ),
       ),
     );
   }

@@ -181,7 +181,7 @@ class _CreateRootUserPage extends State<CreateRootUserPage>
                                   });
                                   _createRootUser(_username, _password).then((re) {
                                     if (re) {
-                                      auth.clear();
+                                      clearAllStates(context);
                                       context.canPop()
                                           ? context.pop()
                                           : context.go("/");

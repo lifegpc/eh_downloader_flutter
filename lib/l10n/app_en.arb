@@ -1,4 +1,5 @@
 {
+    "@@locale": "en",
     "title": "E-Hentai Downloader Dashboard",
     "serverHost": "EH Downloader Server Host",
     "apiPath": "API Path",
@@ -17,5 +18,6 @@
     "settings": "Settings",
     "lang": "Language",
     "systemLang": "System Language",
-    "reset": "Reset"
+    "reset": "Reset",
+    "galleries": "Galleries"
 }

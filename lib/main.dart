@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'create_root_user.dart';
+import 'galleries.dart';
 import 'globals.dart';
 import 'home.dart';
 import 'login.dart';
@@ -19,9 +20,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: HomePage.routeName,
-      // Add const will cause checkAuth not works when pop to home page.
-      // ignore: prefer_const_constructors
-      builder: (context, state) => HomePage(),
+      builder: (context, state) => const HomePage(),
     ),
     GoRoute(
       path: SetServerPage.routeName,
@@ -38,6 +37,10 @@ final _router = GoRouter(
     GoRoute(
       path: SettingsPage.routeName,
       builder: (context, state) => const SettingsPage(),
+    ),
+    GoRoute(
+      path: GalleriesPage.routeName,
+      builder: (context, state) => const GalleriesPage(),
     )
   ],
 );
@@ -105,7 +108,7 @@ class _MainApp extends State<MainApp> {
   ThemeData _darkThemeData = ThemeData.dark();
   ThemeMode get themeMode => _themeMode;
   Lang _lang = Lang.system;
-  Lang get lang => lang;
+  Lang get lang => _lang;
 
   @override
   void initState() {

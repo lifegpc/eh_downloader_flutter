@@ -121,8 +121,16 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
                   ElevatedButton(
                       onPressed: _isValid
                           ? () {
-                              prefs.setString('baseUrl', _serverUrl + _apiPath);
-                              context.go('/');
+                              prefs
+                                  .setString('baseUrl', _serverUrl + _apiPath)
+                                  .then((re) {
+                                if (re) {
+                                  tryInitApi(context);
+                                  context.canPop()
+                                      ? context.pop()
+                                      : context.go("/");
+                                }
+                              });
                             }
                           : null,
                       child: Text(AppLocalizations.of(context)!.save)),
