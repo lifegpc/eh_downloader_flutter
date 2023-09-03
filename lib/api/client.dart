@@ -26,6 +26,22 @@ final _pbkdf2b = Pbkdf2(
 const _utf8Encoder = Utf8Encoder();
 final _salt = _utf8Encoder.convert("eh-downloader-salt");
 
+enum ThumbnailMethod {
+  unknown,
+  cover,
+  contain,
+  fill;
+}
+
+enum ThumbnailAlign {
+  left,
+  center,
+  right;
+
+  static const top = left;
+  static const bottom = right;
+}
+
 @RestApi()
 abstract class _EHApi {
   factory _EHApi(Dio dio, {required String baseUrl}) = __EHApi;
@@ -64,19 +80,31 @@ abstract class _EHApi {
       {@Query("token") String? token});
 
   @GET('/file/{id}')
-  Future<HttpResponse> getFile(@Path("id") int id);
+  @DioResponseType(ResponseType.bytes)
+  Future<HttpResponse<List<int>>> getFile(@Path("id") int id);
   @GET('/file/{id}')
   // ignore: unused_element
   Future<ApiResult<EhFileExtend>> _getFileData(
       @Path("id") int id, @Query("data") bool data);
   @GET('/file/random')
-  Future<HttpResponse> getRandomFile(
+  @DioResponseType(ResponseType.bytes)
+  Future<HttpResponse<List<int>>> getRandomFile(
       {@Query("is_nsfw") bool? isNsfw,
       @Query("is_ad") bool? isAd,
       @Query("thumb") bool? thumb});
   @GET('/files/{token}')
   // ignore: unused_element
   Future<ApiResult<EhFiles>> _getFiles(@Path("token") String token);
+  @GET('/thumbnail/{id}')
+  @DioResponseType(ResponseType.bytes)
+  Future<HttpResponse<List<int>>> getThumbnail(@Path("id") int id,
+      {@Query("max") int? max,
+      @Query("width") int? width,
+      @Query("height") int? height,
+      @Query("quality") int? quality,
+      @Query("force") bool? force,
+      @Query("method") ThumbnailMethod? method,
+      @Query("align") ThumbnailAlign? align});
 
   @GET('/gallery/{gid}')
   Future<ApiResult<GalleryData>> getGallery(@Path("gid") int gid);

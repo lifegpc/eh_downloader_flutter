@@ -281,16 +281,17 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<HttpResponse<dynamic>> getFile(int id) async {
+  Future<HttpResponse<List<int>>> getFile(int id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
+      responseType: ResponseType.bytes,
     )
             .compose(
               _dio.options,
@@ -303,7 +304,7 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = _result.data!.cast<int>();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -342,7 +343,7 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<HttpResponse<dynamic>> getRandomFile({
+  Future<HttpResponse<List<int>>> getRandomFile({
     bool? isNsfw,
     bool? isAd,
     bool? thumb,
@@ -356,11 +357,12 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
+      responseType: ResponseType.bytes,
     )
             .compose(
               _dio.options,
@@ -373,7 +375,7 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = _result.data!.cast<int>();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -406,6 +408,53 @@ class __EHApi implements _EHApi {
       (json) => EhFiles.fromJson(json as Map<String, dynamic>),
     );
     return value;
+  }
+
+  @override
+  Future<HttpResponse<List<int>>> getThumbnail(
+    int id, {
+    int? max,
+    int? width,
+    int? height,
+    int? quality,
+    bool? force,
+    ThumbnailMethod? method,
+    ThumbnailAlign? align,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'max': max,
+      r'width': width,
+      r'height': height,
+      r'quality': quality,
+      r'force': force,
+      r'method': method?.name,
+      r'align': align?.name,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+      responseType: ResponseType.bytes,
+    )
+            .compose(
+              _dio.options,
+              '/thumbnail/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data!.cast<int>();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   @override

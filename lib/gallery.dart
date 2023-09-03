@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'api/gallery.dart';
+import 'components/thumbnail.dart';
 import 'globals.dart';
 
 final _log = Logger("GalleryPage");
@@ -79,7 +80,7 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
             ? const Center(child: CircularProgressIndicator())
             : _data != null
                 ? Center(
-                    child: Text("Gallery $_gid"),
+                    child: Thumbnail(_data!.pages[0]!),
                   )
                 : Center(
                     child: Text("Error: $_error"),

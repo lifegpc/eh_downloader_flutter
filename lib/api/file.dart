@@ -42,11 +42,14 @@ class EhFileExtend {
 
 class EhFiles {
   const EhFiles({required this.files});
-  final Map<String, EhFileBasic> files;
+  final Map<String, List<EhFileBasic>> files;
   factory EhFiles.fromJson(Map<String, dynamic> json) => EhFiles(
         files: (json).map(
-          (k, e) =>
-              MapEntry(k, EhFileBasic.fromJson(e as Map<String, dynamic>)),
+          (k, e) => MapEntry(
+              k,
+              (e as List<dynamic>)
+                  .map((e) => EhFileBasic.fromJson(e as Map<String, dynamic>))
+                  .toList()),
         ),
       );
 }
