@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
@@ -43,6 +44,7 @@ class _Thumbnail extends State<Thumbnail> {
   bool _isLoading = false;
   Object? _error;
   int? _fileId;
+  bool _showNsfw = false;
   Future<void> _fetchData() async {
     try {
       _isLoading = true;
@@ -80,12 +82,16 @@ class _Thumbnail extends State<Thumbnail> {
     _isLoading = false;
     _error = null;
     _fileId = widget._fileId;
+    _showNsfw = false;
     super.initState();
   }
+
+  bool get showNsfw => _showNsfw || (prefs.getBool("showNsfw") ?? false);
 
   @override
   Widget build(BuildContext context) {
     final isLoading = _data == null && _error == null;
+    final isNsfw = widget._pMeta.isNsfw;
     if (isLoading && !_isLoading) _fetchData();
     return SizedBox(
         width: widget.width.toDouble(),
@@ -93,7 +99,32 @@ class _Thumbnail extends State<Thumbnail> {
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
-                ? Image.memory(_data!)
+                ? isNsfw && !showNsfw
+                    ? Stack(
+                        children: [
+                          SizedBox(
+                              width: widget.width.toDouble(),
+                              height: widget.height.toDouble(),
+                              child: ImageFiltered(
+                                  imageFilter:
+                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: Image.memory(_data!))),
+                          SizedBox(
+                              width: widget.width.toDouble(),
+                              height: widget.height.toDouble(),
+                              child: Center(
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _showNsfw = true;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.visibility),
+                                ),
+                              ))
+                        ],
+                      )
+                    : Image.memory(_data!)
                 : Text("Error $_error"));
   }
 }
