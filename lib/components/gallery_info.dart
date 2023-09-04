@@ -16,6 +16,7 @@ class GalleryInfo extends StatefulWidget {
 }
 
 class _GalleryInfo extends State<GalleryInfo> {
+  final ScrollController controller = ScrollController();
   void showNsfwChanged(dynamic _) {
     setState(() {});
   }
@@ -34,6 +35,7 @@ class _GalleryInfo extends State<GalleryInfo> {
         ? widget.files!.files[firstPage.token]!.first.id
         : null;
     return CustomScrollView(
+      controller: controller,
       slivers: [
         useMobile
             ? SliverList(
@@ -44,7 +46,8 @@ class _GalleryInfo extends State<GalleryInfo> {
               )
             : SliverList(
                 delegate: SliverChildListDelegate([
-                  GalleryInfoDesktop(widget.gData, fileId: firstFileId),
+                  GalleryInfoDesktop(widget.gData,
+                      fileId: firstFileId, controller: controller),
                 ]),
               ),
         ThumbnailGridView(widget.gData.pages,
@@ -56,6 +59,7 @@ class _GalleryInfo extends State<GalleryInfo> {
 
   @override
   void dispose() {
+    controller.dispose();
     listener.removeEventListener("showNsfwChanged", showNsfwChanged);
     super.dispose();
   }

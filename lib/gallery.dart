@@ -1,11 +1,10 @@
-import 'package:eh_downloader_flutter/api/file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'api/file.dart';
 import 'api/gallery.dart';
 import 'components/gallery_info.dart';
-import 'components/thumbnail.dart';
 import 'globals.dart';
 
 final _log = Logger("GalleryPage");

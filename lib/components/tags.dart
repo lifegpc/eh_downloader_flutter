@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
+import 'scroll_parent.dart';
 
 class TagsPanel extends StatefulWidget {
-  const TagsPanel(this.tags, {Key? key}) : super(key: key);
+  const TagsPanel(this.tags, {Key? key, this.controller}) : super(key: key);
   final List<Tag> tags;
+  final ScrollController? controller;
 
   @override
   State<TagsPanel> createState() => _TagsPanel();
@@ -51,7 +53,7 @@ class _TagsPanel extends State<TagsPanel> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    return ListView.builder(
+    final re = ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: data!.length,
         itemBuilder: (context, index) {
@@ -76,5 +78,8 @@ class _TagsPanel extends State<TagsPanel> {
             }
           }));
         });
+    return widget.controller != null
+        ? ScrollParent(controller: widget.controller!, child: re)
+        : re;
   }
 }

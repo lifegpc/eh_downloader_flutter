@@ -19,7 +19,9 @@ class ThumbnailGridView extends StatelessWidget {
           final page = pages[index]!;
           final fileId =
               files != null ? files!.files[page.token]!.first.id : null;
-          return Thumbnail(page, fileId: fileId);
+          return Container(
+              padding: const EdgeInsets.all(4),
+              child: Thumbnail(page, fileId: fileId));
         });
   }
 }

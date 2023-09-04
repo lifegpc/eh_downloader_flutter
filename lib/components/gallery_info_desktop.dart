@@ -5,10 +5,11 @@ import 'tags.dart';
 import 'thumbnail.dart';
 
 class GalleryInfoDesktop extends StatelessWidget {
-  const GalleryInfoDesktop(this.gData, {Key? key, this.fileId})
+  const GalleryInfoDesktop(this.gData, {Key? key, this.fileId, this.controller})
       : super(key: key);
   final GalleryData gData;
   final int? fileId;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
