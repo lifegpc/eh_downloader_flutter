@@ -1,3 +1,4 @@
+import 'package:eh_downloader_flutter/api/file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -25,6 +26,7 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
   _GalleryPage();
   int _gid = 0;
   GalleryData? _data;
+  EhFiles? _files;
   Object? _error;
   bool _isLoading = false;
 
@@ -32,8 +34,12 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
     try {
       _isLoading = true;
       final data = (await api.getGallery(_gid)).unwrap();
+      _data = data;
+      final fileData =
+          (await api.getFiles(data.pages.map((e) => e.token).toList()))
+              .unwrap();
       setState(() {
-        _data = data;
+        _files = fileData;
         _isLoading = false;
       });
     } catch (e) {
@@ -82,7 +88,7 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
-                ? GalleryInfo(_data!)
+                ? GalleryInfo(_data!, files: _files)
                 : Center(
                     child: Text("Error: $_error"),
                   ));
