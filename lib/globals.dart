@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:event_listener/event_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -18,6 +19,7 @@ import 'config/shared_preferences.dart';
 import 'config/windows.dart';
 import 'main.dart';
 import 'platform/path.dart';
+import 'tags.dart';
 import 'utils.dart';
 
 final dio = Dio()
@@ -111,8 +113,10 @@ EHApi get api {
 
 final AuthInfo auth = AuthInfo();
 final Path platformPath = Path();
+final TagsInfo tags = TagsInfo();
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
+final EventListener listener = EventListener();
 
 enum MoreVertSettings {
   setServerUrl,
@@ -159,6 +163,24 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
         value: MoreVertSettings.settings,
         child: Text(AppLocalizations.of(context)!.settings)));
   }
+  var showNsfw = prefs.getBool("showNsfw") ?? false;
+  list.add(PopupMenuItem(
+      child: StatefulBuilder(
+    builder: (context, setState) => CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      value: showNsfw,
+      onChanged: (value) {
+        if (value != null) {
+          prefs.setBool("showNsfw", value);
+          listener.emit("showNsfwChanged", null);
+          setState(() {
+            showNsfw = value;
+          });
+        }
+      },
+      title: Text(AppLocalizations.of(context)!.showNsfw),
+    ),
+  )));
   return list;
 }
 
@@ -219,6 +241,7 @@ final _authLog = Logger("AuthLog");
 
 void clearAllStates(BuildContext context) {
   auth.clear();
+  tags.clear();
   checkAuth(context);
 }
 

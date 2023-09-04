@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/gallery.dart';
+import 'tags.dart';
 import 'thumbnail.dart';
 
 class GalleryInfoDesktop extends StatelessWidget {
@@ -45,7 +46,7 @@ class GalleryInfoDesktop extends StatelessWidget {
                               SelectableText(gData.meta.uploader),
                             ])),
                         const VerticalDivider(indent: 10, endIndent: 10),
-                        Expanded(child: Column(children: [])),
+                        Expanded(child: TagsPanel(gData.tags)),
                         const VerticalDivider(indent: 10, endIndent: 10),
                         SizedBox(width: 150, child: Column(children: [])),
                       ])),

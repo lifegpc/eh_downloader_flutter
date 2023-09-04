@@ -6,6 +6,7 @@ import 'package:retrofit/retrofit.dart';
 import 'api_result.dart';
 import 'gallery.dart';
 import 'status.dart';
+import 'tags.dart';
 import 'token.dart';
 import 'user.dart';
 
@@ -113,6 +114,12 @@ abstract class _EHApi {
       {@Query("all") bool? all,
       @Query("offset") int? offset,
       @Query("limit") int? limit});
+
+  @GET('/tag/{id}')
+  // ignore: unused_element
+  Future<ApiResult<Tags>> _getTags(@Path("id") String id);
+  @GET('/tag/rows')
+  Future<ApiResult<List<Tag>>> getRowTags();
 }
 
 class EHApi extends __EHApi {
@@ -144,5 +151,9 @@ class EHApi extends __EHApi {
 
   Future<ApiResult<EhFiles>> getFiles(List<String> tokens) {
     return _getFiles(tokens.join(","));
+  }
+
+  Future<ApiResult<Tags>> getTags(List<int> ids) {
+    return _getTags(ids.join(","));
   }
 }
