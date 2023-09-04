@@ -27,5 +27,6 @@
     "read": "Read",
     "download": "Download",
     "colon": ":",
-    "copyImage": "Copy image to clipboard"
+    "copyImage": "Copy image to clipboard",
+    "copyImgUrl": "Copy image URL to clipboard"
 }

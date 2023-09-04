@@ -46,6 +46,7 @@ class _Thumbnail extends State<Thumbnail> {
   Object? _error;
   int? _fileId;
   bool _showNsfw = false;
+  String? _uri;
   Future<void> _fetchData() async {
     try {
       _isLoading = true;
@@ -63,6 +64,7 @@ class _Thumbnail extends State<Thumbnail> {
         throw Exception(
             'Failed to get thumbnail: ${re.response.statusCode} ${re.response.statusMessage}');
       }
+      _uri = re.response.realUri.toString();
       final data = Uint8List.fromList(re.data);
       setState(() {
         _isLoading = false;
@@ -84,6 +86,7 @@ class _Thumbnail extends State<Thumbnail> {
     _error = null;
     _fileId = widget._fileId;
     _showNsfw = false;
+    _uri = null;
     super.initState();
   }
 
@@ -111,7 +114,8 @@ class _Thumbnail extends State<Thumbnail> {
                                       sigmaX: 10,
                                       sigmaY: 10,
                                       tileMode: TileMode.decal),
-                                  child: ImageWithContextMenu(_data!))),
+                                  child:
+                                      ImageWithContextMenu(_data!, uri: _uri))),
                           SizedBox(
                               width: widget.width.toDouble(),
                               height: widget.height.toDouble(),
@@ -127,7 +131,7 @@ class _Thumbnail extends State<Thumbnail> {
                               ))
                         ],
                       )
-                    : ImageWithContextMenu(_data!)
+                    : ImageWithContextMenu(_data!, uri: _uri)
                 : Text("Error $_error"));
   }
 }

@@ -27,5 +27,6 @@
     "read": "阅读",
     "download": "下载",
     "colon": "：",
-    "copyImage": "复制图片到剪贴板"
+    "copyImage": "复制图片到剪贴板",
+    "copyImgUrl": "复制图片链接到剪贴板"
 }
