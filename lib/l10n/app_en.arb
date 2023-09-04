@@ -22,5 +22,8 @@
     "galleries": "Galleries",
     "loading": "Loading...",
     "gallery": "Gallery",
-    "useTitleJpn": "Use Japanese title first"
+    "useTitleJpn": "Use Japanese title first",
+    "showNsfw": "Show NSFW image by default",
+    "read": "Read",
+    "download": "Download"
 }

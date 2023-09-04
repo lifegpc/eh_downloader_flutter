@@ -106,8 +106,10 @@ class _Thumbnail extends State<Thumbnail> {
                               width: widget.width.toDouble(),
                               height: widget.height.toDouble(),
                               child: ImageFiltered(
-                                  imageFilter:
-                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  imageFilter: ImageFilter.blur(
+                                      sigmaX: 10,
+                                      sigmaY: 10,
+                                      tileMode: TileMode.decal),
                                   child: Image.memory(_data!))),
                           SizedBox(
                               width: widget.width.toDouble(),

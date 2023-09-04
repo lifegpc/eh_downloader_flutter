@@ -18,8 +18,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
   Lang _oriLang = Lang.system;
+  bool _oriShowNsfw = false;
   bool _oriUseTitleJpn = false;
   Lang _lang = Lang.system;
+  bool _showNsfw = false;
   bool _useTitleJpn = false;
   @override
   void initState() {
@@ -40,6 +42,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _oriUseTitleJpn = false;
       _useTitleJpn = false;
     }
+    try {
+      _oriShowNsfw = prefs.getBool("showNsfw") ?? false;
+      _showNsfw = _oriShowNsfw;
+    } catch (e) {
+      _log.warning("Failed to get showNsfw:", e);
+      _oriShowNsfw = false;
+      _showNsfw = false;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -53,6 +63,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
     setState(() {
       _lang = Lang.system;
       _useTitleJpn = false;
+      _showNsfw = false;
     });
   }
 
@@ -70,6 +81,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
         _log.warning("Failed to save useTitleJpn.");
       } else {
         _oriUseTitleJpn = _useTitleJpn;
+      }
+    }
+    if (_oriShowNsfw != _showNsfw) {
+      if (!await prefs.setBool("showNsfw", _showNsfw)) {
+        re = false;
+        _log.warning("Failed to save showNsfw.");
+      } else {
+        _oriShowNsfw = _showNsfw;
       }
     }
     return re;
@@ -145,6 +164,21 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                   child: Text(AppLocalizations.of(context)!
                                       .useTitleJpn),
                                 )),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CheckboxMenuButton(
+                                value: _showNsfw,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _showNsfw = value;
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.showNsfw),
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

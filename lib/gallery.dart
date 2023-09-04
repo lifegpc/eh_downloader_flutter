@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'api/gallery.dart';
+import 'components/gallery_info.dart';
 import 'components/thumbnail.dart';
 import 'globals.dart';
 
@@ -70,7 +71,9 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
               context.canPop() ? context.pop() : context.go("/");
             },
           ),
-          title: _data != null ? SelectableText(title) : Text(title),
+          title: _data != null
+              ? SelectableText(maxLines: 2, minLines: 1, title)
+              : Text(title),
           actions: [
             buildThemeModeIcon(context),
             buildMoreVertSettingsButon(context),
@@ -79,9 +82,7 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
-                ? Center(
-                    child: Thumbnail(_data!.pages[0]!),
-                  )
+                ? GalleryInfo(_data!)
                 : Center(
                     child: Text("Error: $_error"),
                   ));

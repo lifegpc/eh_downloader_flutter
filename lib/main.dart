@@ -126,8 +126,8 @@ class MainApp extends StatefulWidget {
 
 class _MainApp extends State<MainApp> {
   ThemeMode _themeMode = ThemeMode.system;
-  ThemeData _themeData = ThemeData();
-  ThemeData _darkThemeData = ThemeData.dark();
+  ThemeData _themeData = ThemeData(useMaterial3: true);
+  ThemeData _darkThemeData = ThemeData.dark(useMaterial3: true);
   ThemeMode get themeMode => _themeMode;
   Lang _lang = Lang.system;
   Lang get lang => _lang;

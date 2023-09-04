@@ -22,5 +22,8 @@
     "galleries": "画廊",
     "loading": "加载中…",
     "gallery": "画廊",
-    "useTitleJpn": "优先使用日语标题"
+    "useTitleJpn": "优先使用日语标题",
+    "showNsfw": "默认显示NSFW图片",
+    "read": "阅读",
+    "download": "下载"
 }
