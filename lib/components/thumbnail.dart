@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import '../api/client.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
+import 'image.dart';
 
 final _log = Logger("Thumbnail");
 
@@ -110,7 +111,7 @@ class _Thumbnail extends State<Thumbnail> {
                                       sigmaX: 10,
                                       sigmaY: 10,
                                       tileMode: TileMode.decal),
-                                  child: Image.memory(_data!))),
+                                  child: ImageWithContextMenu(_data!))),
                           SizedBox(
                               width: widget.width.toDouble(),
                               height: widget.height.toDouble(),
@@ -126,7 +127,7 @@ class _Thumbnail extends State<Thumbnail> {
                               ))
                         ],
                       )
-                    : Image.memory(_data!)
+                    : ImageWithContextMenu(_data!)
                 : Text("Error $_error"));
   }
 }

@@ -26,5 +26,6 @@
     "showNsfw": "默认显示NSFW图片",
     "read": "阅读",
     "download": "下载",
-    "colon": "："
+    "colon": "：",
+    "copyImage": "复制图片到剪贴板"
 }

@@ -26,5 +26,6 @@
     "showNsfw": "Show NSFW image by default",
     "read": "Read",
     "download": "Download",
-    "colon": ":"
+    "colon": ":",
+    "copyImage": "Copy image to clipboard"
 }
