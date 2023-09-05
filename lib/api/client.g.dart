@@ -24,6 +24,7 @@ class __EHApi implements _EHApi {
     String password, {
     bool? isAdmin,
     int? permissions,
+    CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -62,6 +63,7 @@ class __EHApi implements _EHApi {
               '/user',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -79,6 +81,7 @@ class __EHApi implements _EHApi {
   Future<ApiResult<BUser>> getUser({
     int? id,
     String? username,
+    CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -99,6 +102,7 @@ class __EHApi implements _EHApi {
               '/user',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -113,9 +117,10 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<ServerStatus>> getStatus() async {
+  Future<ApiResult<ServerStatus>> getStatus({CancelToken? cancel}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -129,6 +134,7 @@ class __EHApi implements _EHApi {
               '/status',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -150,6 +156,7 @@ class __EHApi implements _EHApi {
     bool? setCookie,
     bool? httpOnly,
     bool? secure,
+    CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -198,6 +205,7 @@ class __EHApi implements _EHApi {
               '/token',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -212,7 +220,10 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<bool>> deleteToken({String? token}) async {
+  Future<ApiResult<bool>> deleteToken({
+    String? token,
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
@@ -236,6 +247,7 @@ class __EHApi implements _EHApi {
               '/token',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -250,7 +262,10 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<TokenWithUserInfo>> getToken({String? token}) async {
+  Future<ApiResult<TokenWithUserInfo>> getToken({
+    String? token,
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'token': token};
     queryParameters.removeWhere((k, v) => v == null);
@@ -267,6 +282,7 @@ class __EHApi implements _EHApi {
               '/token',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -281,9 +297,13 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<HttpResponse<List<int>>> getFile(int id) async {
+  Future<HttpResponse<List<int>>> getFile(
+    int id, {
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -298,6 +318,7 @@ class __EHApi implements _EHApi {
               '/file/${id}',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -312,10 +333,12 @@ class __EHApi implements _EHApi {
   @override
   Future<ApiResult<EhFileExtend>> _getFileData(
     int id,
-    bool data,
-  ) async {
+    bool data, {
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'data': data};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -329,6 +352,7 @@ class __EHApi implements _EHApi {
               '/file/${id}',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -347,6 +371,7 @@ class __EHApi implements _EHApi {
     bool? isNsfw,
     bool? isAd,
     bool? thumb,
+    CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -369,6 +394,7 @@ class __EHApi implements _EHApi {
               '/file/random',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -381,9 +407,13 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<EhFiles>> _getFiles(String token) async {
+  Future<ApiResult<EhFiles>> _getFiles(
+    String token, {
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -397,6 +427,7 @@ class __EHApi implements _EHApi {
               '/files/${token}',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -420,6 +451,7 @@ class __EHApi implements _EHApi {
     bool? force,
     ThumbnailMethod? method,
     ThumbnailAlign? align,
+    CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -446,6 +478,7 @@ class __EHApi implements _EHApi {
               '/thumbnail/${id}',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -458,9 +491,13 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<GalleryData>> getGallery(int gid) async {
+  Future<ApiResult<GalleryData>> getGallery(
+    int gid, {
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -474,6 +511,7 @@ class __EHApi implements _EHApi {
               '/gallery/${gid}',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -492,6 +530,7 @@ class __EHApi implements _EHApi {
     bool? all,
     int? offset,
     int? limit,
+    CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -513,6 +552,7 @@ class __EHApi implements _EHApi {
               '/gallery/list',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -531,9 +571,13 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<Tags>> _getTags(String id) async {
+  Future<ApiResult<Tags>> _getTags(
+    String id, {
+    CancelToken? cancel,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -547,6 +591,7 @@ class __EHApi implements _EHApi {
               '/tag/${id}',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(
@@ -561,9 +606,10 @@ class __EHApi implements _EHApi {
   }
 
   @override
-  Future<ApiResult<List<Tag>>> getRowTags() async {
+  Future<ApiResult<List<Tag>>> getRowTags({CancelToken? cancel}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -577,6 +623,7 @@ class __EHApi implements _EHApi {
               '/tag/rows',
               queryParameters: queryParameters,
               data: _data,
+              cancelToken: cancel,
             )
             .copyWith(
                 baseUrl: _combineBaseUrls(

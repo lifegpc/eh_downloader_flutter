@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
@@ -47,35 +48,47 @@ class _Thumbnail extends State<Thumbnail> {
   int? _fileId;
   bool _showNsfw = false;
   String? _uri;
+  CancelToken? _cancel;
   Future<void> _fetchData() async {
     try {
+      _cancel = CancelToken();
       _isLoading = true;
       if (_fileId == null) {
         final token = widget._pMeta.token;
-        _fileId = (await api.getFiles([token])).unwrap().files[token]![0]!.id;
+        _fileId = (await api.getFiles([token], cancel: _cancel))
+            .unwrap()
+            .files[token]![0]!
+            .id;
       }
       final re = await api.getThumbnail(_fileId!,
           max: widget._max,
           width: widget._width,
           height: widget._height,
           method: ThumbnailMethod.contain,
-          align: ThumbnailAlign.center);
+          align: ThumbnailAlign.center,
+          cancel: _cancel);
       if (re.response.statusCode != 200) {
         throw Exception(
             'Failed to get thumbnail: ${re.response.statusCode} ${re.response.statusMessage}');
       }
       _uri = re.response.realUri.toString();
       final data = Uint8List.fromList(re.data);
-      setState(() {
-        _isLoading = false;
-        _data = data;
-      });
+      if (!_cancel!.isCancelled) {
+        setState(() {
+          _isLoading = false;
+          _data = data;
+          _cancel = null;
+        });
+      }
     } catch (e) {
-      _log.warning("Failed to get file data:", e);
-      setState(() {
-        _isLoading = false;
-        _error = e;
-      });
+      if (!_cancel!.isCancelled) {
+        _log.warning("Failed to get file data:", e);
+        setState(() {
+          _isLoading = false;
+          _error = e;
+          _cancel = null;
+        });
+      }
     }
   }
 
@@ -91,6 +104,12 @@ class _Thumbnail extends State<Thumbnail> {
   }
 
   bool get showNsfw => _showNsfw || (prefs.getBool("showNsfw") ?? false);
+
+  @override
+  void dispose() {
+    _cancel?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +151,20 @@ class _Thumbnail extends State<Thumbnail> {
                         ],
                       )
                     : ImageWithContextMenu(_data!, uri: _uri)
-                : Text("Error $_error"));
+                : Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                        SelectableText("Error $_error"),
+                        ElevatedButton.icon(
+                            onPressed: () {
+                              _fetchData();
+                              setState(() {
+                                _error = null;
+                              });
+                            },
+                            icon: const Icon(Icons.refresh),
+                            label: Text(AppLocalizations.of(context)!.retry))
+                      ])));
   }
 }

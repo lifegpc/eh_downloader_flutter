@@ -52,13 +52,17 @@ abstract class _EHApi {
   Future<ApiResult<int>> createUser(
       @Part(name: "name") String name, @Part(name: "password") String password,
       {@Part(name: "is_admin") bool? isAdmin,
-      @Part(name: "permissions") int? permissions});
+      @Part(name: "permissions") int? permissions,
+      @CancelRequest() CancelToken? cancel});
   @GET('/user')
   Future<ApiResult<BUser>> getUser(
-      {@Query("id") int? id, @Query("username") String? username});
+      {@Query("id") int? id,
+      @Query("username") String? username,
+      @CancelRequest() CancelToken? cancel});
 
   @GET('/status')
-  Future<ApiResult<ServerStatus>> getStatus();
+  Future<ApiResult<ServerStatus>> getStatus(
+      {@CancelRequest() CancelToken? cancel});
 
   @PUT('/token')
   @MultiPart()
@@ -72,30 +76,40 @@ abstract class _EHApi {
       // ignore: unused_element
       @Part(name: "http_only") bool? httpOnly,
       // ignore: unused_element
-      @Part(name: "secure") bool? secure});
+      @Part(name: "secure") bool? secure,
+      // ignore: unused_element
+      @CancelRequest() CancelToken? cancel});
   @DELETE('/token')
   @MultiPart()
-  Future<ApiResult<bool>> deleteToken({@Part(name: "token") String? token});
+  Future<ApiResult<bool>> deleteToken(
+      {@Part(name: "token") String? token,
+      @CancelRequest() CancelToken? cancel});
   @GET('/token')
   Future<ApiResult<TokenWithUserInfo>> getToken(
-      {@Query("token") String? token});
+      {@Query("token") String? token, @CancelRequest() CancelToken? cancel});
 
   @GET('/file/{id}')
   @DioResponseType(ResponseType.bytes)
-  Future<HttpResponse<List<int>>> getFile(@Path("id") int id);
+  Future<HttpResponse<List<int>>> getFile(@Path("id") int id,
+      {@CancelRequest() CancelToken? cancel});
   @GET('/file/{id}')
   // ignore: unused_element
   Future<ApiResult<EhFileExtend>> _getFileData(
-      @Path("id") int id, @Query("data") bool data);
+      @Path("id") int id, @Query("data") bool data,
+      // ignore: unused_element
+      {@CancelRequest() CancelToken? cancel});
   @GET('/file/random')
   @DioResponseType(ResponseType.bytes)
   Future<HttpResponse<List<int>>> getRandomFile(
       {@Query("is_nsfw") bool? isNsfw,
       @Query("is_ad") bool? isAd,
-      @Query("thumb") bool? thumb});
+      @Query("thumb") bool? thumb,
+      @CancelRequest() CancelToken? cancel});
   @GET('/files/{token}')
   // ignore: unused_element
-  Future<ApiResult<EhFiles>> _getFiles(@Path("token") String token);
+  Future<ApiResult<EhFiles>> _getFiles(@Path("token") String token,
+      // ignore: unused_element
+      {@CancelRequest() CancelToken? cancel});
   @GET('/thumbnail/{id}')
   @DioResponseType(ResponseType.bytes)
   Future<HttpResponse<List<int>>> getThumbnail(@Path("id") int id,
@@ -105,21 +119,27 @@ abstract class _EHApi {
       @Query("quality") int? quality,
       @Query("force") bool? force,
       @Query("method") ThumbnailMethod? method,
-      @Query("align") ThumbnailAlign? align});
+      @Query("align") ThumbnailAlign? align,
+      @CancelRequest() CancelToken? cancel});
 
   @GET('/gallery/{gid}')
-  Future<ApiResult<GalleryData>> getGallery(@Path("gid") int gid);
+  Future<ApiResult<GalleryData>> getGallery(@Path("gid") int gid,
+      {@CancelRequest() CancelToken? cancel});
   @GET('/gallery/list')
   Future<ApiResult<List<GMeta>>> listGalleries(
       {@Query("all") bool? all,
       @Query("offset") int? offset,
-      @Query("limit") int? limit});
+      @Query("limit") int? limit,
+      @CancelRequest() CancelToken? cancel});
 
   @GET('/tag/{id}')
   // ignore: unused_element
-  Future<ApiResult<Tags>> _getTags(@Path("id") String id);
+  Future<ApiResult<Tags>> _getTags(@Path("id") String id,
+      // ignore: unused_element
+      {@CancelRequest() CancelToken? cancel});
   @GET('/tag/rows')
-  Future<ApiResult<List<Tag>>> getRowTags();
+  Future<ApiResult<List<Tag>>> getRowTags(
+      {@CancelRequest() CancelToken? cancel});
 }
 
 class EHApi extends __EHApi {
@@ -129,7 +149,8 @@ class EHApi extends __EHApi {
       required String password,
       bool? setCookie,
       bool? httpOnly,
-      bool? secure}) async {
+      bool? secure,
+      CancelToken? cancel}) async {
     int t = DateTime.now().millisecondsSinceEpoch;
     final p =
         await _pbkdf2a.deriveKeyFromPassword(password: password, nonce: _salt);
@@ -142,18 +163,20 @@ class EHApi extends __EHApi {
         t: t,
         setCookie: setCookie,
         httpOnly: httpOnly,
-        secure: secure);
+        secure: secure,
+        cancel: cancel);
   }
 
-  Future<ApiResult<EhFileExtend>> getFileData(int id) {
-    return _getFileData(id, true);
+  Future<ApiResult<EhFileExtend>> getFileData(int id, {CancelToken? cancel}) {
+    return _getFileData(id, true, cancel: cancel);
   }
 
-  Future<ApiResult<EhFiles>> getFiles(List<String> tokens) {
-    return _getFiles(tokens.join(","));
+  Future<ApiResult<EhFiles>> getFiles(List<String> tokens,
+      {CancelToken? cancel}) {
+    return _getFiles(tokens.join(","), cancel: cancel);
   }
 
-  Future<ApiResult<Tags>> getTags(List<int> ids) {
-    return _getTags(ids.join(","));
+  Future<ApiResult<Tags>> getTags(List<int> ids, {CancelToken? cancel}) {
+    return _getTags(ids.join(","), cancel: cancel);
   }
 }
