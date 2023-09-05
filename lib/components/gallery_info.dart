@@ -18,13 +18,14 @@ class GalleryInfo extends StatefulWidget {
 
 class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
   final ScrollController controller = ScrollController();
-  void showNsfwChanged(dynamic _) {
+  void stateChanged(dynamic _) {
     setState(() {});
   }
 
   @override
   void initState() {
-    listener.on("showNsfwChanged", showNsfwChanged);
+    listener.on("showNsfwChanged", stateChanged);
+    listener.on("displayAdChanged", stateChanged);
     super.initState();
   }
 
@@ -76,7 +77,8 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
   @override
   void dispose() {
     controller.dispose();
-    listener.removeEventListener("showNsfwChanged", showNsfwChanged);
+    listener.removeEventListener("showNsfwChanged", stateChanged);
+    listener.removeEventListener("displayAdChanged", stateChanged);
     super.dispose();
   }
 }

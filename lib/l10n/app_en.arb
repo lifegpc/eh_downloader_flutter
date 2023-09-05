@@ -29,5 +29,6 @@
     "colon": ":",
     "copyImage": "Copy image to clipboard",
     "copyImgUrl": "Copy image URL to clipboard",
-    "retry": "Retry"
+    "retry": "Retry",
+    "displayAd": "Display Ad pages"
 }

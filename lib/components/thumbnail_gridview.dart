@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../api/file.dart';
 import '../api/gallery.dart';
+import '../globals.dart';
 import 'thumbnail.dart';
 
 class ThumbnailGridView extends StatelessWidget {
@@ -12,11 +13,13 @@ class ThumbnailGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayAd = prefs.getBool("displayAd") ?? false;
+    final npages = displayAd ? pages : pages.where((e) => !e.isAd).toList();
     return SliverGrid.builder(
         gridDelegate: gridDelegate,
-        itemCount: pages.length,
+        itemCount: npages.length,
         itemBuilder: (context, index) {
-          final page = pages[index]!;
+          final page = npages[index]!;
           final fileId =
               files != null ? files!.files[page.token]!.first.id : null;
           return Container(

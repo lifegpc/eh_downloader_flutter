@@ -181,6 +181,24 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       title: Text(AppLocalizations.of(context)!.showNsfw),
     ),
   )));
+  var displayAd = prefs.getBool("displayAd") ?? false;
+  list.add(PopupMenuItem(
+      child: StatefulBuilder(
+    builder: (context, setState) => CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      value: displayAd,
+      onChanged: (value) {
+        if (value != null) {
+          prefs.setBool("displayAd", value);
+          listener.emit("displayAdChanged", null);
+          setState(() {
+            displayAd = value;
+          });
+        }
+      },
+      title: Text(AppLocalizations.of(context)!.displayAd),
+    ),
+  )));
   return list;
 }
 
