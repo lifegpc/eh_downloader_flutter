@@ -1,5 +1,6 @@
 import 'package:eh_downloader_flutter/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../api/file.dart';
 import '../api/gallery.dart';
 import 'gallery_basic_info.dart';
@@ -15,7 +16,7 @@ class GalleryInfo extends StatefulWidget {
   State<GalleryInfo> createState() => _GalleryInfo();
 }
 
-class _GalleryInfo extends State<GalleryInfo> {
+class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
   final ScrollController controller = ScrollController();
   void showNsfwChanged(dynamic _) {
     setState(() {});
@@ -37,6 +38,21 @@ class _GalleryInfo extends State<GalleryInfo> {
     return CustomScrollView(
       controller: controller,
       slivers: [
+        SliverAppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.canPop() ? context.pop() : context.go("/");
+            },
+          ),
+          title: SelectableText(
+              maxLines: 2, minLines: 1, widget.gData.meta.preferredTitle),
+          actions: [
+            buildThemeModeIcon(context),
+            buildMoreVertSettingsButon(context),
+          ],
+          floating: true,
+        ),
         useMobile
             ? SliverList(
                 delegate: SliverChildListDelegate([

@@ -66,24 +66,24 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
     final title = isLoading
         ? AppLocalizations.of(context)!.loading
         : _data != null
-            ? _data!.meta.preferredTitle
+            ? ""
             : AppLocalizations.of(context)!.gallery;
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.canPop() ? context.pop() : context.go("/");
-            },
-          ),
-          title: _data != null
-              ? SelectableText(maxLines: 2, minLines: 1, title)
-              : Text(title),
-          actions: [
-            buildThemeModeIcon(context),
-            buildMoreVertSettingsButon(context),
-          ],
-        ),
+        appBar: _data == null
+            ? AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.canPop() ? context.pop() : context.go("/");
+                  },
+                ),
+                title: Text(title),
+                actions: [
+                  buildThemeModeIcon(context),
+                  buildMoreVertSettingsButon(context),
+                ],
+              )
+            : null,
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
