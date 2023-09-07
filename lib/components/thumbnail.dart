@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import '../api/client.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
+import '../utils/clipboard.dart';
 import 'image.dart';
 
 final _log = Logger("Thumbnail");
@@ -39,6 +40,11 @@ class Thumbnail extends StatefulWidget {
 
   @override
   State<Thumbnail> createState() => _Thumbnail();
+}
+
+enum _ThumbnailMenu {
+  copyImage,
+  copyImgUrl,
 }
 
 class _Thumbnail extends State<Thumbnail> {
@@ -111,11 +117,52 @@ class _Thumbnail extends State<Thumbnail> {
     super.dispose();
   }
 
+  Future<void> onItemSelected(_ThumbnailMenu v) async {
+    switch (v) {
+      case _ThumbnailMenu.copyImage:
+        try {
+          copyImageToClipboard(_data!, ImageFmt.jpg);
+        } catch (err) {
+          _log.warning("Failed to copy image to clipboard:", err);
+        }
+        break;
+      case _ThumbnailMenu.copyImgUrl:
+        try {
+          copyTextToClipboard(_uri!);
+        } catch (err) {
+          _log.warning("Failed to copy image url to clipboard:", err);
+        }
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
     if (isLoading && !_isLoading) _fetchData();
+    final iconSize = Theme.of(context).iconTheme.size;
+    final moreVertMenu = Positioned(
+        right: 0,
+        top: 0,
+        width: iconSize,
+        height: iconSize,
+        child: PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (v) {
+              onItemSelected(v);
+            },
+            itemBuilder: (context) {
+              var list = <PopupMenuEntry<_ThumbnailMenu>>[
+                PopupMenuItem(
+                    value: _ThumbnailMenu.copyImage,
+                    child: Text(AppLocalizations.of(context)!.copyImage)),
+                PopupMenuItem(
+                    value: _ThumbnailMenu.copyImgUrl,
+                    child: Text(AppLocalizations.of(context)!.copyImgUrl)),
+              ];
+              return list;
+            }));
     return SizedBox(
         width: widget.width.toDouble(),
         height: widget.height.toDouble(),
@@ -147,10 +194,17 @@ class _Thumbnail extends State<Thumbnail> {
                                   },
                                   icon: const Icon(Icons.visibility),
                                 ),
-                              ))
+                              )),
+                          moreVertMenu
                         ],
                       )
-                    : ImageWithContextMenu(_data!, uri: _uri)
+                    : Stack(children: [
+                        SizedBox(
+                            width: widget.width.toDouble(),
+                            height: widget.height.toDouble(),
+                            child: ImageWithContextMenu(_data!, uri: _uri)),
+                        moreVertMenu
+                      ])
                 : Center(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
