@@ -1,4 +1,4 @@
-package com.example.eh_downloader_flutter
+package com.lifegpc.ehf
 
 import io.flutter.embedding.android.FlutterActivity
 
