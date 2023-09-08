@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../main.dart';
+import 'tag_tooltip.dart';
 import 'scroll_parent.dart';
 
 class TagsPanel extends StatefulWidget {
@@ -12,13 +13,6 @@ class TagsPanel extends StatefulWidget {
 
   @override
   State<TagsPanel> createState() => _TagsPanel();
-}
-
-String _getTag(Tag tag) {
-  final tags = tag.tag.split(":");
-  if (tags.length < 2) return tag.translated ?? tag.tag;
-  final name = tags[1]!;
-  return tag.translated ?? name;
 }
 
 class _TagsPanel extends State<TagsPanel> {
@@ -77,8 +71,9 @@ class _TagsPanel extends State<TagsPanel> {
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     border: Border.all(width: 1, color: cs.primary),
                   ),
-                  child: SelectableText(
-                      stt ? _getTag(ta[index - 1]!) : ta[index - 1]!.tag));
+                  child: stt
+                      ? TagTooltip(ta[index - 1]!)
+                      : SelectableText(ta[index - 1]!.tag));
             }
           }));
         });
