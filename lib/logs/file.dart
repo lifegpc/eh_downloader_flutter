@@ -26,6 +26,29 @@ class LogsFile {
             await dir.create(recursive: true);
           }
           _cachedLogDirectory = dir;
+          final d1 = _file(DateTime.now());
+          if (d1 == null) {
+            throw Exception("Failed to create log file.");
+          }
+          return;
+        }
+      } catch (e) {
+        // Do nothing
+      }
+    }
+    if (isAndroid) {
+      try {
+        final io.Directory? dir = await getExternalStorageDirectory();
+        if (dir != null) {
+          final d = fs.directory(path.join(dir.path, "logs"));
+          if (!(await d.exists())) {
+            await d.create(recursive: true);
+          }
+          _cachedLogDirectory = d;
+          final d2 = _file(DateTime.now());
+          if (d2 == null) {
+            throw Exception("Failed to create log file.");
+          }
           return;
         }
       } catch (e) {
