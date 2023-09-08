@@ -2,12 +2,25 @@ name: Windows build
 on:
   push:
     branches: [master]
+    paths-ignore:
+     - 'android/**'
+     - 'ios/**'
+     - 'linux/**'
+     - 'macos/**'
+     - 'web/**'
+     - '.gitignore'
+     - '.gitmodules'
+     - 'README.md'
+     - 'LICENSE'
 jobs:
   windows:
     runs-on: windows-latest
     steps:
       - name: Check Out
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
       - name: Setup flutter
         uses: subosito/flutter-action@v2
         with:

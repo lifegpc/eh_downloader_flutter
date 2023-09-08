@@ -2,6 +2,16 @@ name: Deploy
 on:
   push:
     branches: [master]
+    paths-ignore:
+     - 'android/**'
+     - 'ios/**'
+     - 'linux/**'
+     - 'macos/**'
+     - 'windows/**'
+     - '.gitignore'
+     - '.gitmodules'
+     - 'README.md'
+     - 'LICENSE'
 concurrency:
   group: deploy
   cancel-in-progress: false
