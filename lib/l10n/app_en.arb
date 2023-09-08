@@ -30,5 +30,6 @@
     "copyImage": "Copy image to clipboard",
     "copyImgUrl": "Copy image URL to clipboard",
     "retry": "Retry",
-    "displayAd": "Display Ad pages"
+    "displayAd": "Display Ad pages",
+    "showTranslatedTag": "Show translated tag (Chinese only)"
 }

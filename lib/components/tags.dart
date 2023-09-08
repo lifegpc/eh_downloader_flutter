@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
+import '../main.dart';
 import 'scroll_parent.dart';
 
 class TagsPanel extends StatefulWidget {
@@ -53,6 +54,8 @@ class _TagsPanel extends State<TagsPanel> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final stt = prefs.getBool("showTranslatedTag") ??
+        MainApp.of(context).lang.toLocale().languageCode == "zh";
     final re = ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: data!.length,
@@ -60,7 +63,7 @@ class _TagsPanel extends State<TagsPanel> {
           final t = data![index].$1;
           final ta = data![index].$2;
           final namespace =
-              "${tags.getTagTranslate(t) ?? t}${AppLocalizations.of(context)!.colon}";
+              "${stt ? (tags.getTagTranslate(t) ?? t) : t}${AppLocalizations.of(context)!.colon}";
           return Wrap(
               children: List.generate(ta.length + 1, (index) {
             if (index == 0) {
@@ -74,7 +77,8 @@ class _TagsPanel extends State<TagsPanel> {
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     border: Border.all(width: 1, color: cs.primary),
                   ),
-                  child: SelectableText(_getTag(ta[index - 1]!)));
+                  child: SelectableText(
+                      stt ? _getTag(ta[index - 1]!) : ta[index - 1]!.tag));
             }
           }));
         });

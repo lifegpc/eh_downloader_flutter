@@ -17,11 +17,15 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
+  bool _oriDisplayAd = false;
   Lang _oriLang = Lang.system;
   bool _oriShowNsfw = false;
+  bool _oriShowTranslatedTag = false;
   bool _oriUseTitleJpn = false;
+  bool _displayAd = false;
   Lang _lang = Lang.system;
   bool _showNsfw = false;
+  bool _showTranslatedTag = false;
   bool _useTitleJpn = false;
   @override
   void initState() {
@@ -50,6 +54,23 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _oriShowNsfw = false;
       _showNsfw = false;
     }
+    try {
+      _oriDisplayAd = prefs.getBool("displayAd") ?? false;
+      _displayAd = _oriDisplayAd;
+    } catch (e) {
+      _log.warning("Failed to get displayAd:", e);
+      _oriDisplayAd = false;
+      _displayAd = false;
+    }
+    try {
+      _oriShowTranslatedTag = prefs.getBool("showTranslatedTag") ??
+          _oriLang.toLocale().languageCode == "zh";
+      _showTranslatedTag = _oriShowTranslatedTag;
+    } catch (e) {
+      _log.warning("Failed to get showTranslatedTag:", e);
+      _oriShowTranslatedTag = false;
+      _showTranslatedTag = false;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -64,6 +85,8 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _lang = Lang.system;
       _useTitleJpn = false;
       _showNsfw = false;
+      _displayAd = false;
+      _showTranslatedTag = _oriLang.toLocale().languageCode == "zh";
     });
   }
 
@@ -89,6 +112,22 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
         _log.warning("Failed to save showNsfw.");
       } else {
         _oriShowNsfw = _showNsfw;
+      }
+    }
+    if (_oriDisplayAd != _displayAd) {
+      if (!await prefs.setBool("displayAd", _displayAd)) {
+        re = false;
+        _log.warning("Failed to save displayAd.");
+      } else {
+        _oriDisplayAd = _displayAd;
+      }
+    }
+    if (_oriShowTranslatedTag != _showTranslatedTag) {
+      if (!await prefs.setBool("showTranslatedTag", _showTranslatedTag)) {
+        re = false;
+        _log.warning("Failed to save showTranslatedTag.");
+      } else {
+        _oriShowTranslatedTag = _showTranslatedTag;
       }
     }
     return re;
@@ -177,6 +216,36 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                 },
                                 child: Text(
                                     AppLocalizations.of(context)!.showNsfw),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CheckboxMenuButton(
+                                value: _displayAd,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _displayAd = value;
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                    AppLocalizations.of(context)!.displayAd),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CheckboxMenuButton(
+                                value: _showTranslatedTag,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _showTranslatedTag = value;
+                                    });
+                                  }
+                                },
+                                child: Text(AppLocalizations.of(context)!
+                                    .showTranslatedTag),
                               ),
                             ),
                             Row(

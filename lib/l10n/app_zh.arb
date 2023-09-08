@@ -30,5 +30,6 @@
     "copyImage": "复制图片到剪贴板",
     "copyImgUrl": "复制图片链接到剪贴板",
     "retry": "重试",
-    "displayAd": "显示广告页面"
+    "displayAd": "显示广告页面",
+    "showTranslatedTag": "显示标签翻译（仅限中文）"
 }
