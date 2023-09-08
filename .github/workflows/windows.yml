@@ -1,8 +1,10 @@
 name: Windows build
 on:
   push:
-    branches: [master]
+    branches: ["*"]
     paths-ignore:
+     - '.github/workflows/android.yml'
+     - '.github/workflows/web.yml'
      - 'android/**'
      - 'ios/**'
      - 'linux/**'

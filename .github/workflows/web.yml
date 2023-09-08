@@ -1,8 +1,10 @@
 name: Web
 on:
   push:
-    branches: [master]
+    branches: ["*"]
     paths-ignore:
+     - '.github/workflows/android.yml'
+     - '.github/workflows/windows.yml'
      - 'android/**'
      - 'ios/**'
      - 'linux/**'

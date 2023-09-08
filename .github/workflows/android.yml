@@ -38,7 +38,7 @@ jobs:
       run: flutter build apk --release --split-per-abi
       env:
           CI: true
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_ALIAS: release
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
     - name: Upload artifact
