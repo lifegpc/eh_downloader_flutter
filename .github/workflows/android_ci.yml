@@ -42,6 +42,7 @@ jobs:
             SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
             SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
       - name: Upload artifact
+        uses: actions/upload-artifact@v2.2.0
         with: 
           name: app-release.${{ steps.current-time.outputs.formattedTime }}
           path: android/app/release/*.apk
