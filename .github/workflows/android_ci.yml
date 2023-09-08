@@ -38,8 +38,9 @@ jobs:
       run: echo $ENCODED_STRING | base64 -di > app/keystore.jks
     
     - name: Build apk
-      run: flutter build android release
+      run: flutter build apk --release --split-per-abi
       env:
+          CI: true
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
