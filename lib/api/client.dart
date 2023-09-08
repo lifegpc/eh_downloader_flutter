@@ -43,6 +43,22 @@ enum ThumbnailAlign {
   static const bottom = right;
 }
 
+enum SortByGid {
+  none,
+  asc,
+  desc;
+  bool? toBool() {
+    switch (this) {
+      case SortByGid.asc:
+        return true;
+      case SortByGid.desc:
+        return false;
+      default:
+        return null;
+    }
+  }
+}
+
 @RestApi()
 abstract class _EHApi {
   factory _EHApi(Dio dio, {required String baseUrl}) = __EHApi;
@@ -130,6 +146,7 @@ abstract class _EHApi {
       {@Query("all") bool? all,
       @Query("offset") int? offset,
       @Query("limit") int? limit,
+      @Query("sort_by_gid") bool? sortByGid,
       @CancelRequest() CancelToken? cancel});
 
   @GET('/tag/{id}')

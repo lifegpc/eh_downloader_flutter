@@ -31,5 +31,9 @@
     "copyImgUrl": "复制图片链接到剪贴板",
     "retry": "重试",
     "displayAd": "显示广告页面",
-    "showTranslatedTag": "显示标签翻译（仅限中文）"
+    "showTranslatedTag": "显示标签翻译（仅限中文）",
+    "none": "无",
+    "sortByGid": "按画廊ID排序",
+    "asc": "升序",
+    "desc": "降序"
 }

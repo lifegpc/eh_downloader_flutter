@@ -6,6 +6,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
+import 'api/client.dart';
 import 'create_root_user.dart';
 import 'galleries.dart';
 import 'gallery.dart';
@@ -42,9 +43,20 @@ final _router = GoRouter(
       builder: (context, state) => const SettingsPage(),
     ),
     GoRoute(
-      path: GalleriesPage.routeName,
-      builder: (context, state) => const GalleriesPage(),
-    ),
+        name: GalleriesPage.routeName,
+        path: GalleriesPage.routeName,
+        builder: (context, state) {
+          SortByGid? sortByGid;
+          try {
+            if (state.uri.queryParameters.containsKey("sortByGid")) {
+              sortByGid = SortByGid
+                  .values[int.parse(state.uri.queryParameters["sortByGid"]!)];
+            }
+          } catch (e) {
+            _routerLog.warning("Failed to load sortByGid from prefs:", e);
+          }
+          return GalleriesPage(sortByGid: sortByGid);
+        }),
     GoRoute(
         path: GalleryPage.routeName,
         builder: (context, state) => GalleryPage(

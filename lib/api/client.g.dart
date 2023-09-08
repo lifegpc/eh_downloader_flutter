@@ -530,6 +530,7 @@ class __EHApi implements _EHApi {
     bool? all,
     int? offset,
     int? limit,
+    bool? sortByGid,
     CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
@@ -537,6 +538,7 @@ class __EHApi implements _EHApi {
       r'all': all,
       r'offset': offset,
       r'limit': limit,
+      r'sort_by_gid': sortByGid,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

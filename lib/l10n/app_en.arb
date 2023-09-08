@@ -31,5 +31,9 @@
     "copyImgUrl": "Copy image URL to clipboard",
     "retry": "Retry",
     "displayAd": "Display Ad pages",
-    "showTranslatedTag": "Show translated tag (Chinese only)"
+    "showTranslatedTag": "Show translated tag (Chinese only)",
+    "none": "none",
+    "sortByGid": "Sort by gallery id",
+    "asc": "Ascending",
+    "desc": "Descending"
 }
