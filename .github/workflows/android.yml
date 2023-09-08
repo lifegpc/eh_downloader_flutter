@@ -2,6 +2,18 @@ name: Android Build
 on:
   push:
     branches: ["*"]
+    paths-ignore:
+      - '.github/workflows/web.yml'
+      - '.github/workflows/windows.yml'
+      - 'ios/**'
+      - 'linux/**'
+      - 'macos/**'
+      - 'web/**'
+      - 'windows/**'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'README.md'
+      - 'LICENSE'
 jobs:
   android:
     runs-on: ubuntu-latest
