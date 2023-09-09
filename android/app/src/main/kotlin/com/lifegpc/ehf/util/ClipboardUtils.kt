@@ -24,7 +24,7 @@ object ClipboardUtils {
     }
 
     private fun saveToImageCache(mimeType: String, byteArray: ByteArray): File {
-        val dir = File(MyApplication.applicationContext.filesDir, "images")
+        val dir = File(MyApplication.applicationContext.cacheDir, "images")
         if (!dir.exists()) {
             dir.mkdirs()
         }
