@@ -8,9 +8,13 @@ class MeilisearchInfo {
     required this.host,
     required this.key,
   });
+
   final String host;
   final String key;
-  factory MeilisearchInfo.fromJson(Map<String, dynamic> json) => _$MeilisearchInfoFromJson(json);
+
+  factory MeilisearchInfo.fromJson(Map<String, dynamic> json) =>
+      _$MeilisearchInfoFromJson(json);
+
   Map<String, dynamic> toJson() => _$MeilisearchInfoToJson(this);
 }
 
@@ -23,6 +27,7 @@ class ServerStatus {
     this.meilisearch,
     required this.noUser,
   });
+
   @JsonKey(name: 'ffmpeg_api_enabled')
   final bool ffmpegApiEnabled;
   @JsonKey(name: 'ffmpeg_binary_enabled')
@@ -32,6 +37,9 @@ class ServerStatus {
   final MeilisearchInfo? meilisearch;
   @JsonKey(name: 'no_user')
   final bool noUser;
-  factory ServerStatus.fromJson(Map<String, dynamic> json) => _$ServerStatusFromJson(json);
+
+  factory ServerStatus.fromJson(Map<String, dynamic> json) =>
+      _$ServerStatusFromJson(json);
+
   Map<String, dynamic> toJson() => _$ServerStatusToJson(this);
 }

@@ -3,8 +3,6 @@ package com.lifegpc.ehf
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
 import com.lifegpc.ehf.annotation.ChannelMethod
 import com.lifegpc.ehf.data.mmkv.SAFSettings
@@ -13,18 +11,24 @@ import com.lifegpc.ehf.util.MethodChannelUtils
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import java.io.FileOutputStream
-import java.lang.Exception
 
 class MainActivity : FlutterActivity() {
     private val safAuthorizationCode = 0x10086
     private var safAuthorizationResult: MethodChannel.Result? = null
-    private var afterAuthSuccess:(()->Unit)?=null
+    private var afterAuthSuccess: (() -> Unit)? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannelUtils.registerMethodChannel("lifegpc.eh_downloader_flutter/saf", flutterEngine, this)
-        MethodChannelUtils.registerMethodChannel("lifegpc.eh_downloader_flutter/clipboard",flutterEngine,ClipboardUtils)
+        MethodChannelUtils.registerMethodChannel(
+            "lifegpc.eh_downloader_flutter/saf",
+            flutterEngine,
+            this
+        )
+        MethodChannelUtils.registerMethodChannel(
+            "lifegpc.eh_downloader_flutter/clipboard",
+            flutterEngine,
+            ClipboardUtils
+        )
     }
 
     @ChannelMethod(responseManually = true)
@@ -36,43 +40,43 @@ class MainActivity : FlutterActivity() {
         content: ByteArray
     ) {
         this.safAuthorizationResult = channelResult
-            if (!checkSafPermission()) {
-                authSAF(channelResult) {
-                    doWriteFile(filename, dir, mimeType, content)
-                    channelResult.success(null)
-                }
-            } else {
-                doWriteFile(filename, dir, mimeType,content)
+        if (!checkSafPermission()) {
+            authSAF(channelResult) {
+                doWriteFile(filename, dir, mimeType, content)
                 channelResult.success(null)
             }
+        } else {
+            doWriteFile(filename, dir, mimeType, content)
+            channelResult.success(null)
+        }
     }
 
     private fun doWriteFile(filename: String, dir: String, mimeType: String, content: ByteArray) {
         var documentDir = DocumentFile.fromTreeUri(this, Uri.parse(SAFSettings.authorizedUri))!!
-        val pathPart=dir.split('/','\\')
+        val pathPart = dir.split('/', '\\')
         pathPart.forEach {
-            if (it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 documentDir = documentDir.createDirectory(it)!!
             }
         }
 
-        val filenameWithoutExtension=if (filename.indexOf('.')!=-1){
-            filename.substring(0,filename.lastIndexOf('.'))
-        }else{
+        val filenameWithoutExtension = if (filename.indexOf('.') != -1) {
+            filename.substring(0, filename.lastIndexOf('.'))
+        } else {
             filename
         }
-        val file=documentDir.createFile(mimeType,filenameWithoutExtension)!!
-        val uri=file.uri
+        val file = documentDir.createFile(mimeType, filenameWithoutExtension)!!
+        val uri = file.uri
         contentResolver.openOutputStream(uri)!!.use {
             it.write(content)
         }
     }
 
-    private fun authSAF(result: MethodChannel.Result,onSuccess:(()->Unit)?=null) {
+    private fun authSAF(result: MethodChannel.Result, onSuccess: (() -> Unit)? = null) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         startActivityForResult(intent, safAuthorizationCode)
         safAuthorizationResult = result
-        this.afterAuthSuccess=onSuccess
+        this.afterAuthSuccess = onSuccess
     }
 
     private fun onSafAuthSuccess(data: Intent) {
@@ -115,7 +119,7 @@ class MainActivity : FlutterActivity() {
                     safAuthorizationResult?.error("Permission denied", null, null)
                     safAuthorizationResult = null
                 }
-                afterAuthSuccess=null
+                afterAuthSuccess = null
             }
         }
     }

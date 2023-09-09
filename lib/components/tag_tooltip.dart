@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../api/gallery.dart';
 
 String _getTag(Tag tag) {
@@ -16,13 +17,15 @@ class TagTooltip extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = _getTag(tag);
     final t = SelectableText(name);
-    return tag.intro != null && tag.intro!.isNotEmpty ? Tooltip(
-      message: tag.intro!,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4.0),
-        color: Theme.of(context).colorScheme.secondary,
-      ),
-      child: t,
-    ) : t;
+    return tag.intro != null && tag.intro!.isNotEmpty
+        ? Tooltip(
+            message: tag.intro!,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.0),
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            child: t,
+          )
+        : t;
   }
 }

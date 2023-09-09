@@ -26,6 +26,7 @@ class ApiResult<T> {
       return throw error!;
     }
   }
+
   (int, String) unwrapErr() {
     if (ok) {
       return throw 'unwrap_err called on ok ApiResult';

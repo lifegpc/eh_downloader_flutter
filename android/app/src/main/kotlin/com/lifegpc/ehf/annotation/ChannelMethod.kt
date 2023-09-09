@@ -9,6 +9,6 @@ package com.lifegpc.ehf.annotation
  * 否则，则会将实现方法的返回值返回给 [io.flutter.plugin.common.MethodChannel.Result]
  */
 annotation class ChannelMethod(
-    val methodName:String="",
-    val responseManually:Boolean=false
+    val methodName: String = "",
+    val responseManually: Boolean = false
 )

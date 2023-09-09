@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+
 import 'globals.dart';
 import 'login.dart';
 
@@ -176,10 +177,11 @@ class _CreateRootUserPage extends State<CreateRootUserPage>
                         ElevatedButton(
                           onPressed: !_isCreated && _isValid
                               ? () {
-                                  setState(() {
+                            setState(() {
                                     _isCreated = true;
                                   });
-                                  _createRootUser(_username, _password).then((re) {
+                                  _createRootUser(_username, _password)
+                                      .then((re) {
                                     if (re) {
                                       clearAllStates(context);
                                       context.canPop()
