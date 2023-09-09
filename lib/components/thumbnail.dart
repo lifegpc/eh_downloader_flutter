@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import '../api/client.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
+import '../utils.dart';
 import '../utils/clipboard.dart';
 import 'image.dart';
 
@@ -15,7 +16,7 @@ final _log = Logger("Thumbnail");
 
 class Thumbnail extends StatefulWidget {
   const Thumbnail(ExtendedPMeta pMeta,
-      {Key? key, int? max, int? width, int? height, int? fileId})
+      {Key? key, int? max, int? width, int? height, int? fileId, this.gid})
       : _pMeta = pMeta,
         _max = max ?? 1200,
         _width = width,
@@ -27,6 +28,7 @@ class Thumbnail extends StatefulWidget {
   final int? _width;
   final int? _height;
   final int? _fileId;
+  final int? gid;
 
   int get height => _height != null
       ? _height!
@@ -58,6 +60,7 @@ class _Thumbnail extends State<Thumbnail> {
   String? _uri;
   CancelToken? _cancel;
   String? _fileName;
+  String _dir = "";
   Future<void> _fetchData() async {
     try {
       _cancel = CancelToken();
@@ -110,6 +113,7 @@ class _Thumbnail extends State<Thumbnail> {
     _showNsfw = false;
     _uri = null;
     _fileName = "${basenameWithoutExtension(widget._pMeta.name)}_thumb";
+    _dir = isAndroid && widget.gid != null ? widget.gid!.toString() : "";
     super.initState();
   }
 
@@ -139,7 +143,8 @@ class _Thumbnail extends State<Thumbnail> {
         break;
       case _ThumbnailMenu.saveAs:
         try {
-          await platformPath.saveFile(_fileName!, "image/jpeg", _data!);
+          await platformPath.saveFile(_fileName!, "image/jpeg", _data!,
+              dir: _dir);
         } catch (err) {
           _log.warning("Failed to save image:", err);
         }
@@ -194,8 +199,10 @@ class _Thumbnail extends State<Thumbnail> {
                                       sigmaX: 10,
                                       sigmaY: 10,
                                       tileMode: TileMode.decal),
-                                  child:
-                                      ImageWithContextMenu(_data!, uri: _uri))),
+                                  child: ImageWithContextMenu(_data!,
+                                      uri: _uri,
+                                      fileName: _fileName,
+                                      dir: _dir))),
                           SizedBox(
                               width: widget.width.toDouble(),
                               height: widget.height.toDouble(),
@@ -216,7 +223,8 @@ class _Thumbnail extends State<Thumbnail> {
                         SizedBox(
                             width: widget.width.toDouble(),
                             height: widget.height.toDouble(),
-                            child: ImageWithContextMenu(_data!, uri: _uri)),
+                            child: ImageWithContextMenu(_data!,
+                                uri: _uri, fileName: _fileName, dir: _dir)),
                         moreVertMenu
                       ])
                 : Center(

@@ -17,7 +17,9 @@ class GalleryBasicInfo extends StatelessWidget {
         child: Column(children: [
           Expanded(
               child: Row(children: [
-            Expanded(flex: 2, child: Thumbnail(firstPage, fileId: fileId)),
+            Expanded(
+                flex: 2,
+                child: Thumbnail(firstPage, fileId: fileId, gid: gMeta.gid)),
             Expanded(
                 flex: 3,
                 child: Column(

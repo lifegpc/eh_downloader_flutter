@@ -21,7 +21,9 @@ class GalleryInfoDesktop extends StatelessWidget {
             width: 1280,
             child: Row(children: [
               Expanded(
-                  flex: 3, child: Thumbnail(gData.pages.first, fileId: fileId)),
+                  flex: 3,
+                  child: Thumbnail(gData.pages.first,
+                      fileId: fileId, gid: gData.meta.gid)),
               Expanded(
                   flex: 7,
                   child: Column(
