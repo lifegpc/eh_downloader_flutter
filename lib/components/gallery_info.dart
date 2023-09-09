@@ -67,9 +67,12 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
                       fileId: firstFileId, controller: controller),
                 ]),
               ),
-        ThumbnailGridView(widget.gData.pages,
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: useMobile ? 2 : 5),
-            files: widget.files),
+        ThumbnailGridView(
+            widget.gData.pages,
+            SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: useMobile ? 2 : 5),
+            files: widget.files,
+            gid: widget.gData.meta.gid),
       ],
     );
   }

@@ -6,7 +6,18 @@ import '../platform/to_png_none.dart'
 enum ImageFmt {
   jpg,
   png,
-  gif,
+  gif;
+
+  String toMimeType() {
+    switch (this) {
+      case ImageFmt.jpg:
+        return "image/jpeg";
+      case ImageFmt.png:
+        return "image/png";
+      case ImageFmt.gif:
+        return "image/gif";
+    }
+  }
 }
 
 Future<void> copyImageToClipboard(Uint8List data, ImageFmt fmt) async {

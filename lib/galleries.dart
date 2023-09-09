@@ -91,7 +91,7 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
                       }
                     },
                     label: Text(AppLocalizations.of(context)!.sortByGid,
-                        style: Theme.of(context).primaryTextTheme.labelMedium),
+                        style: Theme.of(context).textTheme.labelMedium),
                     dropdownMenuEntries: [
                       DropdownMenuEntry(
                           value: SortByGid.none,

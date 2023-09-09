@@ -35,5 +35,6 @@
     "none": "无",
     "sortByGid": "按画廊ID排序",
     "asc": "升序",
-    "desc": "降序"
+    "desc": "降序",
+    "saveAs": "另存为"
 }

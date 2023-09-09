@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:super_context_menu/super_context_menu.dart';
+import '../globals.dart';
 import '../utils/clipboard.dart';
 
 final _log = Logger("ImageWithContextMenu");
 
 class ImageWithContextMenu extends StatelessWidget {
   const ImageWithContextMenu(this.data,
-      {Key? key, this.uri, this.fmt = ImageFmt.jpg})
+      {Key? key, this.uri, this.dir, this.fileName, this.fmt = ImageFmt.jpg})
       : super(key: key);
   final Uint8List data;
   final String? uri;
   final ImageFmt fmt;
+  final String? fileName;
+  final String? dir;
   @override
   Widget build(BuildContext context) {
     return ContextMenuWidget(
@@ -36,6 +39,18 @@ class ImageWithContextMenu extends StatelessWidget {
                   copyTextToClipboard(uri!).catchError((err) {
                     _log.warning("Failed to copy image to clipboard:", err);
                   });
+                }));
+          }
+          if (fileName != null) {
+            list.add(MenuAction(
+                title: AppLocalizations.of(context)!.saveAs,
+                callback: () {
+                  try {
+                    platformPath.saveFile(fileName!, fmt.toMimeType(), data,
+                        dir: dir ?? "");
+                  } catch (err) {
+                    _log.warning("Failed to save image:", err);
+                  }
                 }));
           }
           return Menu(children: list);

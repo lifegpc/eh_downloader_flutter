@@ -5,9 +5,11 @@ import '../globals.dart';
 import 'thumbnail.dart';
 
 class ThumbnailGridView extends StatelessWidget {
-  const ThumbnailGridView(this.pages, this.gridDelegate, {Key? key, this.files})
+  const ThumbnailGridView(this.pages, this.gridDelegate,
+      {Key? key, this.files, this.gid})
       : super(key: key);
   final List<ExtendedPMeta> pages;
+  final int? gid;
   final EhFiles? files;
   final SliverGridDelegate gridDelegate;
 
@@ -24,7 +26,7 @@ class ThumbnailGridView extends StatelessWidget {
               files != null ? files!.files[page.token]!.first.id : null;
           return Container(
               padding: const EdgeInsets.all(4),
-              child: Thumbnail(page, fileId: fileId));
+              child: Thumbnail(page, fileId: fileId, gid: gid));
         });
   }
 }

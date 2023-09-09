@@ -58,6 +58,71 @@ bool FlutterWindow::OnCreate() {
           result->NotImplemented();
         }
       });
+  flutter::MethodChannel<> saf(flutter_controller_->engine()->messenger(), "lifegpc.eh_downloader_flutter/saf",
+      &flutter::StandardMethodCodec::GetInstance());
+  saf.SetMethodCallHandler([&](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result) {
+          if (call.method_name() == "saveFile") {
+            auto args = std::get_if<flutter::EncodableList>(call.arguments());
+            auto fileName = std::get_if<std::string>(&args->at(0));
+            auto dir = std::get_if<std::string>(&args->at(1));
+            auto mimeType = std::get_if<std::string>(&args->at(2));
+            auto data = std::get_if<std::vector<uint8_t>>(&args->at(3));
+            if (!fileName || !dir || !mimeType || !data) {
+              result->Error("INVALID_ARGUMENT", "Invalid arguments.");
+              return;
+            }
+            std::wstring wFileName;
+            if (!wchar_util::str_to_wstr(wFileName, *fileName, CP_UTF8)) {
+              result->Error("ERROR", "Failed to convert file name to wstring.");
+              return;
+            }
+            std::wstring wDir;
+            if (!dir->empty() && !wchar_util::str_to_wstr(wDir, *dir, CP_UTF8)) {
+              result->Error("ERROR", "Failed to convert dir to wstring.");
+              return;
+            }
+            OPENFILENAMEW ofn;
+            ZeroMemory(&ofn, sizeof(ofn));
+            ofn.lStructSize = sizeof(ofn);
+            ofn.hwndOwner = Win32Window::GetHandle();
+            std::wstring filter;
+            std::wstring defExt;
+            if (*mimeType == "image/jpeg") {
+              filter.append(std::wstring(L"JPEG File(*.jpg)\0*.jpg\0", 23));
+              defExt = L"jpg";
+            } else if (*mimeType == "image/png") {
+              filter.append(std::wstring(L"PNG File(*.png)\0*.png\0", 22));
+              defExt = L"png";
+            } else if (*mimeType == "image/gif") {
+              filter.append(std::wstring(L"GIF File(*.gif)\0*.gif\0", 22));
+              defExt = L"gif";
+            };
+            filter.append(std::wstring(L"All Files\0*.*\0\0", 15));
+            ofn.lpstrFilter = filter.c_str();
+            ofn.lpstrDefExt = defExt.empty() ? nullptr : defExt.c_str();
+            wchar_t wFileNameBuf[MAX_PATH_SIZE];
+            memcpy(wFileNameBuf, wFileName.c_str(), (wFileName.size() + 1) * sizeof(wchar_t));
+            ofn.lpstrFile = wFileNameBuf;
+            ofn.nMaxFile = MAX_PATH_SIZE;
+            ofn.lpstrInitialDir = wDir.empty() ? nullptr : wDir.c_str();
+            ofn.Flags = OFN_DONTADDTORECENT | OFN_NONETWORKBUTTON | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT;
+            if (!GetSaveFileNameW(&ofn)) {
+              result->Error("ERROR", "Failed to get file name.");
+              return;
+            }
+            FILE* f = nullptr;
+            _wfopen_s(&f, wFileNameBuf, L"wb");
+            if (!f) {
+              result->Error("ERROR", "Failed to open file.");
+              return;
+            }
+            fwrite(data->data(), sizeof(uint8_t), data->size(), f);
+            fclose(f);
+            result->Success();
+          } else {
+            result->NotImplemented();
+          }
+         }); 
 
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 

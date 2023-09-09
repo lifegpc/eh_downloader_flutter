@@ -35,5 +35,6 @@
     "none": "none",
     "sortByGid": "Sort by gallery id",
     "asc": "Ascending",
-    "desc": "Descending"
+    "desc": "Descending",
+    "saveAs": "Save As"
 }
