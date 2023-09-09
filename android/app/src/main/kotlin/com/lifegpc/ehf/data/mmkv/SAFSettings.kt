@@ -1,4 +1,4 @@
-package com.lifegpc.ehf.mmkv
+package com.lifegpc.ehf.data.mmkv
 
 import com.dylanc.mmkv.MMKVOwner
 import com.dylanc.mmkv.mmkvString

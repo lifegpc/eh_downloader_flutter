@@ -4,25 +4,27 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
 import com.lifegpc.ehf.annotation.ChannelMethod
-import com.lifegpc.ehf.mmkv.SAFSettings
+import com.lifegpc.ehf.data.mmkv.SAFSettings
+import com.lifegpc.ehf.util.ClipboardUtils
+import com.lifegpc.ehf.util.MethodChannelUtils
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import java.io.FileOutputStream
 import java.lang.Exception
 
 class MainActivity : FlutterActivity() {
     private val safAuthorizationCode = 0x10086
     private var safAuthorizationResult: MethodChannel.Result? = null
     private var afterAuthSuccess:(()->Unit)?=null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannelUtils.registerMethodChannel("lifegpc.eh_downloader_flutter/saf", flutterEngine, this)
+        MethodChannelUtils.registerMethodChannel("lifegpc.eh_downloader_flutter/clipboard",flutterEngine,ClipboardUtils)
     }
 
     @ChannelMethod(responseManually = true)

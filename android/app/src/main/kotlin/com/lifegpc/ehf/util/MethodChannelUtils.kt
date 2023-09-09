@@ -1,4 +1,4 @@
-package com.lifegpc.ehf
+package com.lifegpc.ehf.util
 
 import android.util.Log
 import com.lifegpc.ehf.annotation.ChannelMethod
