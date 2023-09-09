@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart';
 import '../api/client.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
@@ -45,6 +46,7 @@ class Thumbnail extends StatefulWidget {
 enum _ThumbnailMenu {
   copyImage,
   copyImgUrl,
+  saveAs,
 }
 
 class _Thumbnail extends State<Thumbnail> {
@@ -55,6 +57,7 @@ class _Thumbnail extends State<Thumbnail> {
   bool _showNsfw = false;
   String? _uri;
   CancelToken? _cancel;
+  String? _fileName;
   Future<void> _fetchData() async {
     try {
       _cancel = CancelToken();
@@ -106,6 +109,7 @@ class _Thumbnail extends State<Thumbnail> {
     _fileId = widget._fileId;
     _showNsfw = false;
     _uri = null;
+    _fileName = "${basenameWithoutExtension(widget._pMeta.name)}_thumb";
     super.initState();
   }
 
@@ -131,6 +135,13 @@ class _Thumbnail extends State<Thumbnail> {
           copyTextToClipboard(_uri!);
         } catch (err) {
           _log.warning("Failed to copy image url to clipboard:", err);
+        }
+        break;
+      case _ThumbnailMenu.saveAs:
+        try {
+          await platformPath.saveFile(_fileName!, "image/jpeg", _data!);
+        } catch (err) {
+          _log.warning("Failed to save image:", err);
         }
         break;
     }
@@ -160,6 +171,9 @@ class _Thumbnail extends State<Thumbnail> {
                 PopupMenuItem(
                     value: _ThumbnailMenu.copyImgUrl,
                     child: Text(AppLocalizations.of(context)!.copyImgUrl)),
+                PopupMenuItem(
+                    value: _ThumbnailMenu.saveAs,
+                    child: Text(AppLocalizations.of(context)!.saveAs)),
               ];
               return list;
             }));

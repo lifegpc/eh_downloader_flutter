@@ -7,7 +7,7 @@ final Logger _log = Logger("platformPath");
 
 class Path {
   static const platform = MethodChannel("lifegpc.eh_downloader_flutter/path");
-  static const _safChannel=MethodChannel("lifegpc.eh_downloader_flutter/saf");
+  static const _safChannel = MethodChannel("lifegpc.eh_downloader_flutter/saf");
   String? _currentExe;
   bool _currentExeLoaded = false;
 
@@ -28,7 +28,10 @@ class Path {
   }
 
   /// 保存文件
-  static Future<void> saveFile(String filenameWithoutExtension,String mimeType,Uint8List bytes,{String dir=""}) async{
-    return _safChannel.invokeMethod("saveFile",[filenameWithoutExtension,dir,mimeType,bytes]);
+  Future<void> saveFile(
+      String filenameWithoutExtension, String mimeType, Uint8List bytes,
+      {String dir = ""}) async {
+    return _safChannel.invokeMethod(
+        "saveFile", [filenameWithoutExtension, dir, mimeType, bytes]);
   }
 }
