@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import '../utils.dart';
+import 'save_file.dart';
 
 final Logger _log = Logger("platformPath");
 
@@ -31,6 +33,9 @@ class Path {
   Future<void> saveFile(
       String filenameWithoutExtension, String mimeType, Uint8List bytes,
       {String dir = ""}) async {
+    if (kIsWeb) {
+      return saveFileWeb(bytes, mimeType, filenameWithoutExtension);
+    }
     return _safChannel.invokeMethod(
         "saveFile", [filenameWithoutExtension, dir, mimeType, bytes]);
   }
