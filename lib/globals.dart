@@ -18,6 +18,7 @@ import 'config/base.dart';
 import 'config/shared_preferences.dart';
 import 'config/windows.dart';
 import 'main.dart';
+import 'platform/clipboard.dart';
 import 'platform/path.dart';
 import 'tags.dart';
 import 'utils.dart';
@@ -112,6 +113,7 @@ EHApi get api {
 }
 
 final AuthInfo auth = AuthInfo();
+final Clipboard platformClipboard = Clipboard();
 final Path platformPath = Path();
 final TagsInfo tags = TagsInfo();
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =

@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:super_clipboard/super_clipboard.dart';
 import '../platform/to_png_none.dart'
     if (dart.library.html) '../platform/to_png.dart';
+import '../globals.dart';
+import '../utils.dart';
 
 enum ImageFmt {
   jpg,
@@ -21,6 +23,9 @@ enum ImageFmt {
 }
 
 Future<void> copyImageToClipboard(Uint8List data, ImageFmt fmt) async {
+  if (isAndroid) {
+    return await platformClipboard.copyImageToClipboard(fmt.toMimeType(), data);
+  }
   final item = DataWriterItem();
   if (!kIsWeb) {
     item.add(fmt == ImageFmt.jpg
