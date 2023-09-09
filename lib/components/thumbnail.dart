@@ -157,14 +157,16 @@ class _Thumbnail extends State<Thumbnail> {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
     if (isLoading && !_isLoading) _fetchData();
-    final iconSize = Theme.of(context).iconTheme.size;
+    final iconSize = MediaQuery.of(context).size.width < 400
+        ? 14.0
+        : Theme.of(context).iconTheme.size;
     final moreVertMenu = Positioned(
         right: 0,
         top: 0,
         width: iconSize,
         height: iconSize,
         child: PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
+            child: Icon(Icons.more_vert, size: iconSize),
             onSelected: (v) {
               onItemSelected(v);
             },
