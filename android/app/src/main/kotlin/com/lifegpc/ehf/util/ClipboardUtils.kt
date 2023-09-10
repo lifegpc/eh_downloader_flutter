@@ -41,7 +41,7 @@ object ClipboardUtils {
 
     private fun mimeTypeToExtName(mimeType: String) = when (mimeType) {
         "image/png" -> "png"
-        "image/jpeg" -> "png"
+        "image/jpeg" -> "jpeg"
         "image/gif" -> "gif"
         else -> throw IllegalArgumentException("$mimeType is not supported")
     }
