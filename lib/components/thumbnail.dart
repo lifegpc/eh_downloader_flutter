@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
+import 'package:palette_generator/palette_generator.dart';
 import '../api/client.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
@@ -61,6 +62,8 @@ class _Thumbnail extends State<Thumbnail> {
   CancelToken? _cancel;
   String? _fileName;
   String _dir = "";
+  Color? _iconColor;
+  double? _iconSize;
   Future<void> _fetchData() async {
     try {
       _cancel = CancelToken();
@@ -91,6 +94,7 @@ class _Thumbnail extends State<Thumbnail> {
           _data = data;
           _cancel = null;
         });
+        updateIconColor();
       }
     } catch (e) {
       if (!_cancel!.isCancelled) {
@@ -115,6 +119,36 @@ class _Thumbnail extends State<Thumbnail> {
     _fileName = "${basenameWithoutExtension(widget._pMeta.name)}_thumb";
     _dir = isAndroid && widget.gid != null ? widget.gid!.toString() : "";
     super.initState();
+  }
+
+  Future<void> updateIconColor() async {
+    if (_data == null) return;
+    try {
+      final img = await instantiateImageCodec(_data!);
+      try {
+        final frame = await img.getNextFrame();
+        final i = frame.image;
+        try {
+          final iconSize = _iconSize ?? 24.0;
+          final pattle = await PaletteGenerator.fromImage(i,
+              region: Rect.fromCenter(
+                  center: Offset(i.width / 2, i.height / 2),
+                  width: iconSize,
+                  height: iconSize));
+          setState(() {
+            _iconColor = pattle.colors.first.computeLuminance() > 0.5
+                ? Colors.black
+                : Colors.white;
+          });
+        } finally {
+          i.dispose();
+        }
+      } finally {
+        img.dispose();
+      }
+    } catch (e) {
+      _log.warning("Failed to generate icon's color from image data:", e);
+    }
   }
 
   bool get showNsfw => _showNsfw || (prefs.getBool("showNsfw") ?? false);
@@ -157,6 +191,7 @@ class _Thumbnail extends State<Thumbnail> {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
     if (isLoading && !_isLoading) _fetchData();
+    _iconSize ??= Theme.of(context).iconTheme.size;
     final iconSize = MediaQuery.of(context).size.width < 400
         ? 14.0
         : Theme.of(context).iconTheme.size;
@@ -215,7 +250,8 @@ class _Thumbnail extends State<Thumbnail> {
                                       _showNsfw = true;
                                     });
                                   },
-                                  icon: const Icon(Icons.visibility),
+                                  icon: Icon(Icons.visibility,
+                                      color: _iconColor ?? Colors.black),
                                 ),
                               )),
                           moreVertMenu
