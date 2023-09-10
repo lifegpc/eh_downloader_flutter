@@ -3,6 +3,9 @@ package com.lifegpc.ehf.util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import androidx.core.content.FileProvider
 import com.lifegpc.ehf.MyApplication
 import com.lifegpc.ehf.annotation.ChannelMethod
@@ -21,6 +24,7 @@ object ClipboardUtils {
             MyApplication.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData =
             ClipData.newUri(MyApplication.applicationContext.contentResolver, "image", uri)
+        grantUriPermissionWhenNeed(uri)
         cbm.setPrimaryClip(clipData)
     }
 
@@ -45,5 +49,26 @@ object ClipboardUtils {
         "image/jpeg" -> "jpeg"
         "image/gif" -> "gif"
         else -> throw IllegalArgumentException("$mimeType is not supported")
+    }
+
+    /**
+     * 在 Android 8/8.1系统上，手动授予所有app读取uri权限
+     * @param uri
+     * @see <a href="https://github.com/chromium/chromium/blob/a5a4f9bfe95e3dcd685c20192b244e0a7e6c1c06/ui/android/java/src/org/chromium/ui/base/ClipboardImpl.java">chromium</a> 中的 grantUriPermission
+     */
+    private fun grantUriPermissionWhenNeed(uri: Uri) {
+        if (Build.VERSION.SDK_INT !in arrayOf(Build.VERSION_CODES.O, Build.VERSION_CODES.O_MR1)) {
+            return
+        }
+
+        @Suppress("DEPRECATION")
+        MyApplication.applicationContext.packageManager.getInstalledPackages(0).forEach {
+            MyApplication.applicationContext.grantUriPermission(
+                it.packageName,
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
+
     }
 }
