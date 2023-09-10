@@ -36,5 +36,9 @@
     "sortByGid": "按画廊ID排序",
     "asc": "升序",
     "desc": "降序",
-    "saveAs": "另存为"
+    "saveAs": "另存为",
+    "posted": "上传时间",
+    "visible": "可见性",
+    "yes": "是",
+    "no": "否"
 }

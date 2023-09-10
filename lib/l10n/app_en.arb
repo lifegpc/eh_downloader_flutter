@@ -36,5 +36,9 @@
     "sortByGid": "Sort by gallery id",
     "asc": "Ascending",
     "desc": "Descending",
-    "saveAs": "Save As"
+    "saveAs": "Save As",
+    "posted": "Posted",
+    "visible": "Visible",
+    "yes": "Yes",
+    "no": "No"
 }

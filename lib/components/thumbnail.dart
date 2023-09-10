@@ -64,6 +64,7 @@ class _Thumbnail extends State<Thumbnail> {
   String _dir = "";
   Color? _iconColor;
   double? _iconSize;
+  bool _disposed = false;
   Future<void> _fetchData() async {
     try {
       _cancel = CancelToken();
@@ -135,11 +136,13 @@ class _Thumbnail extends State<Thumbnail> {
                   center: Offset(i.width / 2, i.height / 2),
                   width: iconSize,
                   height: iconSize));
-          setState(() {
-            _iconColor = pattle.colors.first.computeLuminance() > 0.5
-                ? Colors.black
-                : Colors.white;
-          });
+          if (!_disposed) {
+            setState(() {
+              _iconColor = pattle.colors.first.computeLuminance() > 0.5
+                  ? Colors.black
+                  : Colors.white;
+            });
+          }
         } finally {
           i.dispose();
         }
@@ -155,6 +158,7 @@ class _Thumbnail extends State<Thumbnail> {
 
   @override
   void dispose() {
+    _disposed = true;
     _cancel?.cancel();
     super.dispose();
   }
