@@ -64,6 +64,34 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
   @override
   Widget build(BuildContext context) {
     tryInitApi(context);
+    final sortByGidMenu = DropdownMenu<SortByGid>(
+      initialSelection: _sortByGid2,
+      onSelected: (v) {
+        if (v != null) {
+          prefs.setInt("sortByGid", v!.index).then((re) {
+            if (!re) _log.warning("Failed to save sortByGid to prefs.");
+          }).catchError((error) {
+            _log.warning("Failed to save sortByGid to prefs:", error);
+          });
+          context.pushReplacementNamed("/galleries", queryParameters: {
+            "sortByGid": [v!.index.toString()],
+          });
+        }
+      },
+      label: Text(AppLocalizations.of(context)!.sortByGid,
+          style: MediaQuery.of(context).size.width > 810
+              ? Theme.of(context).textTheme.labelMedium
+              : Theme.of(context).textTheme.labelLarge),
+      dropdownMenuEntries: [
+        DropdownMenuEntry(
+            value: SortByGid.none, label: AppLocalizations.of(context)!.none),
+        DropdownMenuEntry(
+            value: SortByGid.asc, label: AppLocalizations.of(context)!.asc),
+        DropdownMenuEntry(
+            value: SortByGid.desc, label: AppLocalizations.of(context)!.desc),
+      ],
+      leadingIcon: const Icon(Icons.sort),
+    );
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
@@ -74,37 +102,14 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
             ),
             title: Text(AppLocalizations.of(context)!.galleries),
             actions: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: DropdownMenu<SortByGid>(
-                    initialSelection: _sortByGid2,
-                    onSelected: (v) {
-                      if (v != null) {
-                        prefs.setInt("sortByGid", v!.index).catchError((error) {
-                          _log.warning(
-                              "Failed to save sortByGid to prefs:", error);
-                        });
-                        context.pushReplacementNamed("/galleries",
-                            queryParameters: {
-                              "sortByGid": [v!.index.toString()],
-                            });
-                      }
-                    },
-                    label: Text(AppLocalizations.of(context)!.sortByGid,
-                        style: Theme.of(context).textTheme.labelMedium),
-                    dropdownMenuEntries: [
-                      DropdownMenuEntry(
-                          value: SortByGid.none,
-                          label: AppLocalizations.of(context)!.none),
-                      DropdownMenuEntry(
-                          value: SortByGid.asc,
-                          label: AppLocalizations.of(context)!.asc),
-                      DropdownMenuEntry(
-                          value: SortByGid.desc,
-                          label: AppLocalizations.of(context)!.desc),
-                    ],
-                    leadingIcon: const Icon(Icons.sort),
-                  )),
+              MediaQuery.of(context).size.width > 810
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: sortByGidMenu)
+                  : PopupMenuButton(
+                      icon: const Icon(Icons.sort),
+                      itemBuilder: (context) =>
+                          [PopupMenuItem(child: sortByGidMenu)]),
               buildThemeModeIcon(context),
               buildMoreVertSettingsButon(context),
             ]),
