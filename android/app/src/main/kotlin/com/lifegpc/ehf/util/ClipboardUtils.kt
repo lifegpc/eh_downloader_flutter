@@ -19,7 +19,8 @@ object ClipboardUtils {
 
         val cbm =
             MyApplication.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData("image", arrayOf(mimeType), ClipData.Item(uri))
+        val clipData =
+            ClipData.newUri(MyApplication.applicationContext.contentResolver, "image", uri)
         cbm.setPrimaryClip(clipData)
     }
 
