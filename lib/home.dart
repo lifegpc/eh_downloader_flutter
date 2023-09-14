@@ -37,8 +37,7 @@ class HomePage extends HookWidget {
       ),
       drawer: Drawer(
           child: ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: 2,
+              itemCount: 3,
               itemBuilder: (context, i) {
                 if (i == 0) {
                   return Row(
@@ -57,6 +56,16 @@ class HomePage extends HookWidget {
                     onTap: () {
                       Scaffold.of(context).closeDrawer();
                       context.push("/galleries");
+                    },
+                  );
+                }
+                if (i == 2) {
+                  return ListTile(
+                    leading: const Icon(Icons.settings),
+                    title: Text(AppLocalizations.of(context)!.settings),
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.push("/settings");
                     },
                   );
                 }
