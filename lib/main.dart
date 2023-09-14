@@ -59,9 +59,13 @@ final _router = GoRouter(
         }),
     GoRoute(
         path: GalleryPage.routeName,
-        builder: (context, state) => GalleryPage(
-              int.parse(state.pathParameters["gid"]!),
-            ),
+        builder: (context, state) {
+          final extra = state.extra as GalleryPageExtra?;
+          return GalleryPage(
+            int.parse(state.pathParameters["gid"]!),
+            title: extra?.title,
+          );
+        },
         redirect: (context, state) {
           try {
             int.parse(state.pathParameters["gid"]!);

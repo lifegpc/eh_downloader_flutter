@@ -25,6 +25,7 @@ import 'platform/clipboard.dart';
 import 'platform/path.dart';
 import 'tags.dart';
 import 'utils.dart';
+export 'gallery.dart' show GalleryPageExtra;
 
 final dio = Dio()
   ..options.validateStatus = (int? _) {
@@ -307,7 +308,8 @@ void setCurrentTitle(String title, int primaryColor,
     });
   } else {
     SystemChrome.setApplicationSwitcherDescription(
-            ApplicationSwitcherDescription(label: title, primaryColor: primaryColor))
+            ApplicationSwitcherDescription(
+                label: title, primaryColor: primaryColor))
         .then((_) {
       _currentTitle = title;
       if (isPrefix) _prefix = title;

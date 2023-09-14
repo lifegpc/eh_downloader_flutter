@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -9,12 +11,18 @@ import 'globals.dart';
 
 final _log = Logger("GalleryPage");
 
+class GalleryPageExtra {
+  const GalleryPageExtra({this.title});
+  final String? title;
+}
+
 class GalleryPage extends StatefulWidget {
-  const GalleryPage(int gid, {Key? key})
+  const GalleryPage(int gid, {Key? key, this.title})
       : _gid = gid,
         super(key: key);
 
   final int _gid;
+  final String? title;
   static const String routeName = '/gallery/:gid';
 
   @override
@@ -27,26 +35,33 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
   GalleryData? _data;
   EhFiles? _files;
   Object? _error;
+  CancelToken? _cancel;
   bool _isLoading = false;
 
   Future<void> _fetchData() async {
     try {
+      _cancel = CancelToken();
       _isLoading = true;
       final data = (await api.getGallery(_gid)).unwrap();
       _data = data;
-      final fileData =
-          (await api.getFiles(data.pages.map((e) => e.token).toList()))
-              .unwrap();
-      setState(() {
-        _files = fileData;
-        _isLoading = false;
-      });
+      final fileData = (await api.getFiles(
+              data.pages.map((e) => e.token).toList(),
+              cancel: _cancel))
+          .unwrap();
+      if (!_cancel!.isCancelled) {
+        setState(() {
+          _files = fileData;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      _log.severe("Failed to load gallery $_gid:", e);
-      setState(() {
-        _error = e;
-        _isLoading = false;
-      });
+      if (!_cancel!.isCancelled) {
+        _log.severe("Failed to load gallery $_gid:", e);
+        setState(() {
+          _error = e;
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -69,8 +84,15 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
         : _data != null
             ? _data!.meta.preferredTitle
             : i18n.gallery;
-    setCurrentTitle(title, Theme.of(context).primaryColor.value,
-        includePrefix: false);
+    if (!kIsWeb || (_data != null && kIsWeb)) {
+      setCurrentTitle(title, Theme.of(context).primaryColor.value,
+          includePrefix: false);
+    } else if (kIsWeb && widget.title != null) {
+      // 设置预加载标题
+      // Chrome 和 Firefox 必须尽快设置标题以确保在历史记录菜单显示正确的标题
+      setCurrentTitle(widget.title!, Theme.of(context).primaryColor.value,
+          includePrefix: false);
+    }
     return Scaffold(
         appBar: _data == null
             ? AppBar(
@@ -94,5 +116,11 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
                 : Center(
                     child: Text("Error: $_error"),
                   ));
+  }
+
+  @override
+  void dispose() {
+    _cancel?.cancel();
+    super.dispose();
   }
 }

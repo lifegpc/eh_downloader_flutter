@@ -123,7 +123,8 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
             return ListTile(
               title: Text(item.preferredTitle),
               onTap: () {
-                context.push("/gallery/${item.gid}");
+                context.push("/gallery/${item.gid}",
+                    extra: GalleryPageExtra(title: item.preferredTitle));
               },
             );
           }),
