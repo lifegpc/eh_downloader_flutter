@@ -169,7 +169,8 @@ class _MainApp extends State<MainApp> {
       routerConfig: _router,
       onGenerateTitle: (context) {
         final title = AppLocalizations.of(context)!.title;
-        setCurrentTitle(title, isPrefix: true);
+        setCurrentTitle(title, Theme.of(context).primaryColor.value,
+            isPrefix: true);
         return title;
       },
       locale: _lang.toLocale(),

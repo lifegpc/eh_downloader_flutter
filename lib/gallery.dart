@@ -69,7 +69,8 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
         : _data != null
             ? _data!.meta.preferredTitle
             : i18n.gallery;
-    setCurrentTitle(title, includePrefix: false);
+    setCurrentTitle(title, Theme.of(context).primaryColor.value,
+        includePrefix: false);
     return Scaffold(
         appBar: _data == null
             ? AppBar(

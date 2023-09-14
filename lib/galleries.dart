@@ -92,7 +92,8 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
       ],
       leadingIcon: const Icon(Icons.sort),
     );
-    setCurrentTitle(AppLocalizations.of(context)!.galleries);
+    setCurrentTitle(AppLocalizations.of(context)!.galleries,
+        Theme.of(context).primaryColor.value);
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(

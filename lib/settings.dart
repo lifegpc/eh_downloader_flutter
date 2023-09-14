@@ -135,7 +135,8 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
 
   @override
   Widget build(BuildContext context) {
-    setCurrentTitle(AppLocalizations.of(context)!.settings);
+    setCurrentTitle(AppLocalizations.of(context)!.settings,
+        Theme.of(context).primaryColor.value);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
