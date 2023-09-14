@@ -63,11 +63,13 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
     tryInitApi(context);
     final isLoading = _data == null && _error == null;
     if (isLoading && !_isLoading) _fetchData();
+    final i18n = AppLocalizations.of(context)!;
     final title = isLoading
-        ? AppLocalizations.of(context)!.loading
+        ? i18n.loading
         : _data != null
-            ? ""
-            : AppLocalizations.of(context)!.gallery;
+            ? _data!.meta.preferredTitle
+            : i18n.gallery;
+    setCurrentTitle(title, includePrefix: false);
     return Scaffold(
         appBar: _data == null
             ? AppBar(

@@ -6,12 +6,15 @@ import 'package:event_listener/event_listener.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart'
+    show ApplicationSwitcherDescription, SystemChrome;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
 import 'auth.dart';
 import 'config/base.dart';
@@ -275,6 +278,38 @@ void checkAuth(BuildContext context) {
       }
     }).catchError((err) {
       _authLog.log(Level.SEVERE, "Failed to check auth info:", err);
+    });
+  }
+}
+
+String? _currentTitle;
+String? _prefix;
+final _titleLog = Logger("Title");
+
+void setCurrentTitle(String title,
+    {bool isPrefix = false, bool includePrefix = true, bool usePrefix = false}) {
+  if (!isPrefix && includePrefix && _prefix != null) {
+    title = "$_prefix - $title";
+  }
+  if (usePrefix && _prefix != null) {
+    title = _prefix!;
+  }
+  if (_currentTitle != null && title == _currentTitle) return;
+  if (isDesktop) {
+    windowManager.setTitle(title).then((_) {
+      _currentTitle = title;
+      if (isPrefix) _prefix = title;
+    }).catchError((err) {
+      _titleLog.warning("Failed to set title:", err);
+    });
+  } else {
+    SystemChrome.setApplicationSwitcherDescription(
+            ApplicationSwitcherDescription(label: title))
+        .then((_) {
+      _currentTitle = title;
+      if (isPrefix) _prefix = title;
+    }).catchError((err) {
+      _titleLog.warning("Failed to set title:", err);
     });
   }
 }

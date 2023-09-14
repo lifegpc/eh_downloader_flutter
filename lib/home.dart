@@ -17,6 +17,7 @@ class HomePage extends HookWidget {
   Widget build(BuildContext context) {
     tryInitApi(context);
     var mode = useState(MainApp.of(context).themeMode);
+    setCurrentTitle("", usePrefix: true);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.titleBar),

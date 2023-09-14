@@ -169,9 +169,7 @@ class _MainApp extends State<MainApp> {
       routerConfig: _router,
       onGenerateTitle: (context) {
         final title = AppLocalizations.of(context)!.title;
-        if (isDesktop) {
-          windowManager.setTitle(title);
-        }
+        setCurrentTitle(title, isPrefix: true);
         return title;
       },
       locale: _lang.toLocale(),
