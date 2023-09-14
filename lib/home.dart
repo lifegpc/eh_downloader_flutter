@@ -35,6 +35,33 @@ class HomePage extends HookWidget {
           buildMoreVertSettingsButon(context),
         ],
       ),
+      drawer: Drawer(
+          child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: 2,
+              itemBuilder: (context, i) {
+                if (i == 0) {
+                  return Row(
+                    children: [
+                      Expanded(child: Container()),
+                      IconButton(
+                          onPressed: () => Scaffold.of(context).closeDrawer(),
+                          icon: const Icon(Icons.close))
+                    ],
+                  );
+                }
+                if (i == 1) {
+                  return ListTile(
+                    leading: const Icon(Icons.collections),
+                    title: Text(AppLocalizations.of(context)!.galleries),
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.push("/galleries");
+                    },
+                  );
+                }
+                return Container();
+              })),
       body: Center(
         child: TextButton(
           child: Text('Hello World!'),
