@@ -87,6 +87,7 @@ bool tryInitApi(BuildContext context) {
       return true;
     }
     initApi("/api");
+    clearAllStates(context);
     return true;
   }
   String? baseUrl = prefs.getString("baseUrl");
@@ -287,7 +288,9 @@ String? _prefix;
 final _titleLog = Logger("Title");
 
 void setCurrentTitle(String title,
-    {bool isPrefix = false, bool includePrefix = true, bool usePrefix = false}) {
+    {bool isPrefix = false,
+    bool includePrefix = true,
+    bool usePrefix = false}) {
   if (!isPrefix && includePrefix && _prefix != null) {
     title = "$_prefix - $title";
   }
