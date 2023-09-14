@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import '../api/gallery.dart';
 import '../main.dart';
+import '../utils/filesize.dart';
 import 'tags.dart';
 import 'thumbnail.dart';
 
@@ -93,6 +94,21 @@ class GalleryInfoDesktop extends StatelessWidget {
                               _KeyValue(
                                 "${i18n.visible}${i18n.colon}",
                                 gData.meta.expunged ? i18n.no : i18n.yes,
+                                fontSize: 12,
+                              ),
+                              _KeyValue(
+                                "${i18n.fileSize}${i18n.colon}",
+                                getFileSize(gData.meta.filesize),
+                                fontSize: 12,
+                              ),
+                              _KeyValue(
+                                "${i18n.pageLength}${i18n.colon}",
+                                i18n.pages(gData.meta.filecount),
+                                fontSize: 12,
+                              ),
+                              _KeyValue(
+                                "${i18n.gid}${i18n.colon}",
+                                gData.meta.gid.toString(),
                                 fontSize: 12,
                               ),
                             ])),

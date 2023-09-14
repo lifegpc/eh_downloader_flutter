@@ -40,5 +40,17 @@
     "posted": "Posted",
     "visible": "Visible",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "fileSize": "File Size",
+    "pageLength": "Length",
+    "pages": "{value} pages",
+    "@pages": {
+        "placeholders": {
+            "value": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "gid": "Gallery Id"
 }

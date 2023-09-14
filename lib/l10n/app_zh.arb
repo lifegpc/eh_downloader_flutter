@@ -40,5 +40,17 @@
     "posted": "上传时间",
     "visible": "可见性",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "fileSize": "文件大小",
+    "pageLength": "页数",
+    "pages": "{value} 页",
+    "@pages": {
+        "placeholders": {
+            "value": {
+                "type": "int",
+                "format": "decimalPattern"
+            }
+        }
+    },
+    "gid": "画廊ID"
 }
