@@ -23,6 +23,7 @@ import 'config/windows.dart';
 import 'main.dart';
 import 'platform/clipboard.dart';
 import 'platform/path.dart';
+import 'platform/set_title.dart';
 import 'tags.dart';
 import 'utils.dart';
 export 'galleries.dart' show GalleriesPageExtra;
@@ -333,6 +334,10 @@ void setCurrentTitle(String title, int primaryColor,
     }).catchError((err) {
       _titleLog.warning("Failed to set title:", err);
     });
+  } else if (kIsWeb) {
+    setTitleWeb(title);
+    _currentTitle = title;
+    if (isPrefix) _prefix = title;
   } else {
     SystemChrome.setApplicationSwitcherDescription(
             ApplicationSwitcherDescription(
