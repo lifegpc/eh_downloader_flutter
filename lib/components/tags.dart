@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../main.dart';
@@ -73,7 +74,13 @@ class _TagsPanel extends State<TagsPanel> {
                   ),
                   child: stt
                       ? TagTooltip(ta[index - 1]!)
-                      : SelectableText(ta[index - 1]!.tag));
+                      : InkWell(
+                          onTap: () {
+                            context.pushNamed("/galleries", queryParameters: {
+                              "tag": [ta[index - 1]!.tag]
+                            });
+                          },
+                          child: Text(ta[index - 1]!.tag)));
             }
           }));
         });

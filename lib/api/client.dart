@@ -150,6 +150,8 @@ abstract class _EHApi {
       @Query("offset") int? offset,
       @Query("limit") int? limit,
       @Query("sort_by_gid") bool? sortByGid,
+      @Query("uploader") String? uploader,
+      @Query("tag") String? tag,
       @CancelRequest() CancelToken? cancel});
 
   @GET('/tag/{id}')

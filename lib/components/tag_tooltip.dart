@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../api/gallery.dart';
 
@@ -16,7 +17,13 @@ class TagTooltip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = _getTag(tag);
-    final t = SelectableText(name);
+    final t = InkWell(
+        onTap: () {
+          context.pushNamed("/galleries", queryParameters: {
+            "tag": [tag.tag]
+          });
+        },
+        child: Text(name));
     return tag.intro != null && tag.intro!.isNotEmpty
         ? Tooltip(
             message: tag.intro!,

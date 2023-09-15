@@ -10,8 +10,11 @@ import 'globals.dart';
 final _log = Logger("GalleriesPage");
 
 class GalleriesPage extends StatefulWidget {
-  const GalleriesPage({Key? key, this.sortByGid}) : super(key: key);
+  const GalleriesPage({Key? key, this.sortByGid, this.uploader, this.tag})
+      : super(key: key);
   final SortByGid? sortByGid;
+  final String? uploader;
+  final String? tag;
 
   static const String routeName = '/galleries';
 
@@ -30,7 +33,11 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final list = (await api.listGalleries(
-              offset: pageKey, limit: _pageSize, sortByGid: _sortByGid))
+              offset: pageKey,
+              limit: _pageSize,
+              sortByGid: _sortByGid,
+              uploader: widget.uploader,
+              tag: widget.tag))
           .unwrap();
       final isLastPage = list.length < _pageSize;
       if (isLastPage) {
@@ -73,9 +80,14 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
           }).catchError((error) {
             _log.warning("Failed to save sortByGid to prefs:", error);
           });
-          context.pushReplacementNamed("/galleries", queryParameters: {
+          var queryParameters = {
             "sortByGid": [v!.index.toString()],
-          });
+            "tag": [widget.tag ?? ""],
+            "uploader": [widget.uploader ?? ""],
+          };
+          queryParameters.removeWhere((k, v) => v[0].isEmpty);
+          context.pushReplacementNamed("/galleries",
+              queryParameters: queryParameters);
         }
       },
       label: Text(AppLocalizations.of(context)!.sortByGid,

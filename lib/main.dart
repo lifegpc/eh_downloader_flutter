@@ -55,7 +55,10 @@ final _router = GoRouter(
           } catch (e) {
             _routerLog.warning("Failed to load sortByGid from prefs:", e);
           }
-          return GalleriesPage(sortByGid: sortByGid);
+          final tag = state.uri.queryParameters["tag"];
+          final uploader = state.uri.queryParameters["uploader"];
+          return GalleriesPage(
+              sortByGid: sortByGid, tag: tag, uploader: uploader);
         }),
     GoRoute(
         path: GalleryPage.routeName,
