@@ -52,5 +52,32 @@
             }
         }
     },
-    "gid": "Gallery Id"
+    "gid": "Gallery Id",
+    "tagGalleries": "Galleries tagged {tag}",
+    "@tagGalleries": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "tagUploaderGalleries": "Galleries tagged {tag} by {uploader}",
+    "@tagUploaderGalleries": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            },
+            "uploader": {
+                "type": "String"
+            }
+        }
+    },
+    "uploaderGalleries": "Galleries uploaded by {uploader}",
+    "@uploaderGalleries": {
+        "placeholders": {
+            "uploader": {
+                "type": "String"
+            }
+        }
+    }
 }

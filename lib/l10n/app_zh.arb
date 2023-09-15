@@ -52,5 +52,32 @@
             }
         }
     },
-    "gid": "画廊ID"
+    "gid": "画廊ID",
+    "tagGalleries": "带有 {tag} 标签的画廊",
+    "@tagGalleries": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            }
+        }
+    },
+    "tagUploaderGalleries": "{uploader} 上传的带有 {tag} 标签的画廊",
+    "@tagUploaderGalleries": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            },
+            "uploader": {
+                "type": "String"
+            }
+        }
+    },
+    "uploaderGalleries": "{uploader} 上传的画廊",
+    "@uploaderGalleries": {
+        "placeholders": {
+            "uploader": {
+                "type": "String"
+            }
+        }
+    }
 }

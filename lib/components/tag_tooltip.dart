@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
 import '../api/gallery.dart';
+import 'tag.dart';
 
 String _getTag(Tag tag) {
   final tags = tag.tag.split(":");
@@ -17,13 +16,7 @@ class TagTooltip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = _getTag(tag);
-    final t = InkWell(
-        onTap: () {
-          context.pushNamed("/galleries", queryParameters: {
-            "tag": [tag.tag]
-          });
-        },
-        child: Text(name));
+    final t = TagWidget(tag, name: name);
     return tag.intro != null && tag.intro!.isNotEmpty
         ? Tooltip(
             message: tag.intro!,

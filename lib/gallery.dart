@@ -29,7 +29,8 @@ class GalleryPage extends StatefulWidget {
   State<GalleryPage> createState() => _GalleryPage();
 }
 
-class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
+class _GalleryPage extends State<GalleryPage>
+    with ThemeModeWidget, IsTopWidget2 {
   _GalleryPage();
   int _gid = 0;
   GalleryData? _data;
@@ -84,14 +85,16 @@ class _GalleryPage extends State<GalleryPage> with ThemeModeWidget {
         : _data != null
             ? _data!.meta.preferredTitle
             : i18n.gallery;
-    if (!kIsWeb || (_data != null && kIsWeb)) {
-      setCurrentTitle(title, Theme.of(context).primaryColor.value,
-          includePrefix: false);
-    } else if (kIsWeb && widget.title != null) {
-      // 设置预加载标题
-      // Chrome 和 Firefox 必须尽快设置标题以确保在历史记录菜单显示正确的标题
-      setCurrentTitle(widget.title!, Theme.of(context).primaryColor.value,
-          includePrefix: false);
+    if (isTop(context)) {
+      if (!kIsWeb || (_data != null && kIsWeb)) {
+        setCurrentTitle(title, Theme.of(context).primaryColor.value,
+            includePrefix: false);
+      } else if (kIsWeb && widget.title != null) {
+        // 设置预加载标题
+        // Chrome 和 Firefox 必须尽快设置标题以确保在历史记录菜单显示正确的标题
+        setCurrentTitle(widget.title!, Theme.of(context).primaryColor.value,
+            includePrefix: false);
+      }
     }
     return Scaffold(
         appBar: _data == null

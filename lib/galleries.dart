@@ -6,15 +6,28 @@ import 'package:logging/logging.dart';
 import 'api/client.dart';
 import 'api/gallery.dart';
 import 'globals.dart';
+import 'main.dart';
 
 final _log = Logger("GalleriesPage");
 
+class GalleriesPageExtra {
+  const GalleriesPageExtra({this.translatedTag});
+  final String? translatedTag;
+}
+
 class GalleriesPage extends StatefulWidget {
-  const GalleriesPage({Key? key, this.sortByGid, this.uploader, this.tag})
+  const GalleriesPage(
+      {Key? key, this.sortByGid, this.uploader, this.tag, this.translatedTag})
       : super(key: key);
   final SortByGid? sortByGid;
   final String? uploader;
   final String? tag;
+  final String? translatedTag;
+  bool _stt(BuildContext context) =>
+      prefs.getBool("showTranslatedTag") ??
+      MainApp.of(context).lang.toLocale().languageCode == "zh";
+  String? preferredTag(BuildContext context) =>
+      _stt(context) ? translatedTag ?? tag : tag;
 
   static const String routeName = '/galleries';
 
@@ -22,7 +35,8 @@ class GalleriesPage extends StatefulWidget {
   State<GalleriesPage> createState() => _GalleriesPage();
 }
 
-class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
+class _GalleriesPage extends State<GalleriesPage>
+    with ThemeModeWidget, IsTopWidget2 {
   static const int _pageSize = 20;
   bool? _sortByGid;
   SortByGid _sortByGid2 = SortByGid.none;
@@ -71,6 +85,7 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
   @override
   Widget build(BuildContext context) {
     tryInitApi(context);
+    final i18n = AppLocalizations.of(context)!;
     final sortByGidMenu = DropdownMenu<SortByGid>(
       initialSelection: _sortByGid2,
       onSelected: (v) {
@@ -90,22 +105,28 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
               queryParameters: queryParameters);
         }
       },
-      label: Text(AppLocalizations.of(context)!.sortByGid,
+      label: Text(i18n.sortByGid,
           style: MediaQuery.of(context).size.width > 810
               ? Theme.of(context).textTheme.labelMedium
               : Theme.of(context).textTheme.labelLarge),
       dropdownMenuEntries: [
-        DropdownMenuEntry(
-            value: SortByGid.none, label: AppLocalizations.of(context)!.none),
-        DropdownMenuEntry(
-            value: SortByGid.asc, label: AppLocalizations.of(context)!.asc),
-        DropdownMenuEntry(
-            value: SortByGid.desc, label: AppLocalizations.of(context)!.desc),
+        DropdownMenuEntry(value: SortByGid.none, label: i18n.none),
+        DropdownMenuEntry(value: SortByGid.asc, label: i18n.asc),
+        DropdownMenuEntry(value: SortByGid.desc, label: i18n.desc),
       ],
       leadingIcon: const Icon(Icons.sort),
     );
-    setCurrentTitle(AppLocalizations.of(context)!.galleries,
-        Theme.of(context).primaryColor.value);
+    final title = widget.uploader != null && widget.tag != null
+        ? i18n.tagUploaderGalleries(
+            widget.preferredTag(context)!, widget.uploader!)
+        : widget.uploader != null
+            ? i18n.uploaderGalleries(widget.uploader!)
+            : widget.tag != null
+                ? i18n.tagGalleries(widget.preferredTag(context)!)
+                : i18n.galleries;
+    if (isTop(context)) {
+      setCurrentTitle(title, Theme.of(context).primaryColor.value);
+    }
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
@@ -114,7 +135,7 @@ class _GalleriesPage extends State<GalleriesPage> with ThemeModeWidget {
                 context.canPop() ? context.pop() : context.go("/");
               },
             ),
-            title: Text(AppLocalizations.of(context)!.galleries),
+            title: Text(title),
             actions: [
               MediaQuery.of(context).size.width > 810
                   ? Padding(

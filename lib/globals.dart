@@ -25,6 +25,7 @@ import 'platform/clipboard.dart';
 import 'platform/path.dart';
 import 'tags.dart';
 import 'utils.dart';
+export 'galleries.dart' show GalleriesPageExtra;
 export 'gallery.dart' show GalleryPageExtra;
 
 final dio = Dio()
@@ -240,6 +241,32 @@ mixin ThemeModeWidget<T extends StatefulWidget> on State<T> {
             : mode == ThemeMode.dark
                 ? Icons.dark_mode
                 : Icons.light_mode));
+  }
+}
+
+mixin IsTopWidget on Widget {
+  @protected
+  bool isTop(BuildContext context) {
+    final last = GoRouter.of(context)
+        .routerDelegate
+        .currentConfiguration
+        .matches
+        .last
+        .pageKey;
+    return last == key;
+  }
+}
+
+mixin IsTopWidget2<T extends StatefulWidget> on State<T> {
+  @protected
+  bool isTop(BuildContext context) {
+    final last = GoRouter.of(context)
+        .routerDelegate
+        .currentConfiguration
+        .matches
+        .last
+        .pageKey;
+    return last == widget.key;
   }
 }
 
