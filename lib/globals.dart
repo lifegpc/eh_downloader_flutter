@@ -323,7 +323,8 @@ void setCurrentTitle(String title, int primaryColor,
   if (!isPrefix && includePrefix && _prefix != null) {
     title = "$_prefix - $title";
   }
-  if (usePrefix && _prefix != null) {
+  if (usePrefix) {
+    if (_prefix == null) return;
     title = _prefix!;
   }
   if (_currentTitle != null && title == _currentTitle) return;
