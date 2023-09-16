@@ -12,6 +12,7 @@
 
 #include <fcntl.h>
 #include <io.h>
+#include <regex>
 #include "err.h"
 #include "fileop.h"
 #include "wchar_util.h"
@@ -22,6 +23,11 @@ FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
 
 FlutterWindow::~FlutterWindow() {}
+
+void filterFilename(std::wstring& fileName) {
+    const static std::wregex re(L"[/\\\\:\\*\\?\"\\<\\>\\|]");
+    fileName = std::regex_replace(fileName, re, L"_");
+}
 
 void updateDataFromMimeType(std::wstring& defExt, std::wstring& filter, std::string mimeType) {
   if (mimeType == "image/jpeg") {
@@ -96,6 +102,7 @@ bool FlutterWindow::OnCreate() {
               result->Error("ERROR", "Failed to convert file name to wstring.");
               return;
             }
+            filterFilename(wFileName);
             std::wstring wDir;
             if (!dir->empty() && !wchar_util::str_to_wstr(wDir, *dir, CP_UTF8)) {
               result->Error("ERROR", "Failed to convert dir to wstring.");
@@ -153,6 +160,7 @@ bool FlutterWindow::OnCreate() {
               result->Error("ERROR", "Failed to convert file name to wstring.");
               return;
             }
+            filterFilename(wFileName);
             std::wstring wDir;
             if (!dir->empty() && !wchar_util::str_to_wstr(wDir, *dir, CP_UTF8)) {
               result->Error("ERROR", "Failed to convert dir to wstring.");
