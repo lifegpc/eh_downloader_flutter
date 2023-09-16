@@ -82,5 +82,7 @@
     },
     "downloadAsZip": "Download as ZIP file",
     "exportAd": "Export pages which marked as ads",
-    "maxZipFilenameLength": "Maximum length of filenames in Zip files"
+    "maxZipFilenameLength": "Maximum length of filenames in Zip files",
+    "downloadComplete": "Download completed.",
+    "downloadZipFailed": "Failed to download ZIP file."
 }

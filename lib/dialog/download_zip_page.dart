@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -103,8 +104,21 @@ class _DownloadZipPage extends State<DownloadZipPage> {
                                   jpnTitle: useTitleJpn,
                                   exportAd: exportAd,
                                   maxLength: int.tryParse(maxLength))
-                              .catchError((err) {
+                              .then((_) {
+                            if (!kIsWeb) {
+                              final snack = SnackBar(
+                                  content: Text(i18n.downloadComplete));
+                              rootScaffoldMessengerKey.currentState
+                                  ?.showSnackBar(snack);
+                            }
+                          }).catchError((err) {
                             _log.warning("Failed to download zip:", err);
+                            if (!kIsWeb) {
+                              final snack = SnackBar(
+                                  content: Text(i18n.downloadZipFailed));
+                              rootScaffoldMessengerKey.currentState
+                                  ?.showSnackBar(snack);
+                            }
                           });
                           context.canPop()
                               ? context.pop()
