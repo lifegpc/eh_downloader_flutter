@@ -89,7 +89,7 @@ bool tryInitApi(BuildContext context) {
     if (_api != null) {
       return true;
     }
-    initApi("/api");
+    initApi("${Uri.base.origin}/api");
     clearAllStates(context);
     return true;
   }
