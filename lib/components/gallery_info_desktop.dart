@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../api/gallery.dart';
 import '../main.dart';
@@ -115,7 +116,17 @@ class GalleryInfoDesktop extends StatelessWidget {
                         const VerticalDivider(indent: 10, endIndent: 10),
                         Expanded(child: TagsPanel(gData.tags)),
                         const VerticalDivider(indent: 10, endIndent: 10),
-                        SizedBox(width: 150, child: Column(children: [])),
+                        SizedBox(
+                            width: 150,
+                            child: Column(children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    context.push(
+                                        '/dialog/download/zip/${gData.meta.gid}');
+                                  },
+                                  child: Text(
+                                      AppLocalizations.of(context)!.download)),
+                            ])),
                       ])),
                     ],
                   ))

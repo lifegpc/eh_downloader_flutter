@@ -39,4 +39,27 @@ class Path {
     return _safChannel.invokeMethod(
         "saveFile", [filenameWithoutExtension, dir, mimeType, bytes]);
   }
+
+  Future<SAFFile> openFile(String filenameWithoutExtension, String mimeType,
+      {String dir = ""}) async {
+    final fd = await _safChannel.invokeMethod<int>(
+        "openFile", [filenameWithoutExtension, dir, mimeType]);
+    return SAFFile(fd!);
+  }
+}
+
+class SAFFile {
+  SAFFile(this._fd);
+  final int _fd;
+  bool _disposed = false;
+  Future<int> write(Uint8List data) async {
+    if (_disposed) throw Exception("File already closed");
+    return await Path._safChannel.invokeMethod("writeFile", [_fd, data]);
+  }
+
+  Future<void> dispose() async {
+    if (_disposed) return;
+    _disposed = true;
+    await Path._safChannel.invokeMethod("closeFile", [_fd]);
+  }
 }

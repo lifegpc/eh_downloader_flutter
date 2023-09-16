@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(runner LANGUAGES CXX)
+project(runner)
 
 set(ENABLE_ICONV OFF CACHE BOOL "Libiconv is not needed.")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../../utils" "${CMAKE_BINARY_DIR}/utils")

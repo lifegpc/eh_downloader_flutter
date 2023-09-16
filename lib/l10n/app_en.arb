@@ -79,5 +79,8 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "downloadAsZip": "Download as ZIP file",
+    "exportAd": "Export pages which marked as ads",
+    "maxZipFilenameLength": "Maximum length of filenames in Zip files"
 }

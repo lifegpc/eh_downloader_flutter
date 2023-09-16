@@ -162,6 +162,14 @@ abstract class _EHApi {
   @GET('/tag/rows')
   Future<ApiResult<List<Tag>>> getRowTags(
       {@CancelRequest() CancelToken? cancel});
+
+  @GET('/export/gallery/zip/{gid}')
+  @DioResponseType(ResponseType.stream)
+  Future<HttpResponse> exportGalleryZip(@Path("gid") int gid,
+      {@Query("jpn_title") bool? jpnTitle,
+      @Query("max_length") int? maxLength,
+      @Query("export_ad") bool? exportAd,
+      @CancelRequest() CancelToken? cancel});
 }
 
 class EHApi extends __EHApi {

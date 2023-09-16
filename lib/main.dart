@@ -8,6 +8,8 @@ import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
 import 'create_root_user.dart';
+import 'dialog/dialog_page.dart';
+import 'dialog/download_zip_page.dart';
 import 'galleries.dart';
 import 'gallery.dart';
 import 'globals.dart';
@@ -87,7 +89,23 @@ final _router = GoRouter(
     GoRoute(
       path: "/gallery",
       redirect: (context, state) => "/galleries",
-    )
+    ),
+    GoRoute(
+        path: '/dialog/download/zip/:gid',
+        pageBuilder: (context, state) => DialogPage(
+            key: state.pageKey,
+            builder: (context) {
+              return DownloadZipPage(int.parse(state.pathParameters["gid"]!));
+            }),
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["gid"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse gid:", e);
+            return "/";
+          }
+        }),
   ],
 );
 

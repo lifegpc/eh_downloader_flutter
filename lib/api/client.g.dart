@@ -647,6 +647,47 @@ class __EHApi implements _EHApi {
     return value;
   }
 
+  @override
+  Future<HttpResponse<dynamic>> exportGalleryZip(
+    int gid, {
+    bool? jpnTitle,
+    int? maxLength,
+    bool? exportAd,
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'jpn_title': jpnTitle,
+      r'max_length': maxLength,
+      r'export_ad': exportAd,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+      responseType: ResponseType.stream,
+    )
+            .compose(
+              _dio.options,
+              '/export/gallery/zip/${gid}',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

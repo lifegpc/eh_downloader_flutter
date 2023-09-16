@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import '../api/gallery.dart';
 import 'thumbnail.dart';
 
@@ -40,7 +41,9 @@ class GalleryBasicInfo extends StatelessWidget {
                         onPressed: null,
                         child: Text(AppLocalizations.of(context)!.read)),
                     ElevatedButton(
-                        onPressed: null,
+                        onPressed: () {
+                          context.push('/dialog/download/zip/${gMeta.gid}');
+                        },
                         child: Text(AppLocalizations.of(context)!.download)),
                   ]))
         ]));
