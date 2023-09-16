@@ -209,4 +209,19 @@ class EHApi extends __EHApi {
   Future<ApiResult<Tags>> getTags(List<int> ids, {CancelToken? cancel}) {
     return _getTags(ids.join(","), cancel: cancel);
   }
+
+  String exportGalleryZipUrl(int gid,
+      {bool? jpnTitle, int? maxLength, bool? exportAd}) {
+    final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
+    var queries = {
+      "jpn_title": jpnTitle?.toString(),
+      "max_length": maxLength?.toString(),
+      "export_ad": exportAd?.toString(),
+    };
+    queries.removeWhere((key, value) => value == null);
+    final newUri = uri
+        .resolve("export/gallery/zip/$gid")
+        .replace(queryParameters: queries);
+    return newUri.toString();
+  }
 }

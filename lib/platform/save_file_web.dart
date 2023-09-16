@@ -26,3 +26,9 @@ void saveFileWeb(
   a.click();
   Url.revokeObjectUrl(url);
 }
+
+void saveUriWeb(String uri) {
+  final a = document.createElement("a") as AnchorElement;
+  a.href = uri;
+  a.click();
+}
