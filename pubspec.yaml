@@ -35,6 +35,7 @@ dependencies:
   shared_preferences: ^2.2.0
   super_clipboard: ^0.6.4
   super_context_menu: ^0.6.4
+  user_agent_analyzer: ^5.0.0
   window_manager: ^0.3.6
 
 dependency_overrides:

@@ -5,6 +5,7 @@ bool get isDesktop =>
     !kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
 bool get isWindows => !kIsWeb && Platform.isWindows;
 bool get isAndroid => !kIsWeb && Platform.isAndroid;
+bool get isIOS => !kIsWeb && Platform.isIOS;
 
 String? getFilenameFromContentDisposition(String? contentDisposition) {
   if (contentDisposition == null) {

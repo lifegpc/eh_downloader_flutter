@@ -883,6 +883,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.2"
+  user_agent_analyzer:
+    dependency: "direct main"
+    description:
+      name: user_agent_analyzer
+      sha256: "19f8099f09e4800c3f58601c053db66592e8cd6e6a34ab3b9c21a51e0e245e28"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   uuid:
     dependency: transitive
     description:

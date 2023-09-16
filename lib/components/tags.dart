@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../main.dart';
+import '../platform/ua.dart' as ua;
+import '../utils.dart';
 import 'tag.dart';
 import 'tag_tooltip.dart';
 import 'scroll_parent.dart';
@@ -52,6 +54,9 @@ class _TagsPanel extends State<TagsPanel> {
     final stt = prefs.getBool("showTranslatedTag") ??
         MainApp.of(context).lang.toLocale().languageCode == "zh";
     final re = ListView.builder(
+        physics: isIOS || ua.isSafari
+            ? const ClampingScrollPhysics()
+            : null,
         padding: const EdgeInsets.all(8),
         itemCount: data!.length,
         itemBuilder: (context, index) {
