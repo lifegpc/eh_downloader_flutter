@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+
 import '../utils.dart';
 import 'save_file.dart';
 
@@ -50,11 +52,19 @@ class Path {
 
 class SAFFile {
   SAFFile(this._fd);
+
   final int _fd;
   bool _disposed = false;
-  Future<int> write(Uint8List data) async {
+
+  /// 写入文件，返回此次写入的字节数
+  ///
+  /// [data] 要写入文件的数据
+  ///
+  /// [append] 如果为 true 则追加写入，如果为 false 则清空原始文件内容，重新写入，默认为 true
+  Future<int> write(Uint8List data, {bool append = true}) async {
     if (_disposed) throw Exception("File already closed");
-    return await Path._safChannel.invokeMethod("writeFile", [_fd, data]);
+    return await Path._safChannel
+        .invokeMethod("writeFile", [_fd, data, append]);
   }
 
   Future<void> dispose() async {

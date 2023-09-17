@@ -1,4 +1,4 @@
-package com.lifegpc.ehf.util
+package com.lifegpc.ehf.platform
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -12,7 +12,7 @@ import com.lifegpc.ehf.annotation.ChannelMethod
 import java.io.File
 import java.util.UUID
 
-object ClipboardUtils {
+object ClipboardPlugin {
     private const val AUTHORITY = "com.lifegpc.ehf.ClipboardImageProvider"
 
     @ChannelMethod

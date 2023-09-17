@@ -21,10 +21,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "49b1fad315e57ab0bbc15bcbb874e83116a1d78f77ebd500a4af6c9407d6b28e"
+      sha256: e0902a06f0e00414e4e3438a084580161279f137aeb862274710f29ec10cf01e
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.8"
+    version: "3.3.9"
   args:
     dependency: transitive
     description:
@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: build_resolvers
-      sha256: a7417cc44d9edb3f2c8760000270c99dba8c72ff66d0146772b8326565780745
+      sha256: d912852cce27c9e80a93603db721c267716894462e7033165178b91138587972
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   build_runner:
     dependency: "direct dev"
     description:
@@ -190,26 +190,26 @@ packages:
     dependency: "direct main"
     description:
       name: cryptography
-      sha256: df156c5109286340817d21fa7b62f9140f17915077127dd70f8bd7a2a0997a35
+      sha256: "11d083541666d80bba21190d35ff70b2497c81e064e82d1b8a07d801f7c7e282"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   cryptography_flutter:
     dependency: "direct main"
     description:
       name: cryptography_flutter
-      sha256: a66ce021e0b600688c2d51b0594cb156ee677ce9bfbc981b62219ad577dd302e
+      sha256: "423ac095bbc4650fe6c07c64632ddc5dda1d4851241367efa0f26ca24b0ce480"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.1"
   dart_style:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "1efa911ca7086affd35f463ca2fc1799584fb6aa89883cf0af8e3664d6a02d55"
+      sha256: abd7625e16f51f554ea244d090292945ec4d4be7bfbaf2ec8cccea568919d334
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.3"
   device_info_plus:
     dependency: transitive
     description:
@@ -980,5 +980,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0-185.0.dev <4.0.0"
-  flutter: ">=3.7.0"
+  dart: ">=3.1.0 <4.0.0"
+  flutter: ">=3.13.0"
