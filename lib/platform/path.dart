@@ -59,12 +59,10 @@ class SAFFile {
   /// 写入文件，返回此次写入的字节数
   ///
   /// [data] 要写入文件的数据
-  ///
-  /// [append] 如果为 true 则追加写入，如果为 false 则清空原始文件内容，重新写入，默认为 true
-  Future<int> write(Uint8List data, {bool append = true}) async {
+  Future<int> write(Uint8List data) async {
     if (_disposed) throw Exception("File already closed");
     return await Path._safChannel
-        .invokeMethod("writeFile", [_fd, data, append]);
+        .invokeMethod("writeFile", [_fd, data]);
   }
 
   Future<void> dispose() async {

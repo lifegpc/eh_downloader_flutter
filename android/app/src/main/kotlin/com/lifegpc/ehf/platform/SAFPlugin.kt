@@ -3,8 +3,6 @@ package com.lifegpc.ehf.platform
 import android.content.Intent
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import com.anggrayudi.storage.file.makeFile
-import com.anggrayudi.storage.file.openOutputStream
 import com.lifegpc.ehf.MainActivity
 import com.lifegpc.ehf.annotation.ChannelMethod
 import com.lifegpc.ehf.data.mmkv.SAFSettings
@@ -94,7 +92,7 @@ class SAFPlugin(private val activity: MainActivity) {
             DocumentFile.fromTreeUri(activity, Uri.parse(SAFSettings.authorizedUri))!!
         documentFile = createFileRecursively(documentFile, dir)
 
-        val f = documentFile.makeFile(activity, filenameWithoutExtension, mimeType)!!
+        val f = documentFile.createFile(mimeType, filenameWithoutExtension)!!
 
         val id = f.hashCode()
         fdMap[id] = f
@@ -109,10 +107,10 @@ class SAFPlugin(private val activity: MainActivity) {
      */
     @ChannelMethod
     @Suppress("unused")
-    private fun writeFile(id: Int, bytes: ByteArray, append: Boolean): Int {
+    private fun writeFile(id: Int, bytes: ByteArray): Int {
         val f = fdMap[id]!!
-        f.openOutputStream(activity, append)!!.use {
-            it.write(bytes)
+        activity.contentResolver.openOutputStream(f.uri, "wa").use {
+            it!!.write(bytes)
         }
         return bytes.size
     }
@@ -136,20 +134,20 @@ class SAFPlugin(private val activity: MainActivity) {
 
     /**
      * 写入文件
-     * @param filename String
+     * @param filenameWithoutExtension String
      * @param dir String
      * @param mimeType String
      * @param content ByteArray
      */
-    private fun doWriteFile(filename: String, dir: String, mimeType: String, content: ByteArray) {
+    private fun doWriteFile(
+        filenameWithoutExtension: String,
+        dir: String,
+        mimeType: String,
+        content: ByteArray
+    ) {
         var documentDir = DocumentFile.fromTreeUri(activity, Uri.parse(SAFSettings.authorizedUri))!!
         documentDir = createFileRecursively(documentDir, dir)
 
-        val filenameWithoutExtension = if (filename.indexOf('.') != -1) {
-            filename.substring(0, filename.lastIndexOf('.'))
-        } else {
-            filename
-        }
         val file = documentDir.createFile(mimeType, filenameWithoutExtension)!!
         val uri = file.uri
         activity.contentResolver.openOutputStream(uri)!!.use {
