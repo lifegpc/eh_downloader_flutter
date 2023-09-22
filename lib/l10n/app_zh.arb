@@ -85,5 +85,6 @@
     "maxZipFilenameLength": "Zip文件中文件名的最大长度",
     "downloadComplete": "下载完毕。",
     "downloadZipFailed": "Zip文件下载失败。",
-    "rating": "评分"
+    "rating": "评分",
+    "preventScreenCapture": "防止截屏"
 }

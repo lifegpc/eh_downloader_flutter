@@ -151,6 +151,9 @@ void main() async {
     await windowManager.ensureInitialized();
   }
   await initLogger();
+  if (prefs.getBool("preventScreenCapture") ?? false) {
+    await platformDisplay.enableProtect();
+  }
   GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(const MainApp());
 }

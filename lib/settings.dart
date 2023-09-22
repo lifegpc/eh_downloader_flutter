@@ -19,11 +19,13 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
   bool _oriDisplayAd = false;
   Lang _oriLang = Lang.system;
+  bool _oriPreventScreenCapture = false;
   bool _oriShowNsfw = false;
   bool _oriShowTranslatedTag = false;
   bool _oriUseTitleJpn = false;
   bool _displayAd = false;
   Lang _lang = Lang.system;
+  bool _preventScreenCapture = false;
   bool _showNsfw = false;
   bool _showTranslatedTag = false;
   bool _useTitleJpn = false;
@@ -71,6 +73,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _oriShowTranslatedTag = false;
       _showTranslatedTag = false;
     }
+    try {
+      _oriPreventScreenCapture = prefs.getBool("preventScreenCapture") ?? false;
+      _preventScreenCapture = _oriPreventScreenCapture;
+    } catch (e) {
+      _log.warning("Failed to get preventScreenCapture:", e);
+      _oriPreventScreenCapture = false;
+      _preventScreenCapture = false;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -87,6 +97,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _showNsfw = false;
       _displayAd = false;
       _showTranslatedTag = _oriLang.toLocale().languageCode == "zh";
+      _preventScreenCapture = false;
     });
   }
 
@@ -128,6 +139,23 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
         _log.warning("Failed to save showTranslatedTag.");
       } else {
         _oriShowTranslatedTag = _showTranslatedTag;
+      }
+    }
+    if (_oriPreventScreenCapture != _preventScreenCapture) {
+      if (!await prefs.setBool("preventScreenCapture", _preventScreenCapture)) {
+        re = false;
+        _log.warning("Failed to save preventScreenCapture.");
+      } else {
+        _oriPreventScreenCapture = _preventScreenCapture;
+      }
+      if (_preventScreenCapture) {
+        if (!await platformDisplay.enableProtect()) {
+          _log.warning("Failed to enable protect.");
+        }
+      } else {
+        if (!await platformDisplay.disableProtect()) {
+          _log.warning("Failed to disable protect.");
+        }
       }
     }
     return re;
@@ -248,6 +276,21 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                 },
                                 child: Text(AppLocalizations.of(context)!
                                     .showTranslatedTag),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CheckboxMenuButton(
+                                value: _preventScreenCapture,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _preventScreenCapture = value;
+                                    });
+                                  }
+                                },
+                                child: Text(AppLocalizations.of(context)!
+                                    .preventScreenCapture),
                               ),
                             ),
                             Row(

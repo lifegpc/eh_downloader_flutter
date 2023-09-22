@@ -224,6 +224,25 @@ bool FlutterWindow::OnCreate() {
             result->NotImplemented();
           }
          }); 
+  flutter::MethodChannel<> display(flutter_controller_->engine()->messenger(), "lifegpc.eh_downloader_flutter/display",
+      &flutter::StandardMethodCodec::GetInstance());
+  display.SetMethodCallHandler([&](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result) {
+    if (call.method_name() == "enableProtect") {
+      if (!SetWindowDisplayAffinity(Win32Window::GetHandle(), WDA_EXCLUDEFROMCAPTURE)) {
+        result->Error("ERROR", "Failed to enable protect.");
+        return;
+      }
+      result->Success();
+    } else if (call.method_name() == "disableProtect") {
+      if (!SetWindowDisplayAffinity(Win32Window::GetHandle(), WDA_NONE)) {
+        result->Error("ERROR", "Failed to disable protect.");
+        return;
+      }
+      result->Success();
+    } else {
+      result->NotImplemented();
+    }
+  });
 
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 

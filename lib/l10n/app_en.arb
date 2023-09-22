@@ -85,5 +85,6 @@
     "maxZipFilenameLength": "Maximum length of filenames in Zip files",
     "downloadComplete": "Download completed.",
     "downloadZipFailed": "Failed to download ZIP file.",
-    "rating": "Rating"
+    "rating": "Rating",
+    "preventScreenCapture": "Prevent screen capture"
 }
