@@ -84,5 +84,6 @@
     "exportAd": "Export pages which marked as ads",
     "maxZipFilenameLength": "Maximum length of filenames in Zip files",
     "downloadComplete": "Download completed.",
-    "downloadZipFailed": "Failed to download ZIP file."
+    "downloadZipFailed": "Failed to download ZIP file.",
+    "rating": "Rating"
 }

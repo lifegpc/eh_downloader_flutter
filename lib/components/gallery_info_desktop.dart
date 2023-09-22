@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../api/gallery.dart';
 import '../main.dart';
 import '../utils/filesize.dart';
+import 'rate.dart';
 import 'tags.dart';
 import 'thumbnail.dart';
 
@@ -112,6 +113,17 @@ class GalleryInfoDesktop extends StatelessWidget {
                                 gData.meta.gid.toString(),
                                 fontSize: 12,
                               ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                      width: 60,
+                                      child: Text("${i18n.rating}${i18n.colon}",
+                                          style: TextStyle(
+                                              color: cs.primary,
+                                              fontSize: 12))),
+                                  Rate(gData.meta.rating),
+                                ],
+                              )
                             ])),
                         const VerticalDivider(indent: 10, endIndent: 10),
                         Expanded(child: TagsPanel(gData.tags)),

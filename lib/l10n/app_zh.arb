@@ -84,5 +84,6 @@
     "exportAd": "导出标记为广告的页面",
     "maxZipFilenameLength": "Zip文件中文件名的最大长度",
     "downloadComplete": "下载完毕。",
-    "downloadZipFailed": "Zip文件下载失败。"
+    "downloadZipFailed": "Zip文件下载失败。",
+    "rating": "评分"
 }
