@@ -2,6 +2,8 @@ package com.lifegpc.ehf
 
 import android.app.Activity
 import android.content.Intent
+import android.view.WindowManager
+import com.lifegpc.ehf.annotation.ChannelMethod
 import com.lifegpc.ehf.eventbus.SAFAuthEvent
 import com.lifegpc.ehf.platform.ClipboardPlugin
 import com.lifegpc.ehf.platform.MethodChannelUtils
@@ -24,6 +26,11 @@ class MainActivity : FlutterActivity() {
             flutterEngine,
             ClipboardPlugin
         )
+        MethodChannelUtils.registerMethodChannel(
+            "lifegpc.eh_downloader_flutter/display",
+            flutterEngine,
+            this
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -39,5 +46,17 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+    }
+
+    @ChannelMethod(methodName = "enableProtect")
+    @Suppress("unused")
+    private fun enableFlagSecure() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
+    @ChannelMethod(methodName = "disableProtect")
+    @Suppress("unused")
+    private fun disableFlagSecure() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
 }
