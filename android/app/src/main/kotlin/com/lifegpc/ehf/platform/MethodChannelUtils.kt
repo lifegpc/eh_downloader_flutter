@@ -38,52 +38,69 @@ object MethodChannelUtils {
                 }
                 return@setMethodCallHandler
             } else {
-                val argv = call.arguments?.takeIf { it is List<*> } as List<*>?
-                    ?: return@setMethodCallHandler result.error("Argument must be List", null, null)
-                val argTypes = targetMethod.parameterTypes
-                val targetArgc = argTypes.size
-
-                val invokeTargetObject =
-                    if (Modifier.isStatic(targetMethod.modifiers)) null else obj
-                targetMethod.isAccessible = true
-
-                if (targetArgc == argv.size) {
-                    try {
-                        val res = targetMethod.invoke(invokeTargetObject, *(argv.toTypedArray()))
-                        if (res is Unit) {
-                            result.success(null)
-                        } else {
-                            result.success(res)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        result.error("Error", e.toString(), e.stackTraceToString())
-                    }
-                } else if (targetArgc == argv.size + 1 && argTypes[0] == MethodChannel.Result::class.java) {
-                    try {
-                        val responseManually =
-                            targetMethod.getAnnotation(ChannelMethod::class.java)!!.responseManually
-                        val res =
-                            targetMethod.invoke(invokeTargetObject, result, *(argv.toTypedArray()))
-                        if (!responseManually) {
-                            if (res is Unit) {
-                                result.success(null)
-                            } else {
-                                result.success(res)
-                            }
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        result.error("Error", e.toString(), e.stackTraceToString())
-                    }
+                // 传入的参数值
+                val argv = if (call.arguments == null) {
+                    null
+                } else if (call.arguments is List<*>) {
+                    call.arguments as List<*>
                 } else {
-                    result.error(
-                        "Error",
-                        "Parameter count error, required: $targetArgc, found: $argv",
+                    return@setMethodCallHandler result.error(
+                        "Argument must be nullable list",
+                        null,
                         null
                     )
                 }
+
+                try {
+                    if (targetMethod.getChannelMethodAnnotation().responseManually) {
+                        // 若手动返回，传入参数的第一个参数为 flutter 的 result 引用，用来返回给 flutter 结果
+                        val arg = arrayListOf(result) + (argv ?: emptyList())
+                        invokeNativeMethod(targetMethod, arg, obj)
+                    } else {
+                        val invokeResult = invokeNativeMethod(targetMethod, argv, obj)
+                        if (invokeResult == Unit) {
+                            result.success(null)
+                        } else {
+                            result.success(invokeResult)
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    result.error(e.javaClass.name, e.localizedMessage, e.stackTraceToString())
+                }
             }
         }
+    }
+
+    private fun invokeNativeMethod(
+        method: Method,
+        args: List<Any?>?,
+        instance: Any?
+    ): Any? {
+        method.isAccessible = true
+        return if (method.isStaticMethod()) { // 静态方法调用
+            if (args == null) {
+                method.invoke(null)
+            } else {
+                method.invoke(null, *args.toTypedArray())
+            }
+        } else { // 非静态方法调用
+            if (args == null) {
+                method.invoke(instance)
+            } else {
+                method.invoke(instance, *args.toTypedArray())
+            }
+        }
+    }
+
+    /**
+     * 判断方法是否为静态方法
+     * @receiver Method
+     * @return Boolean
+     */
+    private fun Method.isStaticMethod(): Boolean = Modifier.isStatic(this.modifiers)
+
+    private fun Method.getChannelMethodAnnotation(): ChannelMethod {
+        return this.annotations.first { it is ChannelMethod } as ChannelMethod
     }
 }
