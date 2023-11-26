@@ -39,7 +39,7 @@ Config? _prefs;
 EHApi? _api;
 
 Future<String> _getJarPath() async {
-  if (isWindows) {
+  if (isWindows || isLinux) {
     try {
       final p = await platformPath.getCurrentExe();
       if (p != null) {
@@ -60,7 +60,7 @@ Future<void> prepareJar() async {
 }
 
 Future<void> preparePrefs() async {
-  if (isWindows) {
+  if (isWindows || isLinux) {
     try {
       var tmp = WindowsConfig();
       tmp.reload();

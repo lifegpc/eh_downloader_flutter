@@ -10,9 +10,27 @@
 struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
+  FlMethodChannel* path_channel;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+static void on_path_channel_call(FlMethodChannel* channel, FlMethodCall* method_call,
+                                 gpointer user_data) {
+  const gchar* method = fl_method_call_get_name(method_call);
+  if (strcmp(method, "getCurrentExe") == 0) {
+    g_autoptr(GError) local_err = NULL;
+    gchar* exe_path = g_file_read_link("/proc/self/exe", &local_err);
+    if (local_err == NULL) {
+      fl_method_call_respond(method_call, FL_METHOD_RESPONSE(fl_method_success_response_new(fl_value_new_string(exe_path))), nullptr);
+      g_free(exe_path);
+    } else {
+      fl_method_call_respond_error(method_call, "get_current_exe_error", local_err->message, nullptr, nullptr);
+    }
+  } else {
+    fl_method_call_respond_not_implemented(method_call, nullptr);
+  }
+}
 
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
@@ -58,6 +76,11 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  self->path_channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(fl_view_get_engine(view)), "lifegpc.eh_downloader_flutter/path",
+      FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(self->path_channel, on_path_channel_call, self, nullptr);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -85,6 +108,7 @@ static gboolean my_application_local_command_line(GApplication* application, gch
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
+  g_clear_object(&self->path_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 

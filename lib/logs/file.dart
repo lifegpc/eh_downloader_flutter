@@ -17,7 +17,7 @@ class LogsFile {
   IOSink? _cached;
   Future<void> init() async {
     if (_cachedLogDirectory != null) return;
-    if (isWindows) {
+    if (isWindows || isLinux) {
       try {
         final p = await platformPath.getCurrentExe();
         if (p != null) {
