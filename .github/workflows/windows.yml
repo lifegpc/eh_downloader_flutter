@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: flutter build windows --release
       - name: Package files
-        run: cd build/windows/runner/Release && 7z a -mx9 -y ../../../../windows.7z
+        run: cd build/windows/x64/runner/Release && 7z a -mx9 -y ../../../../../windows.7z
       - name: Upload files
         uses: actions/upload-artifact@v3
         with:
