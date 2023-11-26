@@ -105,10 +105,7 @@ class _GalleriesPage extends State<GalleriesPage>
               queryParameters: queryParameters);
         }
       },
-      label: Text(i18n.sortByGid,
-          style: MediaQuery.of(context).size.width > 810
-              ? Theme.of(context).textTheme.labelMedium
-              : Theme.of(context).textTheme.labelLarge),
+      label: Text(i18n.sortByGid),
       dropdownMenuEntries: [
         DropdownMenuEntry(value: SortByGid.none, label: i18n.none),
         DropdownMenuEntry(value: SortByGid.asc, label: i18n.asc),
@@ -137,14 +134,10 @@ class _GalleriesPage extends State<GalleriesPage>
             ),
             title: Text(title),
             actions: [
-              MediaQuery.of(context).size.width > 810
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
-                      child: sortByGidMenu)
-                  : PopupMenuButton(
-                      icon: const Icon(Icons.sort),
-                      itemBuilder: (context) =>
-                          [PopupMenuItem(child: sortByGidMenu)]),
+              PopupMenuButton(
+                  icon: const Icon(Icons.sort),
+                  itemBuilder: (context) =>
+                      [PopupMenuItem(child: sortByGidMenu)]),
               buildThemeModeIcon(context),
               buildMoreVertSettingsButon(context),
             ]),

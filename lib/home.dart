@@ -17,6 +17,7 @@ class HomePage extends HookWidget {
   Widget build(BuildContext context) {
     tryInitApi(context);
     var mode = useState(MainApp.of(context).themeMode);
+    mode.value = MainApp.of(context).themeMode;
     setCurrentTitle("", Theme.of(context).primaryColor.value, usePrefix: true);
     return Scaffold(
       appBar: AppBar(

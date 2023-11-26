@@ -183,7 +183,11 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       onChanged: (value) {
         if (value != null) {
           prefs.setBool("showNsfw", value);
-          listener.emit("showNsfwChanged", null);
+          try {
+            listener.emit("showNsfwChanged", null);
+          } catch (e) {
+            // Do nothing.
+          }
           setState(() {
             showNsfw = value;
           });
@@ -201,7 +205,11 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       onChanged: (value) {
         if (value != null) {
           prefs.setBool("displayAd", value);
-          listener.emit("displayAdChanged", null);
+          try {
+            listener.emit("displayAdChanged", null);
+          } catch (e) {
+            // Do nothing.
+          }
           setState(() {
             displayAd = value;
           });
