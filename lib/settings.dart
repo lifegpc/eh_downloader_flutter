@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'globals.dart';
 import 'main.dart';
+import 'utils.dart';
 
 final _log = Logger("SettingsPage");
 
@@ -278,21 +279,24 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                     .showTranslatedTag),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: CheckboxMenuButton(
-                                value: _preventScreenCapture,
-                                onChanged: (bool? value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      _preventScreenCapture = value;
-                                    });
-                                  }
-                                },
-                                child: Text(AppLocalizations.of(context)!
-                                    .preventScreenCapture),
-                              ),
-                            ),
+                            isAndroid || isWindows
+                                ? Container(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: CheckboxMenuButton(
+                                      value: _preventScreenCapture,
+                                      onChanged: (bool? value) {
+                                        if (value != null) {
+                                          setState(() {
+                                            _preventScreenCapture = value;
+                                          });
+                                        }
+                                      },
+                                      child: Text(AppLocalizations.of(context)!
+                                          .preventScreenCapture),
+                                    ),
+                                  )
+                                : Container(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

@@ -5,6 +5,7 @@ import '../api/file.dart';
 import '../api/gallery.dart';
 import 'gallery_basic_info.dart';
 import 'gallery_info_desktop.dart';
+import 'tags.dart';
 import 'thumbnail_gridview.dart';
 
 class GalleryInfo extends StatefulWidget {
@@ -46,8 +47,8 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
               context.canPop() ? context.pop() : context.go("/");
             },
           ),
-          title: SelectableText(
-              maxLines: 2, minLines: 1, widget.gData.meta.preferredTitle),
+          title: SelectableText(widget.gData.meta.preferredTitle,
+              maxLines: 1, minLines: 1),
           actions: [
             buildThemeModeIcon(context),
             buildMoreVertSettingsButon(context),
@@ -58,15 +59,29 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
             ? SliverList(
                 delegate: SliverChildListDelegate([
                   GalleryBasicInfo(widget.gData.meta, firstPage,
-                      fileId: firstFileId),
+                      fileId: firstFileId,
+                      gData: widget.gData,
+                      files: widget.files),
+                  const Divider(indent: 20, endIndent: 20),
                 ]),
               )
             : SliverList(
                 delegate: SliverChildListDelegate([
                   GalleryInfoDesktop(widget.gData,
-                      fileId: firstFileId, controller: controller),
+                      fileId: firstFileId,
+                      controller: controller,
+                      files: widget.files),
                 ]),
               ),
+        useMobile
+            ? TagsPanel(widget.gData.tags,
+                sliver: true,
+                margin: const EdgeInsets.symmetric(horizontal: 20.0))
+            : SliverToBoxAdapter(child: Container()),
+        useMobile
+            ? const SliverToBoxAdapter(
+                child: Divider(indent: 20, endIndent: 20))
+            : SliverToBoxAdapter(child: Container()),
         ThumbnailGridView(
             widget.gData,
             SliverGridDelegateWithFixedCrossAxisCount(

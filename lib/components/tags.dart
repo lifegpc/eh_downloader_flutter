@@ -10,9 +10,13 @@ import 'tag_tooltip.dart';
 import 'scroll_parent.dart';
 
 class TagsPanel extends StatefulWidget {
-  const TagsPanel(this.tags, {Key? key, this.controller}) : super(key: key);
+  const TagsPanel(this.tags,
+      {Key? key, this.controller, this.sliver, this.margin})
+      : super(key: key);
   final List<Tag> tags;
   final ScrollController? controller;
+  final bool? sliver;
+  final EdgeInsetsGeometry? margin;
 
   @override
   State<TagsPanel> createState() => _TagsPanel();
@@ -53,18 +57,14 @@ class _TagsPanel extends State<TagsPanel> {
     final cs = Theme.of(context).colorScheme;
     final stt = prefs.getBool("showTranslatedTag") ??
         MainApp.of(context).lang.toLocale().languageCode == "zh";
-    final re = ListView.builder(
-        physics: isIOS || ua.isSafari
-            ? const ClampingScrollPhysics()
-            : null,
-        padding: const EdgeInsets.all(8),
-        itemCount: data!.length,
-        itemBuilder: (context, index) {
-          final t = data![index].$1;
-          final ta = data![index].$2;
-          final namespace =
-              "${stt ? (tags.getTagTranslate(t) ?? t) : t}${AppLocalizations.of(context)!.colon}";
-          return Wrap(
+    Widget itemBuilder(BuildContext context, int index) {
+      final t = data![index].$1;
+      final ta = data![index].$2;
+      final namespace =
+          "${stt ? (tags.getTagTranslate(t) ?? t) : t}${AppLocalizations.of(context)!.colon}";
+      return Container(
+          margin: widget.margin,
+          child: Wrap(
               children: List.generate(ta.length + 1, (index) {
             if (index == 0) {
               return Container(
@@ -81,8 +81,20 @@ class _TagsPanel extends State<TagsPanel> {
                       ? TagTooltip(ta[index - 1]!)
                       : TagWidget(ta[index - 1]!));
             }
-          }));
-        });
+          })));
+    }
+
+    final re = widget.sliver == true
+        ? SliverList.builder(
+            itemBuilder: itemBuilder,
+            itemCount: data!.length,
+          )
+        : ListView.builder(
+            physics:
+                isIOS || ua.isSafari ? const ClampingScrollPhysics() : null,
+            padding: const EdgeInsets.all(8),
+            itemCount: data!.length,
+            itemBuilder: itemBuilder);
     return widget.controller != null
         ? ScrollParent(controller: widget.controller!, child: re)
         : re;

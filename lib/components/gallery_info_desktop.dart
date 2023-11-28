@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import '../api/file.dart';
 import '../api/gallery.dart';
 import '../main.dart';
 import '../utils/filesize.dart';
 import 'rate.dart';
 import 'tags.dart';
 import 'thumbnail.dart';
+import '../viewer/single.dart';
 
 class _KeyValue extends StatelessWidget {
   const _KeyValue(this.name, this.value,
@@ -38,11 +40,13 @@ class _KeyValue extends StatelessWidget {
 }
 
 class GalleryInfoDesktop extends StatelessWidget {
-  const GalleryInfoDesktop(this.gData, {Key? key, this.fileId, this.controller})
+  const GalleryInfoDesktop(this.gData,
+      {Key? key, this.fileId, this.controller, this.files})
       : super(key: key);
   final GalleryData gData;
   final int? fileId;
   final ScrollController? controller;
+  final EhFiles? files;
 
   @override
   Widget build(BuildContext context) {
@@ -130,22 +134,27 @@ class GalleryInfoDesktop extends StatelessWidget {
                         const VerticalDivider(indent: 10, endIndent: 10),
                         SizedBox(
                             width: 150,
-                            child: Column(children: [
-                              ElevatedButton(
-                                  onPressed: () {
-                                    context.push(
-                                        '/gallery/${gData.meta.gid}/page/1');
-                                  },
-                                  child:
-                                      Text(AppLocalizations.of(context)!.read)),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    context.push(
-                                        '/dialog/download/zip/${gData.meta.gid}');
-                                  },
-                                  child: Text(
-                                      AppLocalizations.of(context)!.download)),
-                            ])),
+                            child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        context.push(
+                                            '/gallery/${gData.meta.gid}/page/1',
+                                            extra: SinglePageViewerExtra(
+                                                data: gData, files: files));
+                                      },
+                                      child: Text(
+                                          AppLocalizations.of(context)!.read)),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        context.push(
+                                            '/dialog/download/zip/${gData.meta.gid}');
+                                      },
+                                      child: Text(AppLocalizations.of(context)!
+                                          .download)),
+                                ])),
                       ])),
                     ],
                   ))

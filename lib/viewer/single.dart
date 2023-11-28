@@ -40,9 +40,10 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
   late int _index;
   late GalleryData? _data;
   late EhFiles? _files;
+  late String _back;
   CancelToken? _cancel;
   bool _isLoading = false;
-  bool _page_changed = false;
+  bool _pageChanged = false;
   Object? _error;
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
     _pageController = PageController(initialPage: _index);
     _data = widget.data;
     _files = widget.files;
+    _back = "/gallery/${widget.gid}";
     super.initState();
   }
 
@@ -76,11 +78,11 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
         if (_index < 0) {
           _index = 0;
           _pageController.jumpToPage(_index);
-          _page_changed = true;
+          _pageChanged = true;
         } else if (_index >= _data!.pages.length) {
           _index = _data!.pages.length - 1;
           _pageController.jumpToPage(_index);
-          _page_changed = true;
+          _pageChanged = true;
         }
         setState(() {
           _files = fileData;
@@ -102,7 +104,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
   void _onPageChanged(BuildContext context) {
     context.replace("/gallery/${widget.gid}/page/${_index + 1}",
         extra: SinglePageViewerExtra(data: _data, files: _files));
-    _page_changed = false;
+    _pageChanged = false;
   }
 
   @override
@@ -116,7 +118,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                context.canPop() ? context.pop() : context.go("/");
+                context.canPop() ? context.pop() : context.go(_back);
               },
             ),
             title: Text(AppLocalizations.of(context)!.loading),
@@ -143,7 +145,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
                           label: Text(AppLocalizations.of(context)!.retry))
                     ])));
     }
-    if (_page_changed) {
+    if (_pageChanged) {
       _onPageChanged(context);
     }
     return Scaffold(
@@ -167,7 +169,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
             }
           }),
           KeyAction(LogicalKeyboardKey.backspace, "back", () {
-            context.canPop() ? context.pop() : context.go("/");
+            context.canPop() ? context.pop() : context.go(_back);
           }),
         ],
         child: PhotoViewGallery.builder(

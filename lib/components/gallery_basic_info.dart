@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import '../api/file.dart';
 import '../api/gallery.dart';
 import 'thumbnail.dart';
+import '../viewer/single.dart';
 
 class GalleryBasicInfo extends StatelessWidget {
-  const GalleryBasicInfo(this.gMeta, this.firstPage, {Key? key, this.fileId})
+  const GalleryBasicInfo(this.gMeta, this.firstPage,
+      {Key? key, this.fileId, this.gData, this.files})
       : super(key: key);
   final GMeta gMeta;
   final ExtendedPMeta firstPage;
   final int? fileId;
+  final GalleryData? gData;
+  final EhFiles? files;
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return SizedBox(
         height: 300,
         child: Column(children: [
@@ -26,8 +32,11 @@ class GalleryBasicInfo extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SelectableText(gMeta.preferredTitle),
-                    SelectableText(gMeta.uploader),
+                    SelectableText(gMeta.preferredTitle,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: cs.primary)),
+                    SelectableText(gMeta.uploader,
+                        style: TextStyle(color: cs.secondary)),
                     SelectableText(gMeta.category),
                   ],
                 ))
@@ -39,7 +48,9 @@ class GalleryBasicInfo extends StatelessWidget {
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          context.push('/gallery/${gMeta.gid}/page/1');
+                          context.push('/gallery/${gMeta.gid}/page/1',
+                              extra: SinglePageViewerExtra(
+                                  data: gData, files: files));
                         },
                         child: Text(AppLocalizations.of(context)!.read)),
                     ElevatedButton(

@@ -102,7 +102,7 @@ class _GalleryPage extends State<GalleryPage>
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
-                    context.canPop() ? context.pop() : context.go("/");
+                    context.canPop() ? context.pop() : context.go("/gallery");
                   },
                 ),
                 title: Text(title),
