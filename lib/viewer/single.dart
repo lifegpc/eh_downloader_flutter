@@ -107,6 +107,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
 
   @override
   Widget build(BuildContext context) {
+    tryInitApi(context);
     final isLoading = _error == null && (_data == null || _files == null);
     if (isLoading && !_isLoading) _fetchData();
     if (_data == null || _files == null) {
