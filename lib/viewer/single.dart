@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:dio_image_provider/dio_image_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +12,6 @@ import 'package:photo_view/photo_view_gallery.dart';
 import '../api/file.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
-import '../platform/replace_current_route.dart';
 
 final _log = Logger("SinglePageViewer");
 
@@ -102,15 +100,9 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
   }
 
   void _onPageChanged(BuildContext context) {
-    GoRouter.optionURLReflectsImperativeAPIs = false;
-    final q = "/gallery/${widget.gid}/page/${_index + 1}";
-    context.replace(q,
+    context.replace("/gallery/${widget.gid}/page/${_index + 1}",
         extra: SinglePageViewerExtra(data: _data, files: _files));
-    GoRouter.optionURLReflectsImperativeAPIs = true;
     _page_changed = false;
-    if (kIsWeb) {
-      replaceCurrentRoute(q);
-    }
   }
 
   @override
