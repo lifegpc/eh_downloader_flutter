@@ -101,9 +101,9 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 # Start with a clean build bundle directory every time.
-install(CODE "
-  file(REMOVE_RECURSE \"${BUILD_BUNDLE_DIR}/\")
-  " COMPONENT Runtime)
+# install(CODE "
+#   file(REMOVE_RECURSE \"${BUILD_BUNDLE_DIR}/\")
+#   " COMPONENT Runtime)
 
 set(INSTALL_BUNDLE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/data")
 set(INSTALL_BUNDLE_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")

@@ -134,6 +134,13 @@ class GalleryInfoDesktop extends StatelessWidget {
                               ElevatedButton(
                                   onPressed: () {
                                     context.push(
+                                        '/gallery/${gData.meta.gid}/page/1');
+                                  },
+                                  child:
+                                      Text(AppLocalizations.of(context)!.read)),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    context.push(
                                         '/dialog/download/zip/${gData.meta.gid}');
                                   },
                                   child: Text(

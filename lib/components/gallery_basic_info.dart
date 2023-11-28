@@ -38,7 +38,9 @@ class GalleryBasicInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                        onPressed: null,
+                        onPressed: () {
+                          context.push('/gallery/${gMeta.gid}/page/1');
+                        },
                         child: Text(AppLocalizations.of(context)!.read)),
                     ElevatedButton(
                         onPressed: () {

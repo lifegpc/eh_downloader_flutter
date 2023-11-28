@@ -3,21 +3,32 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:palette_generator/palette_generator.dart';
 import '../api/client.dart';
+import '../api/file.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../utils.dart';
 import '../utils/clipboard.dart';
+import '../viewer/single.dart';
 import 'image.dart';
 
 final _log = Logger("Thumbnail");
 
 class Thumbnail extends StatefulWidget {
   const Thumbnail(ExtendedPMeta pMeta,
-      {Key? key, int? max, int? width, int? height, int? fileId, this.gid})
+      {Key? key,
+      int? max,
+      int? width,
+      int? height,
+      int? fileId,
+      this.gid,
+      this.index,
+      this.files,
+      this.gdata})
       : _pMeta = pMeta,
         _max = max ?? 1200,
         _width = width,
@@ -30,6 +41,9 @@ class Thumbnail extends StatefulWidget {
   final int? _height;
   final int? _fileId;
   final int? gid;
+  final int? index;
+  final EhFiles? files;
+  final GalleryData? gdata;
 
   int get height => _height != null
       ? _height!
@@ -223,6 +237,19 @@ class _Thumbnail extends State<Thumbnail> {
               ];
               return list;
             }));
+    final timg = _data != null
+        ? ImageWithContextMenu(_data!,
+            uri: _uri, fileName: _fileName, dir: _dir)
+        : null;
+    final img = widget.gid != null && widget.index != null && _data != null
+        ? GestureDetector(
+            onTap: () {
+              context.push("/gallery/${widget.gid}/page/${widget.index}",
+                  extra: SinglePageViewerExtra(
+                      data: widget.gdata, files: widget.files));
+            },
+            child: timg)
+        : timg;
     return SizedBox(
         width: widget.width.toDouble(),
         height: widget.height.toDouble(),
@@ -240,10 +267,7 @@ class _Thumbnail extends State<Thumbnail> {
                                       sigmaX: 10,
                                       sigmaY: 10,
                                       tileMode: TileMode.decal),
-                                  child: ImageWithContextMenu(_data!,
-                                      uri: _uri,
-                                      fileName: _fileName,
-                                      dir: _dir))),
+                                  child: img)),
                           SizedBox(
                               width: widget.width.toDouble(),
                               height: widget.height.toDouble(),
@@ -265,8 +289,7 @@ class _Thumbnail extends State<Thumbnail> {
                         SizedBox(
                             width: widget.width.toDouble(),
                             height: widget.height.toDouble(),
-                            child: ImageWithContextMenu(_data!,
-                                uri: _uri, fileName: _fileName, dir: _dir)),
+                            child: img),
                         moreVertMenu
                       ])
                 : Center(

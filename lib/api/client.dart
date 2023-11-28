@@ -210,6 +210,36 @@ class EHApi extends __EHApi {
     return _getTags(ids.join(","), cancel: cancel);
   }
 
+  String getFileUrl(int id) {
+    final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
+    final newUri = uri.resolve("file/$id");
+    return newUri.toString();
+  }
+
+  String getThumbnailUrl(int id,
+      {int? max,
+      int? width,
+      int? height,
+      int? quality,
+      bool? force,
+      ThumbnailMethod? method,
+      ThumbnailAlign? align}) {
+    final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
+    final queryParameters = <String, dynamic>{
+      r'max': max,
+      r'width': width,
+      r'height': height,
+      r'quality': quality,
+      r'force': force,
+      r'method': method?.name,
+      r'align': align?.name,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final newUri =
+        uri.resolve("thumbnail/$id").replace(queryParameters: queryParameters);
+    return newUri.toString();
+  }
+
   String exportGalleryZipUrl(int gid,
       {bool? jpnTitle, int? maxLength, bool? exportAd}) {
     final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));

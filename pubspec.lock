@@ -242,6 +242,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0+1"
+  dio_image_provider:
+    dependency: "direct main"
+    description:
+      name: dio_image_provider
+      sha256: d7937f2b33c52db70cbf6209cf6ef6a929e006afcadaebfb6b0dc2da80dce52b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   enum_flag:
     dependency: "direct main"
     description:
@@ -316,6 +324,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_markdown:
+    dependency: transitive
+    description:
+      name: flutter_markdown
+      sha256: "35108526a233cc0755664d445f8a6b4b61e6f8fe993b3658b80b4a26827fc196"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.18+2"
   flutter_staggered_grid_view:
     dependency: transitive
     description:
@@ -462,6 +478,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
+  keymap:
+    dependency: "direct main"
+    description:
+      name: keymap
+      sha256: "837f37bce794bb41c3a49cd122718544921afec348f34c78f6153c72b43f3c10"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.92"
   lints:
     dependency: transitive
     description:
@@ -478,6 +502,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: acf35edccc0463a9d7384e437c015a3535772e09714cf60e07eeef3a15870dcd
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.1.1"
   matcher:
     dependency: transitive
     description:
@@ -590,6 +622,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
+  photo_view:
+    dependency: "direct main"
+    description:
+      name: photo_view
+      sha256: "8036802a00bae2a78fc197af8a158e3e2f7b500561ed23b4c458107685e645bb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.14.0"
   pixel_snap:
     dependency: transitive
     description:

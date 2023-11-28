@@ -19,6 +19,7 @@ import 'logs/file.dart';
 import 'set_server.dart';
 import 'settings.dart';
 import 'utils.dart';
+import 'viewer/single.dart';
 
 final _routerLog = Logger("Router");
 
@@ -83,7 +84,7 @@ final _router = GoRouter(
             return null;
           } catch (e) {
             _routerLog.warning("Failed to parse gid:", e);
-            return "/";
+            return "/gallery";
           }
         }),
     GoRoute(
@@ -104,6 +105,33 @@ final _router = GoRouter(
           } catch (e) {
             _routerLog.warning("Failed to parse gid:", e);
             return "/";
+          }
+        }),
+    GoRoute(
+        path: SinglePageViewer.routeName,
+        builder: (context, state) {
+          final extra = state.extra as SinglePageViewerExtra?;
+          return SinglePageViewer(
+            gid: int.parse(state.pathParameters["gid"]!),
+            index: int.parse(state.pathParameters["index"]!),
+            key: state.pageKey,
+            data: extra?.data,
+            files: extra?.files,
+          );
+        },
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["gid"]!);
+          } catch (e) {
+            _routerLog.warning("Failed to parse gid:", e);
+            return "/gallery";
+          }
+          try {
+            int.parse(state.pathParameters["index"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse index:", e);
+            return "/gallery/${state.pathParameters["gid"]}";
           }
         }),
   ],
