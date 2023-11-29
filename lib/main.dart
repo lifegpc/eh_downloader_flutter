@@ -10,6 +10,7 @@ import 'api/client.dart';
 import 'create_root_user.dart';
 import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
+import 'dialog/gallery_details_page.dart';
 import 'galleries.dart';
 import 'gallery.dart';
 import 'globals.dart';
@@ -132,6 +133,27 @@ final _router = GoRouter(
           } catch (e) {
             _routerLog.warning("Failed to parse index:", e);
             return "/gallery/${state.pathParameters["gid"]}";
+          }
+        }),
+    GoRoute(
+        path: '/dialog/gallery/details/:gid',
+        pageBuilder: (context, state) {
+          final extra = state.extra as GalleryDetailsPageExtra?;
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return GalleryDetailsPage(
+                    int.parse(state.pathParameters["gid"]!),
+                    meta: extra?.meta);
+              });
+        },
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["gid"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse gid:", e);
+            return "/";
           }
         }),
   ],

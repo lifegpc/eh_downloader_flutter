@@ -86,5 +86,6 @@
     "downloadComplete": "Download completed.",
     "downloadZipFailed": "Failed to download ZIP file.",
     "rating": "Rating",
-    "preventScreenCapture": "Prevent screen capture"
+    "preventScreenCapture": "Prevent screen capture",
+    "seeMoreInfo": "See more information"
 }

@@ -5,6 +5,7 @@ import '../api/file.dart';
 import '../api/gallery.dart';
 import 'gallery_basic_info.dart';
 import 'gallery_info_desktop.dart';
+import 'gallery_info_detail.dart';
 import 'tags.dart';
 import 'thumbnail_gridview.dart';
 
@@ -62,6 +63,8 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
                       fileId: firstFileId,
                       gData: widget.gData,
                       files: widget.files),
+                  const Divider(indent: 20, endIndent: 20),
+                  GalleryInfoDetail(widget.gData.meta),
                   const Divider(indent: 20, endIndent: 20),
                 ]),
               )

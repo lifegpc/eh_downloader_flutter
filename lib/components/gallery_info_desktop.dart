@@ -125,7 +125,7 @@ class GalleryInfoDesktop extends StatelessWidget {
                                           style: TextStyle(
                                               color: cs.primary,
                                               fontSize: 12))),
-                                  Rate(gData.meta.rating),
+                                  Rate(gData.meta.rating, fontSize: 12),
                                 ],
                               )
                             ])),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Rate extends StatelessWidget {
-  const Rate(this.rate, {Key? key}) : super(key: key);
+  const Rate(this.rate, {Key? key, this.fontSize}) : super(key: key);
   final double rate;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +18,10 @@ class Rate extends StatelessWidget {
                     ? Icons.star_border
                     : Icons.star_half,
             color: cs.primary,
-            size: 12,
+            size: fontSize,
           ),
-        Text(" $rate", style: TextStyle(color: cs.secondary, fontSize: 12)),
+        Text(" $rate",
+            style: TextStyle(color: cs.secondary, fontSize: fontSize)),
       ],
     );
   }

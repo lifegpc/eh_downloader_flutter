@@ -86,5 +86,6 @@
     "downloadComplete": "下载完毕。",
     "downloadZipFailed": "Zip文件下载失败。",
     "rating": "评分",
-    "preventScreenCapture": "防止截屏"
+    "preventScreenCapture": "防止截屏",
+    "seeMoreInfo": "显示更多信息"
 }
