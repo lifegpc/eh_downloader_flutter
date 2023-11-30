@@ -87,5 +87,7 @@
     "downloadZipFailed": "Failed to download ZIP file.",
     "rating": "Rating",
     "preventScreenCapture": "Prevent screen capture",
-    "seeMoreInfo": "See more information"
+    "seeMoreInfo": "See more information",
+    "markAsNsfw": "Mark as NSFW",
+    "markAsNonNsfw": "Mark as non-NSFW"
 }

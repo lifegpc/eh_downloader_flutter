@@ -162,6 +162,7 @@ class GalleryData {
   final GMeta meta;
   final List<Tag> tags;
   final List<ExtendedPMeta> pages;
+  bool get isAllNsfw => pages.every((page) => page.isNsfw);
 
   factory GalleryData.fromJson(Map<String, dynamic> json) =>
       _$GalleryDataFromJson(json);

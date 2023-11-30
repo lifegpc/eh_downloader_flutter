@@ -87,5 +87,7 @@
     "downloadZipFailed": "Zip文件下载失败。",
     "rating": "评分",
     "preventScreenCapture": "防止截屏",
-    "seeMoreInfo": "显示更多信息"
+    "seeMoreInfo": "显示更多信息",
+    "markAsNsfw": "标记为NSFW",
+    "markAsNonNsfw": "标记为非NSFW"
 }

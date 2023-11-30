@@ -170,6 +170,27 @@ abstract class _EHApi {
       @Query("max_length") int? maxLength,
       @Query("export_ad") bool? exportAd,
       @CancelRequest() CancelToken? cancel});
+
+  @POST('/filemeta')
+  @MultiPart()
+  Future<ApiResult<dynamic>> updateGalleryFileMeta(@Part(name: "gid") int gid,
+      {@Part(name: "is_nsfw") bool? isNsfw,
+      @Part(name: "is_ad") bool? isAd,
+      @Part(name: "excludes") String? excludes,
+      @CancelRequest() CancelToken? cancel});
+  @POST('/filemeta')
+  @MultiPart()
+  Future<ApiResult<dynamic>> updateFileMeta(@Part(name: "token") String token,
+      {@Part(name: "is_nsfw") bool? isNsfw,
+      @Part(name: "is_ad") bool? isAd,
+      @CancelRequest() CancelToken? cancel});
+  @POST('/filemeta')
+  @MultiPart()
+  Future<ApiResult<dynamic>> updateFilesMeta(
+      @Part(name: "tokens") String tokens,
+      {@Part(name: "is_nsfw") bool? isNsfw,
+      @Part(name: "is_ad") bool? isAd,
+      @CancelRequest() CancelToken? cancel});
 }
 
 class EHApi extends __EHApi {

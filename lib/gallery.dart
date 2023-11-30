@@ -27,6 +27,12 @@ class GalleryPage extends StatefulWidget {
 
   @override
   State<GalleryPage> createState() => _GalleryPage();
+  // ignore: library_private_types_in_public_api
+  static _GalleryPage of(BuildContext context) =>
+      context.findAncestorStateOfType<_GalleryPage>()!;
+  // ignore: library_private_types_in_public_api
+  static _GalleryPage? maybeOf(BuildContext context) =>
+      context.findAncestorStateOfType<_GalleryPage>();
 }
 
 class _GalleryPage extends State<GalleryPage>
@@ -37,7 +43,24 @@ class _GalleryPage extends State<GalleryPage>
   EhFiles? _files;
   Object? _error;
   CancelToken? _cancel;
+  CancelToken? _markAsNsfwCancel;
   bool _isLoading = false;
+  bool? get isAllNsfw => _data?.isAllNsfw;
+  Future<void> markGalleryAsNsfw(bool isNsfw) async {
+    try {
+      _markAsNsfwCancel = CancelToken();
+      (await api.updateGalleryFileMeta(_gid,
+              isNsfw: isNsfw, cancel: _markAsNsfwCancel))
+          .unwrap();
+      if (!_cancel!.isCancelled) {
+        _fetchData();
+      }
+    } catch (e) {
+      if (!_cancel!.isCancelled) {
+        _log.severe("Failed to mark gallery $_gid:", e);
+      }
+    }
+  }
 
   Future<void> _fetchData() async {
     try {
@@ -124,6 +147,7 @@ class _GalleryPage extends State<GalleryPage>
   @override
   void dispose() {
     _cancel?.cancel();
+    _markAsNsfwCancel?.cancel();
     super.dispose();
   }
 }

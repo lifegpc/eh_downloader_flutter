@@ -20,6 +20,7 @@ import 'auth.dart';
 import 'config/base.dart';
 import 'config/shared_preferences.dart';
 import 'config/windows.dart';
+import 'gallery.dart';
 import 'main.dart';
 import 'platform/clipboard.dart';
 import 'platform/display.dart';
@@ -133,6 +134,8 @@ enum MoreVertSettings {
   setServerUrl,
   createRootUser,
   settings,
+  markAsNsfw,
+  markAsNonNsfw,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -145,6 +148,12 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
       break;
     case MoreVertSettings.settings:
       context.push("/settings");
+      break;
+    case MoreVertSettings.markAsNsfw:
+      GalleryPage.maybeOf(context)?.markGalleryAsNsfw(true);
+      break;
+    case MoreVertSettings.markAsNonNsfw:
+      GalleryPage.maybeOf(context)?.markGalleryAsNsfw(false);
       break;
     default:
       break;
@@ -183,11 +192,7 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       onChanged: (value) {
         if (value != null) {
           prefs.setBool("showNsfw", value);
-          try {
-            listener.emit("showNsfwChanged", null);
-          } catch (e) {
-            // Do nothing.
-          }
+          listener.tryEmit("showNsfwChanged", null);
           setState(() {
             showNsfw = value;
           });
@@ -205,11 +210,7 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       onChanged: (value) {
         if (value != null) {
           prefs.setBool("displayAd", value);
-          try {
-            listener.emit("displayAdChanged", null);
-          } catch (e) {
-            // Do nothing.
-          }
+          listener.tryEmit("displayAdChanged", null);
           setState(() {
             displayAd = value;
           });
@@ -218,6 +219,20 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       title: Text(AppLocalizations.of(context)!.displayAd),
     ),
   )));
+  if (path == "/gallery/:gid") {
+    list.add(const PopupMenuDivider());
+    final isAllNsfw = GalleryPage.of(context).isAllNsfw;
+    if (isAllNsfw != null) {
+      list.add(PopupMenuItem(
+        value: isAllNsfw
+            ? MoreVertSettings.markAsNonNsfw
+            : MoreVertSettings.markAsNsfw,
+        child: Text(isAllNsfw
+            ? AppLocalizations.of(context)!.markAsNonNsfw
+            : AppLocalizations.of(context)!.markAsNsfw),
+      ));
+    }
+  }
   return list;
 }
 

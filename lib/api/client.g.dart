@@ -688,6 +688,175 @@ class __EHApi implements _EHApi {
     return httpResponse;
   }
 
+  @override
+  Future<ApiResult<dynamic>> updateGalleryFileMeta(
+    int gid, {
+    bool? isNsfw,
+    bool? isAd,
+    String? excludes,
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'gid',
+      gid.toString(),
+    ));
+    if (isNsfw != null) {
+      _data.fields.add(MapEntry(
+        'is_nsfw',
+        isNsfw.toString(),
+      ));
+    }
+    if (isAd != null) {
+      _data.fields.add(MapEntry(
+        'is_ad',
+        isAd.toString(),
+      ));
+    }
+    if (excludes != null) {
+      _data.fields.add(MapEntry(
+        'excludes',
+        excludes,
+      ));
+    }
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/filemeta',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<dynamic>> updateFileMeta(
+    String token, {
+    bool? isNsfw,
+    bool? isAd,
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'token',
+      token,
+    ));
+    if (isNsfw != null) {
+      _data.fields.add(MapEntry(
+        'is_nsfw',
+        isNsfw.toString(),
+      ));
+    }
+    if (isAd != null) {
+      _data.fields.add(MapEntry(
+        'is_ad',
+        isAd.toString(),
+      ));
+    }
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/filemeta',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<dynamic>> updateFilesMeta(
+    String tokens, {
+    bool? isNsfw,
+    bool? isAd,
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'tokens',
+      tokens,
+    ));
+    if (isNsfw != null) {
+      _data.fields.add(MapEntry(
+        'is_nsfw',
+        isNsfw.toString(),
+      ));
+    }
+    if (isAd != null) {
+      _data.fields.add(MapEntry(
+        'is_ad',
+        isAd.toString(),
+      ));
+    }
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/filemeta',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
