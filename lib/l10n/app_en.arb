@@ -89,5 +89,7 @@
     "preventScreenCapture": "Prevent screen capture",
     "seeMoreInfo": "See more information",
     "markAsNsfw": "Mark as NSFW",
-    "markAsNonNsfw": "Mark as non-NSFW"
+    "markAsSfw": "Mark as SFW",
+    "markAsAd": "Mark as Ad",
+    "markAsNonAd": "Mark as non-Ad"
 }

@@ -52,12 +52,12 @@ class _GalleryPage extends State<GalleryPage>
       (await api.updateGalleryFileMeta(_gid,
               isNsfw: isNsfw, cancel: _markAsNsfwCancel))
           .unwrap();
-      if (!_cancel!.isCancelled) {
+      if (!_markAsNsfwCancel!.isCancelled) {
         _fetchData();
       }
     } catch (e) {
-      if (!_cancel!.isCancelled) {
-        _log.severe("Failed to mark gallery $_gid:", e);
+      if (!_markAsNsfwCancel!.isCancelled) {
+        _log.warning("Failed to mark gallery $_gid:", e);
       }
     }
   }

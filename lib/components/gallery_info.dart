@@ -24,10 +24,29 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
     setState(() {});
   }
 
+  void _onAdChanged(dynamic args) {
+    final arguments = args as (String, bool)?;
+    if (arguments == null) return;
+    final token = arguments.$1;
+    final isAd = arguments.$2;
+    var changed = false;
+    for (var e in widget.gData.pages) {
+      if (e.token == token) {
+        e.isAd = isAd;
+        changed = true;
+        break;
+      }
+    }
+    if (changed) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     listener.on("showNsfwChanged", stateChanged);
     listener.on("displayAdChanged", stateChanged);
+    listener.on("adChanged", _onAdChanged);
     super.initState();
   }
 
@@ -100,6 +119,7 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
     controller.dispose();
     listener.removeEventListener("showNsfwChanged", stateChanged);
     listener.removeEventListener("displayAdChanged", stateChanged);
+    listener.removeEventListener("adChanged", _onAdChanged);
     super.dispose();
   }
 }

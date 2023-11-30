@@ -64,6 +64,10 @@ enum _ThumbnailMenu {
   copyImage,
   copyImgUrl,
   saveAs,
+  markAsNsfw,
+  markAsSfw,
+  markAsAd,
+  markAsNonAd,
 }
 
 class _Thumbnail extends State<Thumbnail> {
@@ -74,11 +78,52 @@ class _Thumbnail extends State<Thumbnail> {
   bool _showNsfw = false;
   String? _uri;
   CancelToken? _cancel;
+  CancelToken? _markAsNsfwCancel;
+  CancelToken? _markAsAdCancel;
   String? _fileName;
   String _dir = "";
   Color? _iconColor;
   double? _iconSize;
   bool _disposed = false;
+  void _onNsfwChanged(dynamic args) {
+    final arguments = args as (String, bool)?;
+    if (arguments == null) return;
+    final token = arguments.$1;
+    final isNsfw = arguments.$2;
+    if (token != widget._pMeta.token) return;
+    widget._pMeta.isNsfw = isNsfw;
+    setState(() {});
+  }
+
+  Future<void> _markAsNsfw(bool isNsfw) async {
+    try {
+      _markAsNsfwCancel = CancelToken();
+      final token = widget._pMeta.token;
+      (await api.updateFileMeta(token,
+              isNsfw: isNsfw, cancel: _markAsNsfwCancel))
+          .unwrap();
+      listener.tryEmit("nsfwChanged", (token, isNsfw));
+    } catch (e) {
+      if (!_markAsNsfwCancel!.isCancelled) {
+        _log.warning("Failed to mark as nsfw:", e);
+      }
+    }
+  }
+
+  Future<void> _markAsAd(bool isAd) async {
+    try {
+      _markAsAdCancel = CancelToken();
+      final token = widget._pMeta.token;
+      (await api.updateFileMeta(token, isAd: isAd, cancel: _markAsAdCancel))
+          .unwrap();
+      listener.tryEmit("adChanged", (token, isAd));
+    } catch (e) {
+      if (!_markAsAdCancel!.isCancelled) {
+        _log.warning("Failed to mark as ad:", e);
+      }
+    }
+  }
+
   Future<void> _fetchData() async {
     try {
       _cancel = CancelToken();
@@ -133,6 +178,7 @@ class _Thumbnail extends State<Thumbnail> {
     _uri = null;
     _fileName = "${basenameWithoutExtension(widget._pMeta.name)}_thumb";
     _dir = isAndroid && widget.gid != null ? widget.gid!.toString() : "";
+    listener.on("nsfwChanged", _onNsfwChanged);
     super.initState();
   }
 
@@ -174,6 +220,9 @@ class _Thumbnail extends State<Thumbnail> {
   void dispose() {
     _disposed = true;
     _cancel?.cancel();
+    _markAsNsfwCancel?.cancel();
+    _markAsAdCancel?.cancel();
+    listener.removeEventListener("nsfwChanged", _onNsfwChanged);
     super.dispose();
   }
 
@@ -201,6 +250,18 @@ class _Thumbnail extends State<Thumbnail> {
           _log.warning("Failed to save image:", err);
         }
         break;
+      case _ThumbnailMenu.markAsNsfw:
+        await _markAsNsfw(true);
+        break;
+      case _ThumbnailMenu.markAsSfw:
+        await _markAsNsfw(false);
+        break;
+      case _ThumbnailMenu.markAsAd:
+        await _markAsAd(true);
+        break;
+      case _ThumbnailMenu.markAsNonAd:
+        await _markAsAd(false);
+        break;
     }
   }
 
@@ -208,6 +269,7 @@ class _Thumbnail extends State<Thumbnail> {
   Widget build(BuildContext context) {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
+    final isAd = widget._pMeta.isAd;
     if (isLoading && !_isLoading) _fetchData();
     _iconSize ??= Theme.of(context).iconTheme.size;
     final iconSize = MediaQuery.of(context).size.width < 400
@@ -234,12 +296,37 @@ class _Thumbnail extends State<Thumbnail> {
                 PopupMenuItem(
                     value: _ThumbnailMenu.saveAs,
                     child: Text(AppLocalizations.of(context)!.saveAs)),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                    value: isNsfw
+                        ? _ThumbnailMenu.markAsSfw
+                        : _ThumbnailMenu.markAsNsfw,
+                    child: Text(isNsfw
+                        ? AppLocalizations.of(context)!.markAsSfw
+                        : AppLocalizations.of(context)!.markAsNsfw)),
+                PopupMenuItem(
+                    value: isAd
+                        ? _ThumbnailMenu.markAsNonAd
+                        : _ThumbnailMenu.markAsAd,
+                    child: Text(isAd
+                        ? AppLocalizations.of(context)!.markAsNonAd
+                        : AppLocalizations.of(context)!.markAsAd)),
               ];
               return list;
             }));
     final timg = _data != null
         ? ImageWithContextMenu(_data!,
-            uri: _uri, fileName: _fileName, dir: _dir)
+            uri: _uri,
+            fileName: _fileName,
+            dir: _dir,
+            isNsfw: () => widget._pMeta.isNsfw,
+            changeNsfw: (isNsfw) {
+              _markAsNsfw(isNsfw);
+            },
+            isAd: () => widget._pMeta.isAd,
+            changeAd: (isAd) {
+              _markAsAd(isAd);
+            })
         : null;
     final img = widget.gid != null && widget.index != null && _data != null
         ? GestureDetector(

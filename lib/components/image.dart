@@ -10,13 +10,25 @@ final _log = Logger("ImageWithContextMenu");
 
 class ImageWithContextMenu extends StatelessWidget {
   const ImageWithContextMenu(this.data,
-      {Key? key, this.uri, this.dir, this.fileName, this.fmt = ImageFmt.jpg})
+      {Key? key,
+      this.uri,
+      this.dir,
+      this.fileName,
+      this.fmt = ImageFmt.jpg,
+      this.isNsfw,
+      this.changeNsfw,
+      this.isAd,
+      this.changeAd})
       : super(key: key);
   final Uint8List data;
   final String? uri;
   final ImageFmt fmt;
   final String? fileName;
   final String? dir;
+  final bool Function()? isNsfw;
+  final Function(bool isNsfw)? changeNsfw;
+  final bool Function()? isAd;
+  final Function(bool isAd)? changeAd;
   @override
   Widget build(BuildContext context) {
     return ContextMenuWidget(
@@ -51,6 +63,26 @@ class ImageWithContextMenu extends StatelessWidget {
                   } catch (err) {
                     _log.warning("Failed to save image:", err);
                   }
+                }));
+          }
+          if (isNsfw != null && changeNsfw != null) {
+            final nsfw = isNsfw!();
+            list.add(MenuAction(
+                title: nsfw
+                    ? AppLocalizations.of(context)!.markAsSfw
+                    : AppLocalizations.of(context)!.markAsNsfw,
+                callback: () {
+                  changeNsfw!(!isNsfw!());
+                }));
+          }
+          if (isAd != null && changeAd != null) {
+            final ad = isAd!();
+            list.add(MenuAction(
+                title: ad
+                    ? AppLocalizations.of(context)!.markAsNonAd
+                    : AppLocalizations.of(context)!.markAsAd,
+                callback: () {
+                  changeAd!(!isAd!());
                 }));
           }
           return Menu(children: list);

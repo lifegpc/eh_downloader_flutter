@@ -89,5 +89,7 @@
     "preventScreenCapture": "防止截屏",
     "seeMoreInfo": "显示更多信息",
     "markAsNsfw": "标记为NSFW",
-    "markAsNonNsfw": "标记为非NSFW"
+    "markAsSfw": "标记为SFW",
+    "markAsAd": "标记为广告",
+    "markAsNonAd": "标记为非广告"
 }

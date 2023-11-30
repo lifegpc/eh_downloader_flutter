@@ -128,14 +128,14 @@ final Path platformPath = Path();
 final TagsInfo tags = TagsInfo();
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
-final EventListener listener = EventListener();
+final EventListener listener = EventListener()..maxListeners = 0;
 
 enum MoreVertSettings {
   setServerUrl,
   createRootUser,
   settings,
   markAsNsfw,
-  markAsNonNsfw,
+  markAsSfw,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -152,7 +152,7 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
     case MoreVertSettings.markAsNsfw:
       GalleryPage.maybeOf(context)?.markGalleryAsNsfw(true);
       break;
-    case MoreVertSettings.markAsNonNsfw:
+    case MoreVertSettings.markAsSfw:
       GalleryPage.maybeOf(context)?.markGalleryAsNsfw(false);
       break;
     default:
@@ -225,10 +225,10 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     if (isAllNsfw != null) {
       list.add(PopupMenuItem(
         value: isAllNsfw
-            ? MoreVertSettings.markAsNonNsfw
+            ? MoreVertSettings.markAsSfw
             : MoreVertSettings.markAsNsfw,
         child: Text(isAllNsfw
-            ? AppLocalizations.of(context)!.markAsNonNsfw
+            ? AppLocalizations.of(context)!.markAsSfw
             : AppLocalizations.of(context)!.markAsNsfw),
       ));
     }

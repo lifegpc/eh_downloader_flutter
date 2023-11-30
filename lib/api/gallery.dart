@@ -126,7 +126,7 @@ class Tag {
 
 @JsonSerializable()
 class ExtendedPMeta {
-  const ExtendedPMeta({
+  ExtendedPMeta({
     required this.gid,
     required this.index,
     required this.token,
@@ -143,9 +143,9 @@ class ExtendedPMeta {
   final int width;
   final int height;
   @JsonKey(name: 'is_nsfw')
-  final bool isNsfw;
+  bool isNsfw;
   @JsonKey(name: 'is_ad')
-  final bool isAd;
+  bool isAd;
 
   factory ExtendedPMeta.fromJson(Map<String, dynamic> json) =>
       _$ExtendedPMetaFromJson(json);
