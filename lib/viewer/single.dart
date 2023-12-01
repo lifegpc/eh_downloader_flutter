@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_image_provider/dio_image_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +36,8 @@ class SinglePageViewer extends StatefulWidget {
   State<SinglePageViewer> createState() => _SinglePageViewer();
 }
 
-class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
+class _SinglePageViewer extends State<SinglePageViewer>
+    with ThemeModeWidget, IsTopWidget2 {
   late PageController _pageController;
   late int _index;
   late GalleryData? _data;
@@ -46,16 +48,18 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
   bool _isLoading = false;
   bool _pageChanged = false;
   Object? _error;
-  bool inited = false;
+  bool _inited = false;
+  bool _showMenu = false;
   void _updatePages() {
     if (_data == null) return;
     final displayAd = prefs.getBool("displayAd") ?? false;
-    _pages = displayAd ? _data!.pages : _data!.pages.where((e) => !e.isAd).toList();
+    _pages =
+        displayAd ? _data!.pages : _data!.pages.where((e) => !e.isAd).toList();
     _index = _pages!.indexWhere((e) => e.index == widget.index);
     if (_index == -1) _index = 0;
-    if (!inited) {
+    if (!_inited) {
       _pageController = PageController(initialPage: _index);
-      inited = true;
+      _inited = true;
     }
   }
 
@@ -112,11 +116,113 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
     _pageChanged = false;
   }
 
+  Widget _buildGallery(BuildContext context) {
+    return PhotoViewGallery.builder(
+      scrollPhysics: const BouncingScrollPhysics(),
+      pageController: _pageController,
+      itemCount: _pages!.length,
+      builder: (BuildContext context, int index) {
+        final data = _pages![index];
+        final f = _files!.files[data.token]!.first;
+        return PhotoViewGalleryPageOptions(
+          imageProvider: DioImage.string(
+            api.getFileUrl(f.id),
+            dio: dio,
+          ),
+          initialScale: PhotoViewComputedScale.contained,
+          heroAttributes: PhotoViewHeroAttributes(
+            tag: data.token,
+            transitionOnUserGestures: true,
+          ),
+          filterQuality: FilterQuality.high,
+        );
+      },
+      onPageChanged: (index) {
+        _index = index;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _onPageChanged(context);
+        });
+      },
+    );
+  }
+
+  Widget _buildWithKeyboardSupport(BuildContext context,
+      {required Widget child}) {
+    return KeyboardWidget(
+      bindings: [
+        KeyAction(LogicalKeyboardKey.arrowLeft, "previous page", () {
+          if (_index > 0) {
+            _pageController.previousPage(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut);
+          }
+        }),
+        KeyAction(LogicalKeyboardKey.arrowRight, "next page", () {
+          if (_index < _pages!.length - 1) {
+            _pageController.nextPage(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut);
+          }
+        }),
+        KeyAction(LogicalKeyboardKey.backspace, "back", () {
+          context.canPop() ? context.pop() : context.go(_back);
+        }),
+      ],
+      child: child,
+    );
+  }
+
+  Widget _buildWithTap(BuildContext context, {required Widget child}) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _showMenu = !_showMenu;
+        });
+      },
+      child: child,
+    );
+  }
+
+  Widget _buildViewer(BuildContext context) {
+    return _buildWithTap(context,
+        child:
+            _buildWithKeyboardSupport(context, child: _buildGallery(context)));
+  }
+
+  Widget _buildTopAppBar(BuildContext context) {
+    if (!_showMenu) return Container();
+    return Positioned(
+        top: 0,
+        left: 0,
+        right: 0,
+        child: AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  context.canPop() ? context.pop() : context.go(_back);
+                },
+                icon: const Icon(Icons.close)),
+            title:
+                Text("${_data!.meta.preferredTitle} - ${_pages![_index].name}"),
+            actions: [
+              buildThemeModeIcon(context),
+              buildMoreVertSettingsButon(context),
+            ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     tryInitApi(context);
     final isLoading = _error == null && (_data == null || _files == null);
     if (isLoading && !_isLoading) _fetchData();
+    final title = _data != null && _pages != null
+        ? "${_data!.meta.preferredTitle} - ${_pages![_index].name}"
+        : AppLocalizations.of(context)!.loading;
+    if (isTop(context)) {
+      if (!kIsWeb || (_data != null && kIsWeb)) {
+        setCurrentTitle(title, Theme.of(context).primaryColor.value,
+            includePrefix: false);
+      }
+    }
     if (_data == null || _files == null) {
       return Scaffold(
           appBar: AppBar(
@@ -126,7 +232,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
                 context.canPop() ? context.pop() : context.go(_back);
               },
             ),
-            title: Text(AppLocalizations.of(context)!.loading),
+            title: Text(title),
             actions: [
               buildThemeModeIcon(context),
               buildMoreVertSettingsButon(context),
@@ -157,54 +263,10 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
       backgroundColor: Colors.black,
       extendBody: true,
       extendBodyBehindAppBar: true,
-      body: KeyboardWidget(
-        bindings: [
-          KeyAction(LogicalKeyboardKey.arrowLeft, "previous page", () {
-            if (_index > 0) {
-              _pageController.previousPage(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut);
-            }
-          }),
-          KeyAction(LogicalKeyboardKey.arrowRight, "next page", () {
-            if (_index < _pages!.length - 1) {
-              _pageController.nextPage(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut);
-            }
-          }),
-          KeyAction(LogicalKeyboardKey.backspace, "back", () {
-            context.canPop() ? context.pop() : context.go(_back);
-          }),
-        ],
-        child: PhotoViewGallery.builder(
-          scrollPhysics: const BouncingScrollPhysics(),
-          pageController: _pageController,
-          itemCount: _pages!.length,
-          builder: (BuildContext context, int index) {
-            final data = _pages![index];
-            final f = _files!.files[data.token]!.first;
-            return PhotoViewGalleryPageOptions(
-              imageProvider: DioImage.string(
-                api.getFileUrl(f.id),
-                dio: dio,
-              ),
-              initialScale: PhotoViewComputedScale.contained,
-              heroAttributes: PhotoViewHeroAttributes(
-                tag: data.token,
-                transitionOnUserGestures: true,
-              ),
-              filterQuality: FilterQuality.high,
-            );
-          },
-          onPageChanged: (index) {
-            _index = index;
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              _onPageChanged(context);
-            });
-          },
-        ),
-      ),
+      body: Stack(children: [
+        _buildViewer(context),
+        _buildTopAppBar(context),
+      ]),
     );
   }
 }
