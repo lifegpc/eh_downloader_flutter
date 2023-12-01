@@ -39,17 +39,30 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
   late PageController _pageController;
   late int _index;
   late GalleryData? _data;
+  late List<ExtendedPMeta>? _pages;
   late EhFiles? _files;
   late String _back;
   CancelToken? _cancel;
   bool _isLoading = false;
   bool _pageChanged = false;
   Object? _error;
+  bool inited = false;
+  void _updatePages() {
+    if (_data == null) return;
+    final displayAd = prefs.getBool("displayAd") ?? false;
+    _pages = displayAd ? _data!.pages : _data!.pages.where((e) => !e.isAd).toList();
+    _index = _pages!.indexWhere((e) => e.index == widget.index);
+    if (_index == -1) _index = 0;
+    if (!inited) {
+      _pageController = PageController(initialPage: _index);
+      inited = true;
+    }
+  }
+
   @override
   void initState() {
-    _index = widget.index - 1;
-    _pageController = PageController(initialPage: _index);
     _data = widget.data;
+    _updatePages();
     _files = widget.files;
     _back = "/gallery/${widget.gid}";
     super.initState();
@@ -75,15 +88,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
               cancel: _cancel))
           .unwrap();
       if (!_cancel!.isCancelled) {
-        if (_index < 0) {
-          _index = 0;
-          _pageController.jumpToPage(_index);
-          _pageChanged = true;
-        } else if (_index >= _data!.pages.length) {
-          _index = _data!.pages.length - 1;
-          _pageController.jumpToPage(_index);
-          _pageChanged = true;
-        }
+        _updatePages();
         setState(() {
           _files = fileData;
           _error = null;
@@ -102,7 +107,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
   }
 
   void _onPageChanged(BuildContext context) {
-    context.replace("/gallery/${widget.gid}/page/${_index + 1}",
+    context.replace("/gallery/${widget.gid}/page/${_pages![_index].index}",
         extra: SinglePageViewerExtra(data: _data, files: _files));
     _pageChanged = false;
   }
@@ -162,7 +167,7 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
             }
           }),
           KeyAction(LogicalKeyboardKey.arrowRight, "next page", () {
-            if (_index < _data!.pages.length - 1) {
+            if (_index < _pages!.length - 1) {
               _pageController.nextPage(
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.easeInOut);
@@ -175,9 +180,9 @@ class _SinglePageViewer extends State<SinglePageViewer> with ThemeModeWidget {
         child: PhotoViewGallery.builder(
           scrollPhysics: const BouncingScrollPhysics(),
           pageController: _pageController,
-          itemCount: _data!.pages.length,
+          itemCount: _pages!.length,
           builder: (BuildContext context, int index) {
-            final data = _data!.pages[index];
+            final data = _pages![index];
             final f = _files!.files[data.token]!.first;
             return PhotoViewGalleryPageOptions(
               imageProvider: DioImage.string(

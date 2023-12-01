@@ -32,7 +32,7 @@ class ThumbnailGridView extends StatelessWidget {
                   key: key,
                   fileId: fileId,
                   gid: gid,
-                  index: index + 1,
+                  index: page.index,
                   files: files,
                   gdata: gdata));
         });
