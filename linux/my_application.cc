@@ -11,6 +11,7 @@ struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
   FlMethodChannel* path_channel;
+  FlMethodChannel* saf_channel;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
@@ -29,6 +30,106 @@ static void on_path_channel_call(FlMethodChannel* channel, FlMethodCall* method_
     }
   } else {
     fl_method_call_respond_not_implemented(method_call, nullptr);
+  }
+}
+
+const gchar* get_filter_name_from_mime_type(const gchar* mime_type) {
+  if (g_strcmp0(mime_type, "image/jpeg") == 0) {
+    return "JPG File";
+  } else if (g_strcmp0(mime_type, "image/png") == 0) {
+    return "PNG File";
+  } else if (g_strcmp0(mime_type, "image/gif") == 0) {
+    return "GIF File";
+  } else if (g_strcmp0(mime_type, "application/zip") == 0) {
+    return "Zip File";
+  } else {
+    return nullptr;
+  }
+}
+
+const gchar* get_ext_from_mime_type(const gchar* mime_type) {
+  if (g_strcmp0(mime_type, "image/jpeg") == 0) {
+    return ".jpg";
+  } else if (g_strcmp0(mime_type, "image/png") == 0) {
+    return ".png";
+  } else if (g_strcmp0(mime_type, "image/gif") == 0) {
+    return ".gif";
+  } else if (g_strcmp0(mime_type, "application/zip") == 0) {
+    return ".zip";
+  } else {
+    return nullptr;
+  }
+}
+
+static void on_saf_channel_call(FlMethodChannel* channel, FlMethodCall* method_call,
+                                gpointer user_data) {
+  const gchar* method = fl_method_call_get_name(method_call);
+  if (strcmp(method, "saveFile") == 0) {
+    auto args = fl_method_call_get_args(method_call);
+    auto fileName = fl_value_get_string(fl_value_get_list_value(args, 0));
+    auto dir = fl_value_get_string(fl_value_get_list_value(args, 1));
+    auto mimeType = fl_value_get_string(fl_value_get_list_value(args, 2));
+    auto odata = fl_value_get_list_value(args, 3);
+    auto data = fl_value_get_uint8_list(odata);
+    auto dataLen = fl_value_get_length(odata);
+    if (!fileName || !dir || !mimeType || !data) {
+      fl_method_call_respond_error(method_call, "INVALID_ARGUMENTS", "Invalid arguments", nullptr, nullptr);
+      return;
+    }
+    auto dialog = gtk_file_chooser_dialog_new("Save File", nullptr, GTK_FILE_CHOOSER_ACTION_SAVE,
+                                              "_Cancel", GTK_RESPONSE_CANCEL,
+                                              "_Save", GTK_RESPONSE_ACCEPT,
+                                              nullptr);
+    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+    auto ext = get_ext_from_mime_type(mimeType);
+    if (ext) {
+      auto gstr = g_string_new(fileName);
+      g_string_append(gstr, ext);
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), gstr->str);
+      g_string_free(gstr, TRUE);
+    } else {
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fileName);
+    }
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
+    auto filter = gtk_file_filter_new();
+    gtk_file_filter_add_mime_type(filter, mimeType);
+    gtk_file_filter_set_name(filter, get_filter_name_from_mime_type(mimeType));
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+    filter = gtk_file_filter_new();
+    gtk_file_filter_add_pattern(filter, "*");
+    gtk_file_filter_set_name(filter, "All files");
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+    auto res = gtk_dialog_run(GTK_DIALOG(dialog));
+    if (res == GTK_RESPONSE_ACCEPT) {
+      g_autoptr(GError) local_err = NULL;
+      auto file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER(dialog));
+      GFileOutputStream* stream = g_file_replace(file, nullptr, FALSE, G_FILE_CREATE_NONE, nullptr, &local_err);
+      if (stream == nullptr) {
+        fl_method_call_respond_error(method_call, "SAVE_FILE_ERROR", local_err->message, nullptr, nullptr);
+      } else {
+        gboolean ok = g_output_stream_write_all(G_OUTPUT_STREAM(stream), data, dataLen, nullptr, nullptr, &local_err);
+        if (!ok) {
+          fl_method_call_respond_error(method_call, "SAVE_FILE_ERROR", local_err->message, nullptr, nullptr);
+        } else {
+          ok = g_output_stream_flush(G_OUTPUT_STREAM(stream), nullptr, &local_err);
+          if (!ok) {
+            fl_method_call_respond_error(method_call, "SAVE_FILE_ERROR", local_err->message, nullptr, nullptr);
+          } else {
+            ok = g_output_stream_close(G_OUTPUT_STREAM(stream), nullptr, &local_err);
+            if (!ok) {
+              fl_method_call_respond_error(method_call, "SAVE_FILE_ERROR", local_err->message, nullptr, nullptr);
+            } else {
+              fl_method_call_respond_success(method_call, nullptr, nullptr);
+            }
+          }
+        }
+        g_object_unref(stream);
+      }
+      g_object_unref(file);
+    } else {
+      fl_method_call_respond_error(method_call, "USER_CANCELED", "User canceled", nullptr, nullptr);
+    }
+    gtk_widget_destroy(dialog);
   }
 }
 
@@ -81,6 +182,10 @@ static void my_application_activate(GApplication* application) {
       fl_engine_get_binary_messenger(fl_view_get_engine(view)), "lifegpc.eh_downloader_flutter/path",
       FL_METHOD_CODEC(codec));
   fl_method_channel_set_method_call_handler(self->path_channel, on_path_channel_call, self, nullptr);
+  self->saf_channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(fl_view_get_engine(view)), "lifegpc.eh_downloader_flutter/saf",
+      FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(self->saf_channel, on_saf_channel_call, self, nullptr);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -109,6 +214,7 @@ static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
   g_clear_object(&self->path_channel);
+  g_clear_object(&self->saf_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 
