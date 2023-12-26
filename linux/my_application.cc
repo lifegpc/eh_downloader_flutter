@@ -5,6 +5,8 @@
 #include <gdk/gdkx.h>
 #endif
 
+#include <fcntl.h>
+
 #include "flutter/generated_plugin_registrant.h"
 
 struct _MyApplication {
@@ -130,6 +132,78 @@ static void on_saf_channel_call(FlMethodChannel* channel, FlMethodCall* method_c
       fl_method_call_respond_error(method_call, "USER_CANCELED", "User canceled", nullptr, nullptr);
     }
     gtk_widget_destroy(dialog);
+  } else if (g_strcmp0(method, "openFile") == 0) {
+    auto args = fl_method_call_get_args(method_call);
+    auto fileName = fl_value_get_string(fl_value_get_list_value(args, 0));
+    auto dir = fl_value_get_string(fl_value_get_list_value(args, 1));
+    auto mimeType = fl_value_get_string(fl_value_get_list_value(args, 2));
+    if (!fileName || !dir || !mimeType) {
+      fl_method_call_respond_error(method_call, "INVALID_ARGUMENTS", "Invalid arguments", nullptr, nullptr);
+      return;
+    }
+    auto dialog = gtk_file_chooser_dialog_new("Save File", nullptr, GTK_FILE_CHOOSER_ACTION_SAVE,
+                                              "_Cancel", GTK_RESPONSE_CANCEL,
+                                              "_Save", GTK_RESPONSE_ACCEPT,
+                                              nullptr);
+    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
+    auto ext = get_ext_from_mime_type(mimeType);
+    if (ext) {
+      auto gstr = g_string_new(fileName);
+      g_string_append(gstr, ext);
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), gstr->str);
+      g_string_free(gstr, TRUE);
+    } else {
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fileName);
+    }
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
+    auto filter = gtk_file_filter_new();
+    gtk_file_filter_add_mime_type(filter, mimeType);
+    gtk_file_filter_set_name(filter, get_filter_name_from_mime_type(mimeType));
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+    filter = gtk_file_filter_new();
+    gtk_file_filter_add_pattern(filter, "*");
+    gtk_file_filter_set_name(filter, "All files");
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+    auto res = gtk_dialog_run(GTK_DIALOG(dialog));
+    if (res == GTK_RESPONSE_ACCEPT) {
+      auto filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+      int fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+      if (fd != -1) {
+        fl_method_call_respond_success(method_call, fl_value_new_int(fd), nullptr);
+      } else {
+        fl_method_call_respond_error(method_call, "OPEN_FILE_ERROR", g_strerror(errno), nullptr, nullptr);
+      }
+    } else {
+      fl_method_call_respond_error(method_call, "USER_CANCELED", "User canceled", nullptr, nullptr);
+    }
+    gtk_widget_destroy(dialog);
+  } else if (g_strcmp0(method, "writeFile") == 0) {
+    auto args = fl_method_call_get_args(method_call);
+    auto fd = fl_value_get_int(fl_value_get_list_value(args, 0));
+    auto odata = fl_value_get_list_value(args, 1);
+    auto data = fl_value_get_uint8_list(odata);
+    auto dataLen = fl_value_get_length(odata);
+    if (!data) {
+      fl_method_call_respond_error(method_call, "INVALID_ARGUMENTS", "Invalid arguments", nullptr, nullptr);
+      return;
+    }
+    auto count = write(fd, data, dataLen);
+    if (count != (ssize_t)-1) {
+      fl_method_call_respond_success(method_call, fl_value_new_int(count), nullptr);
+    } else {
+      fl_method_call_respond_error(method_call, "WRITE_FILE_ERROR", g_strerror(errno), nullptr, nullptr);
+    }
+  } else if (g_strcmp0(method, "closeFile") == 0) {
+    auto args = fl_method_call_get_args(method_call);
+    auto fd = fl_value_get_int(fl_value_get_list_value(args, 0));
+    int err = close(fd);
+    if (!err) {
+      fl_method_call_respond_success(method_call, nullptr, nullptr);
+    } else {
+      fl_method_call_respond_error(method_call, "CLOSE_FILE_ERROR", g_strerror(errno), nullptr, nullptr);
+    }
+  } else {
+    fl_method_call_respond_not_implemented(method_call, nullptr);
   }
 }
 
