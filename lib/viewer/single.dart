@@ -1,6 +1,8 @@
+import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:dio_image_provider/dio_image_provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +17,12 @@ import '../api/gallery.dart';
 import '../globals.dart';
 
 final _log = Logger("SinglePageViewer");
+
+enum DoubleTapScaleMode {
+  fitScreen,
+  orignal,
+  twice,
+}
 
 class SinglePageViewerExtra {
   const SinglePageViewerExtra({this.data, this.files});
@@ -44,6 +52,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
   late List<ExtendedPMeta>? _pages;
   late EhFiles? _files;
   late String _back;
+  late PhotoViewController _photoViewController;
+  late DoubleTapScaleMode _doubleTapScaleMode;
   CancelToken? _cancel;
   bool _isLoading = false;
   bool _pageChanged = false;
@@ -69,6 +79,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
     _updatePages();
     _files = widget.files;
     _back = "/gallery/${widget.gid}";
+    _photoViewController = PhotoViewController();
+    _doubleTapScaleMode = DoubleTapScaleMode.fitScreen;
     super.initState();
   }
 
@@ -76,6 +88,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
   void dispose() {
     _cancel?.cancel();
     _pageController.dispose();
+    _photoViewController.dispose();
     super.dispose();
   }
 
@@ -124,6 +137,10 @@ class _SinglePageViewer extends State<SinglePageViewer>
       builder: (BuildContext context, int index) {
         final data = _pages![index];
         final f = _files!.files[data.token]!.first;
+        if (_index != index) {
+          _photoViewController.reset();
+          _doubleTapScaleMode = DoubleTapScaleMode.fitScreen;
+        }
         return PhotoViewGalleryPageOptions(
           imageProvider: DioImage.string(
             api.getFileUrl(f.id),
@@ -135,6 +152,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
             transitionOnUserGestures: true,
           ),
           filterQuality: FilterQuality.high,
+          controller: _photoViewController,
+          disableGestures: true,
         );
       },
       onPageChanged: (index) {
@@ -179,14 +198,73 @@ class _SinglePageViewer extends State<SinglePageViewer>
           _showMenu = !_showMenu;
         });
       },
+      onDoubleTap: () {
+        setState(() {
+          switch (_doubleTapScaleMode) {
+            case DoubleTapScaleMode.fitScreen:
+              _doubleTapScaleMode = DoubleTapScaleMode.orignal;
+              _photoViewController.scale = 1.0;
+              break;
+            case DoubleTapScaleMode.orignal:
+              _doubleTapScaleMode = DoubleTapScaleMode.twice;
+              _photoViewController.scale = 2.0;
+              break;
+            case DoubleTapScaleMode.twice:
+              _doubleTapScaleMode = DoubleTapScaleMode.fitScreen;
+              _photoViewController.scale = null;
+              break;
+          }
+        });
+      },
+      child: child,
+    );
+  }
+
+  Widget _buildWithDragSupport(BuildContext context, {required Widget child}) {
+    return RawGestureDetector(
+      gestures: {
+        PanGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
+          () => PanGestureRecognizer(
+            allowedButtonsFilter: (buttons) => buttons == kPrimaryMouseButton,
+          ),
+          (instance) {
+            instance.onUpdate = (details) {
+              final position = _photoViewController.position;
+              _photoViewController.position = Offset(
+                  position.dx + details.delta.dx,
+                  position.dy + details.delta.dy);
+              setState(() {});
+            };
+          },
+        ),
+      },
+      child: child,
+    );
+  }
+
+  Widget _buildWithScrollSupport(BuildContext context,
+      {required Widget child}) {
+    return Listener(
+      onPointerSignal: (event) {
+        if (event is PointerScrollEvent &&
+            event.kind == PointerDeviceKind.mouse) {
+          if (_photoViewController.scale != null) {
+            _photoViewController.scale = _photoViewController.scale! *
+                (1 - event.scrollDelta.dy / MediaQuery.of(context).size.height);
+          }
+        }
+      },
       child: child,
     );
   }
 
   Widget _buildViewer(BuildContext context) {
-    return _buildWithTap(context,
-        child:
-            _buildWithKeyboardSupport(context, child: _buildGallery(context)));
+    return _buildWithDragSupport(context,
+        child: _buildWithScrollSupport(context,
+            child: _buildWithTap(context,
+                child: _buildWithKeyboardSupport(context,
+                    child: _buildGallery(context)))));
   }
 
   Widget _buildTopAppBar(BuildContext context) {
