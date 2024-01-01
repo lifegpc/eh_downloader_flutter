@@ -17,6 +17,7 @@ import 'globals.dart';
 import 'home.dart';
 import 'login.dart';
 import 'logs/file.dart';
+import 'server_settings.dart';
 import 'set_server.dart';
 import 'settings.dart';
 import 'utils.dart';
@@ -156,6 +157,10 @@ final _router = GoRouter(
             return "/";
           }
         }),
+    GoRoute(
+      path: ServerSettingsPage.routeName,
+      builder: (context, state) => const ServerSettingsPage(),
+    )
   ],
 );
 

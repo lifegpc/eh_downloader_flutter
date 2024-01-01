@@ -857,6 +857,71 @@ class __EHApi implements _EHApi {
     return value;
   }
 
+  @override
+  Future<Config> getConfig({
+    bool? current,
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'current': current};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Config>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/config',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = Config.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UpdateConfigResult> updateConfig(
+    ConfigOptional cfg, {
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(cfg.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UpdateConfigResult>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/config',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = UpdateConfigResult.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

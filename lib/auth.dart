@@ -16,6 +16,7 @@ class AuthInfo {
   bool get checked => _checked;
   bool _isChecking = false;
   bool get isChecking => _isChecking;
+  bool? get isAdmin => _user?.isAdmin;
 
   void clear() {
     _user = null;

@@ -6,6 +6,7 @@ import 'package:eh_downloader_flutter/api/file.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
+import 'config.dart';
 import 'gallery.dart';
 import 'status.dart';
 import 'tags.dart';
@@ -191,6 +192,14 @@ abstract class _EHApi {
       {@Part(name: "is_nsfw") bool? isNsfw,
       @Part(name: "is_ad") bool? isAd,
       @CancelRequest() CancelToken? cancel});
+
+  @GET('/config')
+  Future<Config> getConfig(
+      {@Query("current") bool? current, @CancelRequest() CancelToken? cancel});
+  @POST('/config')
+  Future<UpdateConfigResult> updateConfig(
+      @Body(nullToAbsent: false) ConfigOptional cfg,
+      {@CancelRequest() CancelToken? cancel});
 }
 
 class EHApi extends __EHApi {

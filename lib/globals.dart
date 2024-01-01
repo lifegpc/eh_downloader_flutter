@@ -136,6 +136,7 @@ enum MoreVertSettings {
   settings,
   markAsNsfw,
   markAsSfw,
+  serverSettings,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -154,6 +155,9 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
       break;
     case MoreVertSettings.markAsSfw:
       GalleryPage.maybeOf(context)?.markGalleryAsNsfw(false);
+      break;
+    case MoreVertSettings.serverSettings:
+      context.push("/server_settings");
       break;
     default:
       break;
@@ -182,6 +186,11 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     list.add(PopupMenuItem(
         value: MoreVertSettings.settings,
         child: Text(AppLocalizations.of(context)!.settings)));
+  }
+  if (path != "/server_settings" && auth.isAdmin == true) {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.serverSettings,
+        child: Text(AppLocalizations.of(context)!.serverSettings)));
   }
   var showNsfw = prefs.getBool("showNsfw") ?? false;
   list.add(PopupMenuItem(

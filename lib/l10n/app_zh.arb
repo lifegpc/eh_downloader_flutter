@@ -91,5 +91,11 @@
     "markAsNsfw": "标记为NSFW",
     "markAsSfw": "标记为SFW",
     "markAsAd": "标记为广告",
-    "markAsNonAd": "标记为非广告"
+    "markAsNonAd": "标记为非广告",
+    "serverSettings": "服务器设置",
+    "useEx": "使用 exhentai.org。",
+    "mpv": "从 Multi-Page Viewer 获取页面数据。",
+    "downloadOriginalImg": "下载原始画质的图片。",
+    "exportZipJpnTitle": "导出Zip时优先使用日语标题。",
+    "removePreviousGallery": "移除被新画廊替代的旧画廊。"
 }
