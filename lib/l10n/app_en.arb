@@ -107,5 +107,18 @@
     "enterNewCookies": "Enter new cookies here",
     "maxTaskCount": "Maximum number of parallel tasks",
     "invalidNumber": "Invalid number.",
-    "numberOutOfRange": "The number is out of range."
+    "numberOutOfRange": "The number is out of range.",
+    "maxRetryCount": "Maximum retry count",
+    "maxDownloadImgCount": "Maximum number of parallel downloads of images",
+    "listeningPort": "Listening port",
+    "listeningHostname": "Listening host",
+    "meiliHost": "Meilisearch server host",
+    "meiliUpdateApiKey": "Meilisearch API key for updating gallery metadata",
+    "meiliSearchApiKey": "Meilisearch API key for searching",
+    "ffmpegPath": "The path to the ffmpeg binary",
+    "thumbnailMethod": "The method used to generate thumbnail",
+    "thumbnailMethod0": "ffmpeg binary",
+    "thumbnailMethod1": "ffmpeg API",
+    "thumbnailDir": "The folder used to store thumbnails",
+    "imgVerifySecret": "The secret of image verify"
 }

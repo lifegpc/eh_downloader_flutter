@@ -107,5 +107,18 @@
     "enterNewCookies": "在此输入新的 Cookies",
     "maxTaskCount": "最大并行任务数",
     "invalidNumber": "非法的数字。",
-    "numberOutOfRange": "数字超出了范围。"
+    "numberOutOfRange": "数字超出了范围。",
+    "maxRetryCount": "最大重试次数",
+    "maxDownloadImgCount": "最大图片并行下载数",
+    "listeningPort": "监听端口",
+    "listeningHostname": "监听主机",
+    "meiliHost": "Meilisearch 服务器主机",
+    "meiliUpdateApiKey": "用于更新画廊元数据的 Meilisearch API 密钥",
+    "meiliSearchApiKey": "用于搜索的 Meilisearch API 密钥",
+    "ffmpegPath": "FFMPEG 二进制的位置",
+    "thumbnailMethod": "生成缩略图的方式",
+    "thumbnailMethod0": "FFMPEG 二进制",
+    "thumbnailMethod1": "FFMPEG API",
+    "thumbnailDir": "存放缩略图的文件夹",
+    "imgVerifySecret": "用于验证图片 verify 的密钥"
 }

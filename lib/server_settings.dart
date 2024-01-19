@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'api/config.dart';
+import 'components/labeled_checkbox.dart';
 import 'components/number_field.dart';
 import 'globals.dart';
 import 'platform/ua.dart';
@@ -202,7 +203,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     return _buildWithHorizontalPadding(
         context,
         Column(mainAxisSize: MainAxisSize.min, children: [
-          _buildWithVecticalPadding(CheckboxMenuButton(
+          _buildWithVecticalPadding(LabeledCheckbox(
               value: _now.ex ?? _config!.ex,
               onChanged: (b) {
                 if (b != null) {
@@ -212,8 +213,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                   });
                 }
               },
-              child: Text(i18n.useEx))),
-          _buildWithVecticalPadding(CheckboxMenuButton(
+              label: Text(i18n.useEx))),
+          _buildWithVecticalPadding(LabeledCheckbox(
               value: _now.mpv ?? _config!.mpv,
               onChanged: (b) {
                 if (b != null) {
@@ -223,8 +224,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                   });
                 }
               },
-              child: Text(i18n.mpv))),
-          _buildWithVecticalPadding(CheckboxMenuButton(
+              label: Text(i18n.mpv))),
+          _buildWithVecticalPadding(LabeledCheckbox(
               value: _now.downloadOriginalImg ?? _config!.downloadOriginalImg,
               onChanged: (b) {
                 if (b != null) {
@@ -234,8 +235,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                   });
                 }
               },
-              child: Text(i18n.downloadOriginalImg))),
-          _buildWithVecticalPadding(CheckboxMenuButton(
+              label: Text(i18n.downloadOriginalImg))),
+          _buildWithVecticalPadding(LabeledCheckbox(
               value: _now.exportZipJpnTitle ?? _config!.exportZipJpnTitle,
               onChanged: (b) {
                 if (b != null) {
@@ -245,8 +246,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                   });
                 }
               },
-              child: Text(i18n.exportZipJpnTitle))),
-          _buildWithVecticalPadding(CheckboxMenuButton(
+              label: Text(i18n.exportZipJpnTitle))),
+          _buildWithVecticalPadding(LabeledCheckbox(
               value:
                   _now.removePreviousGallery ?? _config!.removePreviousGallery,
               onChanged: (b) {
@@ -257,7 +258,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                   });
                 }
               },
-              child: Text(i18n.removePreviousGallery))),
+              label: Text(i18n.removePreviousGallery))),
         ]));
   }
 
@@ -345,6 +346,169 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                   _changed = true;
                 });
               }
+            },
+          )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue: _now.maxRetryCount ?? _config!.maxRetryCount,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.maxRetryCount,
+            ),
+            onChanged: (s) {
+              if (s != null) {
+                setState(() {
+                  _now.maxRetryCount = s;
+                  _changed = true;
+                });
+              }
+            },
+          )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue:
+                _now.maxDownloadImgCount ?? _config!.maxDownloadImgCount,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.maxDownloadImgCount,
+            ),
+            onChanged: (s) {
+              if (s != null) {
+                setState(() {
+                  _now.maxDownloadImgCount = s;
+                  _changed = true;
+                });
+              }
+            },
+          )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 0,
+            max: 65535,
+            initialValue: _now.port ?? _config!.port,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.listeningPort,
+            ),
+            onChanged: (s) {
+              if (s != null) {
+                setState(() {
+                  _now.port = s;
+                  _changed = true;
+                });
+              }
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.hostname ?? _config!.hostname,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.listeningHostname,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.hostname = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.meiliHost ?? _config!.meiliHost,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.meiliHost,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.meiliHost = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.meiliSearchApiKey ?? _config!.meiliSearchApiKey,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.meiliSearchApiKey,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.meiliSearchApiKey = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.meiliUpdateApiKey ?? _config!.meiliUpdateApiKey,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.meiliUpdateApiKey,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.meiliUpdateApiKey = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.ffmpegPath ?? _config!.ffmpegPath,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.ffmpegPath,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.ffmpegPath = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(DropdownButtonFormField<ThumbnailMethod>(
+              items: [
+                DropdownMenuItem(
+                    value: ThumbnailMethod.ffmpegBinary,
+                    child: Text(i18n.thumbnailMethod0)),
+                DropdownMenuItem(
+                    value: ThumbnailMethod.ffmpegApi,
+                    child: Text(i18n.thumbnailMethod1)),
+              ],
+              onChanged: (v) {
+                if (v != null) {
+                  setState(() {
+                    _now.thumbnailMethod = v;
+                    _changed = true;
+                  });
+                }
+              },
+              value: _now.thumbnailMethod ?? _config!.thumbnailMethod,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: i18n.thumbnailMethod,
+              ))),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.thumbnailDir ?? _config!.thumbnailDir,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.thumbnailDir,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.thumbnailDir = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.imgVerifySecret ?? _config!.imgVerifySecret,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.imgVerifySecret,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.imgVerifySecret = s;
+                _changed = true;
+              });
             },
           )),
         ]));
