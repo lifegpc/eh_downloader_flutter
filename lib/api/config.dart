@@ -135,31 +135,51 @@ class ConfigOptional {
     this.ffprobePath,
   });
   String? cookies;
+  @JsonKey(name: 'db_path')
   String? dbPath;
   String? ua;
   bool? ex;
   String? base;
+  @JsonKey(name: 'max_task_count')
   int? maxTaskCount;
   bool? mpv;
+  @JsonKey(name: 'max_retry_count')
   int? maxRetryCount;
+  @JsonKey(name: 'max_download_img_count')
   int? maxDownloadImgCount;
+  @JsonKey(name: 'download_original_img')
   bool? downloadOriginalImg;
   int? port;
+  @JsonKey(name: 'export_zip_jpn_title')
   bool? exportZipJpnTitle;
   String? hostname;
+  @JsonKey(name: 'meili_host')
   String? meiliHost;
+  @JsonKey(name: 'meili_search_api_key')
   String? meiliSearchApiKey;
+  @JsonKey(name: 'meili_update_api_key')
   String? meiliUpdateApiKey;
+  @JsonKey(name: 'ffmpeg_path')
   String? ffmpegPath;
+  @JsonKey(name: 'thumbnail_method')
   ThumbnailMethod? thumbnailMethod;
+  @JsonKey(name: 'thumbnail_dir')
   String? thumbnailDir;
+  @JsonKey(name: 'remove_previous_gallery')
   bool? removePreviousGallery;
+  @JsonKey(name: 'img_verify_secret')
   String? imgVerifySecret;
+  @JsonKey(name: 'meili_hosts')
   Map<String, String>? meiliHosts;
+  @JsonKey(name: 'cors_credentials_hosts')
   List<String>? corsCredentialsHosts;
+  @JsonKey(name: 'flutter_frontend')
   String? flutterFrontend;
+  @JsonKey(name: 'fetch_timeout')
   int? fetchTimeout;
+  @JsonKey(name: 'download_timeout')
   int? downloadTimeout;
+  @JsonKey(name: 'ffprobe_path')
   String? ffprobePath;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
