@@ -97,5 +97,15 @@
     "mpv": "从 Multi-Page Viewer 获取页面数据。",
     "downloadOriginalImg": "下载原始画质的图片。",
     "exportZipJpnTitle": "导出Zip时优先使用日语标题。",
-    "removePreviousGallery": "移除被新画廊替代的旧画廊。"
+    "removePreviousGallery": "移除被新画廊替代的旧画廊。",
+    "serverDbPath": "存放数据库的文件夹位置",
+    "serverDbPathHelp": "如果未设置，将使用下载位置。",
+    "userAgent": "用户代理(User Agent)",
+    "useBrowserUA": "使用当前浏览器的用户代理",
+    "downloadLocation": "下载位置",
+    "enterCookies": "在此输入 Cookies",
+    "enterNewCookies": "在此输入新的 Cookies",
+    "maxTaskCount": "最大并行任务数",
+    "invalidNumber": "非法的数字。",
+    "numberOutOfRange": "数字超出了范围。"
 }

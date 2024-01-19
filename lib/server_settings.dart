@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'api/config.dart';
+import 'components/number_field.dart';
 import 'globals.dart';
+import 'platform/ua.dart';
 
 final _log = Logger("ServerSettingsPage");
 
@@ -28,6 +31,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
   Object? _error;
   CancelToken? _cancel;
   CancelToken? _saveCancel;
+  late TextEditingController _uaController;
 
   Future<void> _fetchData() async {
     _cancel = CancelToken();
@@ -83,6 +87,9 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     _changed = false;
     _controller = ScrollController();
     _now = ConfigOptional();
+    if (kIsWeb) {
+      _uaController = TextEditingController();
+    }
   }
 
   @override
@@ -91,6 +98,9 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     _formKey.currentState?.dispose();
     _controller.dispose();
     _saveCancel?.cancel();
+    if (kIsWeb) {
+      _uaController.dispose();
+    }
     super.dispose();
   }
 
@@ -164,6 +174,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             SliverList(
                 delegate: SliverChildListDelegate([
               _buildCheckBox(context),
+              _buildTextBox(context),
               _buildBottomBar(context),
             ])),
           ],
@@ -174,7 +185,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     return Container(
       padding: MediaQuery.of(context).size.width > 810
           ? const EdgeInsets.symmetric(horizontal: 100)
-          : null,
+          : const EdgeInsets.symmetric(horizontal: 16),
       child: child,
     );
   }
@@ -247,6 +258,95 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                 }
               },
               child: Text(i18n.removePreviousGallery))),
+        ]));
+  }
+
+  Widget _buildTextBox(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    if (kIsWeb) {
+      _uaController.text = _now.ua ?? _config!.ua ?? "";
+    }
+    return _buildWithHorizontalPadding(
+        context,
+        Column(mainAxisSize: MainAxisSize.min, children: [
+          _buildWithVecticalPadding(TextFormField(
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText:
+                  _config!.cookies ? i18n.enterNewCookies : i18n.enterCookies,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.cookies = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+              initialValue: _now.dbPath ?? _config!.dbPath,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: i18n.serverDbPath,
+                helperText: i18n.serverDbPathHelp,
+              ),
+              onChanged: (s) {
+                setState(() {
+                  _now.dbPath = s;
+                  _changed = true;
+                });
+              })),
+          _buildWithVecticalPadding(TextFormField(
+              initialValue: kIsWeb ? null : _now.ua ?? _config!.ua,
+              controller: kIsWeb ? _uaController : null,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: i18n.userAgent,
+                counter: kIsWeb
+                    ? TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _now.ua = oUA;
+                            _changed = true;
+                          });
+                        },
+                        child: Text(i18n.useBrowserUA))
+                    : null,
+              ),
+              onChanged: (s) {
+                setState(() {
+                  _now.ua = s;
+                  _changed = true;
+                });
+              })),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.base ?? _config!.base,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.downloadLocation,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.base = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue: _now.maxTaskCount ?? _config!.maxTaskCount,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.maxTaskCount,
+            ),
+            onChanged: (s) {
+              if (s != null) {
+                setState(() {
+                  _now.maxTaskCount = s;
+                  _changed = true;
+                });
+              }
+            },
+          )),
         ]));
   }
 
