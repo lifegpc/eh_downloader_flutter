@@ -47,20 +47,7 @@ class _StringListFormField extends State<StringListFormField> {
   }
 
   Widget _buildItem(BuildContext context, int index) {
-    final isLast = index == value.length;
-    if (isLast) {
-      return IconButton(
-          key: lastKey,
-          onPressed: () {
-            setState(() {
-              value.add("");
-              keys.add(ValueKey("${parentKey}_${value.length}"));
-            });
-            widget.onChanged?.call(value);
-          },
-          icon: const Icon(Icons.add));
-    }
-    return Row(
+    Widget item = Row(
       key: keys[index],
       children: [
         Expanded(
@@ -94,6 +81,14 @@ class _StringListFormField extends State<StringListFormField> {
             index: index, child: const Icon(Icons.reorder)),
       ],
     );
+    if (widget.padding != null) {
+      item = Padding(
+        key: item.key,
+        padding: widget.padding!,
+        child: item,
+      );
+    }
+    return item;
   }
 
   void onReorder(int oldIndex, int newIndex) {
@@ -111,18 +106,8 @@ class _StringListFormField extends State<StringListFormField> {
 
   Widget _buildList(BuildContext context) {
     Widget list = ReorderableList(
-        itemBuilder: (context, index) {
-          final item = _buildItem(context, index);
-          if (widget.padding == null) {
-            return item;
-          }
-          return Padding(
-            key: item.key,
-            padding: widget.padding!,
-            child: item,
-          );
-        },
-        itemCount: value.length + 1,
+        itemBuilder: _buildItem,
+        itemCount: value.length,
         onReorder: onReorder,
         proxyDecorator: proxyDecorator,
         shrinkWrap: true);
@@ -176,6 +161,30 @@ class _StringListFormField extends State<StringListFormField> {
     );
   }
 
+  Widget _buildAddButton(BuildContext context) {
+    Widget button = LayoutBuilder(builder: (context, box) {
+      return SizedBox(
+          width: box.maxWidth,
+          child: IconButton(
+              key: lastKey,
+              onPressed: () {
+                setState(() {
+                  value.add("");
+                  keys.add(ValueKey("${parentKey}_${value.length}"));
+                });
+                widget.onChanged?.call(value);
+              },
+              icon: const Icon(Icons.add)));
+    });
+    if (widget.padding != null) {
+      button = Padding(
+        padding: widget.padding!,
+        child: button,
+      );
+    }
+    return button;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (value.length != keys.length) {
@@ -190,6 +199,7 @@ class _StringListFormField extends State<StringListFormField> {
         children: [
           _buildLabel(context),
           _buildList(context),
+          _buildAddButton(context),
           _buildHelper(context),
         ]);
   }
