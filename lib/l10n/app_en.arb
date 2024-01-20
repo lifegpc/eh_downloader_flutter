@@ -126,5 +126,11 @@
     "downloadTimeout": "Download timeout",
     "downloadTimeoutHelp": "The download will be terminated when nothing is received within the specified time period.",
     "millisecond": "millisecond",
-    "ffprobePath": "The path to the ffprobe binary"
+    "ffprobePath": "The path to the ffprobe binary",
+    "corsCredentialsHostsHint": "eg. https://ehf.lifegpc.com",
+    "invalidURL": "Invalid URL.",
+    "invalidURLOrigin": "Invalid URL origin.",
+    "httpHttpsNeeded": "Unsupported scheme. Only https or http are supported.",
+    "corsCredentialsHosts": "The URL origins which are allowed to send CORS requests with credentials",
+    "corsCredentialsHostsHelp": "Add websites to this list can lead to security risks, make sure you trust these websites."
 }

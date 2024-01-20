@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import 'api/config.dart';
 import 'components/labeled_checkbox.dart';
 import 'components/number_field.dart';
+import 'components/string_list_field.dart';
 import 'globals.dart';
 import 'platform/ua.dart';
 
@@ -57,6 +58,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
   Future<void> _saveConfig() async {
     if (_isSaving) return;
     try {
+      _now.corsCredentialsHosts?.removeWhere((e) => e.isEmpty);
       _saveCancel = CancelToken();
       setState(() {
         _isSaving = true;
@@ -171,7 +173,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                 actions: [
                   buildThemeModeIcon(context),
                   buildMoreVertSettingsButon(context),
-                ]),
+                ],
+                floating: true),
             SliverList(
                 delegate: SliverChildListDelegate([
               _buildCheckBox(context),
@@ -514,6 +517,49 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               });
             },
           )),
+          StringListFormField(
+            key: const ValueKey("corsCredentialsHosts"),
+            initialValue:
+                _now.corsCredentialsHosts ?? _config!.corsCredentialsHosts,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              hintText: i18n.corsCredentialsHostsHint,
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            onChanged: (s) {
+              setState(() {
+                _now.corsCredentialsHosts = s;
+                _changed = true;
+              });
+            },
+            validator: (s) {
+              if (s == null || s.isEmpty) return null;
+              try {
+                final u = Uri.parse(s);
+                if (u.hasQuery ||
+                    u.userInfo.isNotEmpty ||
+                    u.hasFragment ||
+                    !u.hasEmptyPath ||
+                    !u.hasScheme) return i18n.invalidURLOrigin;
+                if (u.scheme != "http" && u.scheme != "https") {
+                  return i18n.httpHttpsNeeded;
+                }
+                return null;
+              } catch (e) {
+                return i18n.invalidURL;
+              }
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            label: Text(i18n.corsCredentialsHosts),
+            constraints: const BoxConstraints(
+              maxHeight: 300,
+            ),
+            helper: Text(i18n.corsCredentialsHostsHelp,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: Colors.red)),
+          ),
           _buildWithVecticalPadding(TextFormField(
             initialValue: _now.flutterFrontend ?? _config!.flutterFrontend,
             decoration: InputDecoration(
