@@ -120,5 +120,11 @@
     "thumbnailMethod0": "FFMPEG 二进制",
     "thumbnailMethod1": "FFMPEG API",
     "thumbnailDir": "存放缩略图的文件夹",
-    "imgVerifySecret": "用于验证图片 verify 的密钥"
+    "imgVerifySecret": "用于验证图片 verify 的密钥",
+    "flutterFrontend": "flutter 前端路径",
+    "fetchTimeout": "Fetch 超时时间",
+    "downloadTimeout": "下载超时时间",
+    "downloadTimeoutHelp": "当指定时间段内没有任何内容收到时，将会停止下载。",
+    "millisecond": "毫秒",
+    "ffprobePath": "FFPROBE 二进制的位置"
 }

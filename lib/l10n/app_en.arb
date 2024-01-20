@@ -120,5 +120,11 @@
     "thumbnailMethod0": "ffmpeg binary",
     "thumbnailMethod1": "ffmpeg API",
     "thumbnailDir": "The folder used to store thumbnails",
-    "imgVerifySecret": "The secret of image verify"
+    "imgVerifySecret": "The secret of image verify",
+    "flutterFrontend": "The path of flutter frontend",
+    "fetchTimeout": "Fetch timeout",
+    "downloadTimeout": "Download timeout",
+    "downloadTimeoutHelp": "The download will be terminated when nothing is received within the specified time period.",
+    "millisecond": "millisecond",
+    "ffprobePath": "The path to the ffprobe binary"
 }

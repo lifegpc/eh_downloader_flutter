@@ -265,7 +265,10 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
   Widget _buildTextBox(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     if (kIsWeb) {
-      _uaController.text = _now.ua ?? _config!.ua ?? "";
+      final t = _now.ua ?? _config!.ua ?? "";
+      if (_uaController.text != t) {
+        _uaController.text = t;
+      }
     }
     return _buildWithHorizontalPadding(
         context,
@@ -507,6 +510,64 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             onChanged: (s) {
               setState(() {
                 _now.imgVerifySecret = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.flutterFrontend ?? _config!.flutterFrontend,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.flutterFrontend,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.flutterFrontend = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue: _now.fetchTimeout ?? _config!.fetchTimeout,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.fetchTimeout,
+              suffixText: i18n.millisecond,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.fetchTimeout = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue: _now.downloadTimeout ?? _config!.downloadTimeout,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.downloadTimeout,
+              suffixText: i18n.millisecond,
+              helperText: i18n.downloadTimeoutHelp,
+              helperMaxLines: 3,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.downloadTimeout = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.ffprobePath ?? _config!.ffprobePath,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.ffprobePath,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.ffprobePath = s;
                 _changed = true;
               });
             },
