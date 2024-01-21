@@ -387,36 +387,40 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               }
             },
           )),
-          _buildWithVecticalPadding(NumberFormField(
-            min: 0,
-            max: 65535,
-            initialValue: _now.port ?? _config!.port,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: i18n.listeningPort,
-            ),
-            onChanged: (s) {
-              if (s != null) {
-                setState(() {
-                  _now.port = s;
-                  _changed = true;
-                });
-              }
-            },
-          )),
-          _buildWithVecticalPadding(TextFormField(
-            initialValue: _now.hostname ?? _config!.hostname,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: i18n.listeningHostname,
-            ),
-            onChanged: (s) {
-              setState(() {
-                _now.hostname = s;
-                _changed = true;
-              });
-            },
-          )),
+          auth.isDocker == true
+              ? Container()
+              : _buildWithVecticalPadding(NumberFormField(
+                  min: 0,
+                  max: 65535,
+                  initialValue: _now.port ?? _config!.port,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: i18n.listeningPort,
+                  ),
+                  onChanged: (s) {
+                    if (s != null) {
+                      setState(() {
+                        _now.port = s;
+                        _changed = true;
+                      });
+                    }
+                  },
+                )),
+          auth.isDocker == true
+              ? Container()
+              : _buildWithVecticalPadding(TextFormField(
+                  initialValue: _now.hostname ?? _config!.hostname,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: i18n.listeningHostname,
+                  ),
+                  onChanged: (s) {
+                    setState(() {
+                      _now.hostname = s;
+                      _changed = true;
+                    });
+                  },
+                )),
           _buildWithVecticalPadding(TextFormField(
             initialValue: _now.meiliHost ?? _config!.meiliHost,
             decoration: InputDecoration(

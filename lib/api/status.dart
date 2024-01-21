@@ -26,6 +26,7 @@ class ServerStatus {
     required this.meilisearchEnabled,
     this.meilisearch,
     required this.noUser,
+    required this.isDocker,
   });
 
   @JsonKey(name: 'ffmpeg_api_enabled')
@@ -37,6 +38,8 @@ class ServerStatus {
   final MeilisearchInfo? meilisearch;
   @JsonKey(name: 'no_user')
   final bool noUser;
+  @JsonKey(name: 'is_docker')
+  final bool isDocker;
 
   factory ServerStatus.fromJson(Map<String, dynamic> json) =>
       _$ServerStatusFromJson(json);

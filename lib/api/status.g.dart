@@ -27,6 +27,7 @@ ServerStatus _$ServerStatusFromJson(Map<String, dynamic> json) => ServerStatus(
           : MeilisearchInfo.fromJson(
               json['meilisearch'] as Map<String, dynamic>),
       noUser: json['no_user'] as bool,
+      isDocker: json['is_docker'] as bool,
     );
 
 Map<String, dynamic> _$ServerStatusToJson(ServerStatus instance) =>
@@ -36,4 +37,5 @@ Map<String, dynamic> _$ServerStatusToJson(ServerStatus instance) =>
       'meilisearch_enabled': instance.meilisearchEnabled,
       'meilisearch': instance.meilisearch,
       'no_user': instance.noUser,
+      'is_docker': instance.isDocker,
     };

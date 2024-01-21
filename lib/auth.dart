@@ -17,6 +17,7 @@ class AuthInfo {
   bool _isChecking = false;
   bool get isChecking => _isChecking;
   bool? get isAdmin => _user?.isAdmin;
+  bool? get isDocker => _status?.isDocker;
 
   void clear() {
     _user = null;
