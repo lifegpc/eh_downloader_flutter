@@ -1,3 +1,3 @@
-FROM lifegpc/pixiv_downloader:master
+FROM lifegpc/eh_downloader_base:master
 
 COPY build/web /app/static/flutter
