@@ -220,7 +220,7 @@ bool FlutterWindow::OnCreate() {
             }
             std::vector<uint8_t> data(buf, num);
             delete[] buf;
-            result->Success(EncodableValue(data));
+            result->Success(flutter::EncodableValue(data));
           } else {
             result->NotImplemented();
           }
