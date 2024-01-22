@@ -4,4 +4,5 @@
 [![Web](https://github.com/lifegpc/eh_downloader_flutter/actions/workflows/web.yml/badge.svg)](https://github.com/lifegpc/eh_downloader_flutter/actions/workflows/web.yml)
 [![Windows build](https://github.com/lifegpc/eh_downloader_flutter/actions/workflows/windows.yml/badge.svg)](https://github.com/lifegpc/eh_downloader_flutter/actions/workflows/windows.yml)
 
-Flutter Frontend for [EH Downloader](https://github.com/lifegpc/eh-downloader)
+Flutter Frontend for [EH Downloader](https://github.com/lifegpc/eh-downloader)  
+Web version is available [here](https://dev.ehf.lifegpc.com).
