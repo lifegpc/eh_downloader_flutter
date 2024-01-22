@@ -202,6 +202,7 @@ bool FlutterWindow::OnCreate() {
             auto args = std::get_if<flutter::EncodableList>(call.arguments());
             auto fd = std::get_if<int>(&args->at(0));
             auto maxlen = std::get_if<int>(&args->at(1));
+            std::vector<uint8_t> data;
             if (!fd || !maxlen) {
               result->Error("INVALID_ARGUMENT", "Invalid arguments.");
               return;
@@ -221,7 +222,7 @@ bool FlutterWindow::OnCreate() {
               result->Error("ERROR", "Failed to read file:" + errmsg);
               return;
             }
-            std::vector<uint8_t> data(buf, num);
+            for (auto i = 0; i < num; i++) data.push_back(buf[i]);
             delete[] buf;
             result->Success(flutter::EncodableValue(data));
           } else {
