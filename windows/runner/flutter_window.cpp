@@ -29,6 +29,11 @@ void filterFilename(std::wstring& fileName) {
     fileName = std::regex_replace(fileName, re, L"_");
 }
 
+void filterDirname(std::string& dirName) {
+    const static std::regex re("[:\\*\\?\"\\<\\>\\|]");
+    dirName = std::regex_replace(dirName, re, "_");
+}
+
 void updateDataFromMimeType(std::wstring& defExt, std::wstring& filter, std::string mimeType) {
   if (mimeType == "image/jpeg") {
     filter.append(std::wstring(L"JPEG File(*.jpg)\0*.jpg\0", 23));
@@ -87,57 +92,7 @@ bool FlutterWindow::OnCreate() {
   flutter::MethodChannel<> saf(flutter_controller_->engine()->messenger(), "lifegpc.eh_downloader_flutter/saf",
       &flutter::StandardMethodCodec::GetInstance());
   saf.SetMethodCallHandler([&](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result) {
-          if (call.method_name() == "saveFile") {
-            auto args = std::get_if<flutter::EncodableList>(call.arguments());
-            auto fileName = std::get_if<std::string>(&args->at(0));
-            auto dir = std::get_if<std::string>(&args->at(1));
-            auto mimeType = std::get_if<std::string>(&args->at(2));
-            auto data = std::get_if<std::vector<uint8_t>>(&args->at(3));
-            if (!fileName || !dir || !mimeType || !data) {
-              result->Error("INVALID_ARGUMENT", "Invalid arguments.");
-              return;
-            }
-            std::wstring wFileName;
-            if (!wchar_util::str_to_wstr(wFileName, *fileName, CP_UTF8)) {
-              result->Error("ERROR", "Failed to convert file name to wstring.");
-              return;
-            }
-            filterFilename(wFileName);
-            std::wstring wDir;
-            if (!dir->empty() && !wchar_util::str_to_wstr(wDir, *dir, CP_UTF8)) {
-              result->Error("ERROR", "Failed to convert dir to wstring.");
-              return;
-            }
-            OPENFILENAMEW ofn;
-            ZeroMemory(&ofn, sizeof(ofn));
-            ofn.lStructSize = sizeof(ofn);
-            ofn.hwndOwner = Win32Window::GetHandle();
-            std::wstring filter;
-            std::wstring defExt;
-            updateDataFromMimeType(defExt, filter, *mimeType);
-            filter.append(std::wstring(L"All Files\0*.*\0\0", 15));
-            ofn.lpstrFilter = filter.c_str();
-            ofn.lpstrDefExt = defExt.empty() ? nullptr : defExt.c_str();
-            wchar_t wFileNameBuf[MAX_PATH_SIZE];
-            memcpy(wFileNameBuf, wFileName.c_str(), (wFileName.size() + 1) * sizeof(wchar_t));
-            ofn.lpstrFile = wFileNameBuf;
-            ofn.nMaxFile = MAX_PATH_SIZE;
-            ofn.lpstrInitialDir = wDir.empty() ? nullptr : wDir.c_str();
-            ofn.Flags = OFN_DONTADDTORECENT | OFN_NONETWORKBUTTON | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT;
-            if (!GetSaveFileNameW(&ofn)) {
-              result->Error("ERROR", "Failed to get file name.");
-              return;
-            }
-            FILE* f = nullptr;
-            _wfopen_s(&f, wFileNameBuf, L"wb");
-            if (!f) {
-              result->Error("ERROR", "Failed to open file.");
-              return;
-            }
-            fwrite(data->data(), sizeof(uint8_t), data->size(), f);
-            fclose(f);
-            result->Success();
-          } else if (call.method_name() == "closeFile") {
+          if (call.method_name() == "closeFile") {
             auto args = std::get_if<flutter::EncodableList>(call.arguments());
             auto fd = std::get_if<int>(&args->at(0));
             if (!fd) {
@@ -151,48 +106,68 @@ bool FlutterWindow::OnCreate() {
             auto fileName = std::get_if<std::string>(&args->at(0));
             auto dir = std::get_if<std::string>(&args->at(1));
             auto mimeType = std::get_if<std::string>(&args->at(2));
-            if (!fileName || !dir || !mimeType) {
+            auto readOnly = std::get_if<bool>(&args->at(3));
+            auto writeOnly = std::get_if<bool>(&args->at(4));
+            auto append = std::get_if<bool>(&args->at(5));
+            auto saveAs = std::get_if<bool>(&args->at(6));
+            if (!fileName || !dir || !mimeType || !readOnly || !writeOnly || !append || !saveAs) {
               result->Error("INVALID_ARGUMENT", "Invalid arguments.");
               return;
             }
-            std::wstring wFileName;
-            if (!wchar_util::str_to_wstr(wFileName, *fileName, CP_UTF8)) {
-              result->Error("ERROR", "Failed to convert file name to wstring.");
-              return;
-            }
-            filterFilename(wFileName);
-            std::wstring wDir;
-            if (!dir->empty() && !wchar_util::str_to_wstr(wDir, *dir, CP_UTF8)) {
-              result->Error("ERROR", "Failed to convert dir to wstring.");
-              return;
-            }
-            OPENFILENAMEW ofn;
-            ZeroMemory(&ofn, sizeof(ofn));
-            ofn.lStructSize = sizeof(ofn);
-            ofn.hwndOwner = Win32Window::GetHandle();
-            std::wstring filter;
-            std::wstring defExt;
-            updateDataFromMimeType(defExt, filter, *mimeType);
-            filter.append(std::wstring(L"All Files\0*.*\0\0", 15));
-            ofn.lpstrFilter = filter.c_str();
-            ofn.lpstrDefExt = defExt.empty() ? nullptr : defExt.c_str();
-            wchar_t wFileNameBuf[MAX_PATH_SIZE];
-            memcpy(wFileNameBuf, wFileName.c_str(), (wFileName.size() + 1) * sizeof(wchar_t));
-            ofn.lpstrFile = wFileNameBuf;
-            ofn.nMaxFile = MAX_PATH_SIZE;
-            ofn.lpstrInitialDir = wDir.empty() ? nullptr : wDir.c_str();
-            ofn.Flags = OFN_DONTADDTORECENT | OFN_NONETWORKBUTTON | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT;
-            if (!GetSaveFileNameW(&ofn)) {
-              result->Error("ERROR", "Failed to get file name.");
-              return;
-            }
             std::string fn;
-            if (!wchar_util::wstr_to_str(fn, wFileNameBuf, CP_UTF8)) {
-              result->Error("ERROR", "Failed to convert file name to UTF-8.");
-              return;
+            if (saveAs) {
+              std::wstring wFileName;
+              if (!wchar_util::str_to_wstr(wFileName, *fileName, CP_UTF8)) {
+                result->Error("ERROR", "Failed to convert file name to wstring.");
+                return;
+              }
+              filterFilename(wFileName);
+              std::wstring wDir;
+              if (!dir->empty() && !wchar_util::str_to_wstr(wDir, *dir, CP_UTF8)) {
+                result->Error("ERROR", "Failed to convert dir to wstring.");
+                return;
+              }
+              OPENFILENAMEW ofn;
+              ZeroMemory(&ofn, sizeof(ofn));
+              ofn.lStructSize = sizeof(ofn);
+              ofn.hwndOwner = Win32Window::GetHandle();
+              std::wstring filter;
+              std::wstring defExt;
+              updateDataFromMimeType(defExt, filter, *mimeType);
+              filter.append(std::wstring(L"All Files\0*.*\0\0", 15));
+              ofn.lpstrFilter = filter.c_str();
+              ofn.lpstrDefExt = defExt.empty() ? nullptr : defExt.c_str();
+              wchar_t wFileNameBuf[MAX_PATH_SIZE];
+              memcpy(wFileNameBuf, wFileName.c_str(), (wFileName.size() + 1) * sizeof(wchar_t));
+              ofn.lpstrFile = wFileNameBuf;
+              ofn.nMaxFile = MAX_PATH_SIZE;
+              ofn.lpstrInitialDir = wDir.empty() ? nullptr : wDir.c_str();
+              ofn.Flags = OFN_DONTADDTORECENT | OFN_NONETWORKBUTTON | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT;
+              if (!GetSaveFileNameW(&ofn)) {
+                result->Error("ERROR", "Failed to get file name.");
+                return;
+              }
+              if (!wchar_util::wstr_to_str(fn, wFileNameBuf, CP_UTF8)) {
+                result->Error("ERROR", "Failed to convert file name to UTF-8.");
+                return;
+              }
+            } else {
+              fn = fileop::join(dir, fileName);
+              filterDirname(fn);
             }
             int fd = 0;
-            int e = fileop::open(fn, fd, _O_WRONLY | _O_BINARY | O_CREAT);
+            int flags = _O_BINARY;
+            if (readOnly && writeOnly) {
+              flags |= _O_RDWR | _O_CREAT;
+            } else if (readOnly) {
+              flags |= _O_RDONLY;
+            } else if (writeOnly) {
+              flags |= _O_WRONLY | _O_CREAT | _O_TRUNC;
+            }
+            if (append) {
+              flags |= _O_APPEND;
+            }
+            int e = fileop::open(fn, fd, flags, _SH_DENYRW, _S_IREAD | _S_IWRITE);
             if (e) {
               std::string errmsg;
               if (!err::get_errno_message(errmsg, e)) {
@@ -220,6 +195,32 @@ bool FlutterWindow::OnCreate() {
               return;
             }
             result->Success(num);
+          } else if (call.method() == "readFile") {
+            auto args = std::get_if<flutter::EncodableList>(call.arguments());
+            auto fd = std::get_if<int>(&args->at(0));
+            auto maxlen = std::get_if<int>(&args->at(1));
+            if (!fd || !maxlen) {
+              result->Error("INVALID_ARGUMENT", "Invalid arguments.");
+              return;
+            }
+            uint8_t* buf = new uint8_t(*maxlen);
+            if (!buf) {
+              result->Error("ERROR", "Failed to allocate memory.");
+              return;
+            }
+            int num = _read((int)*fd, buf, (int)*maxlen);
+            if (num == -1) {
+              std::string errmsg;
+              if (!err::get_errno_message(errmsg, errno)) {
+                errmsg = "Unknown error.";
+              }
+              delete[] buf;
+              result->Error("ERROR", "Failed to read file:" + errmsg);
+              return;
+            }
+            std::vector<uint8_t> data(buf, num);
+            delete[] buf;
+            result->Success(data);
           } else {
             result->NotImplemented();
           }
