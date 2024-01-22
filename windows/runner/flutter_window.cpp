@@ -198,7 +198,7 @@ bool FlutterWindow::OnCreate() {
               return;
             }
             result->Success(num);
-          } else if (call.method() == "readFile") {
+          } else if (call.method_name() == "readFile") {
             auto args = std::get_if<flutter::EncodableList>(call.arguments());
             auto fd = std::get_if<int>(&args->at(0));
             auto maxlen = std::get_if<int>(&args->at(1));
