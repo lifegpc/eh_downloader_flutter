@@ -152,19 +152,19 @@ bool FlutterWindow::OnCreate() {
                 return;
               }
             } else {
-              fn = fileop::join(dir, fileName);
+              fn = fileop::join(*dir, *fileName);
               filterDirname(fn);
             }
             int fd = 0;
             int flags = _O_BINARY;
-            if (readOnly && writeOnly) {
+            if (*readOnly && *writeOnly) {
               flags |= _O_RDWR | _O_CREAT;
-            } else if (readOnly) {
+            } else if (*readOnly) {
               flags |= _O_RDONLY;
-            } else if (writeOnly) {
+            } else if (*writeOnly) {
               flags |= _O_WRONLY | _O_CREAT | _O_TRUNC;
             }
-            if (append) {
+            if (*append) {
               flags |= _O_APPEND;
             }
             int e = fileop::open(fn, fd, flags, _SH_DENYRW, _S_IREAD | _S_IWRITE);
@@ -203,7 +203,7 @@ bool FlutterWindow::OnCreate() {
               result->Error("INVALID_ARGUMENT", "Invalid arguments.");
               return;
             }
-            uint8_t* buf = new uint8_t(*maxlen);
+            uint8_t* buf = new uint8_t[*maxlen];
             if (!buf) {
               result->Error("ERROR", "Failed to allocate memory.");
               return;
@@ -220,7 +220,7 @@ bool FlutterWindow::OnCreate() {
             }
             std::vector<uint8_t> data(buf, num);
             delete[] buf;
-            result->Success(data);
+            result->Success(EncodableValue(data));
           } else {
             result->NotImplemented();
           }
