@@ -294,7 +294,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: i18n.serverDbPath,
-                helperText: i18n.serverDbPathHelp,
+                helperText:
+                    auth.isDocker == true ? null : i18n.serverDbPathHelp,
               ),
               onChanged: (s) {
                 setState(() {
