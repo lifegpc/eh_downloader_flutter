@@ -13,9 +13,12 @@
 #include <fcntl.h>
 #include <io.h>
 #include <regex>
+#include <memory>
 #include "err.h"
 #include "fileop.h"
 #include "wchar_util.h"
+
+using namespace std;
 
 #define MAX_PATH_SIZE 32768
 
@@ -220,7 +223,7 @@ bool FlutterWindow::OnCreate() {
             }
             std::vector<uint8_t> data(buf, num);
             delete[] buf;
-            result->Success<std::vector<uint8_t>>(data);
+            result->Success(flutter::EncodableValue(data));
           } else {
             result->NotImplemented();
           }
