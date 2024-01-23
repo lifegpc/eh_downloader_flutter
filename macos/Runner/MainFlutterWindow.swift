@@ -79,6 +79,8 @@ class MainFlutterWindow: NSWindow {
               panel.allowedContentTypes = [typ]
             }
             panel.allowsOtherFileTypes = true
+            panel.isExtensionHidden = false
+            panel.nameFieldStringValue = fileName + (ext ?? "")
             panel.begin { (res) in
               if res == NSApplication.ModalResponse.OK {
                 if let fn = panel.url {
