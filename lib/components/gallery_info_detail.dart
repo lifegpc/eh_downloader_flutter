@@ -20,31 +20,28 @@ class GalleryInfoDetail extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(horizontal: 40),
-      child: SizedBox(
-        height: 73,
-        child: Column(children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(i18n.pages(meta.filecount),
-                style: TextStyle(color: cs.secondary)),
-            Text(getFileSize(meta.filesize),
-                style: TextStyle(color: cs.secondary)),
-          ]),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Rate(meta.rating, fontSize: 14),
-              Text(DateFormat.yMd(locale).add_jms().format(meta.posted),
-                  style: TextStyle(color: cs.secondary)),
-            ],
-          ),
-          TextButton(
-              onPressed: () {
-                context.push('/dialog/gallery/details/${meta.gid}',
-                    extra: GalleryDetailsPageExtra(meta: meta));
-              },
-              child: Text(i18n.seeMoreInfo)),
+      child: Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(i18n.pages(meta.filecount),
+              style: TextStyle(color: cs.secondary)),
+          Text(getFileSize(meta.filesize),
+              style: TextStyle(color: cs.secondary)),
         ]),
-      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Rate(meta.rating, fontSize: 14),
+            Text(DateFormat.yMd(locale).add_jms().format(meta.posted),
+                style: TextStyle(color: cs.secondary)),
+          ],
+        ),
+        TextButton(
+            onPressed: () {
+              context.push('/dialog/gallery/details/${meta.gid}',
+                  extra: GalleryDetailsPageExtra(meta: meta));
+            },
+            child: Text(i18n.seeMoreInfo)),
+      ]),
     );
   }
 }
