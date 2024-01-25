@@ -1,6 +1,48 @@
 import UIKit
 import Flutter
 import Foundation
+import System
+
+var urlMaps: [CInt: URL] = [:]
+
+func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, append: Bool, isSecure: Bool) {
+  let mode = if readOnly && writeOnly {
+    FileDescriptor.AccessMode.readWrite
+  } else if readOnly {
+    FileDescriptor.AccessMode.readOnly
+  } else if writeOnly {
+    FileDescriptor.AccessMode.writeOnly
+  } else {
+    FileDescriptor.AccessMode.readWrite
+  }
+  var opts = FileDescriptor.OpenOptions.init()
+  if writeOnly {
+    opts.insert(FileDescriptor.OpenOptions.create)
+    if !readOnly {
+      opts.insert(FileDescriptor.OpenOptions.truncate)
+    }
+  }
+  if append {
+    opts.insert(FileDescriptor.OpenOptions.append)
+  }
+  let permissions = FilePermissions(rawValue: 0o644);
+  let uPath = if #available(iOS 16.0, *) {
+    url.path(percentEncoded: false)
+  } else {
+    url.path
+  }
+  let path = FilePath(stringLiteral: uPath);
+  do {
+    let fd = try FileDescriptor.open(path, mode, options: opts, permissions: permissions)
+    result(NSNumber(value: fd.rawValue))
+    if isSecure {
+      urlMaps[fd.rawValue] = url
+    }
+  } catch {
+    result(FlutterError(code: "OEPN_FILE_FAILED", message: nil, details: nil))
+    url.stopAccessingSecurityScopedResource()
+  }
+}
 
 func extFromMimetype(mimeType: String) -> String? {
   switch (mimeType) {
@@ -38,20 +80,35 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
                           details: nil))
       return
     }
-    let con = if #available(iOS 14.0, *) {
-      UIDocumentPickerViewController(forExporting: [self.url])
-    } else {
-      UIDocumentPickerViewController(url: self.url, in: UIDocumentPickerMode.exportToService)
-    }
+    let con = UIDocumentPickerViewController(forExporting: [self.url])
     con.delegate = self
     viewController.present(con, animated: true, completion: nil)
     print("pickFile")
   }
 
+  func handleUrl(_ url: URL) {
+    if !url.isFileURL {
+      result(FlutterError(code: "NOT_FILE_URL", message: nil, details: nil))
+      return
+    }
+    if !url.startAccessingSecurityScopedResource() {
+      result(FlutterError(code: "FAILED_TO_ACCESS_SECURITY_SCOPED_RESOURCE", message: nil, details: nil))
+      return
+    }
+    openFile(result: result, url: url, readOnly: readOnly, writeOnly: writeOnly, append: append, isSecure: true)
+  }
+
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+    print("documentPicker")
+    if let url = urls.first {
+      handleUrl(url)
+    } else {
+      result(FlutterError(code: "USER_CANCELLED", message: nil, details: nil))}
   }
 
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+    print("documentPicker")
+    handleUrl(url)
   }
   
   func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
@@ -113,6 +170,39 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
            } else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: nil, details: nil))
            }
+      case "writeFile":
+        if let args = call.arguments as? Array<Any>,
+           let fd = args[0] as? NSNumber,
+           let data = args[1] as? FlutterStandardTypedData {
+          let fD = FileDescriptor(rawValue: fd.int32Value)
+          do {
+            let readed = try data.data.withUnsafeBytes{ (re) in
+              try fD.write(re)
+            }
+            result(NSNumber(value: readed))
+          } catch {
+            result(FlutterError(code: "WRITE_FILE_FAILED", message: nil, details: nil))
+          }
+        } else {
+          result(FlutterError(code: "INVALID_ARGUMENTS", message: nil, details: nil))
+        }
+      case "closeFile":
+        if let args = call.arguments as? Array<Any>,
+           let fd = args[0] as? NSNumber {
+          let fD = FileDescriptor(rawValue: fd.int32Value)
+          do {
+            try fD.close()
+            result(nil)
+          } catch {
+            result(FlutterError(code: "CLOSE_FILE_FAILED", message: nil, details: nil))
+          }
+          if let url = urlMaps[fd.int32Value] {
+            url.stopAccessingSecurityScopedResource()
+            urlMaps.removeValue(forKey: fd.int32Value)
+          }
+        } else {
+          result(FlutterError(code: "INVALID_ARGUMENTS", message: nil, details: nil))
+        }
       default:
         result(FlutterMethodNotImplemented)
       }
