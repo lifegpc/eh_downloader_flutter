@@ -158,7 +158,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
               } else {
                 url.path
               }
-              if !FileManager.default.createFile(atPath: uPath, contents: nil) {
+              if !FileManager.default.createFile(atPath: uPath, contents: Data.init()) {
                 result(FlutterError(code: "FAILED_TO_CREATE_FILE", message: nil, details: nil))
                 return
               }
