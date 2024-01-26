@@ -135,5 +135,9 @@
     "corsCredentialsHostsHelp": "Add websites to this list can lead to security risks, make sure you trust these websites.",
     "galleryDetails": "Gallery Details",
     "title2": "Title",
-    "titleJpn": "Japanese Title"
+    "titleJpn": "Japanese Title",
+    "meiliHosts": "Meilisearch server hostname for specific domains",
+    "meiliHostsHelp": "Requests from these domains will receive the corresponding Meilisearch server hostname.",
+    "keyIsEmpty": "Key is empty.",
+    "keyIsExists": "Key is exists."
 }

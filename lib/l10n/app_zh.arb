@@ -135,5 +135,9 @@
     "corsCredentialsHostsHelp": "将网站加入这个列表会导致安全风险，请确保你信任这些网站。",
     "galleryDetails": "画廊详情",
     "title2": "标题",
-    "titleJpn": "日语标题"
+    "titleJpn": "日语标题",
+    "meiliHosts": "特定域名的 Meilisearch 服务器主机名",
+    "meiliHostsHelp": "来自这些域的请求将收到相应的 Meilisearch 服务器主机名。",
+    "keyIsEmpty": "键不能为空。",
+    "keyIsExists": "键已存在。"
 }

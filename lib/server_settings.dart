@@ -8,6 +8,7 @@ import 'api/config.dart';
 import 'components/labeled_checkbox.dart';
 import 'components/number_field.dart';
 import 'components/string_list_field.dart';
+import 'components//string_map_field.dart';
 import 'globals.dart';
 import 'platform/ua.dart';
 
@@ -34,6 +35,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
   CancelToken? _cancel;
   CancelToken? _saveCancel;
   late TextEditingController _uaController;
+  late AppLocalizations i18n;
 
   Future<void> _fetchData() async {
     _cancel = CancelToken();
@@ -59,6 +61,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     if (_isSaving) return;
     try {
       _now.corsCredentialsHosts?.removeWhere((e) => e.isEmpty);
+      _now.meiliHosts?.removeWhere((k, v) => k.isEmpty || v.isEmpty);
       _saveCancel = CancelToken();
       setState(() {
         _isSaving = true;
@@ -112,6 +115,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     if (!tryInitApi(context)) {
       return Container();
     }
+    this.i18n = AppLocalizations.of(context)!;
     final isLoading = _config == null && _error == null;
     if (isLoading && !_isLoading) _fetchData();
     final i18n = AppLocalizations.of(context)!;
@@ -153,6 +157,24 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                             label: Text(AppLocalizations.of(context)!.retry))
                       ]))
                 : _buildForm(context));
+  }
+
+  String? urlOriginValidator(String? s) {
+    if (s == null || s.isEmpty) return null;
+    try {
+      final u = Uri.parse(s);
+      if (u.hasQuery ||
+          u.userInfo.isNotEmpty ||
+          u.hasFragment ||
+          !u.hasEmptyPath ||
+          !u.hasScheme) return i18n.invalidURLOrigin;
+      if (u.scheme != "http" && u.scheme != "https") {
+        return i18n.httpHttpsNeeded;
+      }
+      return null;
+    } catch (e) {
+      return i18n.invalidURL;
+    }
   }
 
   Widget _buildForm(BuildContext context) {
@@ -522,6 +544,35 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               });
             },
           )),
+          StringMapFormField(
+            key: const ValueKey("meiliHosts"),
+            initialValue: _now.meiliHosts ?? _config!.meiliHosts,
+            keyDecoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            valueDecoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            keyPadding: const EdgeInsets.only(right: 4),
+            valuePadding: const EdgeInsets.only(left: 4),
+            onChanged: (s) {
+              setState(() {
+                _now.meiliHosts = s;
+                _changed = true;
+              });
+            },
+            keyValidator: urlOriginValidator,
+            valueValidator: urlOriginValidator,
+            keyAutovalidateMode: AutovalidateMode.onUserInteraction,
+            valueAutovalidateMode: AutovalidateMode.onUserInteraction,
+            label: Text(i18n.meiliHosts),
+            constraints: const BoxConstraints(
+              maxHeight: 300,
+            ),
+            helper: Text(i18n.meiliHostsHelp,
+                style: Theme.of(context).textTheme.bodySmall),
+          ),
           StringListFormField(
             key: const ValueKey("corsCredentialsHosts"),
             initialValue:
@@ -537,23 +588,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                 _changed = true;
               });
             },
-            validator: (s) {
-              if (s == null || s.isEmpty) return null;
-              try {
-                final u = Uri.parse(s);
-                if (u.hasQuery ||
-                    u.userInfo.isNotEmpty ||
-                    u.hasFragment ||
-                    !u.hasEmptyPath ||
-                    !u.hasScheme) return i18n.invalidURLOrigin;
-                if (u.scheme != "http" && u.scheme != "https") {
-                  return i18n.httpHttpsNeeded;
-                }
-                return null;
-              } catch (e) {
-                return i18n.invalidURL;
-              }
-            },
+            validator: urlOriginValidator,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             label: Text(i18n.corsCredentialsHosts),
             constraints: const BoxConstraints(
