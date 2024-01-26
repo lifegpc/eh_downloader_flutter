@@ -21,6 +21,7 @@ class GalleryInfoDetail extends StatelessWidget {
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(children: [
+        Container(padding: const EdgeInsets.only(top: 10)),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(i18n.pages(meta.filecount),
               style: TextStyle(color: cs.secondary)),

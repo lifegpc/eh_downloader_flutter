@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
@@ -20,8 +21,10 @@ class _KeyValue extends StatelessWidget {
     return Row(children: [
       SizedBox(
           width: 80,
-          child: Text(name,
-              style: TextStyle(color: cs.primary, fontSize: fontSize))),
+          child: Center(
+              child: Text(name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: cs.primary, fontSize: fontSize)))),
       Expanded(
         child: SelectableText(value,
             style: TextStyle(color: cs.secondary, fontSize: fontSize)),
@@ -91,9 +94,10 @@ class _GalleryDetailsPage extends State<GalleryDetailsPage> {
     final i18n = AppLocalizations.of(context)!;
     final maxWidth = MediaQuery.of(context).size.width;
     if (isLoading && !_isLoading) _fetchData();
+    final indent = maxWidth < 400 ? 5.0 : 10.0;
     return Container(
       padding: maxWidth < 400
-          ? const EdgeInsets.symmetric(vertical: 20, horizontal: 5)
+          ? const EdgeInsets.symmetric(vertical: 20, horizontal: 10)
           : const EdgeInsets.all(20),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
       child: isLoading
@@ -117,11 +121,40 @@ class _GalleryDetailsPage extends State<GalleryDetailsPage> {
                 ))
               : SingleChildScrollView(
                   child: Column(children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text(
+                        i18n.galleryDetails,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () => context.canPop()
+                                ? context.pop()
+                                : context.go("/gallery/${widget.gid}"),
+                            icon: const Icon(Icons.close),
+                          )),
+                    ],
+                  ),
+                  Divider(indent: indent, endIndent: indent),
                   _KeyValue(
                     i18n.gid,
                     _meta!.gid.toString(),
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
+                  Divider(indent: indent, endIndent: indent),
+                  _KeyValue(i18n.title2, _meta!.title, fontSize: 16),
+                  _meta!.titleJpn.isEmpty
+                      ? Container()
+                      : Divider(indent: indent, endIndent: indent),
+                  _meta!.titleJpn.isEmpty
+                      ? Container()
+                      : _KeyValue(i18n.titleJpn, _meta!.titleJpn, fontSize: 16),
+                  Divider(indent: indent, endIndent: indent),
+                  _KeyValue(i18n.visible, _meta!.expunged ? i18n.no : i18n.yes,
+                      fontSize: 16),
                 ])),
     );
   }

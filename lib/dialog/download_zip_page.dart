@@ -45,20 +45,21 @@ class _DownloadZipPage extends State<DownloadZipPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Row(
+                    Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Expanded(
-                            child: Center(
-                                child: Text(
+                        Text(
                           i18n.downloadAsZip,
                           style: Theme.of(context).textTheme.headlineSmall,
-                        ))),
-                        IconButton(
-                          onPressed: () => context.canPop()
-                              ? context.pop()
-                              : context.go("/gallery/${widget.gid}"),
-                          icon: const Icon(Icons.close),
-                        )
+                        ),
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                              onPressed: () => context.canPop()
+                                  ? context.pop()
+                                  : context.go("/gallery/${widget.gid}"),
+                              icon: const Icon(Icons.close),
+                            )),
                       ],
                     ),
                     CheckboxMenuButton(

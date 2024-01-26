@@ -74,7 +74,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
   }
 
   func pickFile() {
-    guard let viewController = UIApplication.shared.keyWindow?.rootViewController else {
+    guard let viewController = UIApplication.shared.windows.last(where: { $0.isKeyWindow })?.rootViewController else {
       result(FlutterError(code: "fatal",
                           message: "Getting rootViewController failed",
                           details: nil))

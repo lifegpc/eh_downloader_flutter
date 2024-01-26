@@ -132,5 +132,8 @@
     "invalidURLOrigin": "非法的 URL 源。",
     "httpHttpsNeeded": "不支持的协议。仅支持 http 或 https。",
     "corsCredentialsHosts": "被允许发送带有凭证的 CORS 请求的 URL 源",
-    "corsCredentialsHostsHelp": "将网站加入这个列表会导致安全风险，请确保你信任这些网站。"
+    "corsCredentialsHostsHelp": "将网站加入这个列表会导致安全风险，请确保你信任这些网站。",
+    "galleryDetails": "画廊详情",
+    "title2": "标题",
+    "titleJpn": "日语标题"
 }

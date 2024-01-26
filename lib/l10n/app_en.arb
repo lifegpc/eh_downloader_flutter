@@ -132,5 +132,8 @@
     "invalidURLOrigin": "Invalid URL origin.",
     "httpHttpsNeeded": "Unsupported scheme. Only https or http are supported.",
     "corsCredentialsHosts": "The URL origins which are allowed to send CORS requests with credentials",
-    "corsCredentialsHostsHelp": "Add websites to this list can lead to security risks, make sure you trust these websites."
+    "corsCredentialsHostsHelp": "Add websites to this list can lead to security risks, make sure you trust these websites.",
+    "galleryDetails": "Gallery Details",
+    "title2": "Title",
+    "titleJpn": "Japanese Title"
 }

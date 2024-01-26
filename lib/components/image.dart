@@ -33,7 +33,7 @@ class ImageWithContextMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContextMenuWidget(
         menuProvider: (_) {
-          var list = [
+          var list = <MenuElement>[
             MenuAction(
                 title: AppLocalizations.of(context)!.copyImage,
                 callback: () async {
@@ -64,6 +64,9 @@ class ImageWithContextMenu extends StatelessWidget {
                     _log.warning("Failed to save image:", err);
                   }
                 }));
+          }
+          if ((isNsfw != null && changeNsfw != null) || (isAd != null && changeAd != null)) {
+            list.add(MenuSeparator());
           }
           if (isNsfw != null && changeNsfw != null) {
             final nsfw = isNsfw!();
