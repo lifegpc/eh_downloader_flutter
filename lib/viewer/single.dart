@@ -12,6 +12,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import '../api/file.dart';
 import '../api/gallery.dart';
+import '../components/fit_text.dart';
 import '../globals.dart';
 
 final _log = Logger("SinglePageViewer");
@@ -191,6 +192,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
 
   Widget _buildTopAppBar(BuildContext context) {
     if (!_showMenu) return Container();
+    final theme = Theme.of(context);
     return Positioned(
         top: 0,
         left: 0,
@@ -201,8 +203,14 @@ class _SinglePageViewer extends State<SinglePageViewer>
                   context.canPop() ? context.pop() : context.go(_back);
                 },
                 icon: const Icon(Icons.close)),
-            title:
-                Text("${_data!.meta.preferredTitle} - ${_pages![_index].name}"),
+            title: FitText(
+                texts: [
+                  (_data!.meta.preferredTitle, 0),
+                  (_pages![_index].name, 1)
+                ],
+                style: theme.appBarTheme.titleTextStyle ??
+                    theme.textTheme.titleLarge,
+                separator: " - "),
             actions: [
               buildThemeModeIcon(context),
               buildMoreVertSettingsButon(context),
