@@ -253,12 +253,14 @@ bool FlutterWindow::OnCreate() {
   device.SetMethodCallHandler([&](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result) {
     if (call.method_name() == "deviceName") {
       wchar_t name[MAX_COMPUTERNAME_LENGTH + 1];
-      if (!GetComputerNameW(name, MAX_COMPUTERNAME_LENGTH)) {
+      DWORD size = 0;
+      if (!GetComputerNameW(name, &size)) {
         result->Success();
         return;
       }
+      std::wstring tmp(name, size);
       std::string deviceName;
-      if (!wchar_util::wstr_to_str(deviceName, name, CP_UTF8)) {
+      if (!wchar_util::wstr_to_str(deviceName, tmp, CP_UTF8)) {
         result->Error("ERROR", "Failed to convert device name to UTF-8.");
         return;
       }
