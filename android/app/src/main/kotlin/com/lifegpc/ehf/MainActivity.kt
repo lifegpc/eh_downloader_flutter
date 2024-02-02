@@ -56,11 +56,6 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.i("MainActivity","DeviceName=${getDeviceName()}")
-    }
-
     @ChannelMethod(methodName = "enableProtect")
     @Suppress("unused")
     private fun enableFlagSecure() {
