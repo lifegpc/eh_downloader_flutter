@@ -195,7 +195,8 @@ class _Thumbnail extends State<Thumbnail> {
               region: Rect.fromCenter(
                   center: Offset(i.width / 2, i.height / 2),
                   width: iconSize,
-                  height: iconSize));
+                  height: iconSize),
+              filters: [(_) => true]);
           if (!_disposed) {
             setState(() {
               _iconColor = pattle.colors.first.computeLuminance() > 0.5
