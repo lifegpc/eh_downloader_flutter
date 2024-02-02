@@ -253,7 +253,7 @@ bool FlutterWindow::OnCreate() {
   device.SetMethodCallHandler([&](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result) {
     if (call.method_name() == "deviceName") {
       wchar_t name[MAX_COMPUTERNAME_LENGTH + 1];
-      DWORD size = 0;
+      DWORD size = MAX_COMPUTERNAME_LENGTH + 1;
       if (!GetComputerNameW(name, &size)) {
         result->Success();
         return;
