@@ -30,6 +30,7 @@ dependencies:
   json_annotation: ^4.8.1
   keymap: ^0.0.92
   logging: ^1.2.0
+  package_info_plus: ^5.0.1
   palette_generator: ^0.3.3+3
   path: ^1.8.3
   path_provider: ^2.1.0
@@ -38,6 +39,7 @@ dependencies:
   shared_preferences: ^2.2.0
   super_clipboard: ^0.6.4
   super_context_menu: ^0.6.4
+  ua_parser_js: ^1.0.1
   user_agent_analyzer: ^5.0.0
   window_manager: ^0.3.6
 

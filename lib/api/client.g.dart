@@ -156,6 +156,10 @@ class __EHApi implements _EHApi {
     bool? setCookie,
     bool? httpOnly,
     bool? secure,
+    String? client,
+    String? device,
+    String? clientVersion,
+    String? clientPlatform,
     CancelToken? cancel,
   }) async {
     const _extra = <String, dynamic>{};
@@ -193,9 +197,103 @@ class __EHApi implements _EHApi {
         secure.toString(),
       ));
     }
+    if (client != null) {
+      _data.fields.add(MapEntry(
+        'client',
+        client,
+      ));
+    }
+    if (device != null) {
+      _data.fields.add(MapEntry(
+        'device',
+        device,
+      ));
+    }
+    if (clientVersion != null) {
+      _data.fields.add(MapEntry(
+        'client_version',
+        clientVersion,
+      ));
+    }
+    if (clientPlatform != null) {
+      _data.fields.add(MapEntry(
+        'client_platform',
+        clientPlatform,
+      ));
+    }
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
       method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/token',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<Token>.fromJson(
+      _result.data!,
+      (json) => Token.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<Token>> updateToken({
+    String? token,
+    String? client,
+    String? device,
+    String? clientVersion,
+    String? clientPlatform,
+    CancelToken? cancel,
+  }) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    if (token != null) {
+      _data.fields.add(MapEntry(
+        'token',
+        token,
+      ));
+    }
+    if (client != null) {
+      _data.fields.add(MapEntry(
+        'client',
+        client,
+      ));
+    }
+    if (device != null) {
+      _data.fields.add(MapEntry(
+        'device',
+        device,
+      ));
+    }
+    if (clientVersion != null) {
+      _data.fields.add(MapEntry(
+        'client_version',
+        clientVersion,
+      ));
+    }
+    if (clientPlatform != null) {
+      _data.fields.add(MapEntry(
+        'client_platform',
+        clientPlatform,
+      ));
+    }
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
+      method: 'PATCH',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',

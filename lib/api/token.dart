@@ -12,6 +12,11 @@ class Token {
     required this.expired,
     required this.httpOnly,
     required this.secure,
+    required this.lastUsed,
+    this.client,
+    this.device,
+    this.clientVersion,
+    this.clientPlatform,
   });
   final int id;
   final int uid;
@@ -21,6 +26,14 @@ class Token {
   @JsonKey(name: 'http_only')
   final bool httpOnly;
   final bool secure;
+  @JsonKey(fromJson: _fromJson, toJson: _toJson, name: 'last_used')
+  final DateTime lastUsed;
+  final String? client;
+  final String? device;
+  @JsonKey(name: 'client_version')
+  final String? clientVersion;
+  @JsonKey(name: 'client_platform')
+  final String? clientPlatform;
   static DateTime _fromJson(String d) => DateTime.parse(d);
   static String _toJson(DateTime d) => d.toIso8601String();
   factory Token.fromJson(Map<String, dynamic> json) => _$TokenFromJson(json);

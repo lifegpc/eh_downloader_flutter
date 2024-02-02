@@ -98,6 +98,23 @@ abstract class _EHApi {
       // ignore: unused_element
       @Part(name: "secure") bool? secure,
       // ignore: unused_element
+      @Part(name: "client") String? client,
+      // ignore: unused_element
+      @Part(name: "device") String? device,
+      // ignore: unused_element
+      @Part(name: "client_version") String? clientVersion,
+      // ignore: unused_element
+      @Part(name: "client_platform") String? clientPlatform,
+      // ignore: unused_element
+      @CancelRequest() CancelToken? cancel});
+  @PATCH('/token')
+  @MultiPart()
+  Future<ApiResult<Token>> updateToken(
+      {@Part(name: "token") String? token,
+      @Part(name: "client") String? client,
+      @Part(name: "device") String? device,
+      @Part(name: "client_version") String? clientVersion,
+      @Part(name: "client_platform") String? clientPlatform,
       @CancelRequest() CancelToken? cancel});
   @DELETE('/token')
   @MultiPart()
@@ -210,6 +227,10 @@ class EHApi extends __EHApi {
       bool? setCookie,
       bool? httpOnly,
       bool? secure,
+      String? client,
+      String? device,
+      String? clientVersion,
+      String? clientPlatform,
       CancelToken? cancel}) async {
     int t = DateTime.now().millisecondsSinceEpoch;
     final p =
@@ -224,6 +245,10 @@ class EHApi extends __EHApi {
         setCookie: setCookie,
         httpOnly: httpOnly,
         secure: secure,
+        client: client,
+        device: device,
+        clientVersion: clientVersion,
+        clientPlatform: clientPlatform,
         cancel: cancel);
   }
 

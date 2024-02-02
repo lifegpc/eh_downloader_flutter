@@ -13,6 +13,11 @@ Token _$TokenFromJson(Map<String, dynamic> json) => Token(
       expired: Token._fromJson(json['expired'] as String),
       httpOnly: json['http_only'] as bool,
       secure: json['secure'] as bool,
+      lastUsed: Token._fromJson(json['last_used'] as String),
+      client: json['client'] as String?,
+      device: json['device'] as String?,
+      clientVersion: json['client_version'] as String?,
+      clientPlatform: json['client_platform'] as String?,
     );
 
 Map<String, dynamic> _$TokenToJson(Token instance) => <String, dynamic>{
@@ -22,6 +27,11 @@ Map<String, dynamic> _$TokenToJson(Token instance) => <String, dynamic>{
       'expired': Token._toJson(instance.expired),
       'http_only': instance.httpOnly,
       'secure': instance.secure,
+      'last_used': Token._toJson(instance.lastUsed),
+      'client': instance.client,
+      'device': instance.device,
+      'client_version': instance.clientVersion,
+      'client_platform': instance.clientPlatform,
     };
 
 TokenWithUserInfo _$TokenWithUserInfoFromJson(Map<String, dynamic> json) =>
