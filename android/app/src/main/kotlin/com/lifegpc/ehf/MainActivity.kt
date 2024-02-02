@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.view.WindowManager
 import com.lifegpc.ehf.annotation.ChannelMethod
 import com.lifegpc.ehf.eventbus.SAFAuthEvent
@@ -55,6 +56,11 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.i("MainActivity","DeviceName=${getDeviceName()}")
+    }
+
     @ChannelMethod(methodName = "enableProtect")
     @Suppress("unused")
     private fun enableFlagSecure() {
@@ -71,7 +77,9 @@ class MainActivity : FlutterActivity() {
     @Suppress("unused")
     private fun getDeviceName(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            Settings.Global.getString(contentResolver, Settings.Global.DEVICE_NAME) ?: Build.MODEL
+            Settings.Global.getString(contentResolver, Settings.Global.DEVICE_NAME)
+                ?: Settings.System.getString(contentResolver, Settings.Global.DEVICE_NAME)
+                ?: Build.MODEL
         } else {
             Build.MODEL
         }
