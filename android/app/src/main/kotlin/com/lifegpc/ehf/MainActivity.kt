@@ -2,6 +2,7 @@ package com.lifegpc.ehf
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.view.WindowManager
 import com.lifegpc.ehf.annotation.ChannelMethod
 import com.lifegpc.ehf.eventbus.SAFAuthEvent
@@ -28,6 +29,11 @@ class MainActivity : FlutterActivity() {
         )
         MethodChannelUtils.registerMethodChannel(
             "lifegpc.eh_downloader_flutter/display",
+            flutterEngine,
+            this
+        )
+        MethodChannelUtils.registerMethodChannel(
+            "lifegpc.eh_downloader_flutter/device",
             flutterEngine,
             this
         )
@@ -59,4 +65,8 @@ class MainActivity : FlutterActivity() {
     private fun disableFlagSecure() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
+
+    @ChannelMethod(methodName = "deviceName")
+    @Suppress("unused")
+    private fun getDeviceName(): String = Build.MODEL
 }
