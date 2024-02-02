@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'globals.dart';
 import 'platform/device.dart';
 
@@ -18,14 +17,6 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-Future<String?> get clientVersion async {
-  try {
-    return (await PackageInfo.fromPlatform()).version;
-  } catch (_) {
-    return null;
-  }
-}
-
 Future<bool> login(String username, String password) async {
   String baseUrl = api.baseUrl!;
   final u = Uri.parse(baseUrl);
@@ -37,7 +28,7 @@ Future<bool> login(String username, String password) async {
       httpOnly: true,
       secure: u.scheme == 'https',
       client: "flutter",
-      device: device,
+      device: await device,
       clientVersion: await clientVersion,
       clientPlatform: clientPlatform);
   if (re.ok) return true;

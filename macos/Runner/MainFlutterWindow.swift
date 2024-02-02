@@ -136,6 +136,18 @@ class MainFlutterWindow: NSWindow {
         result(FlutterMethodNotImplemented)
       }
     }
+
+    let deviceChannel = FlutterMethodChannel(
+      name: "lifegpc.eh_downloader_flutter/device",
+      binaryMessenger: flutterViewController.engine.binaryMessenger)
+    deviceChannel.setMethodCallHandler { (call, result) in
+      switch call.method {
+      case "deviceName":
+        result(Host.current().localizedName)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
     
     RegisterGeneratedPlugins(registry: flutterViewController)
     

@@ -15,6 +15,7 @@ struct _MyApplication {
   char** dart_entrypoint_arguments;
   FlMethodChannel* path_channel;
   FlMethodChannel* saf_channel;
+  FlMethodChannel* device_channel;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
@@ -186,6 +187,21 @@ static void on_saf_channel_call(FlMethodChannel* channel, FlMethodCall* method_c
   }
 }
 
+static void on_device_channel_call(FlMethodChannel* channel, FlMethodCall* method_call,
+                                   gpointer user_data) {
+  const gchar* method = fl_method_call_get_name(method_call);
+  if (g_strcmp0(method, "deviceName") == 0) {
+    const gchar* name = g_get_host_name();
+    if (name) {
+      fl_method_call_respond_success(method_call, fl_value_new_string(name), nullptr);
+    } else {
+      fl_method_call_respond_success(method_call, fl_value_new_null(), nullptr);
+    }
+  } else {
+    fl_method_call_respond_not_implemented(method_call, nullptr);
+  }
+}
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
@@ -239,6 +255,10 @@ static void my_application_activate(GApplication* application) {
       fl_engine_get_binary_messenger(fl_view_get_engine(view)), "lifegpc.eh_downloader_flutter/saf",
       FL_METHOD_CODEC(codec));
   fl_method_channel_set_method_call_handler(self->saf_channel, on_saf_channel_call, self, nullptr);
+  self->device_channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(fl_view_get_engine(view)), "lifegpc.eh_downloader_flutter/device",
+      FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(self->device_channel, on_device_channel_call, self, nullptr);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -268,6 +288,7 @@ static void my_application_dispose(GObject* object) {
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
   g_clear_object(&self->path_channel);
   g_clear_object(&self->saf_channel);
+  g_clear_object(&self->device_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 

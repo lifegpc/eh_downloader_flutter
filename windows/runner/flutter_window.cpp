@@ -248,6 +248,25 @@ bool FlutterWindow::OnCreate() {
       result->NotImplemented();
     }
   });
+  flutter::MethodChannel<> device(flutter_controller_->engine()->messenger(), "lifegpc.eh_downloader_flutter/device",
+      &flutter::StandardMethodCodec::GetInstance());
+  device.SetMethodCallHandler([&](const flutter::MethodCall<>& call, std::unique_ptr<flutter::MethodResult<>> result) {
+    if (call.method_name() == "deviceName") {
+      wchar_t name[MAX_COMPUTERNAME_LENGTH + 1];
+      if (!GetComputerNameW(name, MAX_COMPUTERNAME_LENGTH)) {
+        result->Success();
+        return;
+      }
+      std::string deviceName;
+      if (!wchar_util::wstr_to_str(deviceName, name, CP_UTF8)) {
+        result->Error("ERROR", "Failed to convert device name to UTF-8.");
+        return;
+      }
+      result->Success(deviceName);
+    } else {
+      result->NotImplemented();
+    }
+  });
 
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 

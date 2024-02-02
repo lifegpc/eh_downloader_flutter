@@ -6,6 +6,8 @@ PODS:
   - Flutter (1.0.0)
   - irondash_engine_context (0.0.1):
     - Flutter
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -20,6 +22,7 @@ DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - irondash_engine_context (from `.symlinks/plugins/irondash_engine_context/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - super_native_extensions (from `.symlinks/plugins/super_native_extensions/ios`)
@@ -33,6 +36,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   irondash_engine_context:
     :path: ".symlinks/plugins/irondash_engine_context/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -45,10 +50,11 @@ SPEC CHECKSUMS:
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   irondash_engine_context: 3458bf979b90d616ffb8ae03a150bafe2e860cc9
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   super_native_extensions: 4916b3c627a9c7fffdc48a23a9eca0b1ac228fa7
 
 PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.15.0

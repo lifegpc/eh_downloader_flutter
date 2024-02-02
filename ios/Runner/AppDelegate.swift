@@ -207,6 +207,19 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
         result(FlutterMethodNotImplemented)
       }
     }
+
+    let deviceChannel = FlutterMethodChannel(
+      name: "lifegpc.eh_downloader_flutter/device",
+      binaryMessenger: controller.binaryMessenger
+    )
+    deviceChannel.setMethodCallHandler { (call, result) in
+      switch call.method {
+      case "deviceName":
+        result(UIDevice.current.name)
+      default:
+        result(FlutterMethodNotImplemented)
+      }
+    }
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

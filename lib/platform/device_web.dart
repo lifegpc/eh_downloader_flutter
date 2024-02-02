@@ -3,7 +3,7 @@ import 'package:ua_parser_js/ua_parser_js.dart';
 final _uaParser = UAParser();
 String? _device;
 
-String? get device {
+Future<String?> get device {
   if (_device == null) {
     final ua = _uaParser.getResult();
     _device = ua.browser.name;
@@ -11,7 +11,7 @@ String? get device {
       _device = "$_device ${ua.browser.version}";
     }
   }
-  return _device;
+  return Future.value(_device);
 }
 
 String? get clientPlatform => "web";
