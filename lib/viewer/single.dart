@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_image_provider/dio_image_provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ import '../api/file.dart';
 import '../api/gallery.dart';
 import '../components/fit_text.dart';
 import '../globals.dart';
+import '../platform/media_query.dart';
 
 final _log = Logger("SinglePageViewer");
 
@@ -51,6 +53,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
   Object? _error;
   bool _inited = false;
   bool _showMenu = false;
+  late PhotoViewController _photoViewController;
   void _updatePages() {
     if (_data == null) return;
     final displayAd = prefs.getBool("displayAd") ?? false;
@@ -70,6 +73,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
     _updatePages();
     _files = widget.files;
     _back = "/gallery/${widget.gid}";
+    _photoViewController = PhotoViewController();
     super.initState();
   }
 
@@ -77,6 +81,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
   void dispose() {
     _cancel?.cancel();
     _pageController.dispose();
+    _photoViewController.dispose();
     super.dispose();
   }
 
@@ -125,6 +130,9 @@ class _SinglePageViewer extends State<SinglePageViewer>
       builder: (BuildContext context, int index) {
         final data = _pages![index];
         final f = _files!.files[data.token]!.first;
+        if (_index != index) {
+          _photoViewController.reset();
+        }
         return PhotoViewGalleryPageOptions(
           imageProvider: DioImage.string(
             api.getFileUrl(f.id),
@@ -136,6 +144,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
             transitionOnUserGestures: true,
           ),
           filterQuality: FilterQuality.high,
+          controller: _photoViewController,
         );
       },
       onPageChanged: (index) {
@@ -184,10 +193,30 @@ class _SinglePageViewer extends State<SinglePageViewer>
     );
   }
 
+  Widget _buildWithScrollSupport(BuildContext context,
+      {required Widget child}) {
+    if (kIsWeb && pointerIsTouch) {
+      return child;
+    }
+    return Listener(
+      onPointerSignal: (event) {
+        if (event is PointerScrollEvent &&
+            event.kind == PointerDeviceKind.mouse) {
+          if (_photoViewController.scale != null) {
+            _photoViewController.scale = _photoViewController.scale! *
+                (1 - event.scrollDelta.dy / MediaQuery.of(context).size.height);
+          }
+        }
+      },
+      child: child,
+    );
+  }
+
   Widget _buildViewer(BuildContext context) {
     return _buildWithTap(context,
-        child:
-            _buildWithKeyboardSupport(context, child: _buildGallery(context)));
+        child: _buildWithKeyboardSupport(context,
+            child: _buildWithScrollSupport(context,
+                child: _buildGallery(context))));
   }
 
   Widget _buildTopAppBar(BuildContext context) {
