@@ -246,7 +246,7 @@ class _MainApp extends State<MainApp> {
     } catch (e) {
       _log.warning("Failed to read lang from prefs:", e);
     }
-    if (kIsWeb || isWindows) {
+    if (isWindows) {
       _themeData = _themeData.useSystemChineseFont();
       _darkThemeData = _darkThemeData.useSystemChineseFont();
     }

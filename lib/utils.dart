@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io' show Platform if (dart.library.html) './platform/fake_io.dart';
 import 'package:flutter/foundation.dart';
 
 bool get isDesktop =>

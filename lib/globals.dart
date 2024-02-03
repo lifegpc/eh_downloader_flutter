@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -11,8 +10,6 @@ import 'package:flutter/services.dart'
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
@@ -24,6 +21,7 @@ import 'gallery.dart';
 import 'main.dart';
 import 'platform/clipboard.dart';
 import 'platform/display.dart';
+import 'platform/get_jar.dart';
 import 'platform/path.dart';
 import 'platform/set_title.dart';
 import 'tags.dart';
@@ -39,24 +37,8 @@ final dio = Dio()
 Config? _prefs;
 EHApi? _api;
 
-Future<String> _getJarPath() async {
-  if (isWindows || isLinux) {
-    try {
-      final p = await platformPath.getCurrentExe();
-      if (p != null) {
-        return path.join(path.dirname(p), "cookies");
-      }
-    } catch (e) {
-      // Do nothing
-    }
-  }
-  final Directory appDocDir = await getApplicationDocumentsDirectory();
-  final String appDocPath = appDocDir.path;
-  return '$appDocPath/.eh-cookies/';
-}
-
 Future<void> prepareJar() async {
-  final jar = PersistCookieJar(storage: FileStorage(await _getJarPath()));
+  final jar = PersistCookieJar(storage: FileStorage(await getJarPath()));
   dio.interceptors.add(CookieManager(jar));
 }
 
