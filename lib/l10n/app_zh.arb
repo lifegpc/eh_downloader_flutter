@@ -139,5 +139,6 @@
     "meiliHosts": "特定域名的 Meilisearch 服务器主机名",
     "meiliHostsHelp": "来自这些域的请求将收到相应的 Meilisearch 服务器主机名。",
     "keyIsEmpty": "键不能为空。",
-    "keyIsExists": "键已存在。"
+    "keyIsExists": "键已存在。",
+    "redirectToFlutter": "访问根 URL 时重定向到 flutter 前端。"
 }

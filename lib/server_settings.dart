@@ -284,6 +284,17 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                 }
               },
               label: Text(i18n.removePreviousGallery))),
+          _buildWithVecticalPadding(LabeledCheckbox(
+              value: _now.redirectToFlutter ?? _config!.redirectToFlutter,
+              onChanged: (b) {
+                if (b != null) {
+                  setState(() {
+                    _now.redirectToFlutter = b;
+                    _changed = true;
+                  });
+                }
+              },
+              label: Text(i18n.redirectToFlutter))),
         ]));
   }
 

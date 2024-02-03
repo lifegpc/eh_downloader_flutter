@@ -139,5 +139,6 @@
     "meiliHosts": "Meilisearch server hostname for specific domains",
     "meiliHostsHelp": "Requests from these domains will receive the corresponding Meilisearch server hostname.",
     "keyIsEmpty": "Key is empty.",
-    "keyIsExists": "Key is exists."
+    "keyIsExists": "Key is exists.",
+    "redirectToFlutter": "Redirect to Flutter frontend when accessing the root URL."
 }

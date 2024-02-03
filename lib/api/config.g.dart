@@ -39,6 +39,7 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       fetchTimeout: json['fetch_timeout'] as int,
       downloadTimeout: json['download_timeout'] as int,
       ffprobePath: json['ffprobe_path'] as String,
+      redirectToFlutter: json['redirect_to_flutter'] as bool,
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -69,6 +70,7 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'fetch_timeout': instance.fetchTimeout,
       'download_timeout': instance.downloadTimeout,
       'ffprobe_path': instance.ffprobePath,
+      'redirect_to_flutter': instance.redirectToFlutter,
     };
 
 const _$ThumbnailMethodEnumMap = {
@@ -120,6 +122,7 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
       fetchTimeout: json['fetch_timeout'] as int?,
       downloadTimeout: json['download_timeout'] as int?,
       ffprobePath: json['ffprobe_path'] as String?,
+      redirectToFlutter: json['redirect_to_flutter'] as bool?,
     );
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
@@ -151,4 +154,5 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'fetch_timeout': instance.fetchTimeout,
       'download_timeout': instance.downloadTimeout,
       'ffprobe_path': instance.ffprobePath,
+      'redirect_to_flutter': instance.redirectToFlutter,
     };

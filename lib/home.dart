@@ -8,6 +8,53 @@ import 'main.dart';
 
 final _log = Logger("HomePage");
 
+class HomeDrawer extends StatelessWidget {
+  const HomeDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        child: ListView(
+      children: <Widget>[
+        Row(
+          children: [
+            Expanded(child: Container()),
+            IconButton(
+                onPressed: () => Scaffold.of(context).closeDrawer(),
+                icon: const Icon(Icons.close))
+          ],
+        ),
+        ListTile(
+          leading: const Icon(Icons.collections),
+          title: Text(AppLocalizations.of(context)!.galleries),
+          onTap: () {
+            Scaffold.of(context).closeDrawer();
+            context.push("/galleries");
+          },
+        ),
+        auth.isAdmin == true
+            ? ListTile(
+                leading: const Icon(Icons.admin_panel_settings),
+                title: Text(AppLocalizations.of(context)!.serverSettings),
+                onTap: () {
+                  Scaffold.of(context).closeDrawer();
+                  context.push("/server_settings");
+                },
+              )
+            : Container(),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: Text(AppLocalizations.of(context)!.settings),
+          onTap: () {
+            Scaffold.of(context).closeDrawer();
+            context.push("/settings");
+          },
+        )
+      ],
+    ));
+  }
+}
+
 class HomePage extends HookWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -37,42 +84,7 @@ class HomePage extends HookWidget {
           buildMoreVertSettingsButon(context),
         ],
       ),
-      drawer: Drawer(
-          child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, i) {
-                if (i == 0) {
-                  return Row(
-                    children: [
-                      Expanded(child: Container()),
-                      IconButton(
-                          onPressed: () => Scaffold.of(context).closeDrawer(),
-                          icon: const Icon(Icons.close))
-                    ],
-                  );
-                }
-                if (i == 1) {
-                  return ListTile(
-                    leading: const Icon(Icons.collections),
-                    title: Text(AppLocalizations.of(context)!.galleries),
-                    onTap: () {
-                      Scaffold.of(context).closeDrawer();
-                      context.push("/galleries");
-                    },
-                  );
-                }
-                if (i == 2) {
-                  return ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: Text(AppLocalizations.of(context)!.settings),
-                    onTap: () {
-                      Scaffold.of(context).closeDrawer();
-                      context.push("/settings");
-                    },
-                  );
-                }
-                return Container();
-              })),
+      drawer: const HomeDrawer(),
       body: Center(
         child: TextButton(
           child: Text('Hello World!'),

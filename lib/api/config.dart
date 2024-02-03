@@ -39,6 +39,7 @@ class Config {
     required this.fetchTimeout,
     required this.downloadTimeout,
     required this.ffprobePath,
+    required this.redirectToFlutter,
   });
   bool cookies;
   @JsonKey(name: 'db_path')
@@ -87,6 +88,8 @@ class Config {
   int downloadTimeout;
   @JsonKey(name: 'ffprobe_path')
   String ffprobePath;
+  @JsonKey(name: 'redirect_to_flutter')
+  bool redirectToFlutter;
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigToJson(this);
 }
@@ -133,6 +136,7 @@ class ConfigOptional {
     this.fetchTimeout,
     this.downloadTimeout,
     this.ffprobePath,
+    this.redirectToFlutter,
   });
   String? cookies;
   @JsonKey(name: 'db_path')
@@ -181,6 +185,8 @@ class ConfigOptional {
   int? downloadTimeout;
   @JsonKey(name: 'ffprobe_path')
   String? ffprobePath;
+  @JsonKey(name: 'redirect_to_flutter')
+  bool? redirectToFlutter;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigOptionalToJson(this);
