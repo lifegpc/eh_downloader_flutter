@@ -78,6 +78,7 @@ class AuthInfo {
         final u = _user!;
         _log.info(
             "Logged in as ${u.username} (${u.id}). isAdmin: ${u.isAdmin}. permissions: ${u.permissions}");
+        await checkSessionInfo();
       } else if (re.status == 401 || re.status == 1 || re.status == 404) {
         _user = null;
       } else {
@@ -86,7 +87,6 @@ class AuthInfo {
       }
       _checked = true;
       await getServerStatus();
-      await checkSessionInfo();
       return re.ok;
     } finally {
       _isChecking = false;
