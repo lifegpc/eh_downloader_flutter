@@ -1,0 +1,55 @@
+name: iOS Build
+on:
+  push:
+    branches: ["*"]
+    paths-ignore:
+      - '.github/workflows/android.yml'
+      - '.github/workflows/linux.yml'
+      - '.github/workflows/web.yml'
+      - '.github/workflows/windows.yml'
+      - 'android/**'
+      - 'linux/**'
+      - 'macos/**'
+      - 'web/**'
+      - 'windows/**'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'README.md'
+      - 'LICENSE'
+jobs:
+  ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Import keychain
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.P12_FILE_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+      - name: Install provisoning profile
+        env:
+          PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${PROVISIONING_PROFILE}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/ehf_dev.mobileprovision
+      - name: Build
+        run: flutter build ios --release
+      - name: Clean up
+        run: |
+          rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/ehf_dev.mobileprovision
+      - name: Archive
+        run: |
+          cd build/ios/iphoneos
+          mkdir Payload
+          mv Runner.app Payload
+          zip -r app.ipa Payload
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: build/ios/iphoneos/app.ipa
