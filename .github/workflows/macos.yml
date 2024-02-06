@@ -1,0 +1,40 @@
+name: MacOS Build
+on:
+  push:
+    branches: ["*"]
+    paths-ignore:
+      - '.github/workflows/ios.yml'
+      - '.github/workflows/linux.yml'
+      - '.github/workflows/macos.yml'
+      - '.github/workflows/web.yml'
+      - '.github/workflows/windows.yml'
+      - 'android/**'
+      - 'ios/**'
+      - 'linux/**'
+      - 'web/**'
+      - 'windows/**'
+      - '.gitignore'
+      - '.gitmodules'
+      - 'README.md'
+      - 'LICENSE'
+jobs:
+  macos:
+    runs-on: macos-13
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Build
+        run: flutter build macos --release
+      - name: Archive
+        run: |
+          cd build/macos/Build/Products/Release
+          zip -r macos.zip eh_downloader_flutter.app
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: build/macos/Build/Products/Release/macos.zip
