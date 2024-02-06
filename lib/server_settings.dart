@@ -327,8 +327,9 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: i18n.serverDbPath,
-                helperText:
-                    auth.isDocker == true ? null : i18n.serverDbPathHelp,
+                helperText: auth.isDocker == true
+                    ? i18n.dockerHelper
+                    : i18n.serverDbPathHelp,
               ),
               onChanged: (s) {
                 setState(() {
@@ -364,6 +365,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: i18n.downloadLocation,
+              helperText: auth.isDocker == true ? i18n.dockerHelper : null,
             ),
             onChanged: (s) {
               setState(() {
@@ -499,6 +501,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: i18n.ffmpegPath,
+              helperText: auth.isDocker == true ? i18n.dockerHelper : null,
             ),
             onChanged: (s) {
               setState(() {
@@ -534,6 +537,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: i18n.thumbnailDir,
+              helperText: auth.isDocker == true ? i18n.dockerHelper : null,
             ),
             onChanged: (s) {
               setState(() {
@@ -616,6 +620,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: i18n.flutterFrontend,
+              helperText: auth.isDocker == true ? i18n.dockerHelper : null,
             ),
             onChanged: (s) {
               setState(() {

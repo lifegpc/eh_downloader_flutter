@@ -142,5 +142,6 @@
     "keyIsExists": "键已存在。",
     "redirectToFlutter": "访问根 URL 时重定向到 flutter 前端。",
     "downloadTimeoutCheckInterval": "下载超时检测间隔",
-    "downloadTimeoutCheckIntervalHelp": "值越小，检测准确性越高，但是消耗更多的 CPU。"
+    "downloadTimeoutCheckIntervalHelp": "值越小，检测准确性越高，但是消耗更多的 CPU。",
+    "dockerHelper": "服务器运行在 Docker 容器中。除非你知道你在做什么，否则不要修改这个设置。"
 }
