@@ -3,9 +3,9 @@ on:
   push:
     branches: ["*"]
     paths-ignore:
+      - '.github/workflows/android.yml'
       - '.github/workflows/ios.yml'
       - '.github/workflows/linux.yml'
-      - '.github/workflows/macos.yml'
       - '.github/workflows/web.yml'
       - '.github/workflows/windows.yml'
       - 'android/**'
