@@ -17,7 +17,7 @@ func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, 
   if append {
     opts.insert(FileDescriptor.OpenOptions.append)
   }
-  let uPath = if #available(iOS 16.0, *) {
+  var uPath = if #available(iOS 16.0, *) {
     url.path(percentEncoded: false)
   } else {
     url.path
@@ -138,13 +138,13 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
               result(FlutterError(code: "FAILED_TO_GET_CACHE_DIRERCTORY", message: nil, details: nil))
               return
             }
-            let dUrl = if #available(iOS 16.0, *) {
+            var dUrl = if #available(iOS 16.0, *) {
               URL.init(filePath: path!)
             } else {
               URL.init(fileURLWithPath: path!)
             }
             let url = dUrl.appendingPathComponent(fileName + (ext ?? ""))
-            let uPath = if #available(iOS 16.0, *) {
+            var uPath = if #available(iOS 16.0, *) {
               url.path(percentEncoded: false)
             } else {
               url.path
