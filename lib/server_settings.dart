@@ -669,6 +669,24 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               });
             },
           )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue: _now.downloadTimeoutCheckInterval ??
+                _config!.downloadTimeoutCheckInterval,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.downloadTimeoutCheckInterval,
+              suffixText: i18n.millisecond,
+              helperText: i18n.downloadTimeoutCheckIntervalHelp,
+              helperMaxLines: 3,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.downloadTimeoutCheckInterval = s;
+                _changed = true;
+              });
+            },
+          )),
         ]));
   }
 

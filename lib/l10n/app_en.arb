@@ -140,5 +140,7 @@
     "meiliHostsHelp": "Requests from these domains will receive the corresponding Meilisearch server hostname.",
     "keyIsEmpty": "Key is empty.",
     "keyIsExists": "Key is exists.",
-    "redirectToFlutter": "Redirect to Flutter frontend when accessing the root URL."
+    "redirectToFlutter": "Redirect to Flutter frontend when accessing the root URL.",
+    "downloadTimeoutCheckInterval": "The interval of checking download timeout",
+    "downloadTimeoutCheckIntervalHelp": "The smaller the value, the more accurate the timeout detection, but the higher CPU usage."
 }

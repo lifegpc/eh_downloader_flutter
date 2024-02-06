@@ -140,5 +140,7 @@
     "meiliHostsHelp": "来自这些域的请求将收到相应的 Meilisearch 服务器主机名。",
     "keyIsEmpty": "键不能为空。",
     "keyIsExists": "键已存在。",
-    "redirectToFlutter": "访问根 URL 时重定向到 flutter 前端。"
+    "redirectToFlutter": "访问根 URL 时重定向到 flutter 前端。",
+    "downloadTimeoutCheckInterval": "下载超时检测间隔",
+    "downloadTimeoutCheckIntervalHelp": "值越小，检测准确性越高，但是消耗更多的 CPU。"
 }
