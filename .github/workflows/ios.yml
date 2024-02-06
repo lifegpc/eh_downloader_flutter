@@ -18,7 +18,7 @@ on:
       - 'LICENSE'
 jobs:
   ios:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,6 +40,7 @@ jobs:
       - name: Build
         run: flutter build ios --release
       - name: Clean up
+        if: always()
         run: |
           rm -rf ~/Library/MobileDevice/Provisioning\ Profiles/ehf_dev.mobileprovision
       - name: Archive
