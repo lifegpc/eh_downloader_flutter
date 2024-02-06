@@ -59,3 +59,12 @@ jobs:
         with:
           name: app
           path: build/ios/iphoneos/app.ipa
+      - name: Upload to site
+        env:
+          BASE_URL: ${{ secrets.IPA_BASE_URL }}
+          USERNAME: ${{ secrets.IPA_USERNAME }}
+          PASSWORD: ${{ secrets.IPA_PASSWORD }}
+        continue-on-error: true
+        run: |
+          python3 -m pip install requests
+          python3 scripts/upload_ipa.py "${BASE_URL}" build/ios/iphoneos/app.ipa "${USERNAME}" "${PASSWORD}"
