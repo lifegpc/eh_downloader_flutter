@@ -6,15 +6,7 @@ import System
 var urlMaps: [CInt: URL] = [:]
 
 func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, append: Bool, isSecure: Bool) {
-  let mode = if readOnly && writeOnly {
-    FileDescriptor.AccessMode.readWrite
-  } else if readOnly {
-    FileDescriptor.AccessMode.readOnly
-  } else if writeOnly {
-    FileDescriptor.AccessMode.writeOnly
-  } else {
-    FileDescriptor.AccessMode.readWrite
-  }
+  let mode = readOnly && writeOnly ? FileDescriptor.AccessMode.readWrite : readOnly ? FileDescriptor.AccessMode.readOnly : writeOnly ? FileDescriptor.AccessMode.writeOnly : FileDescriptor.AccessMode.readWrite;
   var opts = FileDescriptor.OpenOptions.init()
   if writeOnly {
     opts.insert(FileDescriptor.OpenOptions.create)
@@ -25,7 +17,6 @@ func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, 
   if append {
     opts.insert(FileDescriptor.OpenOptions.append)
   }
-  let permissions = FilePermissions(rawValue: 0o644);
   let uPath = if #available(iOS 16.0, *) {
     url.path(percentEncoded: false)
   } else {
@@ -33,7 +24,7 @@ func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, 
   }
   let path = FilePath(stringLiteral: uPath);
   do {
-    let fd = try FileDescriptor.open(path, mode, options: opts, permissions: permissions)
+    let fd = try FileDescriptor.open(path, mode, options: opts, permissions: FilePermissions(rawValue: 0o644))
     result(NSNumber(value: fd.rawValue))
     if isSecure {
       urlMaps[fd.rawValue] = url
@@ -72,7 +63,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
     self.url = url
     self.result = result
   }
-
+  
   func pickFile() {
     guard let viewController = UIApplication.shared.windows.last(where: { $0.isKeyWindow })?.rootViewController else {
       result(FlutterError(code: "fatal",
@@ -85,7 +76,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
     viewController.present(con, animated: true, completion: nil)
     print("pickFile")
   }
-
+  
   func handleUrl(_ url: URL) {
     if !url.isFileURL {
       result(FlutterError(code: "NOT_FILE_URL", message: nil, details: nil))
@@ -97,7 +88,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
     }
     openFile(result: result, url: url, readOnly: readOnly, writeOnly: writeOnly, append: append, isSecure: true)
   }
-
+  
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
     print("documentPicker")
     if let url = urls.first {
@@ -105,7 +96,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
     } else {
       result(FlutterError(code: "USER_CANCELLED", message: nil, details: nil))}
   }
-
+  
   func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
     print("documentPicker")
     handleUrl(url)
@@ -140,36 +131,36 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
            let writeOnly = args[4] as? NSNumber,
            let append = args[5] as? NSNumber,
            let saveAs = args[6] as? NSNumber {
-            let ext = extFromMimetype(mimeType: mimeType)
-            if saveAs.boolValue {
-              let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last
-              if path == nil {
-                result(FlutterError(code: "FAILED_TO_GET_CACHE_DIRERCTORY", message: nil, details: nil))
-                return
-              }
-              let dUrl = if #available(iOS 16.0, *) {
-                URL.init(filePath: path!)
-              } else {
-                URL.init(fileURLWithPath: path!)
-              }
-              let url = dUrl.appendingPathComponent(fileName + (ext ?? ""))
-              let uPath = if #available(iOS 16.0, *) {
-                url.path(percentEncoded: false)
-              } else {
-                url.path
-              }
-              if !FileManager.default.createFile(atPath: uPath, contents: Data.init()) {
-                result(FlutterError(code: "FAILED_TO_CREATE_FILE", message: nil, details: nil))
-                return
-              }
-              self.filePickerDelegate = FilePickerDelegate(readOnly: readOnly.boolValue, writeOnly: writeOnly.boolValue, append: append.boolValue, url: url, result: result)
-              self.filePickerDelegate!.pickFile()
-            } else {
-              result(FlutterMethodNotImplemented)
+          let ext = extFromMimetype(mimeType: mimeType)
+          if saveAs.boolValue {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last
+            if path == nil {
+              result(FlutterError(code: "FAILED_TO_GET_CACHE_DIRERCTORY", message: nil, details: nil))
+              return
             }
-           } else {
-            result(FlutterError(code: "INVALID_ARGUMENTS", message: nil, details: nil))
-           }
+            let dUrl = if #available(iOS 16.0, *) {
+              URL.init(filePath: path!)
+            } else {
+              URL.init(fileURLWithPath: path!)
+            }
+            let url = dUrl.appendingPathComponent(fileName + (ext ?? ""))
+            let uPath = if #available(iOS 16.0, *) {
+              url.path(percentEncoded: false)
+            } else {
+              url.path
+            }
+            if !FileManager.default.createFile(atPath: uPath, contents: Data.init()) {
+              result(FlutterError(code: "FAILED_TO_CREATE_FILE", message: nil, details: nil))
+              return
+            }
+            self.filePickerDelegate = FilePickerDelegate(readOnly: readOnly.boolValue, writeOnly: writeOnly.boolValue, append: append.boolValue, url: url, result: result)
+            self.filePickerDelegate!.pickFile()
+          } else {
+            result(FlutterMethodNotImplemented)
+          }
+        } else {
+          result(FlutterError(code: "INVALID_ARGUMENTS", message: nil, details: nil))
+        }
       case "writeFile":
         if let args = call.arguments as? Array<Any>,
            let fd = args[0] as? NSNumber,
@@ -207,7 +198,7 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
         result(FlutterMethodNotImplemented)
       }
     }
-
+    
     let deviceChannel = FlutterMethodChannel(
       name: "lifegpc.eh_downloader_flutter/device",
       binaryMessenger: controller.binaryMessenger
