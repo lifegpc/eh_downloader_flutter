@@ -36,9 +36,9 @@ jobs:
       - name: Archive
         run: |
           cd build/macos/Build/Products/Release
-          zip -r macos.zip eh_downloader_flutter.app
+          7z a -mx9 -y macos.7z eh_downloader_flutter.app
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: macos
-          path: build/macos/Build/Products/Release/macos.zip
+          path: build/macos/Build/Products/Release/macos.7z
