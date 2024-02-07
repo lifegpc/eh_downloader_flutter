@@ -3,19 +3,21 @@ package com.lifegpc.ehf
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import com.lifegpc.ehf.annotation.ChannelMethod
 import com.lifegpc.ehf.eventbus.SAFAuthEvent
 import com.lifegpc.ehf.platform.ClipboardPlugin
 import com.lifegpc.ehf.platform.MethodChannelUtils
 import com.lifegpc.ehf.platform.SAFPlugin
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import org.greenrobot.eventbus.EventBus
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -56,6 +58,15 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val lp=window.attributes
+            lp.layoutInDisplayCutoutMode=WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            window.attributes=lp
+        }
+    }
+
     @ChannelMethod(methodName = "enableProtect")
     @Suppress("unused")
     private fun enableFlagSecure() {
@@ -66,6 +77,29 @@ class MainActivity : FlutterActivity() {
     @Suppress("unused")
     private fun disableFlagSecure() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
+    @ChannelMethod(methodName = "setFullscreenMode")
+    @Suppress("unused")
+    private fun setFullscreenMode(value: Boolean) {
+        // api 23
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowController = window.insetsController
+            if (value) {
+                windowController?.hide(WindowInsets.Type.statusBars())
+                windowController?.systemBarsBehavior =
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            } else {
+                windowController?.show(WindowInsets.Type.statusBars())
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            if (value){
+                window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            }else{
+                window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            }
+        }
     }
 
     @ChannelMethod(methodName = "deviceName")

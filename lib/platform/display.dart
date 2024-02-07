@@ -28,4 +28,14 @@ class Display {
       return false;
     }
   }
+
+  Future<bool> setFullscreenMode(bool fullscreenMode) async{
+    try{
+      await platform.invokeMethod<void>("setScreenMode",fullscreenMode);
+      return true;
+    }catch(e){
+      _log.warning("Failed to set screen mode",e);
+      return false;
+    }
+  }
 }
