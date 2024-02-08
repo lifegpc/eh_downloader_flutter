@@ -109,92 +109,104 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
     _checkStatus(context);
     return Scaffold(
       appBar: AppBar(
+        leading: auth.user == null
+            ? Container()
+            : IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  context.canPop() ? context.pop() : context.go("/");
+                }),
         title: Text(AppLocalizations.of(context)!.login),
         actions: [
           buildThemeModeIcon(context),
         ],
       ),
-      body: Container(
-          padding: MediaQuery.of(context).size.width > 810
-              ? const EdgeInsets.symmetric(horizontal: 100)
-              : null,
-          child: Form(
-              key: _formKey,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            labelText: AppLocalizations.of(context)!.username,
-                          ),
-                          initialValue: _username,
-                          onChanged: _usernameChanged,
-                        )),
-                    Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            labelText: AppLocalizations.of(context)!.password,
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _passwordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Theme.of(context).primaryColorDark,
+      body: PopScope(
+          canPop: auth.user != null,
+          child: Container(
+              padding: MediaQuery.of(context).size.width > 810
+                  ? const EdgeInsets.symmetric(horizontal: 100)
+                  : null,
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText:
+                                    AppLocalizations.of(context)!.username,
                               ),
-                              onPressed: _passwordVisibleChanged,
-                            ),
-                          ),
-                          initialValue: _password,
-                          onChanged: _passwordChanged,
-                          obscureText: !_passwordVisible,
-                        )),
-                    ElevatedButton(
-                        onPressed: _isValid && !_isLogin
-                            ? () {
-                                setState(() {
-                                  _isLogin = true;
-                                });
-                                login(_username, _password).then((re) {
-                                  if (re) {
-                                    clearAllStates(context);
-                                    context.canPop()
-                                        ? context.pop()
-                                        : context.go("/");
-                                  } else {
-                                    final snackBar = SnackBar(
-                                        content: Text(
-                                            AppLocalizations.of(context)!
-                                                .incorrectUserPassword));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
+                              initialValue: _username,
+                              onChanged: _usernameChanged,
+                            )),
+                        Container(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText:
+                                    AppLocalizations.of(context)!.password,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Theme.of(context).primaryColorDark,
+                                  ),
+                                  onPressed: _passwordVisibleChanged,
+                                ),
+                              ),
+                              initialValue: _password,
+                              onChanged: _passwordChanged,
+                              obscureText: !_passwordVisible,
+                            )),
+                        ElevatedButton(
+                            onPressed: _isValid && !_isLogin
+                                ? () {
                                     setState(() {
-                                      _isLogin = false;
+                                      _isLogin = true;
+                                    });
+                                    login(_username, _password).then((re) {
+                                      if (re) {
+                                        clearAllStates(context);
+                                        context.canPop()
+                                            ? context.pop()
+                                            : context.go("/");
+                                      } else {
+                                        final snackBar = SnackBar(
+                                            content: Text(
+                                                AppLocalizations.of(context)!
+                                                    .incorrectUserPassword));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                        setState(() {
+                                          _isLogin = false;
+                                        });
+                                      }
+                                    }).catchError((e) {
+                                      _log.severe("Failed to login:", e);
+                                      final isNetworkError =
+                                          e is! (int, String);
+                                      final snackBar = SnackBar(
+                                          content: Text(isNetworkError
+                                              ? AppLocalizations.of(context)!
+                                                  .networkError
+                                              : AppLocalizations.of(context)!
+                                                  .internalError));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      setState(() {
+                                        _isLogin = false;
+                                      });
                                     });
                                   }
-                                }).catchError((e) {
-                                  _log.severe("Failed to login:", e);
-                                  final isNetworkError = e is! (int, String);
-                                  final snackBar = SnackBar(
-                                      content: Text(isNetworkError
-                                          ? AppLocalizations.of(context)!
-                                              .networkError
-                                          : AppLocalizations.of(context)!
-                                              .internalError));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                  setState(() {
-                                    _isLogin = false;
-                                  });
-                                });
-                              }
-                            : null,
-                        child: Text(AppLocalizations.of(context)!.login)),
-                  ]))),
+                                : null,
+                            child: Text(AppLocalizations.of(context)!.login)),
+                      ])))),
     );
   }
 }
