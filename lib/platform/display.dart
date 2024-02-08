@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
+import 'package:window_manager/window_manager.dart';
+import '../utils.dart';
 
 final _log = Logger("platformDisplay");
 
@@ -30,6 +32,15 @@ class Display {
   }
 
   Future<bool> setFullscreenMode(bool fullscreenMode) async {
+    if (isDesktop) {
+      try {
+        await WindowManager.instance.setFullScreen(fullscreenMode);
+        return true;
+      } catch (e) {
+        _log.warning("Failed to set screen mode", e);
+        return false;
+      }
+    }
     try {
       await platform.invokeMethod<void>("setScreenMode", fullscreenMode);
       return true;

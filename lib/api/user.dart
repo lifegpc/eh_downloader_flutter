@@ -6,9 +6,11 @@ part 'user.g.dart';
 enum UserPermission with EnumFlag {
   readGallery,
   editGallery,
+  deleteGallery,
+  manageTasks,
 }
 
-const userPermissionAll = 3;
+const userPermissionAll = 15;
 
 class UserPermissions {
   const UserPermissions(this.code);
@@ -25,7 +27,7 @@ class UserPermissions {
 
   @override
   String toString() {
-    if (code & userPermissionAll != 0) return "all";
+    if (code & userPermissionAll == userPermissionAll) return "all";
     final set = code.getFlags(UserPermission.values).toSet();
     if (set.isEmpty) return "none";
     return set.map((e) => e.name).join("|");

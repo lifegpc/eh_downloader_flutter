@@ -22,10 +22,19 @@ class AuthInfo {
   bool get isChecking => _isChecking;
   bool? get isAdmin => _user?.isAdmin;
   bool? get isDocker => _status?.isDocker;
+  bool? get canReadGallery =>
+      _user?.permissions.has(UserPermission.readGallery);
+  bool? get canEditGallery =>
+      _user?.permissions.has(UserPermission.editGallery);
+  bool? get canDeleteGallery =>
+      _user?.permissions.has(UserPermission.deleteGallery);
+  bool? get canManageTasks =>
+      _user?.permissions.has(UserPermission.manageTasks);
 
   void clear() {
     _user = null;
     _status = null;
+    _token = null;
     _checked = false;
   }
 

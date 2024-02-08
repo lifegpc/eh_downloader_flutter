@@ -212,7 +212,7 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
       title: Text(AppLocalizations.of(context)!.displayAd),
     ),
   )));
-  if (path == "/gallery/:gid") {
+  if (path == "/gallery/:gid" && auth.canEditGallery == true) {
     list.add(const PopupMenuDivider());
     final isAllNsfw = GalleryPage.of(context).isAllNsfw;
     if (isAllNsfw != null) {

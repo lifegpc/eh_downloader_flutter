@@ -297,22 +297,26 @@ class _Thumbnail extends State<Thumbnail> {
                 PopupMenuItem(
                     value: _ThumbnailMenu.saveAs,
                     child: Text(AppLocalizations.of(context)!.saveAs)),
-                const PopupMenuDivider(),
-                PopupMenuItem(
-                    value: isNsfw
-                        ? _ThumbnailMenu.markAsSfw
-                        : _ThumbnailMenu.markAsNsfw,
-                    child: Text(isNsfw
-                        ? AppLocalizations.of(context)!.markAsSfw
-                        : AppLocalizations.of(context)!.markAsNsfw)),
-                PopupMenuItem(
-                    value: isAd
-                        ? _ThumbnailMenu.markAsNonAd
-                        : _ThumbnailMenu.markAsAd,
-                    child: Text(isAd
-                        ? AppLocalizations.of(context)!.markAsNonAd
-                        : AppLocalizations.of(context)!.markAsAd)),
               ];
+              if (auth.canEditGallery == true) {
+                list += [
+                  const PopupMenuDivider(),
+                  PopupMenuItem(
+                      value: isNsfw
+                          ? _ThumbnailMenu.markAsSfw
+                          : _ThumbnailMenu.markAsNsfw,
+                      child: Text(isNsfw
+                          ? AppLocalizations.of(context)!.markAsSfw
+                          : AppLocalizations.of(context)!.markAsNsfw)),
+                  PopupMenuItem(
+                      value: isAd
+                          ? _ThumbnailMenu.markAsNonAd
+                          : _ThumbnailMenu.markAsAd,
+                      child: Text(isAd
+                          ? AppLocalizations.of(context)!.markAsNonAd
+                          : AppLocalizations.of(context)!.markAsAd)),
+                ];
+              }
               return list;
             }));
     final timg = _data != null
@@ -320,14 +324,19 @@ class _Thumbnail extends State<Thumbnail> {
             uri: _uri,
             fileName: _fileName,
             dir: _dir,
-            isNsfw: () => widget._pMeta.isNsfw,
-            changeNsfw: (isNsfw) {
-              _markAsNsfw(isNsfw);
-            },
-            isAd: () => widget._pMeta.isAd,
-            changeAd: (isAd) {
-              _markAsAd(isAd);
-            })
+            isNsfw:
+                auth.canEditGallery == true ? () => widget._pMeta.isNsfw : null,
+            changeNsfw: auth.canEditGallery == true
+                ? (isNsfw) {
+                    _markAsNsfw(isNsfw);
+                  }
+                : null,
+            isAd: auth.canEditGallery == true ? () => widget._pMeta.isAd : null,
+            changeAd: auth.canEditGallery == true
+                ? (isAd) {
+                    _markAsAd(isAd);
+                  }
+                : null)
         : null;
     final img = widget.gid != null && widget.index != null && _data != null
         ? GestureDetector(
