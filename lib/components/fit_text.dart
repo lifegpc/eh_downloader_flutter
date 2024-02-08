@@ -2,11 +2,11 @@ import "package:flutter/material.dart";
 
 class FitText extends StatelessWidget {
   const FitText({
-    Key? key,
+    super.key,
     required this.texts,
     this.style,
     this.separator = " ",
-  }) : super(key: key);
+  });
   final List<(String, int)> texts;
   final TextStyle? style;
   final String separator;

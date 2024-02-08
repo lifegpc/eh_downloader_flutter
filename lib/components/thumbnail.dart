@@ -20,7 +20,7 @@ final _log = Logger("Thumbnail");
 
 class Thumbnail extends StatefulWidget {
   const Thumbnail(ExtendedPMeta pMeta,
-      {Key? key,
+      {super.key,
       int? max,
       int? width,
       int? height,
@@ -33,8 +33,7 @@ class Thumbnail extends StatefulWidget {
         _max = max ?? 1200,
         _width = width,
         _height = height,
-        _fileId = fileId,
-        super(key: key);
+        _fileId = fileId;
   final ExtendedPMeta _pMeta;
   final int _max;
   final int? _width;

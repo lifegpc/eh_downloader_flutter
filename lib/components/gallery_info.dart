@@ -10,7 +10,7 @@ import 'tags.dart';
 import 'thumbnail_gridview.dart';
 
 class GalleryInfo extends StatefulWidget {
-  const GalleryInfo(this.gData, {Key? key, this.files}) : super(key: key);
+  const GalleryInfo(this.gData, {super.key, this.files});
   final GalleryData gData;
   final EhFiles? files;
 

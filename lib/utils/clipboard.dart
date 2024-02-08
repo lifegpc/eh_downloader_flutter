@@ -38,11 +38,11 @@ Future<void> copyImageToClipboard(Uint8List data, ImageFmt fmt) async {
         ? Formats.gif(data)
         : Formats.png(fmt == ImageFmt.jpg ? await jpgToPng(data) : data));
   }
-  await ClipboardWriter.instance.write([item]);
+  await SystemClipboard.instance!.write([item]);
 }
 
 Future<void> copyTextToClipboard(String text) async {
   final item = DataWriterItem();
   item.add(Formats.plainText(text));
-  await ClipboardWriter.instance.write([item]);
+  await SystemClipboard.instance!.write([item]);
 }

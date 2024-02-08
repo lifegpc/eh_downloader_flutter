@@ -9,7 +9,7 @@ import '../utils/filesize.dart';
 import 'rate.dart';
 
 class GalleryInfoDetail extends StatelessWidget {
-  const GalleryInfoDetail(this.meta, {Key? key}) : super(key: key);
+  const GalleryInfoDetail(this.meta, {super.key});
   final GMeta meta;
 
   @override

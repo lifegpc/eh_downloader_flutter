@@ -247,8 +247,8 @@ class _MainApp extends State<MainApp> {
       _log.warning("Failed to read lang from prefs:", e);
     }
     if (isWindows) {
-      _themeData = _themeData.useSystemChineseFont();
-      _darkThemeData = _darkThemeData.useSystemChineseFont();
+      _themeData = _themeData.useSystemChineseFont(Brightness.light);
+      _darkThemeData = _darkThemeData.useSystemChineseFont(Brightness.dark);
     }
   }
 

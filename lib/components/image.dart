@@ -10,7 +10,7 @@ final _log = Logger("ImageWithContextMenu");
 
 class ImageWithContextMenu extends StatelessWidget {
   const ImageWithContextMenu(this.data,
-      {Key? key,
+      {super.key,
       this.uri,
       this.dir,
       this.fileName,
@@ -18,8 +18,7 @@ class ImageWithContextMenu extends StatelessWidget {
       this.isNsfw,
       this.changeNsfw,
       this.isAd,
-      this.changeAd})
-      : super(key: key);
+      this.changeAd});
   final Uint8List data;
   final String? uri;
   final ImageFmt fmt;

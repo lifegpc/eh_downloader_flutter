@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class StringListFormField extends StatefulWidget {
   const StringListFormField(
-      {Key? key,
+      {super.key,
       this.initialValue,
       this.onChanged,
       this.decoration,
@@ -12,8 +12,7 @@ class StringListFormField extends StatefulWidget {
       this.autovalidateMode,
       this.label,
       this.helper,
-      this.constraints})
-      : super(key: key);
+      this.constraints});
   final List<String>? initialValue;
   final ValueChanged<List<String>>? onChanged;
   final InputDecoration? decoration;

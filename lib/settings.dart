@@ -9,7 +9,7 @@ import 'utils.dart';
 final _log = Logger("SettingsPage");
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   static const String routeName = '/settings';
 

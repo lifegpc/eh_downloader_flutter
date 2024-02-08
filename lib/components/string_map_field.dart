@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StringMapFormField extends StatefulWidget {
   const StringMapFormField(
-      {Key? key,
+      {super.key,
       this.initialValue,
       this.onChanged,
       this.keyDecoration,
@@ -18,8 +18,7 @@ class StringMapFormField extends StatefulWidget {
       this.valueAutovalidateMode,
       this.label,
       this.helper,
-      this.constraints})
-      : super(key: key);
+      this.constraints});
   final Map<String, String>? initialValue;
   final ValueChanged<Map<String, String>>? onChanged;
   final InputDecoration? keyDecoration;

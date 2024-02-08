@@ -17,8 +17,7 @@ class GalleriesPageExtra {
 
 class GalleriesPage extends StatefulWidget {
   const GalleriesPage(
-      {Key? key, this.sortByGid, this.uploader, this.tag, this.translatedTag})
-      : super(key: key);
+      {super.key, this.sortByGid, this.uploader, this.tag, this.translatedTag});
   final SortByGid? sortByGid;
   final String? uploader;
   final String? tag;

@@ -17,9 +17,8 @@ class GalleryPageExtra {
 }
 
 class GalleryPage extends StatefulWidget {
-  const GalleryPage(int gid, {Key? key, this.title})
-      : _gid = gid,
-        super(key: key);
+  const GalleryPage(int gid, {super.key, this.title})
+      : _gid = gid;
 
   final int _gid;
   final String? title;

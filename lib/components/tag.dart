@@ -4,7 +4,7 @@ import '../api/gallery.dart';
 import '../globals.dart';
 
 class TagWidget extends StatelessWidget {
-  const TagWidget(this.tag, {Key? key, this.name}) : super(key: key);
+  const TagWidget(this.tag, {super.key, this.name});
   final Tag tag;
   final String? name;
 

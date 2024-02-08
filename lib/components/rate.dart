@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Rate extends StatelessWidget {
-  const Rate(this.rate, {Key? key, this.fontSize}) : super(key: key);
+  const Rate(this.rate, {super.key, this.fontSize});
   final double rate;
   final double? fontSize;
 

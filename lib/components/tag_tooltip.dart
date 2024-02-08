@@ -10,7 +10,7 @@ String _getTag(Tag tag) {
 }
 
 class TagTooltip extends StatelessWidget {
-  const TagTooltip(this.tag, {Key? key}) : super(key: key);
+  const TagTooltip(this.tag, {super.key});
   final Tag tag;
 
   @override

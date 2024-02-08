@@ -8,7 +8,7 @@ import 'globals.dart';
 final _log = Logger("SetServerPage");
 
 class SetServerPage extends StatefulWidget {
-  const SetServerPage({Key? key}) : super(key: key);
+  const SetServerPage({super.key});
 
   static const String routeName = '/set_server';
 

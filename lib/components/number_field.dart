@@ -4,14 +4,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NumberFormField extends StatelessWidget {
   const NumberFormField(
-      {Key? key,
+      {super.key,
       this.min,
       this.max,
       this.initialValue,
       this.errorMsg,
       this.decoration,
-      this.onChanged})
-      : super(key: key);
+      this.onChanged});
 
   final int? min;
   final int? max;

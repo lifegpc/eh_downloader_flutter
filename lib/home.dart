@@ -9,7 +9,7 @@ import 'main.dart';
 final _log = Logger("HomePage");
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
+  const HomeDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class HomeDrawer extends StatelessWidget {
 }
 
 class HomePage extends HookWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   static const String routeName = '/';
 

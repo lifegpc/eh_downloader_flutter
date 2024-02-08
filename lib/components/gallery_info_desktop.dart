@@ -13,8 +13,7 @@ import '../viewer/single.dart';
 
 class _KeyValue extends StatelessWidget {
   const _KeyValue(this.name, this.value,
-      {Key? key, this.maxLines, this.minLines, this.fontSize})
-      : super(key: key);
+      {this.maxLines, this.minLines, this.fontSize});
   final String name;
   final String value;
   final int? maxLines;
@@ -41,8 +40,7 @@ class _KeyValue extends StatelessWidget {
 
 class GalleryInfoDesktop extends StatelessWidget {
   const GalleryInfoDesktop(this.gData,
-      {Key? key, this.fileId, this.controller, this.files})
-      : super(key: key);
+      {super.key, this.fileId, this.controller, this.files});
   final GalleryData gData;
   final int? fileId;
   final ScrollController? controller;

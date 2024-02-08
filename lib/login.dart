@@ -9,7 +9,7 @@ import 'platform/device.dart';
 final _log = Logger("LoginPage");
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   static const String routeName = '/login';
 

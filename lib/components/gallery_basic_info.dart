@@ -8,8 +8,7 @@ import '../viewer/single.dart';
 
 class GalleryBasicInfo extends StatelessWidget {
   const GalleryBasicInfo(this.gMeta, this.firstPage,
-      {Key? key, this.fileId, this.gData, this.files})
-      : super(key: key);
+      {super.key, this.fileId, this.gData, this.files});
   final GMeta gMeta;
   final ExtendedPMeta firstPage;
   final int? fileId;

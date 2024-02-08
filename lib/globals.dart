@@ -25,6 +25,7 @@ import 'platform/get_jar.dart';
 import 'platform/path.dart';
 import 'platform/set_title.dart';
 import 'tags.dart';
+import 'task.dart';
 import 'utils.dart';
 export 'galleries.dart' show GalleriesPageExtra;
 export 'gallery.dart' show GalleryPageExtra;
@@ -108,6 +109,7 @@ final Clipboard platformClipboard = Clipboard();
 final Display platformDisplay = Display();
 final Path platformPath = Path();
 final TagsInfo tags = TagsInfo();
+final TaskManager tasks = TaskManager();
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 final EventListener listener = EventListener()..maxListeners = 0;
@@ -313,6 +315,7 @@ final _authLog = Logger("AuthLog");
 void clearAllStates(BuildContext context) {
   auth.clear();
   tags.clear();
+  tasks.clear();
   checkAuth(context);
 }
 

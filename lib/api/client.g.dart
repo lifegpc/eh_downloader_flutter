@@ -26,7 +26,7 @@ class __EHApi implements _EHApi {
     int? permissions,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -83,14 +83,14 @@ class __EHApi implements _EHApi {
     String? username,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'id': id,
       r'username': username,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
       method: 'GET',
@@ -118,11 +118,11 @@ class __EHApi implements _EHApi {
 
   @override
   Future<ApiResult<ServerStatus>> getStatus({CancelToken? cancel}) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ApiResult<ServerStatus>>(Options(
       method: 'GET',
@@ -162,7 +162,7 @@ class __EHApi implements _EHApi {
     String? clientPlatform,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -256,7 +256,7 @@ class __EHApi implements _EHApi {
     String? clientPlatform,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -322,7 +322,7 @@ class __EHApi implements _EHApi {
     String? token,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -364,11 +364,11 @@ class __EHApi implements _EHApi {
     String? token,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'token': token};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ApiResult<TokenWithUserInfo>>(Options(
       method: 'GET',
@@ -399,11 +399,11 @@ class __EHApi implements _EHApi {
     int id, {
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
@@ -434,11 +434,11 @@ class __EHApi implements _EHApi {
     bool data, {
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'data': data};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ApiResult<EhFileExtend>>(Options(
       method: 'GET',
@@ -471,7 +471,7 @@ class __EHApi implements _EHApi {
     bool? thumb,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'is_nsfw': isNsfw,
       r'is_ad': isAd,
@@ -479,7 +479,7 @@ class __EHApi implements _EHApi {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
@@ -509,11 +509,11 @@ class __EHApi implements _EHApi {
     String token, {
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<EhFiles>>(Options(
       method: 'GET',
@@ -551,7 +551,7 @@ class __EHApi implements _EHApi {
     ThumbnailAlign? align,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'max': max,
       r'width': width,
@@ -563,7 +563,7 @@ class __EHApi implements _EHApi {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
@@ -593,11 +593,11 @@ class __EHApi implements _EHApi {
     int gid, {
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ApiResult<GalleryData>>(Options(
       method: 'GET',
@@ -633,7 +633,7 @@ class __EHApi implements _EHApi {
     String? tag,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'all': all,
       r'offset': offset,
@@ -644,7 +644,7 @@ class __EHApi implements _EHApi {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ApiResult<List<GMeta>>>(Options(
       method: 'GET',
@@ -679,11 +679,11 @@ class __EHApi implements _EHApi {
     String id, {
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Tags>>(Options(
       method: 'GET',
@@ -711,11 +711,11 @@ class __EHApi implements _EHApi {
 
   @override
   Future<ApiResult<List<Tag>>> getRowTags({CancelToken? cancel}) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ApiResult<List<Tag>>>(Options(
       method: 'GET',
@@ -753,7 +753,7 @@ class __EHApi implements _EHApi {
     bool? exportAd,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'jpn_title': jpnTitle,
       r'max_length': maxLength,
@@ -761,7 +761,7 @@ class __EHApi implements _EHApi {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
@@ -794,7 +794,7 @@ class __EHApi implements _EHApi {
     String? excludes,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -854,7 +854,7 @@ class __EHApi implements _EHApi {
     bool? isAd,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -908,7 +908,7 @@ class __EHApi implements _EHApi {
     bool? isAd,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -960,11 +960,11 @@ class __EHApi implements _EHApi {
     bool? current,
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'current': current};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<Config>(Options(
       method: 'GET',
@@ -992,7 +992,7 @@ class __EHApi implements _EHApi {
     ConfigOptional cfg, {
     CancelToken? cancel,
   }) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

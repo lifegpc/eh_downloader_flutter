@@ -15,7 +15,7 @@ import 'platform/ua.dart';
 final _log = Logger("ServerSettingsPage");
 
 class ServerSettingsPage extends StatefulWidget {
-  const ServerSettingsPage({Key? key}) : super(key: key);
+  const ServerSettingsPage({super.key});
   static get routeName => "/server_settings";
 
   @override

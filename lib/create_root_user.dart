@@ -9,7 +9,7 @@ import 'login.dart';
 final _log = Logger("CreateRootUserPage");
 
 class CreateRootUserPage extends StatefulWidget {
-  const CreateRootUserPage({Key? key}) : super(key: key);
+  const CreateRootUserPage({super.key});
 
   static const String routeName = '/create_root_user';
 

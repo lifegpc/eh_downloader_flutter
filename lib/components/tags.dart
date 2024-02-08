@@ -11,8 +11,7 @@ import 'scroll_parent.dart';
 
 class TagsPanel extends StatefulWidget {
   const TagsPanel(this.tags,
-      {Key? key, this.controller, this.sliver, this.margin})
-      : super(key: key);
+      {super.key, this.controller, this.sliver, this.margin});
   final List<Tag> tags;
   final ScrollController? controller;
   final bool? sliver;

@@ -9,8 +9,7 @@ import '../globals.dart';
 final _log = Logger("GalleryDetailsPage");
 
 class _KeyValue extends StatelessWidget {
-  const _KeyValue(this.name, this.value, {Key? key, this.fontSize})
-      : super(key: key);
+  const _KeyValue(this.name, this.value, {this.fontSize});
   final String name;
   final String value;
   final double? fontSize;
@@ -39,7 +38,7 @@ class GalleryDetailsPageExtra {
 }
 
 class GalleryDetailsPage extends StatefulWidget {
-  const GalleryDetailsPage(this.gid, {Key? key, this.meta}) : super(key: key);
+  const GalleryDetailsPage(this.gid, {super.key, this.meta});
   final int gid;
   final GMeta? meta;
 

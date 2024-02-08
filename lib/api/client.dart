@@ -220,7 +220,7 @@ abstract class _EHApi {
 }
 
 class EHApi extends __EHApi {
-  EHApi(Dio dio, {required String baseUrl}) : super(dio, baseUrl: baseUrl);
+  EHApi(super.dio, {required String super.baseUrl});
   Future<ApiResult<Token>> createToken(
       {required String username,
       required String password,

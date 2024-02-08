@@ -6,8 +6,7 @@ import 'thumbnail.dart';
 
 class ThumbnailGridView extends StatelessWidget {
   const ThumbnailGridView(this.gdata, this.gridDelegate,
-      {Key? key, this.files, this.gid})
-      : super(key: key);
+      {super.key, this.files, this.gid});
   final GalleryData gdata;
   final int? gid;
   final EhFiles? files;

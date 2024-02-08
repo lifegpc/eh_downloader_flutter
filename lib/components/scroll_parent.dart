@@ -4,8 +4,7 @@ class ScrollParent extends StatelessWidget {
   final ScrollController controller;
   final Widget child;
 
-  const ScrollParent({Key? key, required this.controller, required this.child})
-      : super(key: key);
+  const ScrollParent({super.key, required this.controller, required this.child});
 
   @override
   Widget build(BuildContext context) {

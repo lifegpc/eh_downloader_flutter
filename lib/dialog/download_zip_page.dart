@@ -10,7 +10,7 @@ import '../utils/download_zip.dart';
 final _log = Logger("DownloadZipPage");
 
 class DownloadZipPage extends StatefulWidget {
-  const DownloadZipPage(this.gid, {Key? key}) : super(key: key);
+  const DownloadZipPage(this.gid, {super.key});
   final int gid;
 
   @override

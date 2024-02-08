@@ -27,8 +27,7 @@ class SinglePageViewerExtra {
 
 class SinglePageViewer extends StatefulWidget {
   const SinglePageViewer(
-      {Key? key, required this.gid, required this.index, this.data, this.files})
-      : super(key: key);
+      {super.key, required this.gid, required this.index, this.data, this.files});
   final GalleryData? data;
   final EhFiles? files;
   final int gid;
