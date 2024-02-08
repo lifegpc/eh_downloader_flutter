@@ -6,7 +6,15 @@ import System
 var urlMaps: [CInt: URL] = [:]
 
 func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, append: Bool, isSecure: Bool) {
-  let mode = readOnly && writeOnly ? FileDescriptor.AccessMode.readWrite : readOnly ? FileDescriptor.AccessMode.readOnly : writeOnly ? FileDescriptor.AccessMode.writeOnly : FileDescriptor.AccessMode.readWrite;
+  let mode = if readOnly && writeOnly {
+    FileDescriptor.AccessMode.readWrite
+  } else if readOnly {
+    FileDescriptor.AccessMode.readOnly
+  } else if writeOnly {
+    FileDescriptor.AccessMode.writeOnly
+  } else {
+    FileDescriptor.AccessMode.readWrite
+  }
   var opts = FileDescriptor.OpenOptions.init()
   if writeOnly {
     opts.insert(FileDescriptor.OpenOptions.create)
@@ -17,7 +25,7 @@ func openFile(result: FlutterResult, url: URL, readOnly: Bool, writeOnly: Bool, 
   if append {
     opts.insert(FileDescriptor.OpenOptions.append)
   }
-  var uPath = if #available(iOS 16.0, *) {
+  let uPath = if #available(iOS 16.0, *) {
     url.path(percentEncoded: false)
   } else {
     url.path
@@ -138,13 +146,13 @@ class FilePickerDelegate: NSObject, UIDocumentPickerDelegate {
               result(FlutterError(code: "FAILED_TO_GET_CACHE_DIRERCTORY", message: nil, details: nil))
               return
             }
-            var dUrl = if #available(iOS 16.0, *) {
+            let dUrl = if #available(iOS 16.0, *) {
               URL.init(filePath: path!)
             } else {
               URL.init(fileURLWithPath: path!)
             }
             let url = dUrl.appendingPathComponent(fileName + (ext ?? ""))
-            var uPath = if #available(iOS 16.0, *) {
+            let uPath = if #available(iOS 16.0, *) {
               url.path(percentEncoded: false)
             } else {
               url.path
