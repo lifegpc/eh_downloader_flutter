@@ -35,7 +35,7 @@ jobs:
       - name: Setup msbuild
         uses: microsoft/setup-msbuild@v2
       - name: Build resources
-        run: cd windows/resources && msbuild /p:Configuration=Release && COPY /Y "x64/Release/resources.dll" "../../build/windows/x64/runner/Release/resources.dll"
+        run: cd windows/resources && msbuild /p:Configuration=Release && Copy-Item "x64/Release/resources.dll" -Destination "../../build/windows/x64/runner/Release/resources.dll"
       - name: Package files
         run: cd build/windows/x64/runner/Release && 7z a -mx9 -y ../../../../../windows.7z
       - name: Upload files
