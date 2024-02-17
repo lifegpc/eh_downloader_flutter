@@ -42,6 +42,7 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       redirectToFlutter: json['redirect_to_flutter'] as bool,
       downloadTimeoutCheckInterval:
           json['download_timeout_check_interval'] as int,
+      ehMetadataCacheTime: json['eh_metadata_cache_time'] as int,
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -74,6 +75,7 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'ffprobe_path': instance.ffprobePath,
       'redirect_to_flutter': instance.redirectToFlutter,
       'download_timeout_check_interval': instance.downloadTimeoutCheckInterval,
+      'eh_metadata_cache_time': instance.ehMetadataCacheTime,
     };
 
 const _$ThumbnailMethodEnumMap = {
@@ -128,6 +130,7 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
       redirectToFlutter: json['redirect_to_flutter'] as bool?,
       downloadTimeoutCheckInterval:
           json['download_timeout_check_interval'] as int?,
+      ehMetadataCacheTime: json['eh_metadata_cache_time'] as int?,
     );
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
@@ -161,4 +164,5 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'ffprobe_path': instance.ffprobePath,
       'redirect_to_flutter': instance.redirectToFlutter,
       'download_timeout_check_interval': instance.downloadTimeoutCheckInterval,
+      'eh_metadata_cache_time': instance.ehMetadataCacheTime,
     };

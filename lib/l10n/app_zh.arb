@@ -149,5 +149,7 @@
     "running": "运行中",
     "finished": "已完成",
     "failed": "已失败",
-    "allTasks": "所有任务"
+    "allTasks": "所有任务",
+    "ehMetadataCacheTime": "E-Hentai 画廊元数据缓存时间",
+    "hour": "小时"
 }

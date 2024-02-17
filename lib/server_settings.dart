@@ -692,6 +692,22 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               });
             },
           )),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue:
+                _now.ehMetadataCacheTime ?? _config!.ehMetadataCacheTime,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.ehMetadataCacheTime,
+              suffixText: i18n.hour,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.ehMetadataCacheTime = s;
+                _changed = true;
+              });
+            },
+          )),
         ]));
   }
 
