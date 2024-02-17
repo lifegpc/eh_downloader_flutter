@@ -94,6 +94,7 @@ BEGIN
     IDS_PNG                 "PNG 文件"
     IDS_GIF                 "GIF 文件"
     IDS_ZIP                 "ZIP 文件"
+    IDS_ALL_FILES           "所有文件"
 END
 
 #endif    // 中文(简体，中国) resources
@@ -156,6 +157,7 @@ BEGIN
     IDS_PNG                 "PNG File"
     IDS_GIF                 "GIF File"
     IDS_ZIP                 "ZIP File"
+    IDS_ALL_FILES           "All Files"
 END
 
 #endif    // 英语(美国) resources

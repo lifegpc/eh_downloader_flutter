@@ -1,12 +1,13 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ Éú³ÉµÄ°üº¬ÎÄ¼ş¡£
-// ¹© resources.rc Ê¹ÓÃ
+// Microsoft Visual C++ ç”Ÿæˆçš„åŒ…å«æ–‡ä»¶ã€‚
+// ä¾› resources.rc ä½¿ç”¨
 //
 #define IDS_JPEG                        101
 #define IDS_PNG                         102
 #define IDS_GIF                         103
 #define IDR_VERSION2                    103
 #define IDS_ZIP                         104
+#define IDS_ALL_FILES                   105
 
 // Next default values for new objects
 // 

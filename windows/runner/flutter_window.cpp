@@ -18,7 +18,29 @@
 #include "fileop.h"
 #include "wchar_util.h"
 
+#include "../resources/resource.h"
+
 using namespace std;
+
+static HMODULE resourceModule = NULL;
+static bool resourceModuleTryLoad = false;
+
+wstring gettext(DWORD messageId, wstring text) {
+  if (!resourceModuleTryLoad) {
+    resourceModule = LoadLibraryExW(L"resources.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
+    resourceModuleTryLoad = true;
+  }
+  if (resourceModule) {
+    LPWSTR buf;
+    DWORD len;
+    if (!(len = LoadStringW(resourceModule, messageId, (LPWSTR)&buf, 0))) {
+      return text;
+    }
+    wstring tmp(buf, len);
+    return tmp;
+  }
+  return text;
+}
 
 #define MAX_PATH_SIZE 32768
 
@@ -39,16 +61,20 @@ void filterDirname(std::string& dirName) {
 
 void updateDataFromMimeType(std::wstring& defExt, std::wstring& filter, std::string mimeType) {
   if (mimeType == "image/jpeg") {
-    filter.append(std::wstring(L"JPEG File(*.jpg)\0*.jpg\0", 23));
+    filter.append(gettext(IDS_JPEG, L"JPEG File"));
+    filter.append(std::wstring(L"(*.jpg)\0*.jpg\0", 14));
     defExt = L"jpg";
   } else if (mimeType == "image/png") {
-    filter.append(std::wstring(L"PNG File(*.png)\0*.png\0", 22));
+    filter.append(gettext(IDS_PNG, L"PNG File"));
+    filter.append(std::wstring(L"(*.png)\0*.png\0", 14));
     defExt = L"png";
   } else if (mimeType == "image/gif") {
-    filter.append(std::wstring(L"GIF File(*.gif)\0*.gif\0", 22));
+    filter.append(gettext(IDS_GIF, L"GIF File"));
+    filter.append(std::wstring(L"(*.gif)\0*.gif\0", 14));
     defExt = L"gif";
   } else if (mimeType == "application/zip") {
-    filter.append(std::wstring(L"ZIP File(*.zip)\0*.zip\0", 22));
+    filter.append(gettext(IDS_ZIP, L"ZIP File"));
+    filter.append(std::wstring(L"(*.zip)\0*.zip\0", 14));
     defExt = L"zip";
   }
 }
@@ -137,7 +163,8 @@ bool FlutterWindow::OnCreate() {
               std::wstring filter;
               std::wstring defExt;
               updateDataFromMimeType(defExt, filter, *mimeType);
-              filter.append(std::wstring(L"All Files\0*.*\0\0", 15));
+              filter.append(gettext(IDS_ALL_FILES, L"All Files"));
+              filter.append(std::wstring(L"\0*.*\0\0", 6));
               ofn.lpstrFilter = filter.c_str();
               ofn.lpstrDefExt = defExt.empty() ? nullptr : defExt.c_str();
               wchar_t wFileNameBuf[MAX_PATH_SIZE];
