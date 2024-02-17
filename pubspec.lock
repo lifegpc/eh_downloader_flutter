@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: eb376e9acf6938204f90eb3b1f00b578640d3188b4c8a8ec054f9f479af8d051
+      sha256: "0b2f2bd91ba804e53a61d757b986f89f1f9eaed5b11e4b2f5a2468d86d6c9fc7"
       url: "https://pub.dev"
     source: hosted
-    version: "64.0.0"
+    version: "67.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "69f54f967773f6c26c7dcb13e93d7ccee8b17a641689da39e878d5cf13b06893"
+      sha256: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.0"
+    version: "6.4.1"
   archive:
     dependency: transitive
     description:
@@ -278,10 +278,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
+      sha256: "493f37e7df1804778ff3a53bd691d8692ddf69702cf4c1c1096a2e41b4779e21"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   file:
     dependency: "direct main"
     description:
@@ -328,10 +328,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_markdown
-      sha256: "30088ce826b5b9cfbf9e8bece34c716c8a59fa54461dcae1e4ac01a94639e762"
+      sha256: "21b085a1c185e46701373866144ced56cfb7a0c33f63c916bb8fe2d0c1491278"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.18+3"
+    version: "0.6.19"
   flutter_staggered_grid_view:
     dependency: transitive
     description:
@@ -370,10 +370,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: "07ee2436909f749d606f53521dc1725dd738dc5196e5ff815bc254253c594075"
+      sha256: "170c46e237d6eb0e6e9f0e8b3f56101e14fb64f787016e42edd74c39cf8b176a"
       url: "https://pub.dev"
     source: hosted
-    version: "13.1.0"
+    version: "13.2.0"
   graphs:
     dependency: transitive
     description:
@@ -410,10 +410,10 @@ packages:
     dependency: "direct main"
     description:
       name: image
-      sha256: "49a0d4b0c12402853d3f227fe7c315601b238d126aa4caa5dbb2dcf99421aa4a"
+      sha256: "4c68bfd5ae83e700b5204c1e74451e7bf3cf750e6843c6e158289cf56bda018e"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.6"
+    version: "4.1.7"
   infinite_scroll_pagination:
     dependency: "direct main"
     description:
@@ -442,18 +442,18 @@ packages:
     dependency: transitive
     description:
       name: irondash_engine_context
-      sha256: "294a0e21c4358ff17264e6b811c615b664cebb33b49ad2ddb54f8110e7714510"
+      sha256: "4f5e2629296430cce08cdff42e47cef07b8f74a64fdbdfb0525d147bc1a969a2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.5.2"
   irondash_message_channel:
     dependency: transitive
     description:
       name: irondash_message_channel
-      sha256: "131d64d97a3612bc3617aefc878f3e3a8e23e0ce18b3bba8e78cb1930befcec1"
+      sha256: dd581214215dca054bd9873209d690ec3609288c28774cb509dbd86b21180cf8
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   js:
     dependency: transitive
     description:
@@ -674,10 +674,10 @@ packages:
     dependency: transitive
     description:
       name: pixel_snap
-      sha256: d31591a4f4aa8ed5dc6fc00b8d027338a5614dfbf5ca658b69d1faa7aba80af7
+      sha256: "677410ea37b07cd37ecb6d5e6c0d8d7615a7cf3bd92ba406fd1ac57e937d1fb0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.4"
+    version: "0.1.5"
   platform:
     dependency: transitive
     description:
@@ -911,26 +911,26 @@ packages:
     dependency: "direct main"
     description:
       name: super_clipboard
-      sha256: "77f044320934386e0b7a3911e05312426d7f33deb6e8cdb28886663430b0e5b0"
+      sha256: "15d25eb88df8e904e0c2ef77378c6010cc57bbfc0b6f91f2416d08fad5fcca92"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   super_context_menu:
     dependency: "direct main"
     description:
       name: super_context_menu
-      sha256: e4887211f8d14e25a5f472d1a6351798e13e887e986403d853e5df93b80f8939
+      sha256: a8e8d813ed109b6c76ea5ed37ed7d4ac371e2989825edb1b214a2296f0951df6
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   super_native_extensions:
     dependency: transitive
     description:
       name: super_native_extensions
-      sha256: "4699f5b00320290475953c914f823a8b44e10ed8c1e38ce5c8e8426336d11c15"
+      sha256: f96db6b137a0b135e43034289bb55ca6447b65225076036e81f97ebb6381ffeb
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   term_glyph:
     dependency: transitive
     description:
@@ -1031,18 +1031,18 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
+      sha256: "4188706108906f002b3a293509234588823c8c979dc83304e229ff400c996b05"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.2"
   web_socket_channel:
     dependency: "direct main"
     description:
       name: web_socket_channel
-      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
+      sha256: "939ab60734a4f8fa95feacb55804fa278de28bdeef38e616dc08e44a84adea23"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.4.3"
   win32:
     dependency: transitive
     description:
@@ -1092,5 +1092,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0 <4.0.0"
+  dart: ">=3.3.0-279.1.beta <4.0.0"
   flutter: ">=3.16.0"
