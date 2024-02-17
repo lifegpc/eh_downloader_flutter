@@ -20,6 +20,7 @@ import 'logs/file.dart';
 import 'server_settings.dart';
 import 'set_server.dart';
 import 'settings.dart';
+import 'task_manager.dart';
 import 'utils.dart';
 import 'viewer/single.dart';
 
@@ -159,8 +160,12 @@ final _router = GoRouter(
         }),
     GoRoute(
       path: ServerSettingsPage.routeName,
-      builder: (context, state) => const ServerSettingsPage(),
-    )
+      builder: (context, state) => ServerSettingsPage(key: state.pageKey),
+    ),
+    GoRoute(
+      path: TaskManagerPage.routeName,
+      builder: (context, state) => TaskManagerPage(key: state.pageKey),
+    ),
   ],
 );
 
@@ -225,13 +230,15 @@ class MainApp extends StatefulWidget {
       context.findAncestorStateOfType<_MainApp>()!;
 }
 
-class _MainApp extends State<MainApp> {
+class _MainApp extends State<MainApp> with WidgetsBindingObserver {
   ThemeMode _themeMode = ThemeMode.system;
   ThemeData _themeData = ThemeData(useMaterial3: true);
   ThemeData _darkThemeData = ThemeData.dark(useMaterial3: true);
   ThemeMode get themeMode => _themeMode;
   Lang _lang = Lang.system;
   Lang get lang => _lang;
+  AppLifecycleState? _lifecycleState;
+  AppLifecycleState? get lifecycleState => _lifecycleState;
 
   @override
   void initState() {
@@ -250,6 +257,23 @@ class _MainApp extends State<MainApp> {
       _themeData = _themeData.useSystemChineseFont(Brightness.light);
       _darkThemeData = _darkThemeData.useSystemChineseFont(Brightness.dark);
     }
+    WidgetsBinding.instance.addObserver(this);
+    if (WidgetsBinding.instance.lifecycleState != null) {
+      _lifecycleState = WidgetsBinding.instance.lifecycleState;
+      listener.tryEmit("lifecycle", _lifecycleState);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _lifecycleState = state;
+    listener.tryEmit("lifecycle", _lifecycleState);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

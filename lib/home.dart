@@ -42,6 +42,16 @@ class HomeDrawer extends StatelessWidget {
                 },
               )
             : Container(),
+        auth.canManageTasks == true
+            ? ListTile(
+                leading: const Icon(Icons.task),
+                title: Text(AppLocalizations.of(context)!.taskManager),
+                onTap: () {
+                  Scaffold.of(context).closeDrawer();
+                  context.push("/task_manager");
+                },
+              )
+            : Container(),
         ListTile(
           leading: const Icon(Icons.settings),
           title: Text(AppLocalizations.of(context)!.settings),

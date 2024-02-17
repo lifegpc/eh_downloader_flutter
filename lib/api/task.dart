@@ -138,11 +138,11 @@ class TaskProgress {
   const TaskProgress({
     required this.type,
     required this.taskId,
-    required this.progress,
+    required this.detail,
   });
   final TaskType type;
   final int taskId;
-  final TaskProgressBasicType progress;
+  final TaskProgressBasicType detail;
   factory TaskProgress.fromJson(Map<String, dynamic> json) {
     final type = json['type'] as int;
     final taskId = json['task_id'] as int;
@@ -151,29 +151,29 @@ class TaskProgress {
         return TaskProgress(
           type: TaskType.download,
           taskId: taskId,
-          progress: TaskDownloadProgess.fromJson(
-              json['progress'] as Map<String, dynamic>),
+          detail: TaskDownloadProgess.fromJson(
+              json['detail'] as Map<String, dynamic>),
         );
       case 1:
         return TaskProgress(
           type: TaskType.exportZip,
           taskId: taskId,
-          progress: TaskExportZipProgress.fromJson(
-              json['progress'] as Map<String, dynamic>),
+          detail: TaskExportZipProgress.fromJson(
+              json['detail'] as Map<String, dynamic>),
         );
       case 2:
         return TaskProgress(
           type: TaskType.updateMeiliSearchData,
           taskId: taskId,
-          progress: TaskUpdateMeiliSearchDataProgress.fromJson(
-              json['progress'] as Map<String, dynamic>),
+          detail: TaskUpdateMeiliSearchDataProgress.fromJson(
+              json['detail'] as Map<String, dynamic>),
         );
       case 3:
         return TaskProgress(
           type: TaskType.fixGalleryPage,
           taskId: taskId,
-          progress: TaskFixGalleryPageProgress.fromJson(
-              json['progress'] as Map<String, dynamic>),
+          detail: TaskFixGalleryPageProgress.fromJson(
+              json['detail'] as Map<String, dynamic>),
         );
       default:
         throw ArgumentError.value(type, 'type', 'Invalid task type');
@@ -200,9 +200,37 @@ class TaskDetail {
     this.error,
     this.fataled,
   });
-  final Task base;
+  Task base;
   TaskProgressBasicType? progress;
   TaskStatus status;
   String? error;
   bool? fataled;
+}
+
+@JsonSerializable()
+class TaskList {
+  const TaskList({
+    required this.tasks,
+    required this.running,
+  });
+  final List<Task> tasks;
+  final List<int> running;
+  factory TaskList.fromJson(Map<String, dynamic> json) =>
+      _$TaskListFromJson(json);
+  Map<String, dynamic> toJson() => _$TaskListToJson(this);
+}
+
+@JsonSerializable()
+class TaskError {
+  const TaskError({
+    required this.task,
+    required this.error,
+    required this.fatal,
+  });
+  final Task task;
+  final String error;
+  final bool fatal;
+  factory TaskError.fromJson(Map<String, dynamic> json) =>
+      _$TaskErrorFromJson(json);
+  Map<String, dynamic> toJson() => _$TaskErrorToJson(this);
 }

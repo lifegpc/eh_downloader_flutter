@@ -143,5 +143,11 @@
     "redirectToFlutter": "Redirect to Flutter frontend when accessing the root URL.",
     "downloadTimeoutCheckInterval": "The interval of checking download timeout",
     "downloadTimeoutCheckIntervalHelp": "The smaller the value, the more accurate the timeout detection, but the higher CPU usage.",
-    "dockerHelper": "The server is running in a Docker container. Unless you know what you are doing, do not change this setting."
+    "dockerHelper": "The server is running in a Docker container. Unless you know what you are doing, do not change this setting.",
+    "taskManager": "Task Manager",
+    "waiting": "Waiting",
+    "running": "Running",
+    "finished": "Finished",
+    "failed": "Failed",
+    "allTasks": "All Tasks"
 }

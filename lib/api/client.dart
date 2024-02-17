@@ -271,6 +271,19 @@ class EHApi extends __EHApi {
     return newUri.toString();
   }
 
+  Uri getTaskUrl() {
+    final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
+    final nuri = uri.resolve("task");
+    return Uri(
+      scheme: uri.scheme == "https" ? "wss" : "ws",
+      userInfo: nuri.userInfo,
+      host: nuri.host,
+      port: nuri.port,
+      path: nuri.path,
+      query: nuri.query,
+    );
+  }
+
   String getThumbnailUrl(int id,
       {int? max,
       int? width,

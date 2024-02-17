@@ -120,3 +120,27 @@ Map<String, dynamic> _$TaskFixGalleryPageProgressToJson(
       'total_gallery': instance.totalGallery,
       'checked_gallery': instance.checkedGallery,
     };
+
+TaskList _$TaskListFromJson(Map<String, dynamic> json) => TaskList(
+      tasks: (json['tasks'] as List<dynamic>)
+          .map((e) => Task.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      running: (json['running'] as List<dynamic>).map((e) => e as int).toList(),
+    );
+
+Map<String, dynamic> _$TaskListToJson(TaskList instance) => <String, dynamic>{
+      'tasks': instance.tasks,
+      'running': instance.running,
+    };
+
+TaskError _$TaskErrorFromJson(Map<String, dynamic> json) => TaskError(
+      task: Task.fromJson(json['task'] as Map<String, dynamic>),
+      error: json['error'] as String,
+      fatal: json['fatal'] as bool,
+    );
+
+Map<String, dynamic> _$TaskErrorToJson(TaskError instance) => <String, dynamic>{
+      'task': instance.task,
+      'error': instance.error,
+      'fatal': instance.fatal,
+    };

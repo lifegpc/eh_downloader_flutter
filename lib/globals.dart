@@ -37,9 +37,11 @@ final dio = Dio()
   ..options.extra['withCredentials'] = true;
 Config? _prefs;
 EHApi? _api;
+PersistCookieJar? _jar;
 
 Future<void> prepareJar() async {
   final jar = PersistCookieJar(storage: FileStorage(await getJarPath()));
+  _jar = jar;
   dio.interceptors.add(CookieManager(jar));
 }
 
@@ -104,6 +106,10 @@ EHApi get api {
   return _api!;
 }
 
+PersistCookieJar? get cookieJar {
+  return _jar;
+}
+
 final AuthInfo auth = AuthInfo();
 final Clipboard platformClipboard = Clipboard();
 final Display platformDisplay = Display();
@@ -121,6 +127,7 @@ enum MoreVertSettings {
   markAsNsfw,
   markAsSfw,
   serverSettings,
+  taskManager,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -142,6 +149,9 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
       break;
     case MoreVertSettings.serverSettings:
       context.push("/server_settings");
+      break;
+    case MoreVertSettings.taskManager:
+      context.push("/task_manager");
       break;
     default:
       break;
@@ -175,6 +185,11 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     list.add(PopupMenuItem(
         value: MoreVertSettings.serverSettings,
         child: Text(AppLocalizations.of(context)!.serverSettings)));
+  }
+  if (path != "/task_manager" && auth.canManageTasks == true) {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.taskManager,
+        child: Text(AppLocalizations.of(context)!.taskManager)));
   }
   var showNsfw = prefs.getBool("showNsfw") ?? false;
   list.add(PopupMenuItem(
