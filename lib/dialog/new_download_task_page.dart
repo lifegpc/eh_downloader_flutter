@@ -37,6 +37,8 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
             : "");
     _gidController = TextEditingController(text: widget.gid?.toString());
     _tokenController = TextEditingController(text: widget.token);
+    _gid = widget.gid;
+    _token = widget.token;
     super.initState();
   }
 
@@ -46,8 +48,6 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
     _gidController.dispose();
     _tokenController.dispose();
     _cancel?.cancel();
-    _gid = widget.gid;
-    _token = widget.token;
     super.dispose();
   }
 
