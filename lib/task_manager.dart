@@ -2,6 +2,7 @@ import 'package:enum_flag/enum_flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'api/task.dart';
 import 'globals.dart';
 
 enum TaskStatusFilterFlag with EnumFlag {
@@ -98,30 +99,65 @@ class _TaskManagerPage extends State<TaskManagerPage>
     ));
   }
 
+  Widget _buildView(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.canPop() ? context.pop() : context.go("/");
+            },
+          ),
+          title: Text(i18n.taskManager),
+          actions: [
+            buildThemeModeIcon(context),
+            buildMoreVertSettingsButon(context),
+          ],
+          floating: true,
+        ),
+        _buildChips(),
+      ],
+    );
+  }
+
+  Widget _buildAddMenu(BuildContext context) {
+    return PopupMenuButton(
+        icon: const Icon(Icons.add),
+        itemBuilder: (context) {
+          return [
+            PopupMenuItem(
+              value: TaskType.download,
+              child: Text(AppLocalizations.of(context)!.createDownloadTask),
+            )
+          ];
+        },
+        onSelected: (TaskType type) {
+          if (type == TaskType.download) {
+            context.push("/dialog/new_download_task");
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!tryInitApi(context)) {
+      return Container();
+    }
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
       setCurrentTitle(i18n.taskManager, Theme.of(context).primaryColor.value);
     }
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                context.canPop() ? context.pop() : context.go("/");
-              },
-            ),
-            title: Text(i18n.taskManager),
-            actions: [
-              buildThemeModeIcon(context),
-              buildMoreVertSettingsButon(context),
-            ],
-            floating: true,
-          ),
-          _buildChips(),
+      body: Stack(
+        children: <Widget>[
+          _buildView(context),
+          Positioned(
+              bottom: size.height / 10,
+              right: size.width / 10,
+              child: _buildAddMenu(context))
         ],
       ),
     );

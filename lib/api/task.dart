@@ -234,3 +234,26 @@ class TaskError {
       _$TaskErrorFromJson(json);
   Map<String, dynamic> toJson() => _$TaskErrorToJson(this);
 }
+
+@JsonSerializable()
+class DownloadConfig {
+  DownloadConfig ({
+    this.maxDownloadImgCount,
+    this.mpv,
+    this.downloadOriginalImg,
+    this.maxRetryCount,
+    this.removePreviousGallery,
+  });
+  @JsonKey(name: 'max_download_img_count')
+  int? maxDownloadImgCount;
+  bool? mpv;
+  @JsonKey(name: 'download_original_img')
+  bool? downloadOriginalImg;
+  @JsonKey(name: 'max_retry_count')
+  int? maxRetryCount;
+  @JsonKey(name: 'remove_previous_gallery')
+  bool? removePreviousGallery;
+  factory DownloadConfig.fromJson(Map<String, dynamic> json) =>
+      _$DownloadConfigFromJson(json);
+  Map<String, dynamic> toJson() => _$DownloadConfigToJson(this);
+}

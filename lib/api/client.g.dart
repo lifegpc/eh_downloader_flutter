@@ -1020,6 +1020,100 @@ class __EHApi implements _EHApi {
     return value;
   }
 
+  @override
+  Future<ApiResult<EHMetaInfo>> getMetaInfo(
+    List<int> gids,
+    List<String> tokens, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'gid': gids,
+      r'token': tokens,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<EHMetaInfo>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/eh/metadata',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<EHMetaInfo>.fromJson(
+      _result.data!,
+      (json) => EHMetaInfo.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<Task>> createDownloadTask(
+    int gid,
+    String token, {
+    DownloadConfig? cfg,
+    String t = "download",
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'gid',
+      gid.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'token',
+      token,
+    ));
+    _data.fields.add(MapEntry(
+      'cfg',
+      jsonEncode(cfg ?? <String, dynamic>{}),
+    ));
+    _data.fields.add(MapEntry(
+      'type',
+      t,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Task>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/task',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<Task>.fromJson(
+      _result.data!,
+      (json) => Task.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

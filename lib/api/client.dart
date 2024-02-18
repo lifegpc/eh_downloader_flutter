@@ -7,9 +7,11 @@ import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
 import 'config.dart';
+import 'eh.dart';
 import 'gallery.dart';
 import 'status.dart';
 import 'tags.dart';
+import 'task.dart';
 import 'token.dart';
 import 'user.dart';
 
@@ -217,6 +219,21 @@ abstract class _EHApi {
   Future<UpdateConfigResult> updateConfig(
       @Body(nullToAbsent: false) ConfigOptional cfg,
       {@CancelRequest() CancelToken? cancel});
+
+  @GET('/eh/metadata')
+  Future<ApiResult<EHMetaInfo>> getMetaInfo(
+      @Query("gid") List<int> gids, @Query("token") List<String> tokens,
+      {@CancelRequest() CancelToken? cancel});
+
+  @PUT('/task')
+  @MultiPart()
+  Future<ApiResult<Task>> createDownloadTask(
+    @Part(name: "gid") int gid,
+    @Part(name: "token") String token, {
+    @Part(name: "cfg") DownloadConfig? cfg,
+    @Part(name: "type") String t = "download",
+    @CancelRequest() CancelToken? cancel,
+  });
 }
 
 class EHApi extends __EHApi {

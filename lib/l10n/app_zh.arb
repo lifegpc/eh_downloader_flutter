@@ -151,5 +151,8 @@
     "failed": "已失败",
     "allTasks": "所有任务",
     "ehMetadataCacheTime": "E-Hentai 画廊元数据缓存时间",
-    "hour": "小时"
+    "hour": "小时",
+    "createDownloadTask": "新建下载任务",
+    "galleryURL": "画廊地址",
+    "galleryToken": "画廊令牌"
 }

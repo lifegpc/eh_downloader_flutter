@@ -11,6 +11,7 @@ import 'create_root_user.dart';
 import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
 import 'dialog/gallery_details_page.dart';
+import 'dialog/new_download_task_page.dart';
 import 'galleries.dart';
 import 'gallery.dart';
 import 'globals.dart';
@@ -166,6 +167,23 @@ final _router = GoRouter(
       path: TaskManagerPage.routeName,
       builder: (context, state) => TaskManagerPage(key: state.pageKey),
     ),
+    GoRoute(
+        path: "/dialog/new_download_task",
+        pageBuilder: (context, state) {
+          int? gid;
+          String? token;
+          if (state.uri.queryParameters.containsKey("gid")) {
+            gid = int.tryParse(state.uri.queryParameters["gid"]!);
+          }
+          if (state.uri.queryParameters.containsKey("token")) {
+            token = state.uri.queryParameters["token"]!;
+          }
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return NewDownloadTaskPage(gid: gid, token: token);
+              });
+        })
   ],
 );
 

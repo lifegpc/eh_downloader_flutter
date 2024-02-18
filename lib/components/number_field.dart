@@ -10,7 +10,8 @@ class NumberFormField extends StatelessWidget {
       this.initialValue,
       this.errorMsg,
       this.decoration,
-      this.onChanged});
+      this.onChanged,
+      this.controller});
 
   final int? min;
   final int? max;
@@ -18,11 +19,13 @@ class NumberFormField extends StatelessWidget {
   final String? errorMsg;
   final InputDecoration? decoration;
   final Function(int?)? onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     return TextFormField(
+        controller: controller,
         initialValue: initialValue?.toString(),
         keyboardType: TextInputType.number,
         inputFormatters: [

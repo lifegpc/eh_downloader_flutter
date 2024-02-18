@@ -151,5 +151,8 @@
     "failed": "Failed",
     "allTasks": "All Tasks",
     "ehMetadataCacheTime": "The time to cache the metadata of the gallery from E-Hentai",
-    "hour": "hour"
+    "hour": "hour",
+    "createDownloadTask": "Create Download Task",
+    "galleryURL": "Gallery URL",
+    "galleryToken": "Gallery Token"
 }

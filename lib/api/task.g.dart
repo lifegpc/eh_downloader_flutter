@@ -144,3 +144,21 @@ Map<String, dynamic> _$TaskErrorToJson(TaskError instance) => <String, dynamic>{
       'error': instance.error,
       'fatal': instance.fatal,
     };
+
+DownloadConfig _$DownloadConfigFromJson(Map<String, dynamic> json) =>
+    DownloadConfig(
+      maxDownloadImgCount: json['max_download_img_count'] as int?,
+      mpv: json['mpv'] as bool?,
+      downloadOriginalImg: json['download_original_img'] as bool?,
+      maxRetryCount: json['max_retry_count'] as int?,
+      removePreviousGallery: json['remove_previous_gallery'] as bool?,
+    );
+
+Map<String, dynamic> _$DownloadConfigToJson(DownloadConfig instance) =>
+    <String, dynamic>{
+      'max_download_img_count': instance.maxDownloadImgCount,
+      'mpv': instance.mpv,
+      'download_original_img': instance.downloadOriginalImg,
+      'max_retry_count': instance.maxRetryCount,
+      'remove_previous_gallery': instance.removePreviousGallery,
+    };
