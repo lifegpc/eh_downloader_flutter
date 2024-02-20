@@ -14,11 +14,35 @@ class TaskManager {
   bool _closed = false;
   bool _allowReconnect = true;
   Timer? _reconnectTimer;
+  List<int> tasksList = [];
   void clear() {
     tasks.clear();
     _channel?.stream.drain();
     _channel?.sink.close();
     _closed = true;
+  }
+
+  void addToTasksList(Task task, TaskStatus status) {
+    if (status == TaskStatus.finished) {
+      tasksList.add(task.id);
+      return;
+    }
+    final index = tasksList.indexWhere((element) {
+      final otask = tasks[element];
+      if (otask == null) {
+        return false;
+      }
+      if (status == TaskStatus.wait) {
+        return otask.status == TaskStatus.finished;
+      } else {
+        return otask.status == TaskStatus.wait;
+      }
+    });
+    if (index == -1) {
+      tasksList.add(task.id);
+    } else {
+      tasksList.insert(index, task.id);
+    }
   }
 
   Future<void> connect() async {
@@ -32,36 +56,49 @@ class TaskManager {
           if (type == "tasks") {
             final list = TaskList.fromJson(data);
             for (var task in list.tasks) {
+              final status = list.running.contains(task.id)
+                  ? TaskStatus.running
+                  : TaskStatus.wait;
               tasks[task.id] = TaskDetail(
                 base: task,
-                status: list.running.contains(task.id)
-                    ? TaskStatus.running
-                    : TaskStatus.wait,
+                status: status,
               );
+              addToTasksList(task, status);
             }
+            listener.tryEmit("task_list_changed", null);
           } else if (type == "new_task") {
             final task = Task.fromJson(data["detail"] as Map<String, dynamic>);
             tasks[task.id] = TaskDetail(
               base: task,
               status: TaskStatus.wait,
             );
+            addToTasksList(task, TaskStatus.wait);
+            listener.tryEmit("task_list_changed", null);
           } else if (type == "task_started") {
             final task = Task.fromJson(data["detail"] as Map<String, dynamic>);
             tasks.update(task.id, (value) {
               value.status = TaskStatus.running;
+              tasksList.remove(task.id);
+              tasksList.add(task.id);
               return value;
-            },
-                ifAbsent: () => TaskDetail(
-                      base: task,
-                      status: TaskStatus.running,
-                    ));
+            }, ifAbsent: () {
+              addToTasksList(task, TaskStatus.running);
+              return TaskDetail(
+                base: task,
+                status: TaskStatus.running,
+              );
+            });
+            listener.tryEmit("task_list_changed", null);
           } else if (type == "task_finished") {
             final task = Task.fromJson(data["detail"] as Map<String, dynamic>);
             if (tasks.containsKey(task.id)) {
               tasks.update(task.id, (value) {
                 value.status = TaskStatus.finished;
+                tasksList.remove(task.id);
+                tasksList.add(task.id);
                 return value;
               });
+              listener.tryEmit("task_list_changed", null);
             }
           } else if (type == "task_progress") {
             final task =
@@ -88,9 +125,16 @@ class TaskManager {
                 value.status = TaskStatus.failed;
                 value.error = info.error;
                 value.fataled = info.fatal;
+                if (info.fatal) {
+                  tasksList.remove(info.task.id);
+                  tasksList.add(info.task.id);
+                  listener.tryEmit("task_list_changed", null);
+                }
                 return value;
               });
             }
+          } else if (type == "ping") {
+            _channel?.sink.add("{\"type\":\"pong\"}");
           }
         } catch (e) {
           _log.warning("Error processing task message: $e");

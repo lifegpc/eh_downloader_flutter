@@ -1,5 +1,7 @@
+import 'dart:ui';
 import 'package:enum_flag/enum_flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'api/task.dart';
@@ -37,6 +39,20 @@ class TaskStatusFilter {
     code |= flag.value;
   }
 
+  bool filter(TaskStatus status) {
+    if (isAll) return true;
+    switch (status) {
+      case TaskStatus.wait:
+        return has(TaskStatusFilterFlag.wait);
+      case TaskStatus.running:
+        return has(TaskStatusFilterFlag.running);
+      case TaskStatus.finished:
+        return has(TaskStatusFilterFlag.finished);
+      case TaskStatus.failed:
+        return has(TaskStatusFilterFlag.failed);
+    }
+  }
+
   void remove(TaskStatusFilterFlag flag) {
     code &= ~flag.value;
   }
@@ -57,7 +73,57 @@ class _TaskManagerPage extends State<TaskManagerPage>
   @override
   void initState() {
     _filter = TaskStatusFilter();
+    listener.on("task_list_changed", _onStateChanged);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    listener.removeEventListener("task_list_changed", _onStateChanged);
+    super.dispose();
+  }
+
+  void _onStateChanged(dynamic _) {
+    setState(() {});
+  }
+
+  Widget _buildItem(BuildContext context, int index) {
+    final task = tasks.tasks[tasks.tasksList[index]];
+    if (task == null) {
+      return Container(key: ValueKey("unknown_$index"));
+    }
+    if (!_filter.filter(task.status)) {
+      return Container(key: ValueKey("filtered_task_${task.base.id}"));
+    }
+    return Padding(
+        padding: const EdgeInsets.all(8),
+        key: ValueKey("task_${task.base.id}"),
+        child: Text("TODO ${task.base.id}"));
+  }
+
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (BuildContext context, Widget? child) {
+        final double animValue = Curves.easeInOut.transform(animation.value);
+        final double elevation = lerpDouble(0, 6, animValue)!;
+        return Material(
+          elevation: elevation,
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {}
+
+  Widget _buildList(BuildContext context) {
+    return SliverReorderableList(
+        itemBuilder: _buildItem,
+        itemCount: tasks.tasksList.length,
+        onReorder: _onReorder,
+        proxyDecorator: _proxyDecorator);
   }
 
   Widget _buildChips() {
@@ -118,6 +184,7 @@ class _TaskManagerPage extends State<TaskManagerPage>
           floating: true,
         ),
         _buildChips(),
+        _buildList(context),
       ],
     );
   }

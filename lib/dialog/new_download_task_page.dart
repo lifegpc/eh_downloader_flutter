@@ -88,7 +88,9 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
   Widget build(BuildContext context) {
     tryInitApi(context);
     if (_ok) {
-      context.canPop() ? context.pop() : context.go("/task_manager");
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        context.canPop() ? context.pop() : context.go("/task_manager");
+      });
     }
     final i18n = AppLocalizations.of(context)!;
     final maxWidth = MediaQuery.of(context).size.width;
