@@ -17,6 +17,7 @@ on:
      - '.gitmodules'
      - 'README.md'
      - 'LICENSE'
+  workflow_dispatch:
 concurrency:
   group: deploy
   cancel-in-progress: false
