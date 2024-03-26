@@ -42,6 +42,7 @@ class Config {
     required this.redirectToFlutter,
     required this.downloadTimeoutCheckInterval,
     required this.ehMetadataCacheTime,
+    this.randomFileSecret,
   });
   bool cookies;
   @JsonKey(name: 'db_path')
@@ -96,6 +97,8 @@ class Config {
   int downloadTimeoutCheckInterval;
   @JsonKey(name: "eh_metadata_cache_time")
   int ehMetadataCacheTime;
+  @JsonKey(name: "random_file_secret")
+  String? randomFileSecret;
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigToJson(this);
 }
@@ -145,6 +148,7 @@ class ConfigOptional {
     this.redirectToFlutter,
     this.downloadTimeoutCheckInterval,
     this.ehMetadataCacheTime,
+    this.randomFileSecret,
   });
   String? cookies;
   @JsonKey(name: 'db_path')
@@ -199,6 +203,8 @@ class ConfigOptional {
   int? downloadTimeoutCheckInterval;
   @JsonKey(name: "eh_metadata_cache_time")
   int? ehMetadataCacheTime;
+  @JsonKey(name: "random_file_secret")
+  String? randomFileSecret;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigOptionalToJson(this);

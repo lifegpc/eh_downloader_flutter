@@ -154,5 +154,6 @@
     "hour": "小时",
     "createDownloadTask": "新建下载任务",
     "galleryURL": "画廊地址",
-    "galleryToken": "画廊令牌"
+    "galleryToken": "画廊令牌",
+    "randomFileSecret": "生成无需登录即可访问随机文件的令牌的密钥"
 }

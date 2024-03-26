@@ -708,6 +708,19 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               });
             },
           )),
+          _buildWithVecticalPadding(TextFormField(
+            initialValue: _now.randomFileSecret ?? _config!.randomFileSecret,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.randomFileSecret,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.randomFileSecret = s;
+                _changed = true;
+              });
+            },
+          )),
         ]));
   }
 

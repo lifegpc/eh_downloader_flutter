@@ -43,6 +43,7 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       downloadTimeoutCheckInterval:
           json['download_timeout_check_interval'] as int,
       ehMetadataCacheTime: json['eh_metadata_cache_time'] as int,
+      randomFileSecret: json['random_file_secret'] as String?,
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -76,6 +77,7 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'redirect_to_flutter': instance.redirectToFlutter,
       'download_timeout_check_interval': instance.downloadTimeoutCheckInterval,
       'eh_metadata_cache_time': instance.ehMetadataCacheTime,
+      'random_file_secret': instance.randomFileSecret,
     };
 
 const _$ThumbnailMethodEnumMap = {
@@ -131,6 +133,7 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
       downloadTimeoutCheckInterval:
           json['download_timeout_check_interval'] as int?,
       ehMetadataCacheTime: json['eh_metadata_cache_time'] as int?,
+      randomFileSecret: json['random_file_secret'] as String?,
     );
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
@@ -165,4 +168,5 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'redirect_to_flutter': instance.redirectToFlutter,
       'download_timeout_check_interval': instance.downloadTimeoutCheckInterval,
       'eh_metadata_cache_time': instance.ehMetadataCacheTime,
+      'random_file_secret': instance.randomFileSecret,
     };
