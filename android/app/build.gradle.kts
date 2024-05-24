@@ -37,7 +37,7 @@ android {
 
     signingConfigs {
         maybeCreate("release").apply {
-            val keystoreFile = File("keystore.jks")
+            val keystoreFile = File(projectDir, "keystore.jks")
             if (!keystoreFile.exists()) return@apply
             val keyAliasEnv = System.getenv("SIGNING_KEY_ALIAS") ?: return@apply
             val keystorePasswordEnv = System.getenv("SIGNING_STORE_PASSWORD") ?: return@apply
