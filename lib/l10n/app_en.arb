@@ -155,5 +155,6 @@
     "createDownloadTask": "Create Download Task",
     "galleryURL": "Gallery URL",
     "galleryToken": "Gallery Token",
-    "randomFileSecret": "The secret of token to access random file without login"
+    "randomFileSecret": "The secret of token to access random file without login",
+    "downloadTask": "Download Task"
 }
