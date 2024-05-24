@@ -37,7 +37,8 @@ android {
 
     signingConfigs {
         maybeCreate("release").apply {
-            val keystoreFile = File("keystore.jks").also { if (!it.exists()) return@apply }
+            val keystoreFile = File("keystore.jks")
+            if (!keystoreFile.exists()) return@apply
             val keyAliasEnv = System.getenv("SIGNING_KEY_ALIAS") ?: return@apply
             val keystorePasswordEnv = System.getenv("SIGNING_STORE_PASSWORD") ?: return@apply
             val keyPasswordEnv = System.getenv("SIGNING_STORE_PASSWORD") ?: return@apply
@@ -65,7 +66,6 @@ flutter {
 }
 
 dependencies {
-//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10")
     implementation("com.github.DylanCaiCoding:MMKV-KTX:1.2.16")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("org.greenrobot:eventbus:3.3.1")

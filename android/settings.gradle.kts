@@ -20,16 +20,4 @@ plugins {
     id ("org.jetbrains.kotlin.android") version "1.7.10" apply false
 }
 
-//val localPropertiesFile = File(rootProject.projectDir, "local.properties")
-//val properties = Properties()
-//
-//assert(localPropertiesFile.exists())
-//localPropertiesFile.reader(Charset.forName("UTF-8")).use { reader -> properties.load(reader) }
-//
-//val flutterSdkPath = properties.getProperty("flutter.sdk")
-//assert(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
-//apply {
-//    from("$flutterSdkPath/packages/flutter_tools/gradle/app_plugin_loader.gradle")
-//}
-
 include(":app")
