@@ -7,11 +7,11 @@ part of 'task.dart';
 // **************************************************************************
 
 Task _$TaskFromJson(Map<String, dynamic> json) => Task(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       type: $enumDecode(_$TaskTypeEnumMap, json['type']),
-      gid: json['gid'] as int,
+      gid: (json['gid'] as num).toInt(),
       token: json['token'] as String,
-      pid: json['pid'] as int,
+      pid: (json['pid'] as num).toInt(),
       details: json['details'] as String?,
     );
 
@@ -34,15 +34,16 @@ const _$TaskTypeEnumMap = {
 TaskDownloadSingleProgress _$TaskDownloadSingleProgressFromJson(
         Map<String, dynamic> json) =>
     TaskDownloadSingleProgress(
-      index: json['index'] as int,
+      index: (json['index'] as num).toInt(),
       token: json['token'] as String,
       name: json['name'] as String,
-      width: json['width'] as int,
-      height: json['height'] as int,
+      width: (json['width'] as num).toInt(),
+      height: (json['height'] as num).toInt(),
       isOriginal: json['is_original'] as bool,
-      total: json['total'] as int,
-      started: TaskDownloadSingleProgress._fromJson(json['started'] as int),
-      downloaded: json['downloaded'] as int,
+      total: (json['total'] as num).toInt(),
+      started: TaskDownloadSingleProgress._fromJson(
+          (json['started'] as num).toInt()),
+      downloaded: (json['downloaded'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TaskDownloadSingleProgressToJson(
@@ -61,9 +62,9 @@ Map<String, dynamic> _$TaskDownloadSingleProgressToJson(
 
 TaskDownloadProgess _$TaskDownloadProgessFromJson(Map<String, dynamic> json) =>
     TaskDownloadProgess(
-      downloadedPage: json['downloaded_page'] as int,
-      failedPage: json['failed_page'] as int,
-      totalPage: json['total_page'] as int,
+      downloadedPage: (json['downloaded_page'] as num).toInt(),
+      failedPage: (json['failed_page'] as num).toInt(),
+      totalPage: (json['total_page'] as num).toInt(),
       details: (json['details'] as List<dynamic>)
           .map((e) =>
               TaskDownloadSingleProgress.fromJson(e as Map<String, dynamic>))
@@ -82,8 +83,8 @@ Map<String, dynamic> _$TaskDownloadProgessToJson(
 TaskExportZipProgress _$TaskExportZipProgressFromJson(
         Map<String, dynamic> json) =>
     TaskExportZipProgress(
-      addedPage: json['added_page'] as int,
-      totalPage: json['total_page'] as int,
+      addedPage: (json['added_page'] as num).toInt(),
+      totalPage: (json['total_page'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TaskExportZipProgressToJson(
@@ -96,8 +97,8 @@ Map<String, dynamic> _$TaskExportZipProgressToJson(
 TaskUpdateMeiliSearchDataProgress _$TaskUpdateMeiliSearchDataProgressFromJson(
         Map<String, dynamic> json) =>
     TaskUpdateMeiliSearchDataProgress(
-      totalGallery: json['total_gallery'] as int,
-      updatedGallery: json['updated_gallery'] as int,
+      totalGallery: (json['total_gallery'] as num).toInt(),
+      updatedGallery: (json['updated_gallery'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TaskUpdateMeiliSearchDataProgressToJson(
@@ -110,8 +111,8 @@ Map<String, dynamic> _$TaskUpdateMeiliSearchDataProgressToJson(
 TaskFixGalleryPageProgress _$TaskFixGalleryPageProgressFromJson(
         Map<String, dynamic> json) =>
     TaskFixGalleryPageProgress(
-      totalGallery: json['total_gallery'] as int,
-      checkedGallery: json['checked_gallery'] as int,
+      totalGallery: (json['total_gallery'] as num).toInt(),
+      checkedGallery: (json['checked_gallery'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TaskFixGalleryPageProgressToJson(
@@ -125,7 +126,9 @@ TaskList _$TaskListFromJson(Map<String, dynamic> json) => TaskList(
       tasks: (json['tasks'] as List<dynamic>)
           .map((e) => Task.fromJson(e as Map<String, dynamic>))
           .toList(),
-      running: (json['running'] as List<dynamic>).map((e) => e as int).toList(),
+      running: (json['running'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$TaskListToJson(TaskList instance) => <String, dynamic>{
@@ -147,10 +150,10 @@ Map<String, dynamic> _$TaskErrorToJson(TaskError instance) => <String, dynamic>{
 
 DownloadConfig _$DownloadConfigFromJson(Map<String, dynamic> json) =>
     DownloadConfig(
-      maxDownloadImgCount: json['max_download_img_count'] as int?,
+      maxDownloadImgCount: (json['max_download_img_count'] as num?)?.toInt(),
       mpv: json['mpv'] as bool?,
       downloadOriginalImg: json['download_original_img'] as bool?,
-      maxRetryCount: json['max_retry_count'] as int?,
+      maxRetryCount: (json['max_retry_count'] as num?)?.toInt(),
       removePreviousGallery: json['remove_previous_gallery'] as bool?,
     );
 

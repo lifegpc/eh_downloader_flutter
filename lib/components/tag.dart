@@ -18,6 +18,6 @@ class TagWidget extends StatelessWidget {
               },
               extra: GalleriesPageExtra(translatedTag: tag.translated));
         },
-        child: Text(name ?? tag.tag));
+        child: Text(name ?? (tag.tag.contains(':') ? tag.tag.split(':')[1] : tag.tag)));
   }
 }

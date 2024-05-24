@@ -12,7 +12,7 @@ ApiResult<T> _$ApiResultFromJson<T>(
 ) =>
     ApiResult<T>(
       ok: json['ok'] as bool,
-      status: json['status'] as int,
+      status: (json['status'] as num).toInt(),
       data: _$nullableGenericFromJson(json['data'], fromJsonT),
       error: json['error'] as String?,
     );

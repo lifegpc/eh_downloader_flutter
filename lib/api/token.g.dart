@@ -7,8 +7,8 @@ part of 'token.dart';
 // **************************************************************************
 
 Token _$TokenFromJson(Map<String, dynamic> json) => Token(
-      id: json['id'] as int,
-      uid: json['uid'] as int,
+      id: (json['id'] as num).toInt(),
+      uid: (json['uid'] as num).toInt(),
       token: json['token'] as String,
       expired: Token._fromJson(json['expired'] as String),
       httpOnly: json['http_only'] as bool,
@@ -39,7 +39,8 @@ TokenWithUserInfo _$TokenWithUserInfoFromJson(Map<String, dynamic> json) =>
       token: Token.fromJson(json['token'] as Map<String, dynamic>),
       name: json['name'] as String,
       isAdmin: json['is_admin'] as bool,
-      permissions: UserPermissions.fromJson(json['permissions'] as int),
+      permissions:
+          UserPermissions.fromJson((json['permissions'] as num).toInt()),
     );
 
 Map<String, dynamic> _$TokenWithUserInfoToJson(TokenWithUserInfo instance) =>

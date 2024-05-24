@@ -7,20 +7,20 @@ part of 'gallery.dart';
 // **************************************************************************
 
 GMeta _$GMetaFromJson(Map<String, dynamic> json) => GMeta(
-      gid: json['gid'] as int,
+      gid: (json['gid'] as num).toInt(),
       token: json['token'] as String,
       title: json['title'] as String,
       titleJpn: json['title_jpn'] as String,
       category: json['category'] as String,
       uploader: json['uploader'] as String,
-      posted: GMeta._fromJson(json['posted'] as int),
-      filecount: json['filecount'] as int,
-      filesize: json['filesize'] as int,
+      posted: GMeta._fromJson((json['posted'] as num).toInt()),
+      filecount: (json['filecount'] as num).toInt(),
+      filesize: (json['filesize'] as num).toInt(),
       expunged: json['expunged'] as bool,
       rating: (json['rating'] as num).toDouble(),
-      parentGid: json['parent_gid'] as int?,
+      parentGid: (json['parent_gid'] as num?)?.toInt(),
       parentToken: json['parent_token'] as String?,
-      firstGid: json['first_gid'] as int?,
+      firstGid: (json['first_gid'] as num?)?.toInt(),
       firstToken: json['first_token'] as String?,
     );
 
@@ -44,20 +44,20 @@ Map<String, dynamic> _$GMetaToJson(GMeta instance) => <String, dynamic>{
 
 GMetaOptional _$GMetaOptionalFromJson(Map<String, dynamic> json) =>
     GMetaOptional(
-      gid: json['gid'] as int?,
+      gid: (json['gid'] as num?)?.toInt(),
       token: json['token'] as String?,
       title: json['title'] as String?,
       titleJpn: json['title_jpn'] as String?,
       category: json['category'] as String?,
       uploader: json['uploader'] as String?,
-      posted: GMetaOptional._fromJson(json['posted'] as int?),
-      filecount: json['filecount'] as int?,
-      filesize: json['filesize'] as int?,
+      posted: GMetaOptional._fromJson((json['posted'] as num?)?.toInt()),
+      filecount: (json['filecount'] as num?)?.toInt(),
+      filesize: (json['filesize'] as num?)?.toInt(),
       expunged: json['expunged'] as bool?,
       rating: (json['rating'] as num?)?.toDouble(),
-      parentGid: json['parent_gid'] as int?,
+      parentGid: (json['parent_gid'] as num?)?.toInt(),
       parentToken: json['parent_token'] as String?,
-      firstGid: json['first_gid'] as int?,
+      firstGid: (json['first_gid'] as num?)?.toInt(),
       firstToken: json['first_token'] as String?,
     );
 
@@ -81,7 +81,7 @@ Map<String, dynamic> _$GMetaOptionalToJson(GMetaOptional instance) =>
     };
 
 Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       tag: json['tag'] as String,
       translated: json['translated'] as String?,
       intro: json['intro'] as String?,
@@ -96,12 +96,12 @@ Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
 
 ExtendedPMeta _$ExtendedPMetaFromJson(Map<String, dynamic> json) =>
     ExtendedPMeta(
-      gid: json['gid'] as int,
-      index: json['index'] as int,
+      gid: (json['gid'] as num).toInt(),
+      index: (json['index'] as num).toInt(),
       token: json['token'] as String,
       name: json['name'] as String,
-      width: json['width'] as int,
-      height: json['height'] as int,
+      width: (json['width'] as num).toInt(),
+      height: (json['height'] as num).toInt(),
       isNsfw: json['is_nsfw'] as bool,
       isAd: json['is_ad'] as bool,
     );

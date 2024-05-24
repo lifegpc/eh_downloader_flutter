@@ -29,7 +29,7 @@ Map<String, dynamic> _$GalleryMetadataTorrentInfoToJson(
 GalleryMetadataSingle _$GalleryMetadataSingleFromJson(
         Map<String, dynamic> json) =>
     GalleryMetadataSingle(
-      gid: json['gid'] as int,
+      gid: (json['gid'] as num).toInt(),
       token: json['token'] as String,
       archiverKey: json['archiver_key'] as String,
       title: json['title'] as String,
@@ -39,7 +39,7 @@ GalleryMetadataSingle _$GalleryMetadataSingleFromJson(
       uploader: json['uploader'] as String,
       posted: json['posted'] as String,
       filecount: json['filecount'] as String,
-      filesize: json['filesize'] as int,
+      filesize: (json['filesize'] as num).toInt(),
       expunged: json['expunged'] as bool,
       rating: json['rating'] as String,
       torrentcount: json['torrentcount'] as String,

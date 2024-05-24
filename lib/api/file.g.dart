@@ -7,9 +7,9 @@ part of 'file.dart';
 // **************************************************************************
 
 EhFileBasic _$EhFileBasicFromJson(Map<String, dynamic> json) => EhFileBasic(
-      id: json['id'] as int,
-      width: json['width'] as int,
-      height: json['height'] as int,
+      id: (json['id'] as num).toInt(),
+      width: (json['width'] as num).toInt(),
+      height: (json['height'] as num).toInt(),
       isOriginal: json['is_original'] as bool,
     );
 
@@ -22,9 +22,9 @@ Map<String, dynamic> _$EhFileBasicToJson(EhFileBasic instance) =>
     };
 
 EhFileExtend _$EhFileExtendFromJson(Map<String, dynamic> json) => EhFileExtend(
-      id: json['id'] as int,
-      width: json['width'] as int,
-      height: json['height'] as int,
+      id: (json['id'] as num).toInt(),
+      width: (json['width'] as num).toInt(),
+      height: (json['height'] as num).toInt(),
       isOriginal: json['is_original'] as bool,
       token: json['token'] as String,
     );

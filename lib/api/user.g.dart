@@ -7,10 +7,11 @@ part of 'user.dart';
 // **************************************************************************
 
 BUser _$BUserFromJson(Map<String, dynamic> json) => BUser(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       username: json['username'] as String,
       isAdmin: json['is_admin'] as bool,
-      permissions: UserPermissions.fromJson(json['permissions'] as int),
+      permissions:
+          UserPermissions.fromJson((json['permissions'] as num).toInt()),
     );
 
 Map<String, dynamic> _$BUserToJson(BUser instance) => <String, dynamic>{
