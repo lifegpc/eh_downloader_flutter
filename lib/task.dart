@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'api/eh.dart';
 import 'api/task.dart';
 import 'globals.dart';
 import 'utils/websocket.dart';
@@ -15,6 +16,10 @@ class TaskManager {
   bool _allowReconnect = true;
   Timer? _reconnectTimer;
   List<int> tasksList = [];
+  Map<int, GalleryMetadataSingle> meta = {};
+  bool _isFetching = false;
+  List<int> peddingGids = [];
+  List<String> peddingTokens = [];
   void clear() {
     tasks.clear();
     _channel?.stream.drain();
@@ -22,7 +27,36 @@ class TaskManager {
     _closed = true;
   }
 
+  void fetchMeta() async {
+    if (_isFetching) return;
+    try {
+      if (peddingGids.isEmpty) return;
+      _isFetching = true;
+      final re = (await api.getMetaInfo(peddingGids, peddingTokens)).unwrap();
+      for (final e in re.metas.entries) {
+        if (e.value.ok) {
+          meta[e.key] = e.value.unwrap();
+          final index = peddingGids.indexOf(e.key);
+          if (index > -1) {
+            peddingGids.removeAt(index);
+            peddingTokens.removeAt(index);
+          }
+        } else {
+          _log.warning("Gallery id ${e.key}:", e.value.unwrapErr());
+        }
+      }
+      listener.tryEmit("task_meta_updated", null);
+    } catch (e) {
+      _log.warning("Failed to fetch metadatas:", e);
+    }
+    _isFetching = false;
+  }
+
   void addToTasksList(Task task, TaskStatus status) {
+    if (task.type == TaskType.download && !meta.containsKey(task.gid)) {
+      peddingGids.add(task.gid);
+      peddingTokens.add(task.token);
+    }
     if (status == TaskStatus.finished) {
       tasksList.add(task.id);
       return;
@@ -66,6 +100,7 @@ class TaskManager {
               addToTasksList(task, status);
             }
             listener.tryEmit("task_list_changed", null);
+            fetchMeta();
           } else if (type == "new_task") {
             final task = Task.fromJson(data["detail"] as Map<String, dynamic>);
             tasks[task.id] = TaskDetail(
@@ -74,6 +109,7 @@ class TaskManager {
             );
             addToTasksList(task, TaskStatus.wait);
             listener.tryEmit("task_list_changed", null);
+            fetchMeta();
           } else if (type == "task_started") {
             final task = Task.fromJson(data["detail"] as Map<String, dynamic>);
             tasks.update(task.id, (value) {
@@ -83,6 +119,7 @@ class TaskManager {
               return value;
             }, ifAbsent: () {
               addToTasksList(task, TaskStatus.running);
+              fetchMeta();
               return TaskDetail(
                 base: task,
                 status: TaskStatus.running,
@@ -99,6 +136,7 @@ class TaskManager {
                 return value;
               });
               listener.tryEmit("task_list_changed", null);
+              fetchMeta();
             }
           } else if (type == "task_progress") {
             final task =
@@ -108,6 +146,7 @@ class TaskManager {
                 value.progress = task.detail;
                 return value;
               });
+              listener.tryEmit("task_progress_updated", task.taskId);
             }
           } else if (type == "task_updated") {
             final task = Task.fromJson(data["detail"] as Map<String, dynamic>);

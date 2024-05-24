@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'api_result.dart';
+import '../globals.dart';
 
 part 'eh.g.dart';
 
@@ -75,6 +76,12 @@ class GalleryMetadataSingle {
   factory GalleryMetadataSingle.fromJson(Map<String, dynamic> json) =>
       _$GalleryMetadataSingleFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryMetadataSingleToJson(this);
+
+  String get preferredTitle => prefs.getBool("useTitleJpn") == true
+      ? titleJpn.isEmpty
+          ? title
+          : titleJpn
+      : title;
 }
 
 class EHMetaInfo {
