@@ -18,7 +18,7 @@ class SAFPlugin(private val activity: MainActivity) {
     private var onSAFAuthFailed: (() -> Unit)? = null
 
     companion object {
-        const val safAuthorizationCode = 0x10086
+        const val safAuthorizationCode = 0xabcd
     }
 
     init {
@@ -66,6 +66,17 @@ class SAFPlugin(private val activity: MainActivity) {
         }
     }
 
+    /**
+     * 打开文件
+     * @param channelResult Result
+     * @param filenameWithoutExtension String
+     * @param dir String
+     * @param mimeType String
+     * @param readFlag Boolean ignored
+     * @param writeFlag Boolean ignored
+     * @param appendFlag Boolean ignored
+     * @param saveAsFlag Boolean ignored
+     */
     @ChannelMethod(responseManually = true)
     @Suppress("unused")
     private fun openFile(
@@ -73,6 +84,10 @@ class SAFPlugin(private val activity: MainActivity) {
         filenameWithoutExtension: String,
         dir: String,
         mimeType: String,
+        @Suppress("UNUSED_PARAMETER") readFlag: Boolean,
+        @Suppress("UNUSED_PARAMETER") writeFlag: Boolean,
+        @Suppress("UNUSED_PARAMETER") appendFlag: Boolean,
+        @Suppress("UNUSED_PARAMETER") saveAsFlag: Boolean,
     ) {
         if (!checkSafPermission()) {
             onSAFAuthSuccess = {

@@ -77,6 +77,7 @@ object MethodChannelUtils {
         args: List<Any?>?,
         instance: Any?
     ): Any? {
+        Log.i("MethodChannel", "invoke method: ${method}")
         method.isAccessible = true
         return if (method.isStaticMethod()) { // 静态方法调用
             if (args == null) {
