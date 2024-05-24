@@ -85,11 +85,14 @@ class _TaskView extends State<TaskView> {
       child: Column(children: [
         _buildText(context),
         LinearPercentIndicator(
+          animation: true,
+          animateFromLastPercent: true,
           progressColor: Colors.green,
           lineHeight: 20.0,
           barRadius: const Radius.circular(10),
           padding: EdgeInsets.zero,
-          center: Text(percentText),
+          center:
+              Text(percentText, style: const TextStyle(color: Colors.black)),
           percent: percent,
         ),
       ]),
