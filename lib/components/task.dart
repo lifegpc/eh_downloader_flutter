@@ -5,8 +5,9 @@ import '../api/task.dart';
 import '../globals.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView(this.task, {super.key});
+  const TaskView(this.task, this.index, {super.key});
   final TaskDetail task;
+  final int index;
 
   @override
   State<StatefulWidget> createState() => _TaskView();
@@ -82,20 +83,27 @@ class _TaskView extends State<TaskView> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      child: Column(children: [
-        _buildText(context),
-        LinearPercentIndicator(
-          animation: true,
-          animateFromLastPercent: true,
-          progressColor: Colors.green,
-          lineHeight: 20.0,
-          barRadius: const Radius.circular(10),
-          padding: EdgeInsets.zero,
-          center:
-              Text(percentText, style: const TextStyle(color: Colors.black)),
-          percent: percent,
-        ),
-      ]),
+      child: GestureDetector(
+          onTap: () {},
+          child: Row(children: [
+            Expanded(
+                child: Column(children: [
+              _buildText(context),
+              LinearPercentIndicator(
+                animation: true,
+                animateFromLastPercent: true,
+                progressColor: Colors.green,
+                lineHeight: 20.0,
+                barRadius: const Radius.circular(10),
+                padding: EdgeInsets.zero,
+                center: Text(percentText,
+                    style: const TextStyle(color: Colors.black)),
+                percent: percent,
+              ),
+            ])),
+            ReorderableDragStartListener(
+                index: widget.index, child: const Icon(Icons.reorder)),
+          ])),
     );
   }
 }

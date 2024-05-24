@@ -99,7 +99,7 @@ class _TaskManagerPage extends State<TaskManagerPage>
     return Padding(
         padding: const EdgeInsets.all(8),
         key: ValueKey("task_${task.base.id}"),
-        child: TaskView(task));
+        child: TaskView(task, index));
   }
 
   Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
@@ -117,7 +117,15 @@ class _TaskManagerPage extends State<TaskManagerPage>
     );
   }
 
-  void _onReorder(int oldIndex, int newIndex) {}
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      final task = tasks.tasksList.removeAt(oldIndex);
+      tasks.tasksList.insert(newIndex, task);
+    });
+  }
 
   Widget _buildList(BuildContext context) {
     return SliverReorderableList(
