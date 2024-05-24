@@ -1,0 +1,9 @@
+[versions]
+mmkv-ktx = "1.2.16"
+documentfile = "1.0.1"
+eventbus = "3.3.1"
+
+[libraries]
+mmkv-ktx = { group = "com.github.DylanCaiCoding", name = "MMKV-KTX", version.ref = "mmkv-ktx" }
+documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
+eventbus = { group = "org.greenrobot", name = "eventbus", version.ref = "eventbus" }

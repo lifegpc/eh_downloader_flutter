@@ -66,7 +66,7 @@ flutter {
 }
 
 dependencies {
-    implementation("com.github.DylanCaiCoding:MMKV-KTX:1.2.16")
-    implementation("androidx.documentfile:documentfile:1.0.1")
-    implementation("org.greenrobot:eventbus:3.3.1")
+    implementation(libs.mmkv.ktx)
+    implementation(libs.eventbus)
+    implementation(libs.documentfile)
 }
