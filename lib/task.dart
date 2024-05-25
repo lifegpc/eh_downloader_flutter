@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'api/eh.dart';
@@ -20,6 +21,7 @@ class TaskManager {
   bool _isFetching = false;
   List<int> peddingGids = [];
   List<String> peddingTokens = [];
+  late Timer _pingTimer;
   void clear() {
     tasks.clear();
     _channel?.stream.drain();
@@ -187,6 +189,9 @@ class TaskManager {
         }
       }, onError: (e) {
         _log.warning("Task websocket error: $e");
+      }, onDone: () {
+        _log.warning(
+            "WenSocket closed: ${_channel?.closeCode} ${_channel?.closeReason}");
         if (_allowReconnect) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
@@ -213,5 +218,29 @@ class TaskManager {
 
   void sendTaskList() {
     _channel?.sink.add("{\"type\":\"task_list\"}");
+  }
+
+  void _onLifeCycleChanged(dynamic arg) {
+    final state = arg as AppLifecycleState?;
+    if (state == null) return;
+    if (state == AppLifecycleState.resumed) {
+      try {
+        _channel?.sink.add("{\"type\":\"ping\"}");
+      } catch (e) {
+        _log.warning("Failed to send ping when onResumed: $e");
+      }
+    }
+  }
+
+  void init() {
+    listener.on("lifecycle", _onLifeCycleChanged);
+    _pingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      try {
+        _channel?.sink.add("{\"type\":\"ping\"}");
+      } catch (e) {
+        _log.warning("Failed to send ping: $e");
+      }
+      _pingTimer = timer;
+    });
   }
 }
