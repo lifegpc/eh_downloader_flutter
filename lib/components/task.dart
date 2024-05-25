@@ -68,14 +68,11 @@ class _TaskView extends State<TaskView> {
     final i18n = AppLocalizations.of(context)!;
     if (widget.task.base.type == TaskType.download) {
       final gid = widget.task.base.gid;
-      return Row(children: [
-        Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Text(i18n.downloadTask)),
-        Text(tasks.meta.containsKey(gid)
-            ? tasks.meta[gid]!.preferredTitle
-            : gid.toString()),
-      ]);
+      final title = tasks.meta.containsKey(gid)
+          ? tasks.meta[gid]!.preferredTitle
+          : gid.toString();
+      return Text("${i18n.downloadTask} $title",
+          maxLines: 1, overflow: TextOverflow.ellipsis);
     }
     return Container();
   }
@@ -95,21 +92,23 @@ class _TaskView extends State<TaskView> {
                   context.push("/dialog/task/${widget.task.base.id}");
                 },
                 behavior: HitTestBehavior.opaque,
-                child: Column(children: [
-                  _buildText(context),
-                  LinearPercentIndicator(
-                    animation: true,
-                    animateFromLastPercent: true,
-                    animationDuration: 200,
-                    progressColor: Colors.green,
-                    lineHeight: 20.0,
-                    barRadius: const Radius.circular(10),
-                    padding: EdgeInsets.zero,
-                    center: Text(percentText,
-                        style: const TextStyle(color: Colors.black)),
-                    percent: percent,
-                  ),
-                ]))),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildText(context),
+                      LinearPercentIndicator(
+                        animation: true,
+                        animateFromLastPercent: true,
+                        animationDuration: 200,
+                        progressColor: Colors.green,
+                        lineHeight: 20.0,
+                        barRadius: const Radius.circular(10),
+                        padding: EdgeInsets.zero,
+                        center: Text(percentText,
+                            style: const TextStyle(color: Colors.black)),
+                        percent: percent,
+                      ),
+                    ]))),
       ]),
     );
   }

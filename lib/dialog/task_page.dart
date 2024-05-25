@@ -83,20 +83,36 @@ class _TaskPage extends State<TaskPage> {
             typ == TaskType.updateMeiliSearchData)) {
       gid = i18n.allGalleries;
     }
+    final maxWidth = MediaQuery.of(context).size.width;
+    final endIndent = maxWidth < 400 ? 5.0 : 10.0;
+    final indent = endIndent + 70;
     return Column(
       children: [
         _KeyValue(i18n.taskId, widget.id.toString(), fontSize: 16),
+        Divider(indent: indent, endIndent: endIndent),
         _KeyValue(i18n.taskType, typ.text(context), fontSize: 16),
+        Divider(indent: indent, endIndent: endIndent),
         _KeyValue(i18n.gid, gid, fontSize: 16),
         task.base.token.isEmpty
             ? Container()
+            : Divider(indent: indent, endIndent: endIndent),
+        task.base.token.isEmpty
+            ? Container()
             : _KeyValue(i18n.galleryToken, task.base.token, fontSize: 16),
+        Divider(indent: indent, endIndent: endIndent),
         _KeyValue(i18n.processId, task.base.pid.toString(), fontSize: 16),
+        Divider(indent: indent, endIndent: endIndent),
         _KeyValue(i18n.taskStatus, task.status.text(context), fontSize: 16),
+        task.fataled == null
+            ? Container()
+            : Divider(indent: indent, endIndent: endIndent),
         task.fataled == null
             ? Container()
             : _KeyValue(i18n.fatalError, task.fataled! ? i18n.yes : i18n.no,
                 fontSize: 16),
+        task.error == null
+            ? Container()
+            : Divider(indent: indent, endIndent: endIndent),
         task.error == null
             ? Container()
             : SelectableText(task.error!,
@@ -265,19 +281,34 @@ class _TaskPage extends State<TaskPage> {
     }
     final cs = Theme.of(context).colorScheme;
     double? rating = double.tryParse(meta.rating);
+    final maxWidth = MediaQuery.of(context).size.width;
+    final endIndent = maxWidth < 400 ? 5.0 : 10.0;
+    final indent = endIndent + 70;
     return Column(key: ValueKey("task_detail_meta_${widget.id}"), children: [
       _KeyValue(i18n.title2, meta.title, fontSize: 16),
+      Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.titleJpn, meta.titleJpn, fontSize: 16),
+      Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.category, meta.category, fontSize: 16),
+      Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.uploader, meta.uploader, fontSize: 16),
+      posted != null
+          ? Divider(indent: indent, endIndent: endIndent)
+          : Container(),
       posted != null
           ? _KeyValue(
               i18n.posted, DateFormat.yMd(locale).add_jms().format(posted),
               fontSize: 16)
           : Container(),
+      Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.pageLength, meta.filecount, fontSize: 16),
+      Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.fileSize, getFileSize(meta.filesize), fontSize: 16),
+      Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.visible, meta.expunged ? i18n.no : i18n.yes, fontSize: 16),
+      rating != null
+          ? Divider(indent: indent, endIndent: endIndent)
+          : Container(),
       rating != null
           ? Row(children: [
               SizedBox(
