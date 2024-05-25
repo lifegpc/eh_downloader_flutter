@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Rate extends StatelessWidget {
-  const Rate(this.rate, {super.key, this.fontSize});
+  const Rate(this.rate, {super.key, this.fontSize, this.selectable = false});
   final double rate;
   final double? fontSize;
+  final bool selectable;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final style = TextStyle(color: cs.secondary, fontSize: fontSize);
+    final t = " $rate";
     return Row(
       children: [
         for (var i = 1; i < 6; i++)
@@ -20,8 +23,7 @@ class Rate extends StatelessWidget {
             color: cs.primary,
             size: fontSize,
           ),
-        Text(" $rate",
-            style: TextStyle(color: cs.secondary, fontSize: fontSize)),
+        selectable ? SelectableText(t, style: style) : Text(t, style: style),
       ],
     );
   }

@@ -189,5 +189,7 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "category": "分类",
+    "uploader": "上传者"
 }

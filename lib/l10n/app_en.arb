@@ -189,5 +189,7 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "category": "Category",
+    "uploader": "Uploader"
 }

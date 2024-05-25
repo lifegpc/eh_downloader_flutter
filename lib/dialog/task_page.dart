@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../api/task.dart';
+import '../components/rate.dart';
 import '../globals.dart';
+import '../main.dart';
 import '../utils/duration.dart';
 import '../utils/filesize.dart';
 
@@ -242,6 +245,53 @@ class _TaskPage extends State<TaskPage> {
     );
   }
 
+  bool get haveMetaInfo {
+    if (!tasks.tasksList.contains(widget.id)) return false;
+    final task = tasks.tasks[widget.id]!;
+    return task.base.type == TaskType.download &&
+        tasks.meta.containsKey(task.base.gid);
+  }
+
+  Widget _buildMetaInfo(BuildContext context) {
+    if (!haveMetaInfo) return Container();
+    final task = tasks.tasks[widget.id]!;
+    final meta = tasks.meta[task.base.gid]!;
+    final i18n = AppLocalizations.of(context)!;
+    final locale = MainApp.of(context).lang.toLocale().toString();
+    DateTime? posted;
+    final r = int.tryParse(meta.posted);
+    if (r != null) {
+      posted = DateTime.fromMillisecondsSinceEpoch(r! * 1000);
+    }
+    final cs = Theme.of(context).colorScheme;
+    double? rating = double.tryParse(meta.rating);
+    return Column(key: ValueKey("task_detail_meta_${widget.id}"), children: [
+      _KeyValue(i18n.title2, meta.title, fontSize: 16),
+      _KeyValue(i18n.titleJpn, meta.titleJpn, fontSize: 16),
+      _KeyValue(i18n.category, meta.category, fontSize: 16),
+      _KeyValue(i18n.uploader, meta.uploader, fontSize: 16),
+      posted != null
+          ? _KeyValue(
+              i18n.posted, DateFormat.yMd(locale).add_jms().format(posted),
+              fontSize: 16)
+          : Container(),
+      _KeyValue(i18n.pageLength, meta.filecount, fontSize: 16),
+      _KeyValue(i18n.fileSize, getFileSize(meta.filesize), fontSize: 16),
+      _KeyValue(i18n.visible, meta.expunged ? i18n.no : i18n.yes, fontSize: 16),
+      rating != null
+          ? Row(children: [
+              SizedBox(
+                  width: 80,
+                  child: Center(
+                      child: Text(i18n.rating,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: cs.primary, fontSize: 16)))),
+              Expanded(child: Rate(rating!, fontSize: 16, selectable: true)),
+            ])
+          : Container(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     tryInitApi(context);
@@ -282,6 +332,11 @@ class _TaskPage extends State<TaskPage> {
                   : Container()),
           SliverToBoxAdapter(child: _buildProgress(context)),
           _buildMoreProgress(context),
+          SliverToBoxAdapter(
+              child: haveMetaInfo
+                  ? Divider(indent: indent, endIndent: indent)
+                  : Container()),
+          SliverToBoxAdapter(child: _buildMetaInfo(context)),
         ],
       ),
     );
