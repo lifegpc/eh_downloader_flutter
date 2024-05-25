@@ -156,5 +156,19 @@
     "galleryURL": "画廊地址",
     "galleryToken": "画廊令牌",
     "randomFileSecret": "生成无需登录即可访问随机文件的令牌的密钥",
-    "downloadTask": "下载任务"
+    "downloadTask": "下载任务",
+    "taskDetails": "任务详情",
+    "taskId": "任务ID",
+    "taskType": "任务类型",
+    "exportZipTask": "导出为ZIP文件任务",
+    "updateMeiliSearchDataTask": "同步meilisearch服务器数据任务",
+    "fixGalleryPageTask": "修复画廊页面数据任务",
+    "allGalleries": "所有画廊",
+    "processId": "进程ID",
+    "taskStatus": "任务状态",
+    "fatalError": "致命错误",
+    "fetchingMetadata": "获取元数据中…",
+    "downloadedPages": "已下载页数",
+    "failedPages": "下载失败的页数",
+    "totalPages": "总页数"
 }

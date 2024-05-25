@@ -156,5 +156,19 @@
     "galleryURL": "Gallery URL",
     "galleryToken": "Gallery Token",
     "randomFileSecret": "The secret of token to access random file without login",
-    "downloadTask": "Download Task"
+    "downloadTask": "Download Task",
+    "taskDetails": "Task details",
+    "taskId": "Task ID",
+    "taskType": "Task type",
+    "exportZipTask": "Export as ZIP file task",
+    "updateMeiliSearchDataTask": "Sync meilisearch server's data task",
+    "fixGalleryPageTask": "Fix gallery page data task",
+    "allGalleries": "All galleries",
+    "processId": "Process ID",
+    "taskStatus": "Task status",
+    "fatalError": "Fatal error",
+    "fetchingMetadata": "Fetching metadata ...",
+    "downloadedPages": "Downloaded pages",
+    "failedPages": "Download failed pages",
+    "totalPages": "Total pages"
 }

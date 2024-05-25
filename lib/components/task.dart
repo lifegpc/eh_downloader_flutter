@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../api/task.dart';
 import '../globals.dart';
@@ -83,27 +84,31 @@ class _TaskView extends State<TaskView> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-          onTap: () {},
-          child: Row(children: [
-            Expanded(
+      child: Row(children: [
+        Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ReorderableDragStartListener(
+                index: widget.index, child: const Icon(Icons.reorder))),
+        Expanded(
+            child: GestureDetector(
+                onTap: () {
+                  context.push("/dialog/task/${widget.task.base.id}");
+                },
                 child: Column(children: [
-              _buildText(context),
-              LinearPercentIndicator(
-                animation: true,
-                animateFromLastPercent: true,
-                progressColor: Colors.green,
-                lineHeight: 20.0,
-                barRadius: const Radius.circular(10),
-                padding: EdgeInsets.zero,
-                center: Text(percentText,
-                    style: const TextStyle(color: Colors.black)),
-                percent: percent,
-              ),
-            ])),
-            ReorderableDragStartListener(
-                index: widget.index, child: const Icon(Icons.reorder)),
-          ])),
+                  _buildText(context),
+                  LinearPercentIndicator(
+                    animation: true,
+                    animateFromLastPercent: true,
+                    progressColor: Colors.green,
+                    lineHeight: 20.0,
+                    barRadius: const Radius.circular(10),
+                    padding: EdgeInsets.zero,
+                    center: Text(percentText,
+                        style: const TextStyle(color: Colors.black)),
+                    percent: percent,
+                  ),
+                ]))),
+      ]),
     );
   }
 }

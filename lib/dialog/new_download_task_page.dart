@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:eh_downloader_flutter/components/number_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import '../components/number_field.dart';
 import '../globals.dart';
 import '../utils/parse_url.dart';
 

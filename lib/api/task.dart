@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'task.g.dart';
@@ -10,7 +12,21 @@ enum TaskType {
   @JsonValue(2)
   updateMeiliSearchData,
   @JsonValue(3)
-  fixGalleryPage,
+  fixGalleryPage;
+
+  String text(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case TaskType.download:
+        return i18n.downloadTask;
+      case TaskType.exportZip:
+        return i18n.exportZipTask;
+      case TaskType.updateMeiliSearchData:
+        return i18n.updateMeiliSearchDataTask;
+      case TaskType.fixGalleryPage:
+        return i18n.fixGalleryPageTask;
+    }
+  }
 }
 
 @JsonSerializable()
@@ -189,7 +205,21 @@ enum TaskStatus {
   @JsonValue(2)
   finished,
   @JsonValue(3)
-  failed,
+  failed;
+
+  String text(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case TaskStatus.wait:
+        return i18n.waiting;
+      case TaskStatus.running:
+        return i18n.running;
+      case TaskStatus.finished:
+        return i18n.finished;
+      case TaskStatus.failed:
+        return i18n.failed;
+    }
+  }
 }
 
 class TaskDetail {
@@ -237,7 +267,7 @@ class TaskError {
 
 @JsonSerializable()
 class DownloadConfig {
-  DownloadConfig ({
+  DownloadConfig({
     this.maxDownloadImgCount,
     this.mpv,
     this.downloadOriginalImg,

@@ -12,6 +12,7 @@ import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
 import 'dialog/gallery_details_page.dart';
 import 'dialog/new_download_task_page.dart';
+import 'dialog/task_page.dart';
 import 'galleries.dart';
 import 'gallery.dart';
 import 'globals.dart';
@@ -183,7 +184,25 @@ final _router = GoRouter(
               builder: (context) {
                 return NewDownloadTaskPage(gid: gid, token: token);
               });
-        })
+        }),
+    GoRoute(
+        path: "/dialog/task/:id",
+        pageBuilder: (context, state) {
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return TaskPage(int.parse(state.pathParameters["id"]!));
+              });
+        },
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["id"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse id:", e);
+            return "/task_manager";
+          }
+        }),
   ],
 );
 
