@@ -137,8 +137,14 @@ class _TaskPage extends State<TaskPage> {
         return Text(i18n.fetchingMetadata);
       }
       double speed = 0;
-      for (final e in p.details) {
-        speed += e.speed;
+      final dlUseAvgSpeed = prefs.getBool("dlUseAvgSpeed") ?? false;
+      if (dlUseAvgSpeed) {
+        final now = DateTime.now().millisecondsSinceEpoch;
+        if (now > p.started) speed = p.downloadedBytes / (now - p.started);
+      } else {
+        for (final e in p.details) {
+          speed += e.speed;
+        }
       }
       if (p.failedPage == 0) {
         final percent = p.downloadedPage / p.totalPage;
@@ -221,6 +227,7 @@ class _TaskPage extends State<TaskPage> {
     final p = task.progress as TaskDownloadProgess;
     if (p.details.isEmpty) return SliverToBoxAdapter(child: Container());
     final i18n = AppLocalizations.of(context)!;
+    final dlUseAvgSpeed = prefs.getBool("dlUseAvgSpeed") ?? false;
     return SliverList.builder(
       itemCount: p.details.length,
       itemBuilder: (context, index) {
@@ -235,6 +242,11 @@ class _TaskPage extends State<TaskPage> {
         final eta = d.total == 0
             ? double.infinity
             : (d.total - d.downloaded) / avgSpeed;
+        final speed = dlUseAvgSpeed
+            ? d.total == 0
+                ? 0.0
+                : avgSpeed
+            : d.speed;
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SelectableText("${d.name}(${d.width}x${d.height})"),
           LinearPercentIndicator(
@@ -254,7 +266,7 @@ class _TaskPage extends State<TaskPage> {
                 child: Text(
                     "${getFileSize(d.downloaded)}/${getFileSize(d.total)}")),
             Text(
-                "${getFileSize((d.speed * 1000).toInt())}/s${i18n.comma}${fmtDuration(context, eta)}"),
+                "${getFileSize((speed * 1000).toInt())}/s${i18n.comma}${fmtDuration(context, eta)}"),
           ]),
         ]);
       },

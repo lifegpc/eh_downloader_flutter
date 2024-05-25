@@ -24,12 +24,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
   bool _oriShowNsfw = false;
   bool _oriShowTranslatedTag = false;
   bool _oriUseTitleJpn = false;
+  bool _oriDlUseAvgSpeed = false;
   bool _displayAd = false;
   Lang _lang = Lang.system;
   bool _preventScreenCapture = false;
   bool _showNsfw = false;
   bool _showTranslatedTag = false;
   bool _useTitleJpn = false;
+  bool _dlUseAvgSpeed = false;
   @override
   void initState() {
     super.initState();
@@ -82,6 +84,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _oriPreventScreenCapture = false;
       _preventScreenCapture = false;
     }
+    try {
+      _oriDlUseAvgSpeed = prefs.getBool("dlUseAvgSpeed") ?? false;
+      _dlUseAvgSpeed = _oriDlUseAvgSpeed;
+    } catch (e) {
+      _log.warning("Failed to get dlUseAvgSpeed:", e);
+      _oriDlUseAvgSpeed = false;
+      _dlUseAvgSpeed = false;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -99,6 +109,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _displayAd = false;
       _showTranslatedTag = _oriLang.toLocale().languageCode == "zh";
       _preventScreenCapture = false;
+      _dlUseAvgSpeed = false;
     });
   }
 
@@ -157,6 +168,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
         if (!await platformDisplay.disableProtect()) {
           _log.warning("Failed to disable protect.");
         }
+      }
+    }
+    if (_dlUseAvgSpeed != _oriDlUseAvgSpeed) {
+      if (!await prefs.setBool("dlUseAvgSpeed", _dlUseAvgSpeed)) {
+        re = false;
+        _log.warning("Failed to save dlUseAvgSpeed.");
+      } else {
+        _oriDlUseAvgSpeed = _dlUseAvgSpeed;
       }
     }
     return re;
@@ -297,6 +316,21 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                     ),
                                   )
                                 : Container(),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CheckboxMenuButton(
+                                value: _dlUseAvgSpeed,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _dlUseAvgSpeed = value;
+                                    });
+                                  }
+                                },
+                                child: Text(AppLocalizations.of(context)!
+                                    .dlUseAvgSpeed),
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

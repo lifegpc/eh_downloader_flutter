@@ -191,5 +191,6 @@
         }
     },
     "category": "分类",
-    "uploader": "上传者"
+    "uploader": "上传者",
+    "dlUseAvgSpeed": "在任务详情中显示平均速度。"
 }

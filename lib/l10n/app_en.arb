@@ -191,5 +191,6 @@
         }
     },
     "category": "Category",
-    "uploader": "Uploader"
+    "uploader": "Uploader",
+    "dlUseAvgSpeed": "Show average speed in task details."
 }
