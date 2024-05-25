@@ -39,7 +39,7 @@ jobs:
       - name: Package files
         run: cd build/windows/x64/runner/Release && 7z a -mx9 -y ../../../../../windows.7z
       - name: Upload files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: ./windows.7z
