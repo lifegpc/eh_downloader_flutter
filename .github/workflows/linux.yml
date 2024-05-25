@@ -34,7 +34,7 @@ jobs:
       - name: Package files
         run: cd build/linux/x64/release/bundle && 7z a -mx9 -y ../../../../../linux.7z
       - name: Upload files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux
           path: ./linux.7z
