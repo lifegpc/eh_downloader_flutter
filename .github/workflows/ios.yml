@@ -32,7 +32,7 @@ jobs:
         with:
           channel: stable
       - name: Import keychain
-        uses: apple-actions/import-codesign-certs@v2
+        uses: apple-actions/import-codesign-certs@v3
         with:
           p12-file-base64: ${{ secrets.P12_FILE_BASE64 }}
           p12-password: ${{ secrets.P12_PASSWORD }}
