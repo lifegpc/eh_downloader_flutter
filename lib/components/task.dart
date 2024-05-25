@@ -99,6 +99,7 @@ class _TaskView extends State<TaskView> {
                   LinearPercentIndicator(
                     animation: true,
                     animateFromLastPercent: true,
+                    animationDuration: 200,
                     progressColor: Colors.green,
                     lineHeight: 20.0,
                     barRadius: const Radius.circular(10),

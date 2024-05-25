@@ -170,5 +170,16 @@
     "fetchingMetadata": "Fetching metadata ...",
     "downloadedPages": "Downloaded pages",
     "failedPages": "Download failed pages",
-    "totalPages": "Total pages"
+    "totalPages": "Total pages",
+    "downloadedSize": "Downloaded {size}",
+    "@downloadedSize": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "comma": ", ",
+    "downloadedSize2": "Downloaded size",
+    "speed": "Speed"
 }

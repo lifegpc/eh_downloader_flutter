@@ -63,6 +63,8 @@ class TaskDownloadSingleProgress {
     required this.total,
     required this.started,
     required this.downloaded,
+    required this.speed,
+    required this.lastUpdated,
   });
   final int index;
   final String token;
@@ -75,6 +77,9 @@ class TaskDownloadSingleProgress {
   @JsonKey(fromJson: _fromJson, toJson: _toJson)
   final DateTime started;
   final int downloaded;
+  final double speed;
+  @JsonKey(name: 'last_updated')
+  final int lastUpdated;
   static DateTime _fromJson(int d) =>
       DateTime.fromMillisecondsSinceEpoch(d, isUtc: true);
   static int _toJson(DateTime d) => d.millisecondsSinceEpoch;
@@ -90,6 +95,8 @@ class TaskDownloadProgess implements TaskProgressBasicType {
     required this.failedPage,
     required this.totalPage,
     required this.details,
+    required this.started,
+    required this.downloadedBytes,
   });
   @JsonKey(name: 'downloaded_page')
   final int downloadedPage;
@@ -97,6 +104,9 @@ class TaskDownloadProgess implements TaskProgressBasicType {
   final int failedPage;
   @JsonKey(name: 'total_page')
   final int totalPage;
+  final int started;
+  @JsonKey(name: 'downloaded_bytes')
+  final int downloadedBytes;
   final List<TaskDownloadSingleProgress> details;
   factory TaskDownloadProgess.fromJson(Map<String, dynamic> json) =>
       _$TaskDownloadProgessFromJson(json);

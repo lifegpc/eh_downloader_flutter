@@ -116,14 +116,18 @@ class _TaskPage extends State<TaskPage> {
       if (p.totalPage == 0) {
         return Text(i18n.fetchingMetadata);
       }
+      double speed = 0;
+      for (final e in p.details) {
+        speed += e.speed;
+      }
       if (p.failedPage == 0) {
         final percent = p.downloadedPage / p.totalPage;
         final percentText = "${(percent * 100).toStringAsFixed(2)}%";
-        return Row(children: [
-          Expanded(
-              child: LinearPercentIndicator(
+        return Column(children: [
+          LinearPercentIndicator(
             animation: true,
             animateFromLastPercent: true,
+            animationDuration: 200,
             progressColor: Colors.green,
             lineHeight: 20.0,
             barRadius: const Radius.circular(10),
@@ -131,8 +135,13 @@ class _TaskPage extends State<TaskPage> {
             center:
                 Text(percentText, style: const TextStyle(color: Colors.black)),
             percent: percent,
-          )),
-          Text("${p.downloadedPage}/${p.totalPage}"),
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Expanded(
+                child: Text(i18n.downloadedSize(
+                    "${getFileSize(p.downloadedBytes)}${i18n.comma}${p.downloadedPage}/${p.totalPage}"))),
+            Text("${getFileSize((speed * 1000).toInt())}/s"),
+          ]),
         ]);
       }
       return Column(children: [
@@ -140,6 +149,9 @@ class _TaskPage extends State<TaskPage> {
             fontSize: 16),
         _KeyValue(i18n.failedPages, p.failedPage.toString(), fontSize: 16),
         _KeyValue(i18n.totalPages, p.totalPage.toString(), fontSize: 16),
+        _KeyValue(i18n.downloadedSize2, getFileSize(p.downloadedBytes),
+            fontSize: 16),
+        _KeyValue(i18n.speed, "${getFileSize((speed * 1000).toInt())}/s", fontSize: 16),
       ]);
     }
     int now = 0;
@@ -167,6 +179,7 @@ class _TaskPage extends State<TaskPage> {
           child: LinearPercentIndicator(
         animation: true,
         animateFromLastPercent: true,
+        animationDuration: 200,
         progressColor: Colors.green,
         lineHeight: 20.0,
         barRadius: const Radius.circular(10),
@@ -190,24 +203,27 @@ class _TaskPage extends State<TaskPage> {
       itemCount: p.details.length,
       itemBuilder: (context, index) {
         final d = p.details[index];
-        final percent = d.downloaded / d.total;
+        final percent = d.total == 0 ? 0.0 : d.downloaded / d.total;
         final percentText = "${(percent * 100).toStringAsFixed(2)}%";
-        return Column(children: [
-          Text("${d.name}(${d.width}x${d.height})"),
-          Row(children: [
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          SelectableText("${d.name}(${d.width}x${d.height})"),
+          LinearPercentIndicator(
+            animation: true,
+            animateFromLastPercent: true,
+            animationDuration: 200,
+            progressColor: Colors.green,
+            lineHeight: 20.0,
+            barRadius: const Radius.circular(10),
+            padding: EdgeInsets.zero,
+            center:
+                Text(percentText, style: const TextStyle(color: Colors.black)),
+            percent: percent,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Expanded(
-                child: LinearPercentIndicator(
-              animation: true,
-              animateFromLastPercent: true,
-              progressColor: Colors.green,
-              lineHeight: 20.0,
-              barRadius: const Radius.circular(10),
-              padding: EdgeInsets.zero,
-              center: Text(percentText,
-                  style: const TextStyle(color: Colors.black)),
-              percent: percent,
-            )),
-            Text("${getFileSize(d.downloaded)}/${getFileSize(d.total)}"),
+                child: Text(
+                    "${getFileSize(d.downloaded)}/${getFileSize(d.total)}")),
+            Text("${getFileSize((d.speed * 1000).toInt())}/s"),
           ]),
         ]);
       },

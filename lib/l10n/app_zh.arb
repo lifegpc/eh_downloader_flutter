@@ -170,5 +170,16 @@
     "fetchingMetadata": "获取元数据中…",
     "downloadedPages": "已下载页数",
     "failedPages": "下载失败的页数",
-    "totalPages": "总页数"
+    "totalPages": "总页数",
+    "downloadedSize": "已下载 {size}",
+    "@downloadedSize": {
+        "placeholders": {
+            "size": {
+                "type": "String"
+            }
+        }
+    },
+    "comma": "，",
+    "downloadedSize2": "已下载大小",
+    "speed": "速度"
 }

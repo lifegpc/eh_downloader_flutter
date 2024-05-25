@@ -44,6 +44,8 @@ TaskDownloadSingleProgress _$TaskDownloadSingleProgressFromJson(
       started: TaskDownloadSingleProgress._fromJson(
           (json['started'] as num).toInt()),
       downloaded: (json['downloaded'] as num).toInt(),
+      speed: (json['speed'] as num).toDouble(),
+      lastUpdated: (json['last_updated'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TaskDownloadSingleProgressToJson(
@@ -58,6 +60,8 @@ Map<String, dynamic> _$TaskDownloadSingleProgressToJson(
       'total': instance.total,
       'started': TaskDownloadSingleProgress._toJson(instance.started),
       'downloaded': instance.downloaded,
+      'speed': instance.speed,
+      'last_updated': instance.lastUpdated,
     };
 
 TaskDownloadProgess _$TaskDownloadProgessFromJson(Map<String, dynamic> json) =>
@@ -69,6 +73,8 @@ TaskDownloadProgess _$TaskDownloadProgessFromJson(Map<String, dynamic> json) =>
           .map((e) =>
               TaskDownloadSingleProgress.fromJson(e as Map<String, dynamic>))
           .toList(),
+      started: (json['started'] as num).toInt(),
+      downloadedBytes: (json['downloaded_bytes'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TaskDownloadProgessToJson(
@@ -77,6 +83,8 @@ Map<String, dynamic> _$TaskDownloadProgessToJson(
       'downloaded_page': instance.downloadedPage,
       'failed_page': instance.failedPage,
       'total_page': instance.totalPage,
+      'started': instance.started,
+      'downloaded_bytes': instance.downloadedBytes,
       'details': instance.details,
     };
 
