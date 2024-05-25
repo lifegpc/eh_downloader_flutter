@@ -181,5 +181,13 @@
     },
     "comma": ", ",
     "downloadedSize2": "Downloaded size",
-    "speed": "Speed"
+    "speed": "Speed",
+    "days": "{num} days",
+    "@days": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    }
 }

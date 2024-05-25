@@ -181,5 +181,13 @@
     },
     "comma": "，",
     "downloadedSize2": "已下载大小",
-    "speed": "速度"
+    "speed": "速度",
+    "days": "{num} 天",
+    "@days": {
+        "placeholders": {
+            "num": {
+                "type": "int"
+            }
+        }
+    }
 }

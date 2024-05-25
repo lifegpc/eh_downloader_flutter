@@ -78,8 +78,8 @@ class TaskDownloadSingleProgress {
   final DateTime started;
   final int downloaded;
   final double speed;
-  @JsonKey(name: 'last_updated')
-  final int lastUpdated;
+  @JsonKey(name: 'last_updated', fromJson: _fromJson, toJson: _toJson)
+  final DateTime lastUpdated;
   static DateTime _fromJson(int d) =>
       DateTime.fromMillisecondsSinceEpoch(d, isUtc: true);
   static int _toJson(DateTime d) => d.millisecondsSinceEpoch;

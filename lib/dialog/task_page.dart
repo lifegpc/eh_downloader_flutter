@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../api/task.dart';
 import '../globals.dart';
+import '../utils/duration.dart';
 import '../utils/filesize.dart';
 
 class _KeyValue extends StatelessWidget {
@@ -151,7 +152,8 @@ class _TaskPage extends State<TaskPage> {
         _KeyValue(i18n.totalPages, p.totalPage.toString(), fontSize: 16),
         _KeyValue(i18n.downloadedSize2, getFileSize(p.downloadedBytes),
             fontSize: 16),
-        _KeyValue(i18n.speed, "${getFileSize((speed * 1000).toInt())}/s", fontSize: 16),
+        _KeyValue(i18n.speed, "${getFileSize((speed * 1000).toInt())}/s",
+            fontSize: 16),
       ]);
     }
     int now = 0;
@@ -199,12 +201,21 @@ class _TaskPage extends State<TaskPage> {
     }
     final p = task.progress as TaskDownloadProgess;
     if (p.details.isEmpty) return SliverToBoxAdapter(child: Container());
+    final i18n = AppLocalizations.of(context)!;
     return SliverList.builder(
       itemCount: p.details.length,
       itemBuilder: (context, index) {
         final d = p.details[index];
         final percent = d.total == 0 ? 0.0 : d.downloaded / d.total;
         final percentText = "${(percent * 100).toStringAsFixed(2)}%";
+        final avgSpeed = d.started.millisecondsSinceEpoch == 0
+            ? 0.0
+            : d.downloaded /
+                (d.lastUpdated.millisecondsSinceEpoch -
+                    d.started.millisecondsSinceEpoch);
+        final eta = d.total == 0
+            ? double.infinity
+            : (d.total - d.downloaded) / avgSpeed;
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SelectableText("${d.name}(${d.width}x${d.height})"),
           LinearPercentIndicator(
@@ -223,7 +234,8 @@ class _TaskPage extends State<TaskPage> {
             Expanded(
                 child: Text(
                     "${getFileSize(d.downloaded)}/${getFileSize(d.total)}")),
-            Text("${getFileSize((d.speed * 1000).toInt())}/s"),
+            Text(
+                "${getFileSize((d.speed * 1000).toInt())}/s${i18n.comma}${fmtDuration(context, eta)}"),
           ]),
         ]);
       },

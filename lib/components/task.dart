@@ -94,6 +94,7 @@ class _TaskView extends State<TaskView> {
                 onTap: () {
                   context.push("/dialog/task/${widget.task.base.id}");
                 },
+                behavior: HitTestBehavior.opaque,
                 child: Column(children: [
                   _buildText(context),
                   LinearPercentIndicator(
