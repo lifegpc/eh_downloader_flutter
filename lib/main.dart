@@ -299,7 +299,6 @@ class _MainApp extends State<MainApp> with WidgetsBindingObserver {
       _lifecycleState = WidgetsBinding.instance.lifecycleState;
       listener.tryEmit("lifecycle", _lifecycleState);
     }
-    tasks.init();
   }
 
   @override

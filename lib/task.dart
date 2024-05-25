@@ -22,6 +22,8 @@ class TaskManager {
   List<int> peddingGids = [];
   List<String> peddingTokens = [];
   late Timer _pingTimer;
+  bool _inited = false;
+  bool get inited => _inited;
   void clear() {
     tasks.clear();
     _channel?.stream.drain();
@@ -233,6 +235,7 @@ class TaskManager {
   }
 
   void init() {
+    _inited = true;
     listener.on("lifecycle", _onLifeCycleChanged);
     _pingTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       try {

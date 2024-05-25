@@ -89,6 +89,7 @@ class AuthInfo {
             "Logged in as ${u.username} (${u.id}). isAdmin: ${u.isAdmin}. permissions: ${u.permissions}");
         await checkSessionInfo();
         if (canManageTasks == true) {
+          if (!tasks.inited) tasks.init();
           await tasks.connect();
         }
       } else if (re.status == 401 || re.status == 1 || re.status == 404) {
