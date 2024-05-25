@@ -147,7 +147,11 @@ class _TaskPage extends State<TaskPage> {
         }
       }
       if (p.failedPage == 0) {
-        final percent = p.downloadedPage / p.totalPage;
+        double downloaded = p.downloadedPage.toDouble();
+        for (final e in p.details) {
+          downloaded += e.total == 0 ? 0 : e.downloaded / e.total;
+        }
+        final percent = downloaded / p.totalPage;
         final percentText = "${(percent * 100).toStringAsFixed(2)}%";
         return Column(children: [
           LinearPercentIndicator(

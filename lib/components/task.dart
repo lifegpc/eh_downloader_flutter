@@ -39,7 +39,11 @@ class _TaskView extends State<TaskView> {
     switch (widget.task.base.type) {
       case TaskType.download:
         final progress = widget.task.progress as TaskDownloadProgess;
-        return progress.downloadedPage / progress.totalPage;
+        double d = progress.downloadedPage.toDouble();
+        for (final e in progress.details) {
+          d += e.total == 0 ? 0 : e.downloaded / e.total;
+        }
+        return d / progress.totalPage;
       case TaskType.exportZip:
         final progress = widget.task.progress as TaskExportZipProgress;
         return progress.addedPage / progress.totalPage;
