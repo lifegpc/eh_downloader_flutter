@@ -26,7 +26,7 @@ Future<bool> login(String username, String password) async {
       password: password,
       setCookie: true,
       httpOnly: true,
-      secure: u.scheme == 'https',
+      secure: u.scheme == 'https' || u.host == "localhost",
       client: "flutter",
       device: await device,
       clientVersion: await clientVersion,

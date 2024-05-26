@@ -24,6 +24,8 @@ class TaskManager {
   late Timer _pingTimer;
   bool _inited = false;
   bool get inited => _inited;
+  bool _need_closed = false;
+  bool _wait_closed = false;
   void clear() {
     tasks.clear();
     _channel?.stream.drain();
@@ -191,15 +193,28 @@ class TaskManager {
         }
       }, onError: (e) {
         _log.warning("Task websocket error: $e");
-      }, onDone: () {
-        _log.warning(
-            "WenSocket closed: ${_channel?.closeCode} ${_channel?.closeReason}");
-        if (_allowReconnect) {
+        if (_allowReconnect && !_need_closed) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;
             connect();
           });
+        }
+        if (_wait_closed) {
+          _wait_closed = false;
+        }
+      }, onDone: () {
+        _log.warning(
+            "WenSocket closed: ${_channel?.closeCode} ${_channel?.closeReason}");
+        if (_allowReconnect && !_need_closed) {
+          _log.info("Reconnecting to task server in 5 seconds");
+          _reconnectTimer = Timer(const Duration(seconds: 5), () {
+            _reconnectTimer = null;
+            connect();
+          });
+        }
+        if (_wait_closed) {
+          _wait_closed = false;
         }
       }, cancelOnError: true);
       await _channel!.ready;
@@ -245,5 +260,33 @@ class TaskManager {
       }
       _pingTimer = timer;
     });
+  }
+
+  FutureOr<bool> _waitClosed() {
+    if (!_wait_closed) return true;
+    return Future.delayed(const Duration(milliseconds: 10), _waitClosed);
+  }
+
+  Future<bool> waitClosed() {
+    return Future.microtask(_waitClosed);
+  }
+
+  Future<void> refresh() async {
+    if (_channel != null) {
+      _need_closed = true;
+      _wait_closed = true;
+      _channel!.sink.add("{\"type\":\"close\"}");
+      await waitClosed();
+    }
+    _channel?.sink.close();
+    _channel = null;
+    _closed = true;
+    if (_reconnectTimer != null) {
+      _reconnectTimer!.cancel();
+      _reconnectTimer = null;
+    }
+    tasks.clear();
+    listener.tryEmit("task_list_changed", null);
+    await connect();
   }
 }

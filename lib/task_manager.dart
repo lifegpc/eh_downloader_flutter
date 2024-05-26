@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:enum_flag/enum_flag.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,6 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'api/task.dart';
 import 'components/task.dart';
 import 'globals.dart';
+import 'platform/media_query.dart';
+import 'utils.dart';
 
 enum TaskStatusFilterFlag with EnumFlag {
   wait,
@@ -71,6 +75,8 @@ class TaskManagerPage extends StatefulWidget {
 class _TaskManagerPage extends State<TaskManagerPage>
     with ThemeModeWidget, IsTopWidget2 {
   late TaskStatusFilter _filter;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     _filter = TaskStatusFilter();
@@ -177,6 +183,7 @@ class _TaskManagerPage extends State<TaskManagerPage>
   Widget _buildView(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         SliverAppBar(
           leading: IconButton(
@@ -216,6 +223,25 @@ class _TaskManagerPage extends State<TaskManagerPage>
         });
   }
 
+  Widget _buildRefreshIcon(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    return IconButton(
+        onPressed: () {
+          _refreshIndicatorKey.currentState?.show();
+        },
+        tooltip: i18n.refresh,
+        icon: const Icon(Icons.refresh));
+  }
+
+  Widget _buildIconList(BuildContext context) {
+    return Row(children: [
+      isDesktop || (kIsWeb && pointerIsMouse)
+          ? _buildRefreshIcon(context)
+          : Container(),
+      _buildAddMenu(context),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!tryInitApi(context)) {
@@ -229,11 +255,16 @@ class _TaskManagerPage extends State<TaskManagerPage>
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          _buildView(context),
+          RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: () async {
+                return await tasks.refresh();
+              },
+              child: _buildView(context)),
           Positioned(
               bottom: size.height / 10,
               right: size.width / 10,
-              child: _buildAddMenu(context))
+              child: _buildIconList(context))
         ],
       ),
     );

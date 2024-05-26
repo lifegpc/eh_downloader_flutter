@@ -192,5 +192,6 @@
     },
     "category": "Category",
     "uploader": "Uploader",
-    "dlUseAvgSpeed": "Show average speed in task details."
+    "dlUseAvgSpeed": "Show average speed in task details.",
+    "refresh": "Refresh"
 }
