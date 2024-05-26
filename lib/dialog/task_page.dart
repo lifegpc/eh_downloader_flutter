@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../api/task.dart';
+import '../components/fit_text.dart';
 import '../components/rate.dart';
 import '../globals.dart';
 import '../main.dart';
@@ -168,8 +169,10 @@ class _TaskPage extends State<TaskPage> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Expanded(
-                child: Text(i18n.downloadedSize(
-                    "${getFileSize(p.downloadedBytes)}${i18n.comma}${p.downloadedPage}/${p.totalPage}"))),
+                child: FitText(texts: [
+              (i18n.downloadedSize(getFileSize(p.downloadedBytes)), 0),
+              ("${p.downloadedPage}/${p.totalPage}", 1)
+            ], overflow: TextOverflow.ellipsis, maxLines: 1)),
             Text("${getFileSize((speed * 1000).toInt())}/s"),
           ]),
         ]);
@@ -252,7 +255,17 @@ class _TaskPage extends State<TaskPage> {
                 : avgSpeed
             : d.speed;
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SelectableText("${d.name}(${d.width}x${d.height})"),
+          FitText(
+            texts: [
+              ("${d.index}.", 2),
+              (d.name, 3),
+              ("(${d.width}x${d.height})", 0),
+              (d.isOriginal ? "(${i18n.originalImg})" : "", 1)
+            ],
+            selectable: true,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
           LinearPercentIndicator(
             animation: true,
             animateFromLastPercent: true,
@@ -268,7 +281,9 @@ class _TaskPage extends State<TaskPage> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Expanded(
                 child: Text(
-                    "${getFileSize(d.downloaded)}/${getFileSize(d.total)}")),
+                    "${getFileSize(d.downloaded)}/${getFileSize(d.total)}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis)),
             Text(
                 "${getFileSize((speed * 1000).toInt())}/s${i18n.comma}${fmtDuration(context, eta)}"),
           ]),

@@ -193,5 +193,6 @@
     "category": "Category",
     "uploader": "Uploader",
     "dlUseAvgSpeed": "Show average speed in task details.",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "originalImg": "Original image"
 }

@@ -6,10 +6,16 @@ class FitText extends StatelessWidget {
     required this.texts,
     this.style,
     this.separator = " ",
+    this.selectable = false,
+    this.overflow,
+    this.maxLines,
   });
   final List<(String, int)> texts;
   final TextStyle? style;
   final String separator;
+  final bool selectable;
+  final TextOverflow? overflow;
+  final int? maxLines;
 
   Size _textSize(String text, TextStyle? style) {
     final TextPainter textPainter = TextPainter(
@@ -37,10 +43,13 @@ class FitText extends StatelessWidget {
       final double maxWidth = constraints.maxWidth;
       for (int i = sizes.length - 1; i >= 0; i--) {
         if (sizes[i] <= maxWidth) {
-          return Text(texts[i], style: style);
+          return selectable
+              ? SelectableText(texts[i], style: style)
+              : Text(texts[i], style: style, overflow: overflow);
         }
       }
-      return Text(texts[0], style: style);
+      return Text(texts[0],
+          style: style, overflow: overflow, maxLines: maxLines);
     });
   }
 }
