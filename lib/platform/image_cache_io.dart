@@ -107,7 +107,10 @@ class ImageCaches {
     final d = await _db!.query("images", where: 'url = ?', whereArgs: [uri]);
     if (d.isEmpty) return null;
     final data = d.first;
-    final path = data["path"] as String;
+    var p = data["path"] as String;
+    if (_exeDir != null && path.isRelative(p)) {
+      p = path.join(_exeDir!, p);
+    }
     final header = data["headers"] as String;
     final realUrl = data["readUrl"] as String?;
     final lastUsed = DateTime.now().millisecondsSinceEpoch;
@@ -117,7 +120,7 @@ class ImageCaches {
     } catch (e) {
       _log.warning("Failed to set last_used to $lastUsed for $uri.");
     }
-    final f = _fs.file(path);
+    final f = _fs.file(p);
     final da = await f.readAsBytes();
     final h = jsonDecode(header) as Map<String, dynamic>;
     return (
@@ -132,8 +135,8 @@ class ImageCaches {
     if (!_inited) return;
     final u = Uri.parse(uri);
     final dir = await cacheDir;
-    final p = path.join(dir.path, u.host.isEmpty ? "nohost" : u.host,
-        u.path.substring(1) + u.query);
+    String p = path.join(dir.path, u.host.isEmpty ? "nohost" : u.host,
+        u.path.substring(1) + (u.hasQuery ? "?${u.query}" : ""));
     final d = _fs.directory(path.dirname(p));
     if (!(await d.exists())) {
       await d.create(recursive: true);
@@ -142,6 +145,9 @@ class ImageCaches {
     await f.writeAsBytes(data.toList());
     final lastUsed = DateTime.now().millisecondsSinceEpoch;
     final header = jsonEncode(headers);
+    if (_exeDir != null) {
+      p = path.relative(p, from: _exeDir!);
+    }
     await _db!.rawInsert(
         "INSERT OR REPLACE INTO images VALUES (?, ?, ?, ?, ?);",
         [uri, p, lastUsed, header, realUri]);
