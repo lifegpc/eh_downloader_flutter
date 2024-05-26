@@ -194,5 +194,6 @@
     "uploader": "Uploader",
     "dlUseAvgSpeed": "Show average speed in task details.",
     "refresh": "Refresh",
-    "originalImg": "Original image"
+    "originalImg": "Original image",
+    "overwriteDefaultConfig": "Overwrite default config"
 }

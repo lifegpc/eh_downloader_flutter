@@ -194,5 +194,6 @@
     "uploader": "上传者",
     "dlUseAvgSpeed": "在任务详情中显示平均速度。",
     "refresh": "刷新",
-    "originalImg": "原图"
+    "originalImg": "原图",
+    "overwriteDefaultConfig": "覆盖默认设置"
 }

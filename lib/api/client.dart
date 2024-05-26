@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
 import 'package:eh_downloader_flutter/api/file.dart';
+import 'package:retrofit/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
@@ -234,6 +235,9 @@ abstract class _EHApi {
     @Part(name: "type") String t = "download",
     @CancelRequest() CancelToken? cancel,
   });
+  @GET('/task/download_cfg')
+  Future<ApiResult<DownloadConfig>> getDefaultDownloadConfig(
+      {@CancelRequest() CancelToken? cancel});
 }
 
 class EHApi extends __EHApi {

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:eh_downloader_flutter/api/task.dart';
+import 'package:eh_downloader_flutter/components/labeled_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -26,8 +28,13 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
   int? _gid;
   String? _token;
   CancelToken? _cancel;
+  CancelToken? _cancel2;
   bool _isCreating = false;
   bool _ok = false;
+  DownloadConfig? _cfg;
+  bool _useCfg = false;
+  DownloadConfig? _dftCfg;
+  bool _fetched = false;
 
   @override
   void initState() {
@@ -48,6 +55,7 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
     _gidController.dispose();
     _tokenController.dispose();
     _cancel?.cancel();
+    _cancel2?.cancel();
     super.dispose();
   }
 
@@ -67,7 +75,9 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
       setState(() {
         _isCreating = true;
       });
-      (await api.createDownloadTask(_gid!, _token!, cancel: _cancel)).unwrap();
+      (await api.createDownloadTask(_gid!, _token!,
+              cfg: _useCfg ? _cfg : null, cancel: _cancel))
+          .unwrap();
       _ok = true;
       if (!_cancel!.isCancelled) {
         setState(() {
@@ -84,6 +94,18 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
     }
   }
 
+  Future<void> fetchDefaultCfg() async {
+    _fetched = true;
+    try {
+      _cancel2 = CancelToken();
+      _dftCfg = (await api.getDefaultDownloadConfig(cancel: _cancel2)).unwrap();
+    } catch (e) {
+      if (!_cancel2!.isCancelled) {
+        _log.warning("Failed to fetch default download config:", e);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     tryInitApi(context);
@@ -92,6 +114,7 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
         context.canPop() ? context.pop() : context.go("/task_manager");
       });
     }
+    if (!_fetched) fetchDefaultCfg();
     final i18n = AppLocalizations.of(context)!;
     final maxWidth = MediaQuery.of(context).size.width;
     return Container(
@@ -173,6 +196,92 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
                         }
                       },
                     )),
+                    _buildWithVecticalPadding(LabeledCheckbox(
+                      value: _useCfg,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _useCfg = value;
+                            if (_useCfg && _cfg == null) {
+                              if (_dftCfg != null) {
+                                _cfg =
+                                    DownloadConfig.fromJson(_dftCfg!.toJson());
+                              } else {
+                                _cfg = DownloadConfig();
+                              }
+                            }
+                          });
+                        }
+                      },
+                      label: Text(i18n.overwriteDefaultConfig),
+                    )),
+                    _useCfg
+                        ? _buildWithVecticalPadding(NumberFormField(
+                            min: 1,
+                            initialValue: _cfg!.maxDownloadImgCount,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: i18n.maxDownloadImgCount,
+                            ),
+                            onChanged: (s) {
+                              setState(() {
+                                _cfg!.maxDownloadImgCount = s;
+                              });
+                            }))
+                        : Container(),
+                    _useCfg
+                        ? _buildWithVecticalPadding(LabeledCheckbox(
+                            value: _cfg!.mpv ?? false,
+                            onChanged: (b) {
+                              if (b != null) {
+                                setState(() {
+                                  _cfg!.mpv = b;
+                                });
+                              }
+                            },
+                            label: Text(i18n.mpv)))
+                        : Container(),
+                    _useCfg
+                        ? _buildWithVecticalPadding(LabeledCheckbox(
+                            value: _cfg!.downloadOriginalImg ?? false,
+                            onChanged: (b) {
+                              if (b != null) {
+                                setState(() {
+                                  _cfg!.downloadOriginalImg = b;
+                                });
+                              }
+                            },
+                            label: Text(i18n.downloadOriginalImg)))
+                        : Container(),
+                    _useCfg
+                        ? _buildWithVecticalPadding(NumberFormField(
+                            min: 1,
+                            initialValue: _cfg!.maxRetryCount,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: i18n.maxRetryCount,
+                            ),
+                            onChanged: (s) {
+                              if (s != null) {
+                                setState(() {
+                                  _cfg!.maxRetryCount = s;
+                                });
+                              }
+                            },
+                          ))
+                        : Container(),
+                    _useCfg
+                        ? _buildWithVecticalPadding(LabeledCheckbox(
+                            value: _cfg!.removePreviousGallery ?? false,
+                            onChanged: (b) {
+                              if (b != null) {
+                                setState(() {
+                                  _cfg!.removePreviousGallery = b;
+                                });
+                              }
+                            },
+                            label: Text(i18n.removePreviousGallery)))
+                        : Container(),
                     _buildWithVecticalPadding(ElevatedButton(
                         onPressed: _gid != null &&
                                 _token != null &&
