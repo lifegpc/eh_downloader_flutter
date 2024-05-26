@@ -38,10 +38,12 @@ dependencies:
   photo_view: ^0.15.0
   retrofit: ^4.0.1
   shared_preferences: ^2.2.0
+  sqflite_common_ffi: ^2.3.3
   super_clipboard: ^0.8.15
   super_context_menu: ^0.8.15
   ua_parser_js: ^1.0.1
   user_agent_analyzer: ^5.0.0
+  web: ^0.5.0
   web_socket_channel: ^3.0.0
   window_manager: ^0.3.6
 
@@ -59,6 +61,7 @@ dev_dependencies:
   build_runner: ^2.4.6
   retrofit_generator: ^8.1.0
   json_serializable: ^6.7.1
+  sqflite_common_ffi: ^2.3.3
 
 flutter:
   generate: true

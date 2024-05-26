@@ -25,6 +25,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
   bool _oriShowTranslatedTag = false;
   bool _oriUseTitleJpn = false;
   bool _oriDlUseAvgSpeed = false;
+  bool _oriEnableImageCache = false;
   bool _displayAd = false;
   Lang _lang = Lang.system;
   bool _preventScreenCapture = false;
@@ -32,6 +33,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
   bool _showTranslatedTag = false;
   bool _useTitleJpn = false;
   bool _dlUseAvgSpeed = false;
+  bool _enableImageCache = false;
   @override
   void initState() {
     super.initState();
@@ -92,6 +94,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _oriDlUseAvgSpeed = false;
       _dlUseAvgSpeed = false;
     }
+    try {
+      _oriEnableImageCache = prefs.getBool("enableImageCache") ?? true;
+      _enableImageCache = _oriEnableImageCache;
+    } catch (e) {
+      _log.warning("Failed to get enableImageCache:", e);
+      _oriEnableImageCache = true;
+      _enableImageCache = true;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -110,6 +120,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
       _showTranslatedTag = _oriLang.toLocale().languageCode == "zh";
       _preventScreenCapture = false;
       _dlUseAvgSpeed = false;
+      _enableImageCache = true;
     });
   }
 
@@ -176,6 +187,14 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
         _log.warning("Failed to save dlUseAvgSpeed.");
       } else {
         _oriDlUseAvgSpeed = _dlUseAvgSpeed;
+      }
+    }
+    if (_enableImageCache != _oriEnableImageCache) {
+      if (!await prefs.setBool("enableImageCache", _enableImageCache)) {
+        re = false;
+        _log.warning("Failed to save enableImageCache.");
+      } else {
+        _oriEnableImageCache = _enableImageCache;
       }
     }
     return re;
@@ -329,6 +348,21 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                 },
                                 child: Text(AppLocalizations.of(context)!
                                     .dlUseAvgSpeed),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: CheckboxMenuButton(
+                                value: _enableImageCache,
+                                onChanged: (bool? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      _enableImageCache = value;
+                                    });
+                                  }
+                                },
+                                child: Text(AppLocalizations.of(context)!
+                                    .enableImageCache),
                               ),
                             ),
                             Row(

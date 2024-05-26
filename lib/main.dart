@@ -251,6 +251,7 @@ void main() async {
   if (prefs.getBool("preventScreenCapture") ?? false) {
     await platformDisplay.enableProtect();
   }
+  await prepareImageCaches();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   runApp(const MainApp());
 }

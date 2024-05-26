@@ -22,6 +22,7 @@ import 'main.dart';
 import 'platform/clipboard.dart';
 import 'platform/display.dart';
 import 'platform/get_jar.dart';
+import 'platform/image_cache.dart';
 import 'platform/path.dart';
 import 'platform/set_title.dart';
 import 'tags.dart';
@@ -38,6 +39,7 @@ final dio = Dio()
 Config? _prefs;
 EHApi? _api;
 PersistCookieJar? _jar;
+ImageCaches? _imageCaches;
 
 Future<void> prepareJar() async {
   final jar = PersistCookieJar(storage: FileStorage(await getJarPath()));
@@ -65,6 +67,21 @@ Config get prefs {
   }
   return _prefs!;
 }
+
+final _globalLog = Logger("global");
+
+Future<void> prepareImageCaches() async {
+  _imageCaches = ImageCaches();
+  try {
+    await _imageCaches!.init();
+  } catch (e) {
+    _globalLog.warning("Failed to initiailzed image caches: $e");
+  }
+}
+
+ImageCaches get imageCaches => _imageCaches!;
+
+bool get isImageCacheEnabled => prefs.getBool("enableImageCache") ?? true;
 
 void initApi(String baseUrl) {
   _api = EHApi(dio, baseUrl: baseUrl);

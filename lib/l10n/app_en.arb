@@ -195,5 +195,6 @@
     "dlUseAvgSpeed": "Show average speed in task details.",
     "refresh": "Refresh",
     "originalImg": "Original image",
-    "overwriteDefaultConfig": "Overwrite default config"
+    "overwriteDefaultConfig": "Overwrite default config",
+    "enableImageCache": "Cache images to disk."
 }

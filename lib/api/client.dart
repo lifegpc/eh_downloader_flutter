@@ -315,11 +315,11 @@ class EHApi extends __EHApi {
       ThumbnailAlign? align}) {
     final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
     final queryParameters = <String, dynamic>{
-      r'max': max,
-      r'width': width,
-      r'height': height,
-      r'quality': quality,
-      r'force': force,
+      r'max': max?.toString(),
+      r'width': width?.toString(),
+      r'height': height?.toString(),
+      r'quality': quality?.toString(),
+      r'force': force?.toString(),
       r'method': method?.name,
       r'align': align?.name,
     };

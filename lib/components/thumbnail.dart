@@ -84,6 +84,7 @@ class _Thumbnail extends State<Thumbnail> {
   Color? _iconColor;
   double? _iconSize;
   bool _disposed = false;
+  String? _originalUrl;
   void _onNsfwChanged(dynamic args) {
     final arguments = args as (String, bool)?;
     if (arguments == null) return;
@@ -134,6 +135,28 @@ class _Thumbnail extends State<Thumbnail> {
             .files[token]![0]!
             .id;
       }
+      _originalUrl ??= api.getThumbnailUrl(_fileId!,
+          max: widget._max,
+          width: widget._width,
+          height: widget._height,
+          method: ThumbnailMethod.contain,
+          align: ThumbnailAlign.center);
+      if (isImageCacheEnabled) {
+        try {
+          final cache = await imageCaches.getCache(_originalUrl!);
+          if (cache != null) {
+            setState(() {
+              _data = cache!.$1;
+              _uri = cache!.$3 ?? _originalUrl;
+              _isLoading = false;
+              _cancel = null;
+            });
+            return;
+          }
+        } catch (e) {
+          _log.warning("Failed to get cache for $_originalUrl: $e");
+        }
+      }
       final re = await api.getThumbnail(_fileId!,
           max: widget._max,
           width: widget._width,
@@ -148,6 +171,14 @@ class _Thumbnail extends State<Thumbnail> {
       _uri = re.response.realUri.toString();
       final data = Uint8List.fromList(re.data);
       if (!_cancel!.isCancelled) {
+        if (isImageCacheEnabled) {
+          try {
+            await imageCaches.putCache(
+                _originalUrl!, data, re.response.headers.map, _uri);
+          } catch (e) {
+            _log.warning("Failed to put cache for $_originalUrl: $e");
+          }
+        }
         setState(() {
           _isLoading = false;
           _data = data;
