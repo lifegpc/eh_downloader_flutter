@@ -138,6 +138,14 @@ class ImageCaches {
     String p = path.join(dir.path, u.host.isEmpty ? "nohost" : u.host,
         u.path.substring(1) + (u.hasQuery ? "?${u.query}" : ""));
     final d = _fs.directory(path.dirname(p));
+    if (isWindows) {
+      if (path.isAbsolute(p)) {
+        p = p.substring(0, 2) +
+            p.substring(2).replaceAll(RegExp("[:\\*\\?\"\\<\\>\\|]"), '_');
+      } else {
+        p = p.replaceAll(RegExp("[:\\*\\?\"\\<\\>\\|]"), '_');
+      }
+    }
     if (!(await d.exists())) {
       await d.create(recursive: true);
     }
