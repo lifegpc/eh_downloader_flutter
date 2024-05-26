@@ -24,10 +24,12 @@ class TaskManager {
   late Timer _pingTimer;
   bool _inited = false;
   bool get inited => _inited;
-  bool _need_closed = false;
-  bool _wait_closed = false;
+  bool _needClosed = false;
+  bool _waitClosed = false;
+  bool get closed => _closed;
   void clear() {
     tasks.clear();
+    tasksList.clear();
     _channel?.stream.drain();
     _channel?.sink.close();
     _closed = true;
@@ -193,28 +195,28 @@ class TaskManager {
         }
       }, onError: (e) {
         _log.warning("Task websocket error: $e");
-        if (_allowReconnect && !_need_closed) {
+        if (_allowReconnect && !_needClosed) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;
             connect();
           });
         }
-        if (_wait_closed) {
-          _wait_closed = false;
+        if (_waitClosed) {
+          _waitClosed = false;
         }
       }, onDone: () {
         _log.warning(
             "WenSocket closed: ${_channel?.closeCode} ${_channel?.closeReason}");
-        if (_allowReconnect && !_need_closed) {
+        if (_allowReconnect && !_needClosed) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;
             connect();
           });
         }
-        if (_wait_closed) {
-          _wait_closed = false;
+        if (_waitClosed) {
+          _waitClosed = false;
         }
       }, cancelOnError: true);
       await _channel!.ready;
@@ -262,21 +264,21 @@ class TaskManager {
     });
   }
 
-  FutureOr<bool> _waitClosed() {
-    if (!_wait_closed) return true;
-    return Future.delayed(const Duration(milliseconds: 10), _waitClosed);
+  FutureOr<bool> _waitClose() {
+    if (!_waitClosed) return true;
+    return Future.delayed(const Duration(milliseconds: 10), _waitClose);
   }
 
-  Future<bool> waitClosed() {
-    return Future.microtask(_waitClosed);
+  Future<bool> waitClose() {
+    return Future.microtask(_waitClose);
   }
 
   Future<void> refresh() async {
     if (_channel != null) {
-      _need_closed = true;
-      _wait_closed = true;
+      _needClosed = true;
+      _waitClosed = true;
       _channel!.sink.add("{\"type\":\"close\"}");
-      await waitClosed();
+      await waitClose();
     }
     _channel?.sink.close();
     _channel = null;
@@ -286,6 +288,7 @@ class TaskManager {
       _reconnectTimer = null;
     }
     tasks.clear();
+    tasksList.clear();
     listener.tryEmit("task_list_changed", null);
     await connect();
   }
