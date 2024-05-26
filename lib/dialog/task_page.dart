@@ -169,10 +169,15 @@ class _TaskPage extends State<TaskPage> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Expanded(
-                child: FitText(texts: [
-              (i18n.downloadedSize(getFileSize(p.downloadedBytes)), 0),
-              ("${p.downloadedPage}/${p.totalPage}", 1)
-            ], overflow: TextOverflow.ellipsis, maxLines: 1)),
+                child: FitText(
+              texts: [
+                (i18n.downloadedSize(getFileSize(p.downloadedBytes)), 0),
+                ("${p.downloadedPage}/${p.totalPage}", 1)
+              ],
+              overflow: TextOverflow.ellipsis,
+              separator: i18n.comma,
+              maxLines: 1,
+            )),
             Text("${getFileSize((speed * 1000).toInt())}/s"),
           ]),
         ]);
