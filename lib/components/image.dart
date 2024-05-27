@@ -38,8 +38,9 @@ class ImageWithContextMenu extends StatelessWidget {
                 callback: () async {
                   try {
                     await copyImageToClipboard(data, fmt);
-                  } catch (err) {
-                    _log.warning("Failed to copy image to clipboard:", err);
+                  } catch (err, stack) {
+                    _log.warning(
+                        "Failed to copy image to clipboard: $err\n$stack");
                   }
                 })
           ];
@@ -59,12 +60,13 @@ class ImageWithContextMenu extends StatelessWidget {
                   try {
                     platformPath.saveFile(fileName!, fmt.toMimeType(), data,
                         dir: dir ?? "");
-                  } catch (err) {
-                    _log.warning("Failed to save image:", err);
+                  } catch (err, stack) {
+                    _log.warning("Failed to save image: $err\n$stack");
                   }
                 }));
           }
-          if ((isNsfw != null && changeNsfw != null) || (isAd != null && changeAd != null)) {
+          if ((isNsfw != null && changeNsfw != null) ||
+              (isAd != null && changeAd != null)) {
             list.add(MenuSeparator());
           }
           if (isNsfw != null && changeNsfw != null) {

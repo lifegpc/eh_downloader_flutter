@@ -92,8 +92,8 @@ class DioImage extends ImageProvider<DioImage> {
             final buffer = await ui.ImmutableBuffer.fromUint8List(cache!.$1);
             return decode(buffer);
           }
-        } catch (e) {
-          _log.warning("Failed to get cache for ${url.toString()}: $e");
+        } catch (e, stack) {
+          _log.warning("Failed to get cache for ${url.toString()}: $e\n$stack");
         }
       }
 
@@ -128,8 +128,8 @@ class DioImage extends ImageProvider<DioImage> {
         try {
           await imageCaches.putCache(url.toString(), bytes,
               response.headers.map, response.realUri.toString());
-        } catch (e) {
-          _log.warning("Failed to put cache for ${url.toString()}: $e");
+        } catch (e, stack) {
+          _log.warning("Failed to put cache for ${url.toString()}: $e\n$stack");
         }
       }
 

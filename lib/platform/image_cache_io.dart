@@ -144,7 +144,7 @@ class ImageCaches {
             needDeleted.add(url);
           }
         } catch (e) {
-          _log.warning("Failed to check $p is exists or not. Url: $url");
+          _log.warning("Failed to check $p is exists or not. Url: $url. $e");
         }
       }
       offset += records.length;
@@ -181,7 +181,7 @@ class ImageCaches {
       await _db!.rawUpdate(
           "UPDATE images SET last_used = ? WHERE url = ?;", [lastUsed, uri]);
     } catch (e) {
-      _log.warning("Failed to set last_used to $lastUsed for $uri.");
+      _log.warning("Failed to set last_used to $lastUsed for $uri: $e");
     }
     final f = _fs.file(p);
     final da = await f.readAsBytes();
@@ -252,7 +252,7 @@ class ImageCaches {
         try {
           await f.delete();
         } catch (e) {
-          _log.warning("Failed to delete $p");
+          _log.warning("Failed to delete $p: $e");
         }
       }
       offset += records.length;

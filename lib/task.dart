@@ -190,8 +190,9 @@ class TaskManager {
           } else if (type == "ping") {
             _channel?.sink.add("{\"type\":\"pong\"}");
           }
-        } catch (e) {
-          _log.warning("Error processing task message: $e, event: $event");
+        } catch (e, stack) {
+          _log.warning(
+              "Error processing task message: $e, event: $event\n$stack");
         }
       }, onError: (e) {
         _log.warning("Task websocket error: $e");

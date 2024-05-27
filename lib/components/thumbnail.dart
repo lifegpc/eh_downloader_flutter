@@ -153,8 +153,8 @@ class _Thumbnail extends State<Thumbnail> {
             });
             return;
           }
-        } catch (e) {
-          _log.warning("Failed to get cache for $_originalUrl: $e");
+        } catch (e, stack) {
+          _log.warning("Failed to get cache for $_originalUrl: $e\n$stack");
         }
       }
       final re = await api.getThumbnail(_fileId!,
@@ -175,8 +175,8 @@ class _Thumbnail extends State<Thumbnail> {
           try {
             await imageCaches.putCache(
                 _originalUrl!, data, re.response.headers.map, _uri);
-          } catch (e) {
-            _log.warning("Failed to put cache for $_originalUrl: $e");
+          } catch (e, stack) {
+            _log.warning("Failed to put cache for $_originalUrl: $e\n$stack");
           }
         }
         setState(() {
@@ -262,23 +262,23 @@ class _Thumbnail extends State<Thumbnail> {
       case _ThumbnailMenu.copyImage:
         try {
           copyImageToClipboard(_data!, ImageFmt.jpg);
-        } catch (err) {
-          _log.warning("Failed to copy image to clipboard:", err);
+        } catch (err, stack) {
+          _log.warning("Failed to copy image to clipboard: $err\n$stack");
         }
         break;
       case _ThumbnailMenu.copyImgUrl:
         try {
           copyTextToClipboard(_uri!);
-        } catch (err) {
-          _log.warning("Failed to copy image url to clipboard:", err);
+        } catch (err, stack) {
+          _log.warning("Failed to copy image url to clipboard: $err\n$stack");
         }
         break;
       case _ThumbnailMenu.saveAs:
         try {
           await platformPath.saveFile(_fileName!, "image/jpeg", _data!,
               dir: _dir);
-        } catch (err) {
-          _log.warning("Failed to save image:", err);
+        } catch (err, stack) {
+          _log.warning("Failed to save image: $err\n$stack");
         }
         break;
       case _ThumbnailMenu.markAsNsfw:
