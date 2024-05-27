@@ -16,6 +16,7 @@ path TEXT,
 last_used INT,
 headers TEXT,
 realUrl TEXT,
+size INT,
 PRIMARY KEY(url)
 );""";
 const _allTables = ['images'];
@@ -29,6 +30,7 @@ class ImageCaches {
   String? _exeDir;
   final Set<String> _existingTable = {};
   bool _inited = false;
+  static const version = 1;
   ImageCaches();
   Future<String?> _desktopFilePath() async {
     final String? exe = await platformPath.getCurrentExe();
@@ -70,6 +72,30 @@ class ImageCaches {
     await _updateExistsTable();
     final v = await _db!.getVersion();
     _log.fine("Database version: $v");
+    if (v < version) {
+      bool needOptimized = false;
+      if (v < 1 && _existingTable.contains("images")) {
+        await _db!.execute("ALTER TABLE images ADD size INT;");
+        final re = await _db!.query("images", columns: ['url', 'path']);
+        for (final r in re) {
+          final f = _fs.file(r["path"] as String);
+          try {
+            final stats = await f.stat();
+            Map<String, Object?> map = {};
+            map["size"] = stats.size;
+            await _db!
+                .update("images", map, where: 'url = ?', whereArgs: [r["url"]]);
+          } catch (e) {
+            _log.warning("Failed to stat ${f.path}: $e");
+            await _db!
+                .delete("images", where: 'url = ?', whereArgs: [r["url"]]);
+            needOptimized = true;
+          }
+        }
+      }
+      await _db!.setVersion(version);
+      if (needOptimized) await _optimize();
+    }
     if (_allTables.length != _existingTable.length ||
         !_allTables.every((e) => _existingTable.contains(e))) {
       return false;
@@ -91,6 +117,10 @@ class ImageCaches {
     for (final c in cur) {
       _existingTable.add(c["name"]! as String);
     }
+  }
+
+  Future<void> _optimize() async {
+    await _db!.execute("VACUUM;");
   }
 
   Future<void> init() async {
@@ -157,7 +187,7 @@ class ImageCaches {
       p = path.relative(p, from: _exeDir!);
     }
     await _db!.rawInsert(
-        "INSERT OR REPLACE INTO images VALUES (?, ?, ?, ?, ?);",
-        [uri, p, lastUsed, header, realUri]);
+        "INSERT OR REPLACE INTO images VALUES (?, ?, ?, ?, ?, ?);",
+        [uri, p, lastUsed, header, realUri, data.length]);
   }
 }
