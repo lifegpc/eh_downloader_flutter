@@ -31,6 +31,8 @@ class ImageCaches {
   final Set<String> _existingTable = {};
   bool _inited = false;
   static const version = 1;
+  int _size = 0;
+  int get size => _size;
   ImageCaches();
   Future<String?> _desktopFilePath() async {
     final String? exe = await platformPath.getCurrentExe();
@@ -123,11 +125,42 @@ class ImageCaches {
     await _db!.execute("VACUUM;");
   }
 
+  Future<void> _removeUnexist() async {
+    List<String> needDeleted = [];
+    int offset = 0;
+    late List<Map<String, Object?>> records;
+    do {
+      records = await _db!.query("images",
+          columns: ["url", "path"], limit: 100, offset: offset);
+      for (final record in records) {
+        final url = record["url"] as String;
+        var p = record["path"] as String;
+        if (_exeDir != null && path.isRelative(p)) {
+          p = path.join(_exeDir!, p);
+        }
+        final f = _fs.file(p);
+        try {
+          if (!await f.exists()) {
+            needDeleted.add(url);
+          }
+        } catch (e) {
+          _log.warning("Failed to check $p is exists or not. Url: $url");
+        }
+      }
+      offset += records.length;
+    } while (records.isNotEmpty);
+    for (final url in needDeleted) {
+      await _db!.delete("images", where: "url = ?", whereArgs: [url]);
+    }
+    if (needDeleted.isNotEmpty) await _optimize();
+  }
+
   Future<void> init() async {
     sqfliteFfiInit();
     _db = await databaseFactoryFfi.openDatabase(await _filePath);
     await _createDir();
     if (!(await _checkDatabase())) await _createTable();
+    await updateSize();
     _inited = true;
   }
 
@@ -186,8 +219,45 @@ class ImageCaches {
     if (_exeDir != null) {
       p = path.relative(p, from: _exeDir!);
     }
+    final exes = await _db!.query("images", where: 'url = ?', whereArgs: [uri]);
     await _db!.rawInsert(
         "INSERT OR REPLACE INTO images VALUES (?, ?, ?, ?, ?, ?);",
         [uri, p, lastUsed, header, realUri, data.length]);
+    if (exes.isEmpty) {
+      _size += data.length;
+    } else {
+      final originalSize = (exes[0]["size"] as int?) ?? 0;
+      _size += (data.length - originalSize);
+    }
+  }
+
+  Future<void> updateSize({bool clear = false}) async {
+    if (clear) await _removeUnexist();
+    final re = await _db!.rawQuery("SELECT SUM(size) AS sizes FROM images;");
+    _size = re[0]["sizes"] as int;
+  }
+
+  Future<void> clear() async {
+    int offset = 0;
+    late List<Map<String, Object?>> records;
+    do {
+      records = await _db!
+          .query("images", columns: ["path"], limit: 100, offset: offset);
+      for (final record in records) {
+        var p = record["path"] as String;
+        if (_exeDir != null && path.isRelative(p)) {
+          p = path.join(_exeDir!, p);
+        }
+        final f = _fs.file(p);
+        try {
+          await f.delete();
+        } catch (e) {
+          _log.warning("Failed to delete $p");
+        }
+      }
+      offset += records.length;
+    } while (records.isNotEmpty);
+    await _db!.delete("images");
+    _size = 0;
   }
 }

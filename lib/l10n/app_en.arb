@@ -26,7 +26,7 @@
     "showNsfw": "Show NSFW image by default",
     "read": "Read",
     "download": "Download",
-    "colon": ":",
+    "colon": ": ",
     "copyImage": "Copy image to clipboard",
     "copyImgUrl": "Copy image URL to clipboard",
     "retry": "Retry",
@@ -196,5 +196,9 @@
     "refresh": "Refresh",
     "originalImg": "Original image",
     "overwriteDefaultConfig": "Overwrite default config",
-    "enableImageCache": "Cache images to disk."
+    "enableImageCache": "Cache images to disk.",
+    "cachedFileSize": "Cached file size",
+    "update": "Update",
+    "updateFileSize": "Update file size",
+    "clearCaches": "Clear caches"
 }

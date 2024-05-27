@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'globals.dart';
 import 'main.dart';
 import 'utils.dart';
+import 'utils/filesize.dart';
 
 final _log = Logger("SettingsPage");
 
@@ -200,10 +201,57 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
     return re;
   }
 
+  Widget _buildCache(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    final text = SelectableText(
+        "${i18n.cachedFileSize}${i18n.colon}${getFileSize(imageCaches.size)}");
+    final button = ElevatedButton(
+        onPressed: () {
+          imageCaches.updateSize(clear: true).then((_) {
+            setState(() {});
+          }).onError((e, _) {
+            _log.warning("Failed to update image cache size: $e");
+            return null;
+          });
+        },
+        child: Text(i18n.updateFileSize));
+    final cButton = Container(
+        padding: const EdgeInsets.only(left: 8),
+        child: ElevatedButton(
+            onPressed: () {
+              imageCaches.clear().then((_) {
+                setState(() {});
+              }).onError((e, _) {
+                _log.warning("Failed to clear image cache: $e");
+                return null;
+              });
+            },
+            child: Text(i18n.clearCaches)));
+    final maxWidth = MediaQuery.of(context).size.width;
+    final useTwoLine = maxWidth <= 500 ? true : false;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      CheckboxMenuButton(
+        value: _enableImageCache,
+        onChanged: (bool? value) {
+          if (value != null) {
+            setState(() {
+              _enableImageCache = value;
+            });
+          }
+        },
+        child: Text(i18n.enableImageCache),
+      ),
+      Container(
+          padding: const EdgeInsets.only(left: 6, top: 4),
+          child: useTwoLine ? text : Row(children: [text, button, cButton])),
+      useTwoLine ? Row(children: [button, cButton]) : Container(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    setCurrentTitle(AppLocalizations.of(context)!.settings,
-        Theme.of(context).primaryColor.value);
+    final i18n = AppLocalizations.of(context)!;
+    setCurrentTitle(i18n.settings, Theme.of(context).primaryColor.value);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -213,7 +261,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
             },
             icon: const Icon(Icons.arrow_back),
           ),
-          title: Text(AppLocalizations.of(context)!.settings),
+          title: Text(i18n.settings),
           actions: [
             buildThemeModeIcon(context),
             buildMoreVertSettingsButon(context),
@@ -245,14 +293,12 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                       MainApp.of(context).changeLang(_lang);
                                     }
                                   },
-                                  label:
-                                      Text(AppLocalizations.of(context)!.lang),
+                                  label: Text(i18n.lang),
                                   dropdownMenuEntries: Lang.values
                                       .map((e) => DropdownMenuEntry(
                                           value: e,
                                           label: e == Lang.system
-                                              ? AppLocalizations.of(context)!
-                                                  .systemLang
+                                              ? i18n.systemLang
                                               : e.langName))
                                       .toList(),
                                   leadingIcon: const Icon(Icons.language),
@@ -269,8 +315,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                       });
                                     }
                                   },
-                                  child: Text(AppLocalizations.of(context)!
-                                      .useTitleJpn),
+                                  child: Text(i18n.useTitleJpn),
                                 )),
                             Container(
                               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -283,8 +328,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                     });
                                   }
                                 },
-                                child: Text(
-                                    AppLocalizations.of(context)!.showNsfw),
+                                child: Text(i18n.showNsfw),
                               ),
                             ),
                             Container(
@@ -298,8 +342,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                     });
                                   }
                                 },
-                                child: Text(
-                                    AppLocalizations.of(context)!.displayAd),
+                                child: Text(i18n.displayAd),
                               ),
                             ),
                             Container(
@@ -313,8 +356,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                     });
                                   }
                                 },
-                                child: Text(AppLocalizations.of(context)!
-                                    .showTranslatedTag),
+                                child: Text(i18n.showTranslatedTag),
                               ),
                             ),
                             isAndroid || isWindows
@@ -330,8 +372,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                           });
                                         }
                                       },
-                                      child: Text(AppLocalizations.of(context)!
-                                          .preventScreenCapture),
+                                      child: Text(i18n.preventScreenCapture),
                                     ),
                                   )
                                 : Container(),
@@ -346,24 +387,12 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                     });
                                   }
                                 },
-                                child: Text(AppLocalizations.of(context)!
-                                    .dlUseAvgSpeed),
+                                child: Text(i18n.dlUseAvgSpeed),
                               ),
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: CheckboxMenuButton(
-                                value: _enableImageCache,
-                                onChanged: (bool? value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      _enableImageCache = value;
-                                    });
-                                  }
-                                },
-                                child: Text(AppLocalizations.of(context)!
-                                    .enableImageCache),
-                              ),
+                              child: _buildCache(context),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -375,9 +404,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                         onPressed: () {
                                           reset(context);
                                         },
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .reset))),
+                                        child: Text(i18n.reset))),
                                 Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
@@ -385,8 +412,7 @@ class _SettingsPage extends State<SettingsPage> with ThemeModeWidget {
                                       onPressed: () {
                                         save();
                                       },
-                                      child: Text(
-                                          AppLocalizations.of(context)!.save),
+                                      child: Text(i18n.save),
                                     ))
                               ],
                             ),

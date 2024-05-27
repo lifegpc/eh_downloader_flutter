@@ -6,6 +6,8 @@ import 'package:web/web.dart';
 class ImageCaches {
   Cache? cache;
   ImageCaches();
+  int _size = 0;
+  int get size => _size;
   Future<void> init() async {
     cache = await window.caches.open("image_caches").toDart;
   }
@@ -42,4 +44,7 @@ class ImageCaches {
     final res = Response(data.toJS, opts);
     await cache!.put(uri.toJS, res).toDart;
   }
+
+  Future<void> updateSize({bool clear = false}) async {}
+  Future<void> clear() async {}
 }
