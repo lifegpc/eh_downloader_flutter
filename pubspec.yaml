@@ -38,6 +38,7 @@ dependencies:
   retrofit: ^4.0.1
   shared_preferences: ^2.2.0
   sqflite_common_ffi: ^2.3.3
+  sqlite3_flutter_libs: any
   super_clipboard: ^0.8.15
   super_context_menu: ^0.8.15
   ua_parser_js: ^1.0.1

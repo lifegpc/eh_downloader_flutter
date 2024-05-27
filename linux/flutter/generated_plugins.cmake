@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   irondash_engine_context
   screen_retriever
+  sqlite3_flutter_libs
   super_native_extensions
   window_manager
 )
