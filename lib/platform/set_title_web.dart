@@ -1,5 +1,4 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'package:web/web.dart';
 
 void setTitleWeb(String title) {
   Future.delayed(const Duration(milliseconds: 10), () {

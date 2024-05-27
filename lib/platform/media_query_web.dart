@@ -1,5 +1,4 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'package:web/web.dart';
 
 bool get pointerIsMouse => window.matchMedia('(pointer: fine)').matches;
 bool get pointerIsTouch => window.matchMedia('(pointer: coarse)').matches;

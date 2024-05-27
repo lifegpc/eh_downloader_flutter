@@ -1,12 +1,13 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
+import 'dart:js_interop';
 import 'dart:typed_data';
+import 'package:web/web.dart';
 
 void saveFileWeb(
     Uint8List data, String mimeType, String filenameWithoutExtension) {
-  final blob = Blob([data], mimeType);
-  final url = Url.createObjectUrlFromBlob(blob);
-  final a = document.createElement("a") as AnchorElement;
+  final blobOpts = BlobPropertyBag(type: mimeType);
+  final blob = Blob([data.toJS].toJS, blobOpts);
+  final url = URL.createObjectURL(blob);
+  final a = document.createElement("a") as HTMLAnchorElement;
   a.href = url;
   var ext = "";
   switch (mimeType) {
@@ -24,11 +25,11 @@ void saveFileWeb(
   }
   a.download = "$filenameWithoutExtension$ext";
   a.click();
-  Url.revokeObjectUrl(url);
+  URL.revokeObjectURL(url);
 }
 
 void saveUriWeb(String uri) {
-  final a = document.createElement("a") as AnchorElement;
+  final a = document.createElement("a") as HTMLAnchorElement;
   a.href = uri;
   a.click();
 }
