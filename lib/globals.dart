@@ -74,8 +74,8 @@ Future<void> prepareImageCaches() async {
   _imageCaches = ImageCaches();
   try {
     await _imageCaches!.init();
-  } catch (e) {
-    _globalLog.warning("Failed to initiailzed image caches: $e");
+  } catch (e, stack) {
+    _globalLog.warning("Failed to initiailzed image caches: $e\n$stack");
   }
 }
 
