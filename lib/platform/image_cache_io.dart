@@ -21,7 +21,7 @@ PRIMARY KEY(url)
 );""";
 const _allTables = ['images'];
 
-final _log = Logger("ImageCachesDb");
+final _log = Logger("ImageCachesIO");
 
 class ImageCaches {
   Database? _db;
@@ -155,12 +155,17 @@ class ImageCaches {
     if (needDeleted.isNotEmpty) await _optimize();
   }
 
+  Future<void> _updateSize() async {
+    final re = await _db!.rawQuery("SELECT SUM(size) AS sizes FROM images;");
+    _size = re.isEmpty ? 0 : ((re[0]["sizes"] as int?) ?? 0);
+  }
+
   Future<void> init() async {
     sqfliteFfiInit();
     _db = await databaseFactoryFfi.openDatabase(await _filePath);
     await _createDir();
     if (!(await _checkDatabase())) await _createTable();
-    await updateSize();
+    await _updateSize();
     _inited = true;
   }
 
@@ -232,12 +237,13 @@ class ImageCaches {
   }
 
   Future<void> updateSize({bool clear = false}) async {
+    if (!_inited) return;
     if (clear) await _removeUnexist();
-    final re = await _db!.rawQuery("SELECT SUM(size) AS sizes FROM images;");
-    _size = re.isEmpty ? 0 : ((re[0]["sizes"] as int?) ?? 0);
+    await _updateSize();
   }
 
   Future<void> clear() async {
+    if (!_inited) return;
     int offset = 0;
     late List<Map<String, Object?>> records;
     do {
