@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:dio_image_provider/dio_image_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import '../api/gallery.dart';
 import '../components/fit_text.dart';
 import '../globals.dart';
 import '../platform/media_query.dart';
+import '../provider/dio_image_provider.dart';
 
 final _log = Logger("SinglePageViewer");
 
