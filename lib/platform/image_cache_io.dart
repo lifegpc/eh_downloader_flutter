@@ -234,7 +234,7 @@ class ImageCaches {
   Future<void> updateSize({bool clear = false}) async {
     if (clear) await _removeUnexist();
     final re = await _db!.rawQuery("SELECT SUM(size) AS sizes FROM images;");
-    _size = re.isEmpty ? 0 : re[0]["sizes"] as int;
+    _size = re.isEmpty ? 0 : ((re[0]["sizes"] as int?) ?? 0);
   }
 
   Future<void> clear() async {
