@@ -3,6 +3,7 @@ on:
   push:
     branches: ["*"]
     paths-ignore:
+      - '.devcontainer/**'
       - '.github/workflows/android.yml'
       - '.github/workflows/ios.yml'
       - '.github/workflows/linux.yml'
