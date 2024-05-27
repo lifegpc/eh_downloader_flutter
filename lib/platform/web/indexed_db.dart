@@ -48,6 +48,7 @@ class IndexedDb {
   }
 
   Future<void> init() async {
+    if (_inited) return;
     makeStoragePersist();
     final req = version != null
         ? window.indexedDB.open(dbName, version!)
@@ -156,6 +157,10 @@ class IndexedDb {
     }
 
     await Future.microtask(waitResult);
+    if (!ok) {
+      _inited = false;
+      throw req.error ?? "";
+    }
   }
 
   Future<void> openKeyCursor(String table, void Function(IDBCursor) callback,
@@ -193,6 +198,10 @@ class IndexedDb {
     }
 
     await Future.microtask(waitResult);
+    if (!ok) {
+      _inited = false;
+      throw req.error ?? "";
+    }
   }
 
   Future<JSAny?> put(String table, JSAny value, {JSAny? key}) async {
