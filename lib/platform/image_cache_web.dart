@@ -2,6 +2,7 @@ import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 import 'dart:typed_data';
 import 'package:logging/logging.dart';
+import 'package:mutex/mutex.dart';
 import 'package:web/web.dart';
 import 'web/indexed_db.dart';
 
@@ -14,6 +15,7 @@ class ImageCaches {
   int get size => _size;
   late IndexedDb _db;
   bool _inited = false;
+  late Mutex _mutex;
   Future<void> _updateSize() async {
     int total = 0;
     await _db.openCursor("images", (cur) {
@@ -51,6 +53,7 @@ class ImageCaches {
     }, 1);
     await _db.init();
     await _updateSize();
+    _mutex = Mutex();
     _inited = true;
   }
 
@@ -90,27 +93,29 @@ class ImageCaches {
   Future<void> putCache(String uri, Uint8List data,
       Map<String, List<String>> headers, String? realUri) async {
     if (!_inited) return;
-    final he = JSObject();
-    for (final e in headers.entries) {
-      he.setProperty(e.key.toJS, e.value.map((e) => e.toJS).toList().toJS);
-    }
-    final opts = ResponseInit(status: 200, statusText: 'OK', headers: he);
-    final lastUsed = DateTime.now().millisecondsSinceEpoch;
-    final res = Response(data.toJS, opts);
-    await cache.put(uri.toJS, res).toDart;
-    final oObj = (await _db.get("images", uri.toJS)) as JSObject?;
-    final obj = JSObject();
-    obj.setProperty("url".toJS, uri.toJS);
-    obj.setProperty("size".toJS, data.length.toJS);
-    obj.setProperty("last_used".toJS, lastUsed.toJS);
-    await _db.put("images", obj);
-    if (oObj == null) {
-      _size += data.length;
-    } else {
-      final originalSize =
-          (oObj!.getProperty("size".toJS) as JSNumber).toDartInt;
-      _size += (data.length - originalSize);
-    }
+    await _mutex.protect(() async {
+      final he = JSObject();
+      for (final e in headers.entries) {
+        he.setProperty(e.key.toJS, e.value.map((e) => e.toJS).toList().toJS);
+      }
+      final opts = ResponseInit(status: 200, statusText: 'OK', headers: he);
+      final lastUsed = DateTime.now().millisecondsSinceEpoch;
+      final res = Response(data.toJS, opts);
+      await cache.put(uri.toJS, res).toDart;
+      final oObj = (await _db.get("images", uri.toJS)) as JSObject?;
+      final obj = JSObject();
+      obj.setProperty("url".toJS, uri.toJS);
+      obj.setProperty("size".toJS, data.length.toJS);
+      obj.setProperty("last_used".toJS, lastUsed.toJS);
+      await _db.put("images", obj);
+      if (oObj == null) {
+        _size += data.length;
+      } else {
+        final originalSize =
+            (oObj!.getProperty("size".toJS) as JSNumber).toDartInt;
+        _size += (data.length - originalSize);
+      }
+    });
   }
 
   Future<void> updateSize({bool clear = false}) async {

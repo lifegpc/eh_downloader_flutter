@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:logging/logging.dart';
+import 'package:mutex/mutex.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -33,6 +34,7 @@ class ImageCaches {
   static const version = 1;
   int _size = 0;
   int get size => _size;
+  late Mutex _mutex;
   ImageCaches();
   Future<String?> _desktopFilePath() async {
     final String? exe = await platformPath.getCurrentExe();
@@ -166,6 +168,7 @@ class ImageCaches {
     await _createDir();
     if (!(await _checkDatabase())) await _createTable();
     await _updateSize();
+    _mutex = Mutex();
     _inited = true;
   }
 
@@ -201,39 +204,42 @@ class ImageCaches {
   Future<void> putCache(String uri, Uint8List data,
       Map<String, List<String>> headers, String? realUri) async {
     if (!_inited) return;
-    final u = Uri.parse(uri);
-    final dir = await cacheDir;
-    String p = path.join(dir.path, u.host.isEmpty ? "nohost" : u.host,
-        u.path.substring(1) + (u.hasQuery ? "?${u.query}" : ""));
-    final d = _fs.directory(path.dirname(p));
-    if (isWindows) {
-      if (path.isAbsolute(p)) {
-        p = p.substring(0, 2) +
-            p.substring(2).replaceAll(RegExp("[:\\*\\?\"\\<\\>\\|]"), '_');
-      } else {
-        p = p.replaceAll(RegExp("[:\\*\\?\"\\<\\>\\|]"), '_');
+    await _mutex.protect(() async {
+      final u = Uri.parse(uri);
+      final dir = await cacheDir;
+      String p = path.join(dir.path, u.host.isEmpty ? "nohost" : u.host,
+          u.path.substring(1) + (u.hasQuery ? "?${u.query}" : ""));
+      final d = _fs.directory(path.dirname(p));
+      if (isWindows) {
+        if (path.isAbsolute(p)) {
+          p = p.substring(0, 2) +
+              p.substring(2).replaceAll(RegExp("[:\\*\\?\"\\<\\>\\|]"), '_');
+        } else {
+          p = p.replaceAll(RegExp("[:\\*\\?\"\\<\\>\\|]"), '_');
+        }
       }
-    }
-    if (!(await d.exists())) {
-      await d.create(recursive: true);
-    }
-    final f = _fs.file(p);
-    await f.writeAsBytes(data.toList());
-    final lastUsed = DateTime.now().millisecondsSinceEpoch;
-    final header = jsonEncode(headers);
-    if (_exeDir != null) {
-      p = path.relative(p, from: _exeDir!);
-    }
-    final exes = await _db!.query("images", where: 'url = ?', whereArgs: [uri]);
-    await _db!.rawInsert(
-        "INSERT OR REPLACE INTO images VALUES (?, ?, ?, ?, ?, ?);",
-        [uri, p, lastUsed, header, realUri, data.length]);
-    if (exes.isEmpty) {
-      _size += data.length;
-    } else {
-      final originalSize = (exes[0]["size"] as int?) ?? 0;
-      _size += (data.length - originalSize);
-    }
+      if (!(await d.exists())) {
+        await d.create(recursive: true);
+      }
+      final f = _fs.file(p);
+      await f.writeAsBytes(data.toList());
+      final lastUsed = DateTime.now().millisecondsSinceEpoch;
+      final header = jsonEncode(headers);
+      if (_exeDir != null) {
+        p = path.relative(p, from: _exeDir!);
+      }
+      final exes =
+          await _db!.query("images", where: 'url = ?', whereArgs: [uri]);
+      await _db!.rawInsert(
+          "INSERT OR REPLACE INTO images VALUES (?, ?, ?, ?, ?, ?);",
+          [uri, p, lastUsed, header, realUri, data.length]);
+      if (exes.isEmpty) {
+        _size += data.length;
+      } else {
+        final originalSize = (exes[0]["size"] as int?) ?? 0;
+        _size += (data.length - originalSize);
+      }
+    });
   }
 
   Future<void> updateSize({bool clear = false}) async {
