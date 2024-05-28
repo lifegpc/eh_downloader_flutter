@@ -30,7 +30,7 @@ class TaskManager {
   void clear() {
     tasks.clear();
     tasksList.clear();
-    _channel?.stream.drain();
+    _channel?.sink.add("{\"type\":\"close\"}");
     _channel?.sink.close();
     _closed = true;
   }

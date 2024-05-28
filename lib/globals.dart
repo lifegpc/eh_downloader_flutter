@@ -357,7 +357,11 @@ void checkAuth(BuildContext context) {
       if (!re) {
         if (auth.status!.noUser && prefs.getBool("skipCreateRootUser") == true)
           return;
-        context.push(auth.status!.noUser ? "/create_root_user" : "/login");
+        final loc = auth.status!.noUser ? "/create_root_user" : "/login";
+        final path = GoRouterState.of(context).path;
+        if (path != loc) {
+          context.push(loc);
+        }
       }
     }).catchError((err) {
       _authLog.log(Level.SEVERE, "Failed to check auth info:", err);
