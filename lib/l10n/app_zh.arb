@@ -200,5 +200,11 @@
     "cachedFileSize": "已缓存文件大小",
     "update": "更新",
     "updateFileSize": "更新文件大小",
-    "clearCaches": "清除缓存"
+    "clearCaches": "清除缓存",
+    "userManagemant": "用户管理",
+    "admin": "管理员",
+    "user": "用户",
+    "edit": "编辑",
+    "delete": "删除",
+    "createNewUser": "新建用户"
 }

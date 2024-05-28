@@ -39,6 +39,8 @@ class TaskPage extends StatefulWidget {
   const TaskPage(this.id, {super.key});
   final int id;
 
+  static const routeName = "/dialog/task/:id";
+
   @override
   State<StatefulWidget> createState() => _TaskPage();
 }

@@ -13,6 +13,8 @@ class DownloadZipPage extends StatefulWidget {
   const DownloadZipPage(this.gid, {super.key});
   final int gid;
 
+  static const routeName = '/dialog/download/zip/:gid';
+
   @override
   State<DownloadZipPage> createState() => _DownloadZipPage();
 }

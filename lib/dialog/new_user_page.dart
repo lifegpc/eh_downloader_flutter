@@ -1,0 +1,124 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import '../components/labeled_checkbox.dart';
+import '../globals.dart';
+
+class NewUserPage extends StatefulWidget {
+  const NewUserPage({super.key});
+
+  static const routeName = "/dialog/user/new";
+
+  @override
+  State<StatefulWidget> createState() => _NewUserPage();
+}
+
+class _NewUserPage extends State<NewUserPage> {
+  final _formKey = GlobalKey<FormState>();
+  String _username = "";
+  String _password = "";
+  bool _isAdmin = false;
+  bool _passwordVisible = false;
+
+  Widget _buildWithVecticalPadding(Widget child) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: child,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!tryInitApi(context)) {
+      return Container();
+    }
+    if (auth.isAdmin == false) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        context.go("/");
+      });
+      return Container();
+    }
+    final i18n = AppLocalizations.of(context)!;
+    final maxWidth = MediaQuery.of(context).size.width;
+    return Container(
+      padding: maxWidth < 400
+          ? const EdgeInsets.symmetric(vertical: 20, horizontal: 5)
+          : const EdgeInsets.all(20),
+      width: maxWidth < 810 ? null : 800,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+      child: SingleChildScrollView(
+          child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text(
+                        i18n.createNewUser,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () => context.canPop()
+                                ? context.pop()
+                                : context.go("/users"),
+                            icon: const Icon(Icons.close),
+                          )),
+                    ],
+                  ),
+                  _buildWithVecticalPadding(TextFormField(
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: i18n.username,
+                    ),
+                    initialValue: _username,
+                    onChanged: (value) {
+                      setState(() {
+                        _username = value;
+                      });
+                    },
+                  )),
+                  _buildWithVecticalPadding(TextFormField(
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: i18n.password,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                    initialValue: _password,
+                    onChanged: (value) {
+                      setState(() {
+                        _password = value;
+                      });
+                    },
+                    obscureText: !_passwordVisible,
+                  )),
+                  _buildWithVecticalPadding(LabeledCheckbox(
+                      value: _isAdmin,
+                      onChanged: (b) {
+                        if (b != null) {
+                          setState(() {
+                            _isAdmin = b;
+                          });
+                        }
+                      },
+                      label: Text(i18n.admin))),
+                ],
+              ))),
+    );
+  }
+}

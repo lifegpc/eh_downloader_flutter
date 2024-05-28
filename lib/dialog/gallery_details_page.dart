@@ -42,6 +42,8 @@ class GalleryDetailsPage extends StatefulWidget {
   final int gid;
   final GMeta? meta;
 
+  static const routeName = '/dialog/gallery/details/:gid';
+
   @override
   State<GalleryDetailsPage> createState() => _GalleryDetailsPage();
 }

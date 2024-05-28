@@ -11,6 +11,7 @@ import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
 import 'dialog/gallery_details_page.dart';
 import 'dialog/new_download_task_page.dart';
+import 'dialog/new_user_page.dart';
 import 'dialog/task_page.dart';
 import 'globals.dart';
 import 'logs/file.dart';
@@ -23,6 +24,7 @@ import 'pages/server_settings.dart';
 import 'pages/set_server.dart';
 import 'pages/settings.dart';
 import 'pages/task_manager.dart';
+import 'pages/users.dart';
 import 'utils.dart';
 import 'viewer/single.dart';
 
@@ -97,7 +99,7 @@ final _router = GoRouter(
       redirect: (context, state) => "/galleries",
     ),
     GoRoute(
-        path: '/dialog/download/zip/:gid',
+        path: DownloadZipPage.routeName,
         pageBuilder: (context, state) => DialogPage(
             key: state.pageKey,
             builder: (context) {
@@ -140,7 +142,7 @@ final _router = GoRouter(
           }
         }),
     GoRoute(
-        path: '/dialog/gallery/details/:gid',
+        path: GalleryDetailsPage.routeName,
         pageBuilder: (context, state) {
           final extra = state.extra as GalleryDetailsPageExtra?;
           return DialogPage(
@@ -169,7 +171,7 @@ final _router = GoRouter(
       builder: (context, state) => TaskManagerPage(key: state.pageKey),
     ),
     GoRoute(
-        path: "/dialog/new_download_task",
+        path: NewDownloadTaskPage.routeName,
         pageBuilder: (context, state) {
           int? gid;
           String? token;
@@ -186,7 +188,7 @@ final _router = GoRouter(
               });
         }),
     GoRoute(
-        path: "/dialog/task/:id",
+        path: TaskPage.routeName,
         pageBuilder: (context, state) {
           return DialogPage(
               key: state.pageKey,
@@ -202,6 +204,19 @@ final _router = GoRouter(
             _routerLog.warning("Failed to parse id:", e);
             return "/task_manager";
           }
+        }),
+    GoRoute(
+      path: UsersPage.routeName,
+      builder: (context, state) => const UsersPage(),
+    ),
+    GoRoute(
+        path: NewUserPage.routeName,
+        pageBuilder: (context, state) {
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return const NewUserPage();
+              });
         }),
   ],
 );

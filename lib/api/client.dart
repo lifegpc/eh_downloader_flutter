@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
 import 'package:eh_downloader_flutter/api/file.dart';
-import 'package:retrofit/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
@@ -81,6 +80,12 @@ abstract class _EHApi {
   Future<ApiResult<BUser>> getUser(
       {@Query("id") int? id,
       @Query("username") String? username,
+      @CancelRequest() CancelToken? cancel});
+  @GET('/user/list')
+  Future<ApiResult<List<BUser>>> getUsers(
+      {@Query("all") bool? all,
+      @Query("offset") int? offset,
+      @Query("limit") int? limit,
       @CancelRequest() CancelToken? cancel});
 
   @GET('/status')

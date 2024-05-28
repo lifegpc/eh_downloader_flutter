@@ -21,6 +21,7 @@ class AuthInfo {
   bool _isChecking = false;
   bool get isChecking => _isChecking;
   bool? get isAdmin => _user?.isAdmin;
+  bool? get isRoot => _user != null ? _user!.id == 0 : null;
   bool? get isDocker => _status?.isDocker;
   bool? get canReadGallery =>
       _user?.permissions.has(UserPermission.readGallery);

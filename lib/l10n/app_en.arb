@@ -200,5 +200,11 @@
     "cachedFileSize": "Cached file size",
     "update": "Update",
     "updateFileSize": "Update file size",
-    "clearCaches": "Clear caches"
+    "clearCaches": "Clear caches",
+    "userManagemant": "User Management",
+    "admin": "Administrator",
+    "user": "User",
+    "edit": "Edit",
+    "delete": "Delete",
+    "createNewUser": "Create new user"
 }

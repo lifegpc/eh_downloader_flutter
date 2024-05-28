@@ -13,6 +13,7 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
     return Drawer(
         child: ListView(
       children: <Widget>[
@@ -26,7 +27,7 @@ class HomeDrawer extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.collections),
-          title: Text(AppLocalizations.of(context)!.galleries),
+          title: Text(i18n.galleries),
           onTap: () {
             Scaffold.of(context).closeDrawer();
             context.push("/galleries");
@@ -35,7 +36,7 @@ class HomeDrawer extends StatelessWidget {
         auth.isAdmin == true
             ? ListTile(
                 leading: const Icon(Icons.admin_panel_settings),
-                title: Text(AppLocalizations.of(context)!.serverSettings),
+                title: Text(i18n.serverSettings),
                 onTap: () {
                   Scaffold.of(context).closeDrawer();
                   context.push("/server_settings");
@@ -45,12 +46,21 @@ class HomeDrawer extends StatelessWidget {
         auth.canManageTasks == true
             ? ListTile(
                 leading: const Icon(Icons.task),
-                title: Text(AppLocalizations.of(context)!.taskManager),
+                title: Text(i18n.taskManager),
                 onTap: () {
                   Scaffold.of(context).closeDrawer();
                   context.push("/task_manager");
                 },
               )
+            : Container(),
+        auth.isAdmin == true
+            ? ListTile(
+                leading: const Icon(Icons.manage_accounts),
+                title: Text(i18n.userManagemant),
+                onTap: () {
+                  Scaffold.of(context).closeDrawer();
+                  context.push("/users");
+                })
             : Container(),
         ListTile(
           leading: const Icon(Icons.settings),

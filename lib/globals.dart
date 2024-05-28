@@ -355,8 +355,10 @@ void checkAuth(BuildContext context) {
   if (!auth.isAuthed && !auth.checked && !auth.isChecking) {
     auth.checkAuth().then((re) {
       if (!re) {
-        if (auth.status!.noUser && prefs.getBool("skipCreateRootUser") == true)
+        if (auth.status!.noUser &&
+            prefs.getBool("skipCreateRootUser") == true) {
           return;
+        }
         final loc = auth.status!.noUser ? "/create_root_user" : "/login";
         final path = GoRouterState.of(context).path;
         if (path != loc) {

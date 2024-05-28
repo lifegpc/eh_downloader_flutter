@@ -16,6 +16,8 @@ class NewDownloadTaskPage extends StatefulWidget {
   final int? gid;
   final String? token;
 
+  static const routeName = "/dialog/new_download_task";
+
   @override
   State<NewDownloadTaskPage> createState() => _NewDownloadTaskPage();
 }
