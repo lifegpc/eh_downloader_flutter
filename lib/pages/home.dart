@@ -3,8 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'globals.dart';
-import 'main.dart';
+import '../globals.dart';
+import '../main.dart';
 
 final _log = Logger("HomePage");
 

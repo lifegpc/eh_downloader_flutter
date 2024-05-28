@@ -3,10 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:logging/logging.dart';
-import 'api/client.dart';
-import 'api/gallery.dart';
-import 'globals.dart';
-import 'main.dart';
+import '../api/client.dart';
+import '../api/gallery.dart';
+import '../globals.dart';
+import '../main.dart';
 
 final _log = Logger("GalleriesPage");
 

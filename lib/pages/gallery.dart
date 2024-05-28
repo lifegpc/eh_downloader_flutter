@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'api/file.dart';
-import 'api/gallery.dart';
-import 'components/gallery_info.dart';
-import 'globals.dart';
+import '../api/file.dart';
+import '../api/gallery.dart';
+import '../components/gallery_info.dart';
+import '../globals.dart';
 
 final _log = Logger("GalleryPage");
 
@@ -17,8 +17,7 @@ class GalleryPageExtra {
 }
 
 class GalleryPage extends StatefulWidget {
-  const GalleryPage(int gid, {super.key, this.title})
-      : _gid = gid;
+  const GalleryPage(int gid, {super.key, this.title}) : _gid = gid;
 
   final int _gid;
   final String? title;

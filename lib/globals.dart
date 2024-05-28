@@ -17,8 +17,8 @@ import 'auth.dart';
 import 'config/base.dart';
 import 'config/shared_preferences.dart';
 import 'config/windows.dart';
-import 'gallery.dart';
 import 'main.dart';
+import 'pages/gallery.dart';
 import 'platform/clipboard.dart';
 import 'platform/display.dart';
 import 'platform/get_jar.dart';
@@ -28,8 +28,8 @@ import 'platform/set_title.dart';
 import 'tags.dart';
 import 'task.dart';
 import 'utils.dart';
-export 'galleries.dart' show GalleriesPageExtra;
-export 'gallery.dart' show GalleryPageExtra;
+export 'pages/galleries.dart' show GalleriesPageExtra;
+export 'pages/gallery.dart' show GalleryPageExtra;
 
 final dio = Dio()
   ..options.validateStatus = (int? _) {

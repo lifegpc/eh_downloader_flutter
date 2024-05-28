@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'api/config.dart';
-import 'components/labeled_checkbox.dart';
-import 'components/number_field.dart';
-import 'components/string_list_field.dart';
-import 'components//string_map_field.dart';
-import 'globals.dart';
-import 'platform/ua.dart';
+import '../api/config.dart';
+import '../components/labeled_checkbox.dart';
+import '../components/number_field.dart';
+import '../components/string_list_field.dart';
+import '../components/string_map_field.dart';
+import '../globals.dart';
+import '../platform/ua.dart';
 
 final _log = Logger("ServerSettingsPage");
 

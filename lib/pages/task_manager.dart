@@ -1,16 +1,14 @@
 import 'dart:ui';
 import 'package:enum_flag/enum_flag.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'api/task.dart';
-import 'components/task.dart';
-import 'globals.dart';
-import 'platform/media_query.dart';
-import 'utils.dart';
+import '../api/task.dart';
+import '../components/task.dart';
+import '../globals.dart';
+import '../platform/media_query.dart';
+import '../utils.dart';
 
 enum TaskStatusFilterFlag with EnumFlag {
   wait,
