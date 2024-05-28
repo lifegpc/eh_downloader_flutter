@@ -142,6 +142,7 @@ class _EditUserPage extends State<EditUserPage> {
           ? const EdgeInsets.symmetric(vertical: 20, horizontal: 10)
           : const EdgeInsets.all(20),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+      width: maxWidth < 810 ? null : 800,
       child: isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null

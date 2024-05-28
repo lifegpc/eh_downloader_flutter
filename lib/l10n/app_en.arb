@@ -215,5 +215,14 @@
     "userPermissions": "User permissions",
     "revokeToken": "Revoke all login sessions",
     "editUser": "Edit user",
-    "rootUser": "Root user"
+    "rootUser": "Root user",
+    "deleteUserConfirm": "Do you want to delete user {user}?",
+    "@deleteUserConfirm": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "failedDeleteUser": "Failed to delete user: "
 }

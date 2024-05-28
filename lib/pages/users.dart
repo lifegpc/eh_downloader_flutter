@@ -162,6 +162,7 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
     _cancel2?.cancel();
     listener.removeEventListener("new_user", _onNewUser);
     listener.removeEventListener("update_user", _onUpdateUser);
+    listener.removeEventListener("delete_user", _onDeleteUser);
     super.dispose();
   }
 
@@ -169,6 +170,7 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
   void initState() {
     listener.on("new_user", _onNewUser);
     listener.on("update_user", _onUpdateUser);
+    listener.on("delete_user", _onDeleteUser);
     super.initState();
   }
 
@@ -203,5 +205,16 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
         _users![index] = user;
       }
     });
+  }
+
+  void _onDeleteUser(dynamic arg) {
+    final uid = arg as int;
+    if (_users == null) return;
+    final index = _users!.indexWhere((v) => v.id == uid);
+    if (index > -1) {
+      setState(() {
+        _users!.removeAt(index);
+      });
+    }
   }
 }

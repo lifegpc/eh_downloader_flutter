@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import '../api/user.dart';
 import '../dialog/edit_user_page.dart';
 import '../globals.dart';
+
+final _log = Logger("UserCard");
+
+Future<void> _deleteUser(int id, String errmsg) async {
+  try {
+    (await api.deleteUser(id: id)).unwrap();
+    listener.tryEmit("delete_user", id);
+  } catch (e) {
+    _log.severe("Failed to delete user $id: $e");
+    final snack = SnackBar(content: Text("$errmsg$e"));
+    rootScaffoldMessengerKey.currentState?.showSnackBar(snack);
+  }
+}
 
 class UserCard extends StatelessWidget {
   const UserCard(this.user, {super.key});
@@ -49,7 +63,45 @@ class UserCard extends StatelessWidget {
               !user.isAdmin ||
                       (user.isAdmin && auth.isRoot == true && user.id != 0)
                   ? IconButton(
-                      onPressed: () {},
+                      onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) {
+                            final maxWidth = MediaQuery.of(context).size.width;
+                            return Dialog(
+                                child: Container(
+                                    padding: maxWidth < 400
+                                        ? const EdgeInsets.symmetric(
+                                            vertical: 20, horizontal: 10)
+                                        : const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    width: maxWidth < 500 ? null : 500,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(i18n
+                                            .deleteUserConfirm(user.username)),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    context.pop();
+                                                    _deleteUser(user.id,
+                                                        i18n.failedDeleteUser);
+                                                  },
+                                                  child: Text(i18n.yes)),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    context.pop();
+                                                  },
+                                                  child: Text(i18n.no)),
+                                            ]),
+                                      ],
+                                    )));
+                          }),
                       tooltip: i18n.delete,
                       icon: const Icon(Icons.delete))
                   : Container(),

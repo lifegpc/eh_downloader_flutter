@@ -215,5 +215,14 @@
     "userPermissions": "用户权限",
     "revokeToken": "撤销所有登录的会话",
     "editUser": "编辑用户",
-    "rootUser": "根用户"
+    "rootUser": "根用户",
+    "deleteUserConfirm": "是否删除用户 {user} ？",
+    "@deleteUserConfirm": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "failedDeleteUser": "删除用户失败："
 }
