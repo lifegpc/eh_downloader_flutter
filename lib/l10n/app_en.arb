@@ -206,5 +206,11 @@
     "user": "User",
     "edit": "Edit",
     "delete": "Delete",
-    "createNewUser": "Create new user"
+    "createNewUser": "Create new user",
+    "readGallery": "Read gallery",
+    "editGallery": "Edit gallery",
+    "deleteGallery": "Delete gallery",
+    "manageTasks": "Manage tasks",
+    "allPermissions": "All permissions",
+    "userPermissions": "User permissions"
 }

@@ -27,7 +27,11 @@ class SinglePageViewerExtra {
 
 class SinglePageViewer extends StatefulWidget {
   const SinglePageViewer(
-      {super.key, required this.gid, required this.index, this.data, this.files});
+      {super.key,
+      required this.gid,
+      required this.index,
+      this.data,
+      this.files});
   final GalleryData? data;
   final EhFiles? files;
   final int gid;
@@ -89,7 +93,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
       _cancel = CancelToken();
       _isLoading = true;
       if (_data == null) {
-        final data = (await api.getGallery(widget.gid)).unwrap();
+        final data =
+            (await api.getGallery(widget.gid, cancel: _cancel)).unwrap();
         _data = data;
       }
       final fileData = (await api.getFiles(

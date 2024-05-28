@@ -1,4 +1,4 @@
-import 'package:eh_downloader_flutter/globals.dart';
+import '../globals.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../api/file.dart';

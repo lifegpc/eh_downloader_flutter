@@ -30,10 +30,12 @@ class UserCard extends StatelessWidget {
                       style: TextStyle(color: cs.secondary))
                 ],
               )),
-              IconButton(
-                  onPressed: () {},
-                  tooltip: i18n.edit,
-                  icon: const Icon(Icons.edit)),
+              !user.isAdmin || (user.isAdmin && auth.isRoot == true)
+                  ? IconButton(
+                      onPressed: () {},
+                      tooltip: i18n.edit,
+                      icon: const Icon(Icons.edit))
+                  : Container(),
               !user.isAdmin ||
                       (user.isAdmin && auth.isRoot == true && user.id != 0)
                   ? IconButton(

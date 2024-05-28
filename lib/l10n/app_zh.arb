@@ -206,5 +206,11 @@
     "user": "用户",
     "edit": "编辑",
     "delete": "删除",
-    "createNewUser": "新建用户"
+    "createNewUser": "新建用户",
+    "readGallery": "查看画廊",
+    "editGallery": "编辑画廊",
+    "deleteGallery": "删除画廊",
+    "manageTasks": "管理任务",
+    "allPermissions": "所有权限",
+    "userPermissions": "用户权限"
 }

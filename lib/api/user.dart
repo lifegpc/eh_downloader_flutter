@@ -1,4 +1,6 @@
 import 'package:enum_flag/enum_flag.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
@@ -7,22 +9,45 @@ enum UserPermission with EnumFlag {
   readGallery,
   editGallery,
   deleteGallery,
-  manageTasks,
+  manageTasks;
+
+  String localText(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case UserPermission.readGallery:
+        return i18n.readGallery;
+      case UserPermission.editGallery:
+        return i18n.editGallery;
+      case UserPermission.deleteGallery:
+        return i18n.deleteGallery;
+      case UserPermission.manageTasks:
+        return i18n.manageTasks;
+    }
+  }
 }
 
 const userPermissionAll = 15;
 
 class UserPermissions {
-  const UserPermissions(this.code);
-  final int code;
+  UserPermissions(this.code);
+  int code;
   bool has(UserPermission permission) => code.hasFlag(permission);
+  bool get isAll => code == userPermissionAll;
   int toJson() => code;
+  void add(UserPermission flag) {
+    code |= flag.value;
+  }
+
   static int toJson2(UserPermissions code) {
     return code.code;
   }
 
   static fromJson(int code) {
     return UserPermissions(code);
+  }
+
+  void remove(UserPermission flag) {
+    code &= ~flag.value;
   }
 
   @override

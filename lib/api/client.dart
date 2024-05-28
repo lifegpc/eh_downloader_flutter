@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
-import 'package:eh_downloader_flutter/api/file.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
 import 'config.dart';
 import 'eh.dart';
+import 'file.dart';
 import 'gallery.dart';
 import 'status.dart';
 import 'tags.dart';

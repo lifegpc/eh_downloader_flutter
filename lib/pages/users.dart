@@ -23,12 +23,14 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
   List<BUser>? _users;
   bool _isLoading = false;
   CancelToken? _cancel;
+  CancelToken? _cancel2;
   Object? _error;
   Future<void> _fetchData() async {
+    _cancel2?.cancel();
     try {
       _cancel = CancelToken();
       _isLoading = true;
-      final users = (await api.getUsers(all: true)).unwrap();
+      final users = (await api.getUsers(all: true, cancel: _cancel)).unwrap();
       if (!_cancel!.isCancelled) {
         setState(() {
           _users = users;
@@ -152,5 +154,39 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
         childCount: _users!.length,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cancel?.cancel();
+    _cancel2?.cancel();
+    listener.removeEventListener("new_user", _onNewUser);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    listener.on("new_user", _onNewUser);
+    super.initState();
+  }
+
+  void _onNewUser(dynamic arg) async {
+    int uid = arg as int;
+    try {
+      _cancel2 = CancelToken();
+      final u = (await api.getUser(id: uid, cancel: _cancel2)).unwrap();
+      if (!_cancel2!.isCancelled) {
+        setState(() {
+          _users?.add(u);
+        });
+      }
+    } catch (e) {
+      if (!_cancel2!.isCancelled) {
+        _log.severe("Failed to load user $uid:", e);
+        setState(() {
+          _error = e;
+        });
+      }
+    }
   }
 }

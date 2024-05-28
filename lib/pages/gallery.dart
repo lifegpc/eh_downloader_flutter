@@ -64,7 +64,7 @@ class _GalleryPage extends State<GalleryPage>
     try {
       _cancel = CancelToken();
       _isLoading = true;
-      final data = (await api.getGallery(_gid)).unwrap();
+      final data = (await api.getGallery(_gid, cancel: _cancel)).unwrap();
       _data = data;
       final fileData = (await api.getFiles(
               data.pages.map((e) => e.token).toList(),

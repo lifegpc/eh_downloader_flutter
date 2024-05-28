@@ -58,7 +58,7 @@ class _GalleryDetailsPage extends State<GalleryDetailsPage> {
     try {
       _cancel = CancelToken();
       _isLoading = true;
-      final data = (await api.getGallery(widget.gid)).unwrap();
+      final data = (await api.getGallery(widget.gid, cancel: _cancel)).unwrap();
       if (!_cancel!.isCancelled) {
         setState(() {
           _meta = data.meta;
