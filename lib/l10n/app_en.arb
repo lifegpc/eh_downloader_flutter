@@ -212,5 +212,8 @@
     "deleteGallery": "Delete gallery",
     "manageTasks": "Manage tasks",
     "allPermissions": "All permissions",
-    "userPermissions": "User permissions"
+    "userPermissions": "User permissions",
+    "revokeToken": "Revoke all login sessions",
+    "editUser": "Edit user",
+    "rootUser": "Root user"
 }

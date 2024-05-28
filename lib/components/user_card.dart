@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import '../api/user.dart';
+import '../dialog/edit_user_page.dart';
 import '../globals.dart';
 
 class UserCard extends StatelessWidget {
@@ -26,13 +28,21 @@ class UserCard extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: cs.primary),
                   ),
-                  Text(user.isAdmin ? i18n.admin : i18n.user,
+                  Text(
+                      user.id == 0
+                          ? i18n.rootUser
+                          : user.isAdmin
+                              ? i18n.admin
+                              : i18n.user,
                       style: TextStyle(color: cs.secondary))
                 ],
               )),
               !user.isAdmin || (user.isAdmin && auth.isRoot == true)
                   ? IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push("/dialog/user/edit/${user.id}",
+                            extra: EditUserPageExtra(user: user));
+                      },
                       tooltip: i18n.edit,
                       icon: const Icon(Icons.edit))
                   : Container(),

@@ -78,6 +78,55 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<dynamic>> deleteUser({
+    int? id,
+    String? username,
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    if (id != null) {
+      _data.fields.add(MapEntry(
+        'id',
+        id.toString(),
+      ));
+    }
+    if (username != null) {
+      _data.fields.add(MapEntry(
+        'username',
+        username,
+      ));
+    }
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/user',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
   Future<ApiResult<BUser>> getUser({
     int? id,
     String? username,
@@ -157,6 +206,83 @@ class __EHApi implements _EHApi {
               .map<BUser>((i) => BUser.fromJson(i as Map<String, dynamic>))
               .toList()
           : List.empty(),
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<BUser>> updateUser({
+    int? id,
+    String? username,
+    String? password,
+    bool? isAdmin,
+    bool? revokeToken,
+    int? permissions,
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    if (id != null) {
+      _data.fields.add(MapEntry(
+        'id',
+        id.toString(),
+      ));
+    }
+    if (username != null) {
+      _data.fields.add(MapEntry(
+        'username',
+        username,
+      ));
+    }
+    if (password != null) {
+      _data.fields.add(MapEntry(
+        'password',
+        password,
+      ));
+    }
+    if (isAdmin != null) {
+      _data.fields.add(MapEntry(
+        'is_admin',
+        isAdmin.toString(),
+      ));
+    }
+    if (revokeToken != null) {
+      _data.fields.add(MapEntry(
+        'revoke_token',
+        revokeToken.toString(),
+      ));
+    }
+    if (permissions != null) {
+      _data.fields.add(MapEntry(
+        'permissions',
+        permissions.toString(),
+      ));
+    }
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/user',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<BUser>.fromJson(
+      _result.data!,
+      (json) => BUser.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

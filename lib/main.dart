@@ -9,6 +9,7 @@ import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
 import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
+import 'dialog/edit_user_page.dart';
 import 'dialog/gallery_details_page.dart';
 import 'dialog/new_download_task_page.dart';
 import 'dialog/new_user_page.dart';
@@ -217,6 +218,26 @@ final _router = GoRouter(
               builder: (context) {
                 return const NewUserPage();
               });
+        }),
+    GoRoute(
+        path: EditUserPage.routeName,
+        pageBuilder: (context, state) {
+          final extra = state.extra as EditUserPageExtra?;
+          final uid = int.parse(state.pathParameters["uid"]!);
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return EditUserPage(uid, user: extra?.user);
+              });
+        },
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["uid"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse uid:", e);
+            return "/users";
+          }
         }),
   ],
 );

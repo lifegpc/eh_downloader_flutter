@@ -212,5 +212,8 @@
     "deleteGallery": "删除画廊",
     "manageTasks": "管理任务",
     "allPermissions": "所有权限",
-    "userPermissions": "用户权限"
+    "userPermissions": "用户权限",
+    "revokeToken": "撤销所有登录的会话",
+    "editUser": "编辑用户",
+    "rootUser": "根用户"
 }

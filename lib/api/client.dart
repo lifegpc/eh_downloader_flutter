@@ -76,6 +76,12 @@ abstract class _EHApi {
       {@Part(name: "is_admin") bool? isAdmin,
       @Part(name: "permissions") int? permissions,
       @CancelRequest() CancelToken? cancel});
+  @DELETE('/user')
+  @MultiPart()
+  Future<ApiResult<dynamic>> deleteUser(
+      {@Part(name: "id") int? id,
+      @Part(name: "username") String? username,
+      @CancelRequest() CancelToken? cancel});
   @GET('/user')
   Future<ApiResult<BUser>> getUser(
       {@Query("id") int? id,
@@ -86,6 +92,16 @@ abstract class _EHApi {
       {@Query("all") bool? all,
       @Query("offset") int? offset,
       @Query("limit") int? limit,
+      @CancelRequest() CancelToken? cancel});
+  @PATCH('/user')
+  @MultiPart()
+  Future<ApiResult<BUser>> updateUser(
+      {@Part(name: "id") int? id,
+      @Part(name: "username") String? username,
+      @Part(name: "password") String? password,
+      @Part(name: "is_admin") bool? isAdmin,
+      @Part(name: "revoke_token") bool? revokeToken,
+      @Part(name: "permissions") int? permissions,
       @CancelRequest() CancelToken? cancel});
 
   @GET('/status')
