@@ -26,6 +26,7 @@ import 'pages/settings/cache.dart';
 import 'pages/settings/display.dart';
 import 'pages/settings/server.dart';
 import 'pages/settings/server_url.dart';
+import 'pages/settings/user.dart';
 import 'pages/task_manager.dart';
 import 'pages/users.dart';
 import 'utils.dart';
@@ -248,6 +249,10 @@ final _router = GoRouter(
     GoRoute(
       path: CacheSettingsPage.routeName,
       builder: (context, state) => CacheSettingsPage(key: state.pageKey),
+    ),
+    GoRoute(
+      path: UserSettingsPage.routeName,
+      builder: (context, state) => UserSettingsPage(key: state.pageKey),
     ),
   ],
 );

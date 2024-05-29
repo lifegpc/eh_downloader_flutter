@@ -65,6 +65,14 @@ class _SettingsPage extends State<SettingsPage>
                           context.push("/settings/server/url");
                         })
                     : Container(),
+                auth.isAuthed
+                    ? ListTile(
+                        leading: const Icon(Icons.account_circle),
+                        title: Text(i18n.user),
+                        onTap: () {
+                          context.push("/settings/user");
+                        })
+                    : Container(),
                 ListTile(
                     leading: const Icon(Icons.display_settings),
                     title: Text(i18n.display),

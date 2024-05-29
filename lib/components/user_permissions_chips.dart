@@ -3,9 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/user.dart';
 
 class UserPermissionsChips extends StatefulWidget {
-  const UserPermissionsChips({super.key, this.permissions, this.onChanged});
+  const UserPermissionsChips(
+      {super.key, this.permissions, this.onChanged, this.readOnly = false});
   final UserPermissions? permissions;
   final ValueChanged<UserPermissions>? onChanged;
+  final bool readOnly;
 
   @override
   State<StatefulWidget> createState() => _UserPermissionsChips();
@@ -31,32 +33,36 @@ class _UserPermissionsChips extends State<UserPermissionsChips> {
       FilterChip(
         label: Text(i18n.allPermissions),
         selected: _permissions.isAll,
-        onSelected: (bool value) {
-          setState(() {
-            if (value) {
-              _permissions.code = userPermissionAll;
-            } else {
-              _permissions.code = 0;
-            }
-          });
-          _onChanged();
-        },
+        onSelected: widget.readOnly
+            ? null
+            : (bool value) {
+                setState(() {
+                  if (value) {
+                    _permissions.code = userPermissionAll;
+                  } else {
+                    _permissions.code = 0;
+                  }
+                });
+                _onChanged();
+              },
       )
     ];
     for (var flag in UserPermission.values) {
       list.add(FilterChip(
         label: Text(flag.localText(context)),
         selected: _permissions.has(flag),
-        onSelected: (bool value) {
-          setState(() {
-            if (value) {
-              _permissions.add(flag);
-            } else {
-              _permissions.remove(flag);
-            }
-          });
-          _onChanged();
-        },
+        onSelected: widget.readOnly
+            ? null
+            : (bool value) {
+                setState(() {
+                  if (value) {
+                    _permissions.add(flag);
+                  } else {
+                    _permissions.remove(flag);
+                  }
+                });
+                _onChanged();
+              },
       ));
     }
     return Wrap(spacing: 5.0, children: list);

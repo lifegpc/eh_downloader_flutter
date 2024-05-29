@@ -107,4 +107,11 @@ class AuthInfo {
       _isChecking = false;
     }
   }
+
+  void setUpdatedUser(BUser u) {
+    _user = u;
+    _log.info(
+        "User updated: ${u.username} (${u.id}), isAdmin: ${u.isAdmin}. permissions: ${u.permissions}");
+    listener.tryEmit("user_logined", null);
+  }
 }

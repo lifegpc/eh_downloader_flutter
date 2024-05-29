@@ -227,5 +227,15 @@
     "failedDeleteUser": "删除用户失败：",
     "deleteUser": "删除用户",
     "display": "显示",
-    "cache": "缓存"
+    "cache": "缓存",
+    "cancel": "取消",
+    "changeUsername": "修改用户名",
+    "failedChangeUsername": "修改用户名失败：",
+    "usernameIsAlreadyUsed": "此用户名已被其他用户占用。",
+    "changePassword": "修改密码",
+    "failedChangePassword": "修改密码失败：",
+    "oldPassword": "旧密码",
+    "newPassword": "新密码",
+    "incorrectPassword": "不正确的密码。",
+    "changedPasswordSuccessfully": "修改密码成功。"
 }

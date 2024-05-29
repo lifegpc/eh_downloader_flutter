@@ -19,6 +19,96 @@ class __EHApi implements _EHApi {
   String? baseUrl;
 
   @override
+  Future<ApiResult<BUser>> changeUserName(
+    String username, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'username',
+      username,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/user/change_name',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<BUser>.fromJson(
+      _result.data!,
+      (json) => BUser.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<dynamic>> _changeUserPassword(
+    String oldPassword,
+    int t,
+    String newPassword, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'old',
+      oldPassword,
+    ));
+    _data.fields.add(MapEntry(
+      't',
+      t.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'new',
+      newPassword,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/user/change_password',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<dynamic>.fromJson(
+      _result.data!,
+      (json) => json as dynamic,
+    );
+    return value;
+  }
+
+  @override
   Future<ApiResult<int>> createUser(
     String name,
     String password, {

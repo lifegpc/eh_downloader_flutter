@@ -69,6 +69,20 @@ enum SortByGid {
 abstract class _EHApi {
   factory _EHApi(Dio dio, {required String baseUrl}) = __EHApi;
 
+  @POST('/user/change_name')
+  @MultiPart()
+  Future<ApiResult<BUser>> changeUserName(
+      @Part(name: "username") String username,
+      {@CancelRequest() CancelToken? cancel});
+  @POST('/user/change_password')
+  @MultiPart()
+  // ignore: unused_element
+  Future<ApiResult<dynamic>> _changeUserPassword(
+      @Part(name: "old") String oldPassword,
+      @Part(name: "t") int t,
+      @Part(name: "new") String newPassword,
+      // ignore: unused_element
+      {@CancelRequest() CancelToken? cancel});
   @PUT('/user')
   @MultiPart()
   Future<ApiResult<int>> createUser(
@@ -363,5 +377,17 @@ class EHApi extends __EHApi {
         .resolve("export/gallery/zip/$gid")
         .replace(queryParameters: queries);
     return newUri.toString();
+  }
+
+  Future<ApiResult<dynamic>> changeUserPassword(
+      String oldPassword, String newPassword,
+      {CancelToken? cancel}) async {
+    int t = DateTime.now().millisecondsSinceEpoch;
+    final p = await _pbkdf2a.deriveKeyFromPassword(
+        password: oldPassword, nonce: _salt);
+    final p2 = await _pbkdf2b.deriveKey(
+        secretKey: p, nonce: _utf8Encoder.convert(t.toString()));
+    final p3 = base64Encode(await p2.extractBytes());
+    return await _changeUserPassword(p3, t, newPassword, cancel: cancel);
   }
 }

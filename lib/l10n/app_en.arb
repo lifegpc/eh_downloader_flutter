@@ -227,5 +227,15 @@
     "failedDeleteUser": "Failed to delete user: ",
     "deleteUser": "Delete user",
     "display": "Display",
-    "cache": "Cache"
+    "cache": "Cache",
+    "cancel": "Cancel",
+    "changeUsername": "Change username",
+    "failedChangeUsername": "Failed to change username: ",
+    "usernameIsAlreadyUsed": "The username is already used by another user.",
+    "changePassword": "Change password",
+    "failedChangePassword": "Failed to change password: ",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "incorrectPassword": "Incorrect password.",
+    "changedPasswordSuccessfully": "Changed password successfully."
 }
