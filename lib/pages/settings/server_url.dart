@@ -3,20 +3,21 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import '../globals.dart';
+import '../../globals.dart';
 
-final _log = Logger("SetServerPage");
+final _log = Logger("ServerUrlSettingsPage");
 
-class SetServerPage extends StatefulWidget {
-  const SetServerPage({super.key});
+class ServerUrlSettingsPage extends StatefulWidget {
+  const ServerUrlSettingsPage({super.key});
 
-  static const String routeName = '/set_server';
+  static const String routeName = '/settings/server/url';
 
   @override
-  State<SetServerPage> createState() => _SetServerPageState();
+  State<ServerUrlSettingsPage> createState() => _ServerUrlSettingsPage();
 }
 
-class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
+class _ServerUrlSettingsPage extends State<ServerUrlSettingsPage>
+    with ThemeModeWidget {
   String _serverUrl = "";
   String _apiPath = "/api/";
   bool _isValid = false;
@@ -65,6 +66,7 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
     bool? skipBaseUrl = const bool.fromEnvironment("skipBaseUrl");
     if (skipBaseUrl == true) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -76,9 +78,11 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
       buildThemeModeIcon(context),
     ];
     if (hasBaseUrl) actions.add(buildMoreVertSettingsButon(context));
+    setCurrentTitle("${i18n.settings} - ${i18n.setServerUrl}",
+        Theme.of(context).primaryColor.value);
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.setServerUrl),
+        title: Text(i18n.setServerUrl),
         leading: hasBaseUrl
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -103,7 +107,7 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
                       child: TextFormField(
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context)!.serverHost,
+                          labelText: i18n.serverHost,
                         ),
                         initialValue: _serverUrl,
                         onChanged: _serverUrlChanged,
@@ -113,7 +117,7 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
                       child: TextFormField(
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context)!.apiPath,
+                          labelText: i18n.apiPath,
                         ),
                         initialValue: _apiPath,
                         onChanged: _apiPathChanged,
@@ -133,7 +137,7 @@ class _SetServerPageState extends State<SetServerPage> with ThemeModeWidget {
                               });
                             }
                           : null,
-                      child: Text(AppLocalizations.of(context)!.save)),
+                      child: Text(i18n.save)),
                 ],
               ))),
     );

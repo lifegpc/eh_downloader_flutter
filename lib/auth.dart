@@ -88,6 +88,7 @@ class AuthInfo {
         final u = _user!;
         _log.info(
             "Logged in as ${u.username} (${u.id}). isAdmin: ${u.isAdmin}. permissions: ${u.permissions}");
+        listener.tryEmit("user_logined", null);
         await checkSessionInfo();
         if (canManageTasks == true) {
           if (!tasks.inited) tasks.init();

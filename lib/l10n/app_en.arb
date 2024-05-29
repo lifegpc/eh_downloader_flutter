@@ -11,7 +11,7 @@
     "incorrectUserPassword": "Incorrect username or password.",
     "networkError": "Network error.",
     "internalError": "Some internal error occurred. Please send the log file to the developer.",
-    "setServerUrl": "Server URL Settings",
+    "setServerUrl": "Server URL",
     "createRootUser": "Create Root User",
     "skip": "Skip",
     "create": "Create",
@@ -92,7 +92,7 @@
     "markAsSfw": "Mark as SFW",
     "markAsAd": "Mark as Ad",
     "markAsNonAd": "Mark as non-Ad",
-    "serverSettings": "Server Settings",
+    "server": "Server",
     "useEx": "Use exhentai.org.",
     "mpv": "Fetch page data from  Multi-Page Viewer.",
     "downloadOriginalImg": "Download original images.",
@@ -225,5 +225,7 @@
         }
     },
     "failedDeleteUser": "Failed to delete user: ",
-    "deleteUser": "Delete user"
+    "deleteUser": "Delete user",
+    "display": "Display",
+    "cache": "Cache"
 }

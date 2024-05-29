@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import '../api/config.dart';
-import '../components/labeled_checkbox.dart';
-import '../components/number_field.dart';
-import '../components/string_list_field.dart';
-import '../components/string_map_field.dart';
-import '../globals.dart';
-import '../platform/ua.dart';
+import '../../api/config.dart';
+import '../../components/labeled_checkbox.dart';
+import '../../components/number_field.dart';
+import '../../components/string_list_field.dart';
+import '../../components/string_map_field.dart';
+import '../../globals.dart';
+import '../../platform/ua.dart';
 
 final _log = Logger("ServerSettingsPage");
 
 class ServerSettingsPage extends StatefulWidget {
   const ServerSettingsPage({super.key});
-  static get routeName => "/server_settings";
+  static get routeName => "/settings/server";
 
   @override
   State<ServerSettingsPage> createState() => _ServerSettingsPage();
@@ -121,7 +121,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     final i18n = AppLocalizations.of(context)!;
     final cs = Theme.of(context).colorScheme;
     if (isTop(context)) {
-      setCurrentTitle(i18n.serverSettings, cs.primary.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.server}", cs.primary.value);
     }
     return Scaffold(
         appBar: isLoading
@@ -132,7 +132,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                     context.canPop() ? context.pop() : context.go("/");
                   },
                 ),
-                title: Text(i18n.serverSettings),
+                title: Text(i18n.server),
                 actions: [
                     buildThemeModeIcon(context),
                     buildMoreVertSettingsButon(context),
@@ -191,7 +191,7 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                     context.canPop() ? context.pop() : context.go("/");
                   },
                 ),
-                title: Text(i18n.serverSettings),
+                title: Text(i18n.server),
                 actions: [
                   buildThemeModeIcon(context),
                   buildMoreVertSettingsButon(context),

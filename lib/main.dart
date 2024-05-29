@@ -21,9 +21,11 @@ import 'pages/galleries.dart';
 import 'pages/gallery.dart';
 import 'pages/home.dart';
 import 'pages/login.dart';
-import 'pages/server_settings.dart';
-import 'pages/set_server.dart';
 import 'pages/settings.dart';
+import 'pages/settings/cache.dart';
+import 'pages/settings/display.dart';
+import 'pages/settings/server.dart';
+import 'pages/settings/server_url.dart';
 import 'pages/task_manager.dart';
 import 'pages/users.dart';
 import 'utils.dart';
@@ -38,8 +40,8 @@ final _router = GoRouter(
       builder: (context, state) => const HomePage(),
     ),
     GoRoute(
-      path: SetServerPage.routeName,
-      builder: (context, state) => const SetServerPage(),
+      path: ServerUrlSettingsPage.routeName,
+      builder: (context, state) => ServerUrlSettingsPage(key: state.pageKey),
     ),
     GoRoute(
       path: LoginPage.routeName,
@@ -51,7 +53,7 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: SettingsPage.routeName,
-      builder: (context, state) => const SettingsPage(),
+      builder: (context, state) => SettingsPage(key: state.pageKey),
     ),
     GoRoute(
         name: GalleriesPage.routeName,
@@ -239,6 +241,14 @@ final _router = GoRouter(
             return "/users";
           }
         }),
+    GoRoute(
+      path: DisplaySettingsPage.routeName,
+      builder: (context, state) => DisplaySettingsPage(key: state.pageKey),
+    ),
+    GoRoute(
+      path: CacheSettingsPage.routeName,
+      builder: (context, state) => CacheSettingsPage(key: state.pageKey),
+    ),
   ],
 );
 

@@ -100,7 +100,7 @@ bool tryInitApi(BuildContext context) {
   String? baseUrl = prefs.getString("baseUrl");
   if (baseUrl == null) {
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      context.go("/set_server");
+      context.go("/settings/server/url");
     });
     return false;
   }
@@ -138,20 +138,15 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 final EventListener listener = EventListener()..maxListeners = 0;
 
 enum MoreVertSettings {
-  setServerUrl,
   createRootUser,
   settings,
   markAsNsfw,
   markAsSfw,
-  serverSettings,
   taskManager,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
   switch (value) {
-    case MoreVertSettings.setServerUrl:
-      context.push("/set_server");
-      break;
     case MoreVertSettings.createRootUser:
       context.push("/create_root_user");
       break;
@@ -163,9 +158,6 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
       break;
     case MoreVertSettings.markAsSfw:
       GalleryPage.maybeOf(context)?.markGalleryAsNsfw(false);
-      break;
-    case MoreVertSettings.serverSettings:
-      context.push("/server_settings");
       break;
     case MoreVertSettings.taskManager:
       context.push("/task_manager");
@@ -179,12 +171,6 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     BuildContext context) {
   var list = <PopupMenuEntry<MoreVertSettings>>[];
   var path = GoRouterState.of(context).path;
-  if (const bool.fromEnvironment("skipBaseUrl") != true &&
-      path != "/set_server") {
-    list.add(PopupMenuItem(
-        value: MoreVertSettings.setServerUrl,
-        child: Text(AppLocalizations.of(context)!.setServerUrl)));
-  }
   if (auth.status != null &&
       auth.status!.noUser &&
       prefs.getBool("skipCreateRootUser") == true &&
@@ -197,11 +183,6 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     list.add(PopupMenuItem(
         value: MoreVertSettings.settings,
         child: Text(AppLocalizations.of(context)!.settings)));
-  }
-  if (path != "/server_settings" && auth.isAdmin == true) {
-    list.add(PopupMenuItem(
-        value: MoreVertSettings.serverSettings,
-        child: Text(AppLocalizations.of(context)!.serverSettings)));
   }
   if (path != "/task_manager" && auth.canManageTasks == true) {
     list.add(PopupMenuItem(

@@ -33,16 +33,6 @@ class HomeDrawer extends StatelessWidget {
             context.push("/galleries");
           },
         ),
-        auth.isAdmin == true
-            ? ListTile(
-                leading: const Icon(Icons.admin_panel_settings),
-                title: Text(i18n.serverSettings),
-                onTap: () {
-                  Scaffold.of(context).closeDrawer();
-                  context.push("/server_settings");
-                },
-              )
-            : Container(),
         auth.canManageTasks == true
             ? ListTile(
                 leading: const Icon(Icons.task),
