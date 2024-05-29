@@ -113,6 +113,11 @@ class _EditUserPage extends State<EditUserPage> {
       listener.tryEmit("update_user", user);
     } catch (e) {
       _log.severe("Failed to update user ${widget.uid}: $e");
+      if (!_requestCancel!.isCancelled) {
+        setState(() {
+          _isRequesting = false;
+        });
+      }
     }
   }
 

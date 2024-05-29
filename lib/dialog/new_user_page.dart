@@ -58,6 +58,11 @@ class _NewUserPage extends State<NewUserPage> {
       listener.tryEmit("new_user", _newUserId);
     } catch (e) {
       _log.severe("Failed to create new user: $e");
+      if (!_cancel!.isCancelled) {
+        setState(() {
+          _isRequesting = false;
+        });
+      }
     }
   }
 
@@ -153,16 +158,18 @@ class _NewUserPage extends State<NewUserPage> {
                     },
                     obscureText: !_passwordVisible,
                   )),
-                  _buildWithVecticalPadding(LabeledCheckbox(
-                      value: _isAdmin,
-                      onChanged: (b) {
-                        if (b != null) {
-                          setState(() {
-                            _isAdmin = b;
-                          });
-                        }
-                      },
-                      label: Text(i18n.admin))),
+                  auth.isRoot == true
+                      ? _buildWithVecticalPadding(LabeledCheckbox(
+                          value: _isAdmin,
+                          onChanged: (b) {
+                            if (b != null) {
+                              setState(() {
+                                _isAdmin = b;
+                              });
+                            }
+                          },
+                          label: Text(i18n.admin)))
+                      : Container(),
                   !_isAdmin
                       ? _buildWithVecticalPadding(UserPermissionsChips(
                           permissions: _permissions,
