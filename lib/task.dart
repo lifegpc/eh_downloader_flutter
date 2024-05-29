@@ -97,7 +97,8 @@ class TaskManager {
   Future<void> connect() async {
     if (auth.canManageTasks != true) return;
     try {
-      _channel = await connectWebSocket(api.getTaskUrl());
+      final url = api.getTaskUrl();
+      _channel = await connectWebSocket(url);
       _channel!.stream.listen((event) {
         try {
           final data = jsonDecode(event) as Map<String, dynamic>;
@@ -196,7 +197,8 @@ class TaskManager {
         }
       }, onError: (e) {
         _log.warning("Task websocket error: $e");
-        if (_allowReconnect && !_needClosed) {
+        final url2 = api.getTaskUrl();
+        if (_allowReconnect && !_needClosed && url == url2) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;
@@ -209,7 +211,8 @@ class TaskManager {
       }, onDone: () {
         _log.warning(
             "WenSocket closed: ${_channel?.closeCode} ${_channel?.closeReason}");
-        if (_allowReconnect && !_needClosed) {
+        final url2 = api.getTaskUrl();
+        if (_allowReconnect && !_needClosed && url == url2) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;
