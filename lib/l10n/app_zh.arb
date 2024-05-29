@@ -224,5 +224,6 @@
             }
         }
     },
-    "failedDeleteUser": "删除用户失败："
+    "failedDeleteUser": "删除用户失败：",
+    "deleteUser": "删除用户"
 }

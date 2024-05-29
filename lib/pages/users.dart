@@ -145,7 +145,7 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
         maxCrossAxisExtent: 360.0,
         mainAxisSpacing: 10.0,
         crossAxisSpacing: 10.0,
-        childAspectRatio: 4.0,
+        mainAxisExtent: 80.0,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

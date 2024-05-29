@@ -66,41 +66,24 @@ class UserCard extends StatelessWidget {
                       onPressed: () => showDialog(
                           context: context,
                           builder: (context) {
-                            final maxWidth = MediaQuery.of(context).size.width;
-                            return Dialog(
-                                child: Container(
-                                    padding: maxWidth < 400
-                                        ? const EdgeInsets.symmetric(
-                                            vertical: 20, horizontal: 10)
-                                        : const EdgeInsets.all(20),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    width: maxWidth < 500 ? null : 500,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(i18n
-                                            .deleteUserConfirm(user.username)),
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    context.pop();
-                                                    _deleteUser(user.id,
-                                                        i18n.failedDeleteUser);
-                                                  },
-                                                  child: Text(i18n.yes)),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    context.pop();
-                                                  },
-                                                  child: Text(i18n.no)),
-                                            ]),
-                                      ],
-                                    )));
+                            return AlertDialog(
+                                title: Text(i18n.deleteUser),
+                                content:
+                                    Text(i18n.deleteUserConfirm(user.username)),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        context.pop();
+                                        _deleteUser(
+                                            user.id, i18n.failedDeleteUser);
+                                      },
+                                      child: Text(i18n.yes)),
+                                  TextButton(
+                                      onPressed: () {
+                                        context.pop();
+                                      },
+                                      child: Text(i18n.no)),
+                                ]);
                           }),
                       tooltip: i18n.delete,
                       icon: const Icon(Icons.delete))

@@ -224,5 +224,6 @@
             }
         }
     },
-    "failedDeleteUser": "Failed to delete user: "
+    "failedDeleteUser": "Failed to delete user: ",
+    "deleteUser": "Delete user"
 }
