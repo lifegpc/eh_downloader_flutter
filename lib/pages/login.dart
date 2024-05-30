@@ -36,7 +36,8 @@ Future<bool> login(String username, String password) async {
   throw re.unwrapErr();
 }
 
-class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
+class _LoginPageState extends State<LoginPage>
+    with ThemeModeWidget, IsTopWidget2 {
   final _formKey = GlobalKey<FormState>();
   String _username = "";
   String _password = "";
@@ -44,6 +45,10 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
   bool _isValid = false;
   bool _isLogin = false;
   bool _checkAuth = false;
+
+  void _onStateChanged(dynamic _) {
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -53,6 +58,13 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
     _passwordVisible = false;
     _isValid = false;
     _isLogin = false;
+    listener.on("user_logined", _onStateChanged);
+  }
+
+  @override
+  void dispose() {
+    listener.removeEventListener("user_logined", _onStateChanged);
+    super.dispose();
   }
 
   static bool _checkIsValid(String username, String password) {
@@ -82,6 +94,7 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
   }
 
   void _checkStatus(BuildContext build) {
+    if (!isTop(context)) return;
     if (auth.isAuthed) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         build.go("/");
@@ -107,18 +120,18 @@ class _LoginPageState extends State<LoginPage> with ThemeModeWidget {
   Widget build(BuildContext context) {
     tryInitApi(context);
     _checkStatus(context);
+    if (isTop(context) && auth.user != null) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        context.canPop() ? context.pop() : context.go("/");
+      });
+    }
     return Scaffold(
       appBar: AppBar(
-        leading: auth.user == null
-            ? Container()
-            : IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.canPop() ? context.pop() : context.go("/");
-                }),
+        leading: Container(),
         title: Text(AppLocalizations.of(context)!.login),
         actions: [
           buildThemeModeIcon(context),
+          buildMoreVertSettingsButon(context),
         ],
       ),
       body: PopScope(

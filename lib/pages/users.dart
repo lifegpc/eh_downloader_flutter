@@ -142,7 +142,7 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
   Widget _buildSliverGrid(BuildContext context) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 360.0,
+        maxCrossAxisExtent: 370.0,
         mainAxisSpacing: 10.0,
         crossAxisSpacing: 10.0,
         mainAxisExtent: 80.0,

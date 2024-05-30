@@ -32,6 +32,7 @@ class TaskManager {
     tasksList.clear();
     _channel?.sink.add("{\"type\":\"close\"}");
     _channel?.sink.close();
+    _channel = null;
     _closed = true;
   }
 

@@ -334,6 +334,8 @@ void clearAllStates(BuildContext context) {
 
 void checkAuth(BuildContext context) {
   if (!auth.isAuthed && !auth.checked && !auth.isChecking) {
+    final state = GoRouterState.of(context);
+    final router = GoRouter.of(context);
     auth.checkAuth().then((re) {
       if (!re) {
         if (auth.status!.noUser &&
@@ -341,9 +343,8 @@ void checkAuth(BuildContext context) {
           return;
         }
         final loc = auth.status!.noUser ? "/create_root_user" : "/login";
-        final path = GoRouterState.of(context).path;
-        if (path != loc) {
-          context.push(loc);
+        if (state.path != loc) {
+          router.push(loc);
         }
       }
     }).catchError((err) {

@@ -237,6 +237,7 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
                                               : e.langName))
                                       .toList(),
                                   leadingIcon: const Icon(Icons.language),
+                                  width: 250,
                                 )),
                             Container(
                                 padding:

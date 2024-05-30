@@ -46,7 +46,7 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: LoginPage.routeName,
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => LoginPage(key: state.pageKey),
     ),
     GoRoute(
       path: CreateRootUserPage.routeName,
