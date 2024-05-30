@@ -270,6 +270,7 @@ class ImageCaches {
       offset += records.length;
     } while (records.isNotEmpty);
     await _db!.delete("images");
+    await _optimize();
     _size = 0;
   }
 }
