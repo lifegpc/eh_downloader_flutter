@@ -27,12 +27,14 @@ class TaskManager {
   bool _needClosed = false;
   bool _waitClosed = false;
   bool get closed => _closed;
+  int _connectId = 0;
   void clear() {
-    tasks.clear();
-    tasksList.clear();
+    _connectId++;
     _channel?.sink.add("{\"type\":\"close\"}");
     _channel?.sink.close();
     _channel = null;
+    tasks.clear();
+    tasksList.clear();
     _closed = true;
   }
 
@@ -98,8 +100,8 @@ class TaskManager {
   Future<void> connect() async {
     if (auth.canManageTasks != true) return;
     try {
-      final url = api.getTaskUrl();
-      _channel = await connectWebSocket(url);
+      final cId = _connectId;
+      _channel = await connectWebSocket(api.getTaskUrl());
       _channel!.stream.listen((event) {
         try {
           final data = jsonDecode(event) as Map<String, dynamic>;
@@ -198,8 +200,7 @@ class TaskManager {
         }
       }, onError: (e) {
         _log.warning("Task websocket error: $e");
-        final url2 = api.getTaskUrl();
-        if (_allowReconnect && !_needClosed && url == url2) {
+        if (_allowReconnect && !_needClosed && _connectId == cId) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;
@@ -212,8 +213,7 @@ class TaskManager {
       }, onDone: () {
         _log.warning(
             "WenSocket closed: ${_channel?.closeCode} ${_channel?.closeReason}");
-        final url2 = api.getTaskUrl();
-        if (_allowReconnect && !_needClosed && url == url2) {
+        if (_allowReconnect && !_needClosed && _connectId == cId) {
           _log.info("Reconnecting to task server in 5 seconds");
           _reconnectTimer = Timer(const Duration(seconds: 5), () {
             _reconnectTimer = null;

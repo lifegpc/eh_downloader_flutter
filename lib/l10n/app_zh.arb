@@ -237,5 +237,8 @@
     "oldPassword": "旧密码",
     "newPassword": "新密码",
     "incorrectPassword": "不正确的密码。",
-    "changedPasswordSuccessfully": "修改密码成功。"
+    "changedPasswordSuccessfully": "修改密码成功。",
+    "logout": "退出登录",
+    "logoutConfirm": "是否退出登录",
+    "failedLogout": "退出登录失败："
 }

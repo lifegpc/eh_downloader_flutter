@@ -47,6 +47,22 @@ Future<void> _changeUserPassword(
   }
 }
 
+Future<void> _deleteToken(AppLocalizations i18n, GoRouter router) async {
+  try {
+    (await api.deleteToken()).unwrap();
+    clearAllStates2(null, router);
+  } catch (e, stack) {
+    String errmsg = e.toString();
+    if (e is (int, String)) {
+      _log.warning("Failed to delete token: $e");
+    } else {
+      _log.severe("Failed to delete token: $e\n$stack");
+    }
+    final snack = SnackBar(content: Text("${i18n.failedLogout}$errmsg"));
+    rootScaffoldMessengerKey.currentState?.showSnackBar(snack);
+  }
+}
+
 class _ChangeUsernameDialog extends StatefulWidget {
   const _ChangeUsernameDialog({this.username});
 
@@ -254,6 +270,28 @@ class _UserSettingsPage extends State<UserSettingsPage> with ThemeModeWidget {
           padding: const EdgeInsets.only(left: 16),
           child: UserPermissionsChips(
               permissions: auth.user!.permissions, readOnly: true)),
+      ListTile(
+          leading: const Icon(Icons.logout),
+          title: Text(i18n.logout),
+          onTap: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text(i18n.logout),
+                    content: Text(i18n.logoutConfirm),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            _deleteToken(i18n, GoRouter.of(context));
+                            context.pop();
+                          },
+                          child: Text(i18n.yes)),
+                      TextButton(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          child: Text(i18n.no)),
+                    ],
+                  ))),
     ]));
   }
 

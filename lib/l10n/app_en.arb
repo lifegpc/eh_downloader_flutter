@@ -237,5 +237,8 @@
     "oldPassword": "Old password",
     "newPassword": "New password",
     "incorrectPassword": "Incorrect password.",
-    "changedPasswordSuccessfully": "Changed password successfully."
+    "changedPasswordSuccessfully": "Changed password successfully.",
+    "logout": "Log out",
+    "logoutConfirm": "Do you want to log out?",
+    "failedLogout": "Failed to log out: "
 }
