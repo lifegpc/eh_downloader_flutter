@@ -23,7 +23,7 @@ class ApiResult<T> {
     if (ok) {
       return data!;
     } else {
-      return throw (status, error!);
+      return throw (status, error);
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -17,16 +18,20 @@ class GalleriesPageExtra {
 
 class GalleriesPage extends StatefulWidget {
   const GalleriesPage(
-      {super.key, this.sortByGid, this.uploader, this.tag, this.translatedTag});
+      {super.key,
+      this.sortByGid,
+      this.uploader,
+      this.tag,
+      this.translatedTag,
+      this.hasExtra = false});
   final SortByGid? sortByGid;
   final String? uploader;
   final String? tag;
   final String? translatedTag;
+  final bool hasExtra;
   bool _stt(BuildContext context) =>
       prefs.getBool("showTranslatedTag") ??
       MainApp.of(context).lang.toLocale().languageCode == "zh";
-  String? preferredTag(BuildContext context) =>
-      _stt(context) ? translatedTag ?? tag : tag;
 
   static const String routeName = '/galleries';
 
@@ -39,6 +44,12 @@ class _GalleriesPage extends State<GalleriesPage>
   static const int _pageSize = 20;
   bool? _sortByGid;
   SortByGid _sortByGid2 = SortByGid.none;
+  String? _translatedTag;
+  String? preferredTag(BuildContext context) =>
+      widget._stt(context) ? _translatedTag ?? widget.tag : widget.tag;
+  CancelToken? _tagCancel;
+  bool _isFetchingTag = false;
+  bool _fetchedTag = false;
 
   final PagingController<int, GMeta> _pagingController =
       PagingController(firstPageKey: 0);
@@ -65,6 +76,31 @@ class _GalleriesPage extends State<GalleriesPage>
     }
   }
 
+  Future<void> _fetchTag() async {
+    _isFetchingTag = true;
+    try {
+      _tagCancel = CancelToken();
+      final tags =
+          (await api.getTags2([widget.tag!], cancel: _tagCancel)).unwrap();
+      final tag = tags.tags[widget.tag!]!.unwrap();
+      if (!_tagCancel!.isCancelled) {
+        setState(() {
+          _translatedTag = tag.translated;
+        });
+      }
+    } catch (e, stack) {
+      if (!_tagCancel!.isCancelled) {
+        if (e is (int, String)) {
+          _log.warning("Failed to fetch tags: $e");
+        } else {
+          _log.severe("Failed to fetch tags: $e\n$stack");
+        }
+      }
+    }
+    _fetchedTag = true;
+    _isFetchingTag = false;
+  }
+
   @override
   void initState() {
     try {
@@ -78,7 +114,13 @@ class _GalleriesPage extends State<GalleriesPage>
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    _translatedTag = widget.translatedTag;
+    listener.on("user_logined", _onStateChanged);
     super.initState();
+  }
+
+  void _onStateChanged(dynamic _) {
+    setState(() {});
   }
 
   @override
@@ -101,7 +143,8 @@ class _GalleriesPage extends State<GalleriesPage>
           };
           queryParameters.removeWhere((k, v) => v[0].isEmpty);
           context.pushReplacementNamed("/galleries",
-              queryParameters: queryParameters);
+              queryParameters: queryParameters,
+              extra: GalleriesPageExtra(translatedTag: _translatedTag));
         }
       },
       label: Text(i18n.sortByGid),
@@ -113,15 +156,21 @@ class _GalleriesPage extends State<GalleriesPage>
       leadingIcon: const Icon(Icons.sort),
     );
     final title = widget.uploader != null && widget.tag != null
-        ? i18n.tagUploaderGalleries(
-            widget.preferredTag(context)!, widget.uploader!)
+        ? i18n.tagUploaderGalleries(preferredTag(context)!, widget.uploader!)
         : widget.uploader != null
             ? i18n.uploaderGalleries(widget.uploader!)
             : widget.tag != null
-                ? i18n.tagGalleries(widget.preferredTag(context)!)
+                ? i18n.tagGalleries(preferredTag(context)!)
                 : i18n.galleries;
     if (isTop(context)) {
       setCurrentTitle(title, Theme.of(context).primaryColor.value);
+    }
+    if (auth.canManageTasks == true &&
+        !widget.hasExtra &&
+        widget.tag != null &&
+        !_isFetchingTag &&
+        !_fetchedTag) {
+      _fetchTag();
     }
     return Scaffold(
         appBar: AppBar(
@@ -159,6 +208,8 @@ class _GalleriesPage extends State<GalleriesPage>
   @override
   void dispose() {
     _pagingController.dispose();
+    _tagCancel?.cancel();
+    listener.removeEventListener("user_logined", _onStateChanged);
     super.dispose();
   }
 }

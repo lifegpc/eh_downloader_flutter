@@ -77,7 +77,8 @@ final _router = GoRouter(
               sortByGid: sortByGid,
               tag: tag,
               uploader: uploader,
-              translatedTag: extra?.translatedTag);
+              translatedTag: extra?.translatedTag,
+              hasExtra: extra != null);
         }),
     GoRoute(
         path: GalleryPage.routeName,

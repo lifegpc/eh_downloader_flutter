@@ -321,6 +321,10 @@ class EHApi extends __EHApi {
     return _getTags(ids.join(","), cancel: cancel);
   }
 
+  Future<ApiResult<Tags>> getTags2(List<String> ids, {CancelToken? cancel}) {
+    return _getTags(ids.join(","), cancel: cancel);
+  }
+
   String getFileUrl(int id) {
     final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
     final newUri = uri.resolve("file/$id");
