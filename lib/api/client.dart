@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
+import 'package:retrofit/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
@@ -200,6 +201,11 @@ abstract class _EHApi {
   @GET('/gallery/{gid}')
   Future<ApiResult<GalleryData>> getGallery(@Path("gid") int gid,
       {@CancelRequest() CancelToken? cancel});
+  @GET('/gallery/meta/{gids}')
+  // ignore: unused_element
+  Future<ApiResult<GMetaInfos>> _getGalleriesMeta(@Path("gids") String gids,
+      // ignore: unused_element
+      {@CancelRequest() CancelToken? cancel});
   @GET('/gallery/list')
   Future<ApiResult<List<GMeta>>> listGalleries(
       {@Query("all") bool? all,
@@ -270,8 +276,17 @@ abstract class _EHApi {
     @Part(name: "type") String t = "download",
     @CancelRequest() CancelToken? cancel,
   });
+  @PUT('/task')
+  @MultiPart()
+  Future<ApiResult<Task>> createExportZipTask(@Part(name: "gid") int gid,
+      {@Part(name: 'cfg') ExportZipConfig? cfg,
+      @Part(name: "type") String t = "export_zip",
+      @CancelRequest() CancelToken? cancel});
   @GET('/task/download_cfg')
   Future<ApiResult<DownloadConfig>> getDefaultDownloadConfig(
+      {@CancelRequest() CancelToken? cancel});
+  @GET('/task/export_zip_cfg')
+  Future<ApiResult<ExportZipConfig>> getDefaultExportZipConfig(
       {@CancelRequest() CancelToken? cancel});
 }
 
@@ -315,6 +330,11 @@ class EHApi extends __EHApi {
   Future<ApiResult<EhFiles>> getFiles(List<String> tokens,
       {CancelToken? cancel}) {
     return _getFiles(tokens.join(","), cancel: cancel);
+  }
+
+  Future<ApiResult<GMetaInfos>> getGalleriesMeta(List<int> gids,
+      {@CancelRequest() CancelToken? cancel}) {
+    return _getGalleriesMeta(gids.join(","), cancel: cancel);
   }
 
   Future<ApiResult<Tags>> getTags(List<int> ids, {CancelToken? cancel}) {

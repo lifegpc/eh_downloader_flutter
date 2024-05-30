@@ -12,6 +12,7 @@ import 'dialog/download_zip_page.dart';
 import 'dialog/edit_user_page.dart';
 import 'dialog/gallery_details_page.dart';
 import 'dialog/new_download_task_page.dart';
+import 'dialog/new_export_zip_task_page.dart';
 import 'dialog/new_user_page.dart';
 import 'dialog/task_page.dart';
 import 'globals.dart';
@@ -255,6 +256,19 @@ final _router = GoRouter(
       path: UserSettingsPage.routeName,
       builder: (context, state) => UserSettingsPage(key: state.pageKey),
     ),
+    GoRoute(
+        path: NewExportZipTaskPage.routeName,
+        pageBuilder: (context, state) {
+          int? gid;
+          if (state.uri.queryParameters.containsKey("gid")) {
+            gid = int.tryParse(state.uri.queryParameters["gid"]!);
+          }
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return NewExportZipTaskPage(gid: gid);
+              });
+        }),
   ],
 );
 

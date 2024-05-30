@@ -152,7 +152,7 @@
     "allTasks": "All Tasks",
     "ehMetadataCacheTime": "The time to cache the metadata of the gallery from E-Hentai",
     "hour": "hour",
-    "createDownloadTask": "Create Download Task",
+    "createDownloadTask": "Create download task",
     "galleryURL": "Gallery URL",
     "galleryToken": "Gallery Token",
     "randomFileSecret": "The secret of token to access random file without login",
@@ -240,5 +240,7 @@
     "changedPasswordSuccessfully": "Changed password successfully.",
     "logout": "Log out",
     "logoutConfirm": "Do you want to log out?",
-    "failedLogout": "Failed to log out: "
+    "failedLogout": "Failed to log out: ",
+    "createExportZipTask": "Create export as ZIP file task",
+    "outputDir": "Output directory"
 }

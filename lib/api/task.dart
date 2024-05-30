@@ -297,3 +297,23 @@ class DownloadConfig {
       _$DownloadConfigFromJson(json);
   Map<String, dynamic> toJson() => _$DownloadConfigToJson(this);
 }
+
+@JsonSerializable()
+class ExportZipConfig {
+  ExportZipConfig({
+    this.output,
+    this.jpnTitle,
+    this.maxLength,
+    this.exportAd,
+  });
+  String? output;
+  @JsonKey(name: 'jpn_title')
+  bool? jpnTitle;
+  @JsonKey(name: 'max_length')
+  int? maxLength;
+  @JsonKey(name: 'export_ad')
+  bool? exportAd;
+  factory ExportZipConfig.fromJson(Map<String, dynamic> json) =>
+      _$ExportZipConfigFromJson(json);
+  Map<String, dynamic> toJson() => _$ExportZipConfigToJson(this);
+}

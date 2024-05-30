@@ -885,6 +885,41 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<GMetaInfos>> _getGalleriesMeta(
+    String gids, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<GMetaInfos>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/gallery/meta/${gids}',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<GMetaInfos>.fromJson(
+      _result.data!,
+      (json) => GMetaInfos.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<ApiResult<List<GMeta>>> listGalleries({
     bool? all,
     int? offset,
@@ -1376,6 +1411,56 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<Task>> createExportZipTask(
+    int gid, {
+    ExportZipConfig? cfg,
+    String t = "export_zip",
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'gid',
+      gid.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'cfg',
+      jsonEncode(cfg ?? <String, dynamic>{}),
+    ));
+    _data.fields.add(MapEntry(
+      'type',
+      t,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Task>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/task',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<Task>.fromJson(
+      _result.data!,
+      (json) => Task.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<ApiResult<DownloadConfig>> getDefaultDownloadConfig(
       {CancelToken? cancel}) async {
     final _extra = <String, dynamic>{};
@@ -1404,6 +1489,39 @@ class __EHApi implements _EHApi {
     final value = ApiResult<DownloadConfig>.fromJson(
       _result.data!,
       (json) => DownloadConfig.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ApiResult<ExportZipConfig>> getDefaultExportZipConfig(
+      {CancelToken? cancel}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<ExportZipConfig>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/task/export_zip_cfg',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ApiResult<ExportZipConfig>.fromJson(
+      _result.data!,
+      (json) => ExportZipConfig.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

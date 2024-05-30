@@ -174,3 +174,19 @@ Map<String, dynamic> _$DownloadConfigToJson(DownloadConfig instance) =>
       'max_retry_count': instance.maxRetryCount,
       'remove_previous_gallery': instance.removePreviousGallery,
     };
+
+ExportZipConfig _$ExportZipConfigFromJson(Map<String, dynamic> json) =>
+    ExportZipConfig(
+      output: json['output'] as String?,
+      jpnTitle: json['jpn_title'] as bool?,
+      maxLength: (json['max_length'] as num?)?.toInt(),
+      exportAd: json['export_ad'] as bool?,
+    );
+
+Map<String, dynamic> _$ExportZipConfigToJson(ExportZipConfig instance) =>
+    <String, dynamic>{
+      'output': instance.output,
+      'jpn_title': instance.jpnTitle,
+      'max_length': instance.maxLength,
+      'export_ad': instance.exportAd,
+    };

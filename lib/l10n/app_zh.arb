@@ -240,5 +240,7 @@
     "changedPasswordSuccessfully": "修改密码成功。",
     "logout": "退出登录",
     "logoutConfirm": "是否退出登录",
-    "failedLogout": "退出登录失败："
+    "failedLogout": "退出登录失败：",
+    "createExportZipTask": "新建导出为ZIP文件任务",
+    "outputDir": "输出文件夹"
 }

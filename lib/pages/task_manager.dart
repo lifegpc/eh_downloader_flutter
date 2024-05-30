@@ -204,19 +204,26 @@ class _TaskManagerPage extends State<TaskManagerPage>
   }
 
   Widget _buildAddMenu(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
     return PopupMenuButton(
         icon: const Icon(Icons.add),
         itemBuilder: (context) {
           return [
             PopupMenuItem(
               value: TaskType.download,
-              child: Text(AppLocalizations.of(context)!.createDownloadTask),
-            )
+              child: Text(i18n.createDownloadTask),
+            ),
+            PopupMenuItem(
+              value: TaskType.exportZip,
+              child: Text(i18n.createExportZipTask),
+            ),
           ];
         },
         onSelected: (TaskType type) {
           if (type == TaskType.download) {
             context.push("/dialog/new_download_task");
+          } else if (type == TaskType.exportZip) {
+            context.push("/dialog/new_export_zip_task");
           }
         });
   }

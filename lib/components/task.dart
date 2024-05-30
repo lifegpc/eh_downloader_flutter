@@ -70,12 +70,21 @@ class _TaskView extends State<TaskView> {
 
   Widget _buildText(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
-    if (widget.task.base.type == TaskType.download) {
+    final typ = widget.task.base.type;
+    if (typ == TaskType.download) {
       final gid = widget.task.base.gid;
       final title = tasks.meta.containsKey(gid)
           ? tasks.meta[gid]!.preferredTitle
           : gid.toString();
       return Text("${i18n.downloadTask} $title",
+          maxLines: 1, overflow: TextOverflow.ellipsis);
+    }
+    if (typ == TaskType.exportZip) {
+      final gid = widget.task.base.gid;
+      final title = tasks.gmeta.containsKey(gid)
+          ? tasks.gmeta[gid]!.preferredTitle
+          : gid.toString();
+      return Text("${i18n.exportZipTask} $title",
           maxLines: 1, overflow: TextOverflow.ellipsis);
     }
     return Container();

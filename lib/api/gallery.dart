@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'api_result.dart';
 import '../globals.dart';
 
 part 'gallery.g.dart';
@@ -167,4 +168,16 @@ class GalleryData {
   factory GalleryData.fromJson(Map<String, dynamic> json) =>
       _$GalleryDataFromJson(json);
   Map<String, dynamic> toJson() => _$GalleryDataToJson(this);
+}
+
+class GMetaInfos {
+  const GMetaInfos({
+    required this.metas,
+  });
+  final Map<int, ApiResult<GMeta>> metas;
+  factory GMetaInfos.fromJson(Map<String, dynamic> json) => GMetaInfos(
+      metas: json.map((key, value) => MapEntry(
+          int.parse(key),
+          ApiResult<GMeta>.fromJson(value as Map<String, dynamic>,
+              (json) => GMeta.fromJson(json as Map<String, dynamic>)))));
 }
