@@ -7,7 +7,6 @@ environment:
   sdk: '>=3.0.5 <4.0.0'
 
 dependencies:
-  chinese_font_library: ^1.0.2
   cryptography: ^2.5.0
   cryptography_flutter: ^2.3.0
   dio: ^5.3.2

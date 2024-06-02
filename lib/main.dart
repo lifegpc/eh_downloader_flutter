@@ -1,4 +1,3 @@
-import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -336,8 +335,8 @@ class MainApp extends StatefulWidget {
 
 class _MainApp extends State<MainApp> with WidgetsBindingObserver {
   ThemeMode _themeMode = ThemeMode.system;
-  ThemeData _themeData = ThemeData(useMaterial3: true);
-  ThemeData _darkThemeData = ThemeData.dark(useMaterial3: true);
+  final ThemeData _themeData = ThemeData(useMaterial3: true);
+  final ThemeData _darkThemeData = ThemeData.dark(useMaterial3: true);
   ThemeMode get themeMode => _themeMode;
   Lang _lang = Lang.system;
   Lang get lang => _lang;
@@ -356,10 +355,6 @@ class _MainApp extends State<MainApp> with WidgetsBindingObserver {
       _lang = Lang.values[prefs.getInt("lang") ?? 0];
     } catch (e) {
       _log.warning("Failed to read lang from prefs:", e);
-    }
-    if (isWindows) {
-      _themeData = _themeData.useSystemChineseFont(Brightness.light);
-      _darkThemeData = _darkThemeData.useSystemChineseFont(Brightness.dark);
     }
     WidgetsBinding.instance.addObserver(this);
     if (WidgetsBinding.instance.lifecycleState != null) {
