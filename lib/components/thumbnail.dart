@@ -67,6 +67,7 @@ enum _ThumbnailMenu {
   markAsSfw,
   markAsAd,
   markAsNonAd,
+  copyOriImgUrl,
 }
 
 class _Thumbnail extends State<Thumbnail> {
@@ -261,14 +262,14 @@ class _Thumbnail extends State<Thumbnail> {
     switch (v) {
       case _ThumbnailMenu.copyImage:
         try {
-          copyImageToClipboard(_data!, ImageFmt.jpg);
+          await copyImageToClipboard(_data!, ImageFmt.jpg);
         } catch (err, stack) {
           _log.warning("Failed to copy image to clipboard: $err\n$stack");
         }
         break;
       case _ThumbnailMenu.copyImgUrl:
         try {
-          copyTextToClipboard(_uri!);
+          await copyTextToClipboard(_uri!);
         } catch (err, stack) {
           _log.warning("Failed to copy image url to clipboard: $err\n$stack");
         }
@@ -293,6 +294,15 @@ class _Thumbnail extends State<Thumbnail> {
       case _ThumbnailMenu.markAsNonAd:
         await _markAsAd(false);
         break;
+      case _ThumbnailMenu.copyOriImgUrl:
+        try {
+          final uri = api.getFileUrl(_fileId!);
+          await copyTextToClipboard(uri);
+        } catch (err, stack) {
+          _log.warning(
+              "Failed to copy original image url to clipboard: $err\n$stack");
+        }
+        break;
     }
   }
 
@@ -301,6 +311,7 @@ class _Thumbnail extends State<Thumbnail> {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
     final isAd = widget._pMeta.isAd;
+    final i18n = AppLocalizations.of(context)!;
     if (isLoading && !_isLoading) _fetchData();
     _iconSize ??= Theme.of(context).iconTheme.size;
     final iconSize = MediaQuery.of(context).size.width < 400
@@ -320,13 +331,15 @@ class _Thumbnail extends State<Thumbnail> {
               var list = <PopupMenuEntry<_ThumbnailMenu>>[
                 PopupMenuItem(
                     value: _ThumbnailMenu.copyImage,
-                    child: Text(AppLocalizations.of(context)!.copyImage)),
+                    child: Text(i18n.copyImage)),
                 PopupMenuItem(
                     value: _ThumbnailMenu.copyImgUrl,
-                    child: Text(AppLocalizations.of(context)!.copyImgUrl)),
+                    child: Text(i18n.copyImgUrl)),
                 PopupMenuItem(
-                    value: _ThumbnailMenu.saveAs,
-                    child: Text(AppLocalizations.of(context)!.saveAs)),
+                    value: _ThumbnailMenu.copyOriImgUrl,
+                    child: Text(i18n.copyOriImgUrl)),
+                PopupMenuItem(
+                    value: _ThumbnailMenu.saveAs, child: Text(i18n.saveAs)),
               ];
               if (auth.canEditGallery == true) {
                 list += [
@@ -335,23 +348,24 @@ class _Thumbnail extends State<Thumbnail> {
                       value: isNsfw
                           ? _ThumbnailMenu.markAsSfw
                           : _ThumbnailMenu.markAsNsfw,
-                      child: Text(isNsfw
-                          ? AppLocalizations.of(context)!.markAsSfw
-                          : AppLocalizations.of(context)!.markAsNsfw)),
+                      child: Text(isNsfw ? i18n.markAsSfw : i18n.markAsNsfw)),
                   PopupMenuItem(
                       value: isAd
                           ? _ThumbnailMenu.markAsNonAd
                           : _ThumbnailMenu.markAsAd,
-                      child: Text(isAd
-                          ? AppLocalizations.of(context)!.markAsNonAd
-                          : AppLocalizations.of(context)!.markAsAd)),
+                      child: Text(isAd ? i18n.markAsNonAd : i18n.markAsAd)),
                 ];
               }
               return list;
             }));
+    String? oUri;
+    if (_fileId != null) {
+      oUri = api.getFileUrl(_fileId!);
+    }
     final timg = _data != null
         ? ImageWithContextMenu(_data!,
             uri: _uri,
+            originalUri: oUri,
             fileName: _fileName,
             dir: _dir,
             isNsfw:
@@ -432,7 +446,7 @@ class _Thumbnail extends State<Thumbnail> {
                               });
                             },
                             icon: const Icon(Icons.refresh),
-                            label: Text(AppLocalizations.of(context)!.retry))
+                            label: Text(i18n.retry))
                       ])));
   }
 }

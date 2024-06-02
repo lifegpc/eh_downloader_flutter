@@ -242,5 +242,6 @@
     "logoutConfirm": "Do you want to log out?",
     "failedLogout": "Failed to log out: ",
     "createExportZipTask": "Create export as ZIP file task",
-    "outputDir": "Output directory"
+    "outputDir": "Output directory",
+    "copyOriImgUrl": "Copy original image URL to clipboard"
 }

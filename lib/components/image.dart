@@ -12,6 +12,7 @@ class ImageWithContextMenu extends StatelessWidget {
   const ImageWithContextMenu(this.data,
       {super.key,
       this.uri,
+      this.originalUri,
       this.dir,
       this.fileName,
       this.fmt = ImageFmt.jpg,
@@ -21,6 +22,7 @@ class ImageWithContextMenu extends StatelessWidget {
       this.changeAd});
   final Uint8List data;
   final String? uri;
+  final String? originalUri;
   final ImageFmt fmt;
   final String? fileName;
   final String? dir;
@@ -63,6 +65,16 @@ class ImageWithContextMenu extends StatelessWidget {
                   } catch (err, stack) {
                     _log.warning("Failed to save image: $err\n$stack");
                   }
+                }));
+          }
+          if (originalUri != null) {
+            list.add(MenuAction(
+                title: AppLocalizations.of(context)!.copyOriImgUrl,
+                callback: () {
+                  copyTextToClipboard(originalUri!).catchError((err) {
+                    _log.warning(
+                        "Failed to copy original image to clipboard:", err);
+                  });
                 }));
           }
           if ((isNsfw != null && changeNsfw != null) ||
