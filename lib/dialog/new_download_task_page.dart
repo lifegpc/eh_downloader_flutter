@@ -115,6 +115,7 @@ class _NewDownloadTaskPage extends State<NewDownloadTaskPage> {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         context.canPop() ? context.pop() : context.go("/task_manager");
       });
+      _ok = false;
     }
     if (!_fetched) fetchDefaultCfg();
     final i18n = AppLocalizations.of(context)!;

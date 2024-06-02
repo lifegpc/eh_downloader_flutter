@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage>
   bool _isValid = false;
   bool _isLogin = false;
   bool _checkAuth = false;
+  bool _tryPoped = false;
 
   void _onStateChanged(dynamic _) {
     setState(() {});
@@ -120,10 +121,12 @@ class _LoginPageState extends State<LoginPage>
   Widget build(BuildContext context) {
     tryInitApi(context);
     _checkStatus(context);
-    if (isTop(context) && auth.user != null) {
+    if (isTop(context) && auth.user != null && !_tryPoped) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         context.canPop() ? context.pop() : context.go("/");
       });
+      _tryPoped = true;
+      return Container();
     }
     return Scaffold(
       appBar: AppBar(
