@@ -96,7 +96,9 @@ class _NewExportZipTaskPage extends State<NewExportZipTaskPage> {
   Widget build(BuildContext context) {
     tryInitApi(context);
     if (_ok) {
-      context.canPop() ? context.pop() : context.go("/task_manager");
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        context.canPop() ? context.pop() : context.go("/task_manager");
+      });
     }
     if (!_fetched) fetchDefaultCfg();
     final i18n = AppLocalizations.of(context)!;
