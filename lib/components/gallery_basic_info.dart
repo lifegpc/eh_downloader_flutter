@@ -10,7 +10,7 @@ class GalleryBasicInfo extends StatelessWidget {
   const GalleryBasicInfo(this.gMeta, this.firstPage,
       {super.key, this.fileId, this.gData, this.files});
   final GMeta gMeta;
-  final ExtendedPMeta firstPage;
+  final ExtendedPMeta? firstPage;
   final int? fileId;
   final GalleryData? gData;
   final EhFiles? files;
@@ -27,7 +27,9 @@ class GalleryBasicInfo extends StatelessWidget {
                 flex: 2,
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
-                  child: Thumbnail(firstPage, fileId: fileId, gid: gMeta.gid),
+                  child: firstPage != null
+                      ? Thumbnail(firstPage!, fileId: fileId, gid: gMeta.gid)
+                      : Container(),
                 )),
             Expanded(
                 flex: 3,

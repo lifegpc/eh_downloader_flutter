@@ -53,9 +53,9 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
   @override
   Widget build(BuildContext context) {
     bool useMobile = MediaQuery.of(context).size.width <= 810;
-    final firstPage = widget.gData.pages.first;
-    final int? firstFileId = widget.files != null
-        ? widget.files!.files[firstPage.token]!.first.id
+    final firstPage = widget.gData.pages.firstOrNull;
+    final int? firstFileId = widget.files != null && firstPage != null
+        ? widget.files!.files[firstPage!.token]!.firstOrNull?.id
         : null;
     return CustomScrollView(
       controller: controller,

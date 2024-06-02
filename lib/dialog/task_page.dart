@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -89,13 +90,42 @@ class _TaskPage extends State<TaskPage> {
     final maxWidth = MediaQuery.of(context).size.width;
     final endIndent = maxWidth < 400 ? 5.0 : 10.0;
     final indent = endIndent + 70;
+    final allowLink = task.base.gid != 0 &&
+        (typ != TaskType.download ||
+            task.status == TaskStatus.running ||
+            task.status == TaskStatus.finished);
+    String? title;
+    if (typ == TaskType.download && tasks.meta.containsKey(task.base.gid)) {
+      title = tasks.meta[task.base.gid]!.preferredTitle;
+    }
+    final cs = Theme.of(context).colorScheme;
     return Column(
       children: [
         _KeyValue(i18n.taskId, widget.id.toString(), fontSize: 16),
         Divider(indent: indent, endIndent: endIndent),
         _KeyValue(i18n.taskType, typ.text(context), fontSize: 16),
         Divider(indent: indent, endIndent: endIndent),
-        _KeyValue(i18n.gid, gid, fontSize: 16),
+        Row(children: [
+          SizedBox(
+              width: 80,
+              child: Center(
+                  child: Text(i18n.gid,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: cs.primary, fontSize: 16)))),
+          Expanded(
+              child: allowLink
+                  ? SelectableText.rich(TextSpan(
+                      text: gid,
+                      style: TextStyle(color: cs.secondary, fontSize: 16),
+                      mouseCursor: SystemMouseCursors.click,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          context.push("/gallery/${task.base.gid}",
+                              extra: GalleryPageExtra(title: title));
+                        }))
+                  : SelectableText(gid,
+                      style: TextStyle(color: cs.secondary, fontSize: 16))),
+        ]),
         task.base.token.isEmpty
             ? Container()
             : Divider(indent: indent, endIndent: endIndent),
@@ -324,8 +354,12 @@ class _TaskPage extends State<TaskPage> {
     final indent = endIndent + 70;
     return Column(key: ValueKey("task_detail_meta_${widget.id}"), children: [
       _KeyValue(i18n.title2, meta.title, fontSize: 16),
-      Divider(indent: indent, endIndent: endIndent),
-      _KeyValue(i18n.titleJpn, meta.titleJpn, fontSize: 16),
+      meta.titleJpn.isNotEmpty
+          ? Divider(indent: indent, endIndent: endIndent)
+          : Container(),
+      meta.titleJpn.isNotEmpty
+          ? _KeyValue(i18n.titleJpn, meta.titleJpn, fontSize: 16)
+          : Container(),
       Divider(indent: indent, endIndent: endIndent),
       _KeyValue(i18n.category, meta.category, fontSize: 16),
       Divider(indent: indent, endIndent: endIndent),
