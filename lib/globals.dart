@@ -179,7 +179,8 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
         value: MoreVertSettings.createRootUser,
         child: Text(AppLocalizations.of(context)!.createRootUser)));
   }
-  if (path != "/settings") {
+  if (path == null ||
+      (path != "/settings" && !path!.startsWith("/settings/"))) {
     list.add(PopupMenuItem(
         value: MoreVertSettings.settings,
         child: Text(AppLocalizations.of(context)!.settings)));

@@ -87,7 +87,7 @@ class _ServerUrlSettingsPage extends State<ServerUrlSettingsPage>
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  context.canPop() ? context.pop() : context.go("/");
+                  context.canPop() ? context.pop() : context.go("/settings");
                 },
               )
             : null,
