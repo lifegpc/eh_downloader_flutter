@@ -1,4 +1,6 @@
+import 'dart:ui';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,6 +9,8 @@ import 'package:logging/logging.dart';
 import '../api/user.dart';
 import '../components/user_card.dart';
 import '../globals.dart';
+import '../platform/media_query.dart';
+import '../utils.dart';
 
 final _log = Logger("UsersPage");
 
@@ -20,6 +24,8 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   List<BUser>? _users;
   bool _isLoading = false;
   CancelToken? _cancel;
@@ -94,7 +100,19 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
   Widget _buildMain(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Stack(children: [
-      _buildUserList(context),
+      RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () async {
+            return await _fetchData();
+          },
+          child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                },
+              ),
+              child: _buildUserList(context))),
       Positioned(
           bottom: size.height / 10,
           right: size.width / 10,
@@ -112,8 +130,21 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
         icon: const Icon(Icons.add));
   }
 
+  Widget _buildRefreshIcon(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    return IconButton(
+        onPressed: () {
+          _refreshIndicatorKey.currentState?.show();
+        },
+        tooltip: i18n.refresh,
+        icon: const Icon(Icons.refresh));
+  }
+
   Widget _buildIconList(BuildContext context) {
     return Row(children: [
+      isDesktop || (kIsWeb && pointerIsMouse)
+          ? _buildRefreshIcon(context)
+          : Container(),
       _buildAddIcon(context),
     ]);
   }

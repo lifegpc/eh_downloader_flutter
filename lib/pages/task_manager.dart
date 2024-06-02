@@ -265,7 +265,14 @@ class _TaskManagerPage extends State<TaskManagerPage>
               onRefresh: () async {
                 return await tasks.refresh();
               },
-              child: _buildView(context)),
+              child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(
+                    dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    },
+                  ),
+                  child: _buildView(context))),
           Positioned(
               bottom: size.height / 10,
               right: size.width / 10,
