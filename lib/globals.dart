@@ -317,7 +317,7 @@ enum Lang {
       case Lang.english:
         return const Locale("en");
       case Lang.simplifiedChinese:
-        return const Locale("zh");
+        return const Locale("zh", "CN");
       default:
         return PlatformDispatcher.instance.locale;
     }
