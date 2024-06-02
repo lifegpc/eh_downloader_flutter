@@ -121,9 +121,7 @@ class _LoginPageState extends State<LoginPage>
     tryInitApi(context);
     _checkStatus(context);
     if (isTop(context) && auth.user != null) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        context.canPop() ? context.pop() : context.go("/");
-      });
+      context.canPop() ? context.pop() : context.go("/");
     }
     return Scaffold(
       appBar: AppBar(

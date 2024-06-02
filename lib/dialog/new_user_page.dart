@@ -84,9 +84,7 @@ class _NewUserPage extends State<NewUserPage> {
       return Container();
     }
     if (_newUserId != null) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        context.canPop() ? context.pop() : context.go("/users");
-      });
+      context.canPop() ? context.pop() : context.go("/users");
       return Container();
     }
     final i18n = AppLocalizations.of(context)!;
