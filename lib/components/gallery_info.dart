@@ -1,8 +1,9 @@
-import '../globals.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../api/file.dart';
 import '../api/gallery.dart';
+import '../globals.dart';
 import 'gallery_basic_info.dart';
 import 'gallery_info_desktop.dart';
 import 'gallery_info_detail.dart';
@@ -10,9 +11,12 @@ import 'tags.dart';
 import 'thumbnail_gridview.dart';
 
 class GalleryInfo extends StatefulWidget {
-  const GalleryInfo(this.gData, {super.key, this.files});
+  const GalleryInfo(this.gData,
+      {super.key, this.files, this.refreshIndicatorKey, this.onRefresh});
   final GalleryData gData;
   final EhFiles? files;
+  final GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
+  final Future<void> Function()? onRefresh;
 
   @override
   State<GalleryInfo> createState() => _GalleryInfo();
@@ -57,7 +61,7 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
     final int? firstFileId = widget.files != null && firstPage != null
         ? widget.files!.files[firstPage!.token]!.firstOrNull?.id
         : null;
-    return CustomScrollView(
+    final v = CustomScrollView(
       controller: controller,
       slivers: [
         SliverAppBar(
@@ -112,6 +116,20 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
             gid: widget.gData.meta.gid),
       ],
     );
+    if (widget.refreshIndicatorKey != null && widget.onRefresh != null) {
+      return RefreshIndicator(
+          key: widget.refreshIndicatorKey,
+          onRefresh: widget.onRefresh!,
+          child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                },
+              ),
+              child: v));
+    }
+    return v;
   }
 
   @override

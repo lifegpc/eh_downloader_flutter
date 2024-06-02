@@ -36,6 +36,8 @@ class GalleryPage extends StatefulWidget {
 class _GalleryPage extends State<GalleryPage>
     with ThemeModeWidget, IsTopWidget2 {
   _GalleryPage();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   int _gid = 0;
   GalleryData? _data;
   EhFiles? _files;
@@ -136,7 +138,11 @@ class _GalleryPage extends State<GalleryPage>
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
-                ? GalleryInfo(_data!, files: _files)
+                ? GalleryInfo(_data!,
+                    files: _files, refreshIndicatorKey: _refreshIndicatorKey,
+                    onRefresh: () async {
+                    await _fetchData();
+                  })
                 : Center(
                     child: Text("Error: $_error"),
                   ));

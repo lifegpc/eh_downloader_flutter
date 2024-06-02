@@ -24,7 +24,7 @@ class ThumbnailGridView extends StatelessWidget {
           final page = npages[index]!;
           final fileId =
               files != null ? files!.files[page.token]!.firstOrNull?.id : null;
-          final key = Key("thumbnail$gid-${page.index}");
+          final key = Key("thumbnail$gid-${page.index}-$fileId");
           return Container(
               padding: const EdgeInsets.all(4),
               child: Thumbnail(page,

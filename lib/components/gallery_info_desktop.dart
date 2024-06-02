@@ -63,7 +63,10 @@ class GalleryInfoDesktop extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: gData.pages.isNotEmpty
                           ? Thumbnail(gData.pages.first,
-                              fileId: fileId, gid: gData.meta.gid)
+                              key: Key(
+                                  "thumbnail${gData.meta.gid}-${gData.pages.first.index}-$fileId"),
+                              fileId: fileId,
+                              gid: gData.meta.gid)
                           : Container())),
               Expanded(
                   flex: 7,

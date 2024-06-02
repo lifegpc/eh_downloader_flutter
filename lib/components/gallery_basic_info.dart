@@ -28,7 +28,11 @@ class GalleryBasicInfo extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
                   child: firstPage != null
-                      ? Thumbnail(firstPage!, fileId: fileId, gid: gMeta.gid)
+                      ? Thumbnail(firstPage!,
+                          fileId: fileId,
+                          gid: gMeta.gid,
+                          key: Key(
+                              "thumbnail${gMeta.gid}-${firstPage!.index}-$fileId"))
                       : Container(),
                 )),
             Expanded(
