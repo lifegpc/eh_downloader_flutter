@@ -231,7 +231,8 @@ class UserSettingsPage extends StatefulWidget {
   State<StatefulWidget> createState() => _UserSettingsPage();
 }
 
-class _UserSettingsPage extends State<UserSettingsPage> with ThemeModeWidget {
+class _UserSettingsPage extends State<UserSettingsPage>
+    with ThemeModeWidget, IsTopWidget2 {
   void _onStateChanged(dynamic _) {
     setState(() {});
   }
@@ -310,8 +311,10 @@ class _UserSettingsPage extends State<UserSettingsPage> with ThemeModeWidget {
   @override
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
-    setCurrentTitle("${i18n.settings} - ${i18n.user}",
-        Theme.of(context).primaryColor.value);
+    if (isTop(context)) {
+      setCurrentTitle("${i18n.settings} - ${i18n.user}",
+          Theme.of(context).primaryColor.value);
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

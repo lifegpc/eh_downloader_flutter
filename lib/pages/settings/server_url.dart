@@ -17,7 +17,7 @@ class ServerUrlSettingsPage extends StatefulWidget {
 }
 
 class _ServerUrlSettingsPage extends State<ServerUrlSettingsPage>
-    with ThemeModeWidget {
+    with ThemeModeWidget, IsTopWidget2 {
   String _serverUrl = "";
   String _apiPath = "/api/";
   bool _isValid = false;
@@ -78,8 +78,10 @@ class _ServerUrlSettingsPage extends State<ServerUrlSettingsPage>
       buildThemeModeIcon(context),
     ];
     if (hasBaseUrl) actions.add(buildMoreVertSettingsButon(context));
-    setCurrentTitle("${i18n.settings} - ${i18n.setServerUrl}",
-        Theme.of(context).primaryColor.value);
+    if (isTop(context)) {
+      setCurrentTitle("${i18n.settings} - ${i18n.setServerUrl}",
+          Theme.of(context).primaryColor.value);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(i18n.setServerUrl),

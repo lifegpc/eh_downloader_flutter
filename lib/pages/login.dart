@@ -128,10 +128,14 @@ class _LoginPageState extends State<LoginPage>
       _tryPoped = true;
       return Container();
     }
+    final i18n = AppLocalizations.of(context)!;
+    if (isTop(context)) {
+      setCurrentTitle(i18n.login, Theme.of(context).primaryColor.value);
+    }
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: Text(AppLocalizations.of(context)!.login),
+        title: Text(i18n.login),
         actions: [
           buildThemeModeIcon(context),
           buildMoreVertSettingsButon(context),
@@ -153,8 +157,7 @@ class _LoginPageState extends State<LoginPage>
                             child: TextFormField(
                               decoration: InputDecoration(
                                 border: const OutlineInputBorder(),
-                                labelText:
-                                    AppLocalizations.of(context)!.username,
+                                labelText: i18n.username,
                               ),
                               initialValue: _username,
                               onChanged: _usernameChanged,
@@ -164,8 +167,7 @@ class _LoginPageState extends State<LoginPage>
                             child: TextFormField(
                               decoration: InputDecoration(
                                 border: const OutlineInputBorder(),
-                                labelText:
-                                    AppLocalizations.of(context)!.password,
+                                labelText: i18n.password,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     _passwordVisible
@@ -195,8 +197,7 @@ class _LoginPageState extends State<LoginPage>
                                       } else {
                                         final snackBar = SnackBar(
                                             content: Text(
-                                                AppLocalizations.of(context)!
-                                                    .incorrectUserPassword));
+                                                i18n.incorrectUserPassword));
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                         setState(() {
@@ -209,10 +210,8 @@ class _LoginPageState extends State<LoginPage>
                                           e is! (int, String);
                                       final snackBar = SnackBar(
                                           content: Text(isNetworkError
-                                              ? AppLocalizations.of(context)!
-                                                  .networkError
-                                              : AppLocalizations.of(context)!
-                                                  .internalError));
+                                              ? i18n.networkError
+                                              : i18n.internalError));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                       setState(() {
@@ -221,7 +220,7 @@ class _LoginPageState extends State<LoginPage>
                                     });
                                   }
                                 : null,
-                            child: Text(AppLocalizations.of(context)!.login)),
+                            child: Text(i18n.login)),
                       ])))),
     );
   }

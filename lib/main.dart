@@ -38,7 +38,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: HomePage.routeName,
-      builder: (context, state) => const HomePage(),
+      builder: (context, state) => HomePage(key: state.pageKey),
     ),
     GoRoute(
       path: ServerUrlSettingsPage.routeName,
@@ -212,7 +212,7 @@ final _router = GoRouter(
         }),
     GoRoute(
       path: UsersPage.routeName,
-      builder: (context, state) => const UsersPage(),
+      builder: (context, state) => UsersPage(key: state.pageKey),
     ),
     GoRoute(
         path: NewUserPage.routeName,

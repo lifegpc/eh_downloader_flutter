@@ -65,7 +65,7 @@ class HomeDrawer extends StatelessWidget {
   }
 }
 
-class HomePage extends HookWidget {
+class HomePage extends HookWidget with IsTopWidget {
   const HomePage({super.key});
 
   static const String routeName = '/';
@@ -75,7 +75,10 @@ class HomePage extends HookWidget {
     tryInitApi(context);
     var mode = useState(MainApp.of(context).themeMode);
     mode.value = MainApp.of(context).themeMode;
-    setCurrentTitle("", Theme.of(context).primaryColor.value, usePrefix: true);
+    if (isTop(context)) {
+      setCurrentTitle("", Theme.of(context).primaryColor.value,
+          usePrefix: true);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.titleBar),

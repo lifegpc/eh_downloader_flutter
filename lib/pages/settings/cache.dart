@@ -16,7 +16,8 @@ class CacheSettingsPage extends StatefulWidget {
   State<CacheSettingsPage> createState() => _CacheSettingsPage();
 }
 
-class _CacheSettingsPage extends State<CacheSettingsPage> with ThemeModeWidget {
+class _CacheSettingsPage extends State<CacheSettingsPage>
+    with ThemeModeWidget, IsTopWidget2 {
   bool _oriEnableImageCache = false;
   bool _enableImageCache = false;
   @override
@@ -103,8 +104,10 @@ class _CacheSettingsPage extends State<CacheSettingsPage> with ThemeModeWidget {
   @override
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
-    setCurrentTitle("${i18n.settings} - ${i18n.cache}",
-        Theme.of(context).primaryColor.value);
+    if (isTop(context)) {
+      setCurrentTitle("${i18n.settings} - ${i18n.cache}",
+          Theme.of(context).primaryColor.value);
+    }
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(

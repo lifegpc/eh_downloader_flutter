@@ -18,7 +18,7 @@ class DisplaySettingsPage extends StatefulWidget {
 }
 
 class _DisplaySettingsPage extends State<DisplaySettingsPage>
-    with ThemeModeWidget {
+    with ThemeModeWidget, IsTopWidget2 {
   bool _oriDisplayAd = false;
   Lang _oriLang = Lang.system;
   bool _oriPreventScreenCapture = false;
@@ -185,8 +185,10 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   @override
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
-    setCurrentTitle("${i18n.settings} - ${i18n.display}",
-        Theme.of(context).primaryColor.value);
+    if (isTop(context)) {
+      setCurrentTitle("${i18n.settings} - ${i18n.display}",
+          Theme.of(context).primaryColor.value);
+    }
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
