@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../api/gallery.dart';
@@ -94,8 +95,16 @@ class _TagsPanel extends State<TagsPanel> {
             padding: const EdgeInsets.all(8),
             itemCount: data!.length,
             itemBuilder: itemBuilder);
+    final re2 = ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+          },
+        ),
+        child: re);
     return widget.controller != null
-        ? ScrollParent(controller: widget.controller!, child: re)
+        ? ScrollParent(controller: widget.controller!, child: re2)
         : re;
   }
 }

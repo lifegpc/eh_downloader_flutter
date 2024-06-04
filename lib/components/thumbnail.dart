@@ -442,7 +442,7 @@ class _Thumbnail extends State<Thumbnail> {
                         widget.isSelectMode ? Container() : moreVertMenu,
                         Visibility(
                             visible: widget.isSelectMode,
-                            child: const ModalBarrier()),
+                            child: const ModalBarrier(dismissible: false)),
                         widget.isSelectMode
                             ? Center(
                                 child: Checkbox(
