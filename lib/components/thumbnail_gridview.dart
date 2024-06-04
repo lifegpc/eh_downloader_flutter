@@ -6,11 +6,19 @@ import 'thumbnail.dart';
 
 class ThumbnailGridView extends StatelessWidget {
   const ThumbnailGridView(this.gdata, this.gridDelegate,
-      {super.key, this.files, this.gid});
+      {super.key,
+      this.files,
+      this.gid,
+      this.isSelectMode = false,
+      this.selected,
+      this.onSelectedChange});
   final GalleryData gdata;
   final int? gid;
   final EhFiles? files;
   final SliverGridDelegate gridDelegate;
+  final bool isSelectMode;
+  final List<String>? selected;
+  final Function? onSelectedChange;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +35,27 @@ class ThumbnailGridView extends StatelessWidget {
           final key = Key("thumbnail$gid-${page.index}-$fileId");
           return Container(
               padding: const EdgeInsets.all(4),
-              child: Thumbnail(page,
-                  key: key,
-                  fileId: fileId,
-                  gid: gid,
-                  index: page.index,
-                  files: files,
-                  gdata: gdata));
+              child: Thumbnail(
+                page,
+                key: key,
+                fileId: fileId,
+                gid: gid,
+                index: page.index,
+                files: files,
+                gdata: gdata,
+                isSelectMode: isSelectMode,
+                isSelected: selected?.contains(page.token) ?? false,
+                onSelectedChange: (v) {
+                  if (v) {
+                    selected?.add(page.token);
+                  } else {
+                    selected?.remove(page.token);
+                  }
+                  if (onSelectedChange != null) {
+                    onSelectedChange!();
+                  }
+                },
+              ));
         });
   }
 }

@@ -12,11 +12,20 @@ import 'thumbnail_gridview.dart';
 
 class GalleryInfo extends StatefulWidget {
   const GalleryInfo(this.gData,
-      {super.key, this.files, this.refreshIndicatorKey, this.onRefresh});
+      {super.key,
+      this.files,
+      this.refreshIndicatorKey,
+      this.onRefresh,
+      this.isSelectMode = false,
+      this.onSelectChanged,
+      this.selected});
   final GalleryData gData;
   final EhFiles? files;
   final GlobalKey<RefreshIndicatorState>? refreshIndicatorKey;
   final Future<void> Function()? onRefresh;
+  final bool isSelectMode;
+  final ValueChanged<bool>? onSelectChanged;
+  final List<String>? selected;
 
   @override
   State<GalleryInfo> createState() => _GalleryInfo();
@@ -66,14 +75,29 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
       slivers: [
         SliverAppBar(
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(widget.isSelectMode ? Icons.close : Icons.arrow_back),
             onPressed: () {
-              context.canPop() ? context.pop() : context.go("/");
+              if (widget.isSelectMode) {
+                if (widget.onSelectChanged != null) {
+                  widget.onSelectChanged!(false);
+                }
+              } else {
+                context.canPop() ? context.pop() : context.go("/");
+              }
             },
           ),
           title: SelectableText(widget.gData.meta.preferredTitle,
               maxLines: 1, minLines: 1),
           actions: [
+            widget.isSelectMode || widget.onSelectChanged == null
+                ? Container()
+                : IconButton(
+                    onPressed: () {
+                      if (widget.onSelectChanged != null) {
+                        widget.onSelectChanged!(true);
+                      }
+                    },
+                    icon: const Icon(Icons.check_box)),
             buildThemeModeIcon(context),
             buildMoreVertSettingsButon(context),
           ],
@@ -113,7 +137,10 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
             SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: useMobile ? 2 : 5),
             files: widget.files,
-            gid: widget.gData.meta.gid),
+            gid: widget.gData.meta.gid,
+            isSelectMode: widget.isSelectMode,
+            selected: widget.selected,
+            onSelectedChange: () => setState(() {})),
       ],
     );
     if (widget.refreshIndicatorKey != null && widget.onRefresh != null) {

@@ -44,19 +44,47 @@ class _GalleryPage extends State<GalleryPage>
   Object? _error;
   CancelToken? _cancel;
   CancelToken? _markAsNsfwCancel;
+  CancelToken? _markAsAdCancel;
   bool _isLoading = false;
+  bool _isSelectMode = false;
+  final List<String> _selected = [];
   bool? get isAllNsfw => _data?.isAllNsfw;
+  bool get isSelectMode => _isSelectMode;
   Future<void> markGalleryAsNsfw(bool isNsfw) async {
     try {
       _markAsNsfwCancel = CancelToken();
-      (await api.updateGalleryFileMeta(_gid,
-              isNsfw: isNsfw, cancel: _markAsNsfwCancel))
-          .unwrap();
+      if (_isSelectMode) {
+        if (_selected.isEmpty) return;
+        (await api.updateFilesMeta(_selected.join(","),
+                isNsfw: isNsfw, cancel: _markAsNsfwCancel))
+            .unwrap();
+      } else {
+        (await api.updateGalleryFileMeta(_gid,
+                isNsfw: isNsfw, cancel: _markAsNsfwCancel))
+            .unwrap();
+      }
       if (!_markAsNsfwCancel!.isCancelled) {
         _fetchData();
       }
     } catch (e) {
       if (!_markAsNsfwCancel!.isCancelled) {
+        _log.warning("Failed to mark gallery $_gid:", e);
+      }
+    }
+  }
+
+  Future<void> markAsAd(bool isAd) async {
+    if (!_isSelectMode || _selected.isEmpty) return;
+    try {
+      _markAsAdCancel = CancelToken();
+      (await api.updateFilesMeta(_selected.join(","),
+              isAd: isAd, cancel: _markAsAdCancel))
+          .unwrap();
+      if (!_markAsAdCancel!.isCancelled) {
+        _fetchData();
+      }
+    } catch (e) {
+      if (!_markAsAdCancel!.isCancelled) {
         _log.warning("Failed to mark gallery $_gid:", e);
       }
     }
@@ -76,6 +104,7 @@ class _GalleryPage extends State<GalleryPage>
         setState(() {
           _files = fileData;
           _isLoading = false;
+          _selected.clear();
         });
       }
     } catch (e) {
@@ -138,11 +167,22 @@ class _GalleryPage extends State<GalleryPage>
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
-                ? GalleryInfo(_data!,
-                    files: _files, refreshIndicatorKey: _refreshIndicatorKey,
+                ? GalleryInfo(
+                    _data!,
+                    files: _files,
+                    refreshIndicatorKey: _refreshIndicatorKey,
                     onRefresh: () async {
-                    await _fetchData();
-                  })
+                      await _fetchData();
+                    },
+                    onSelectChanged: (v) {
+                      setState(() {
+                        _isSelectMode = v;
+                        if (v) _selected.clear();
+                      });
+                    },
+                    isSelectMode: _isSelectMode,
+                    selected: _selected,
+                  )
                 : Center(
                     child: Text("Error: $_error"),
                   ));
@@ -152,6 +192,7 @@ class _GalleryPage extends State<GalleryPage>
   void dispose() {
     _cancel?.cancel();
     _markAsNsfwCancel?.cancel();
+    _markAsAdCancel?.cancel();
     super.dispose();
   }
 }

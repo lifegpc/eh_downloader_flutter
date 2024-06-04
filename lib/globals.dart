@@ -143,6 +143,8 @@ enum MoreVertSettings {
   markAsNsfw,
   markAsSfw,
   taskManager,
+  markAsAd,
+  markAsNonAd,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -162,6 +164,12 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
     case MoreVertSettings.taskManager:
       context.push("/task_manager");
       break;
+    case MoreVertSettings.markAsAd:
+      GalleryPage.maybeOf(context)?.markAsAd(true);
+      break;
+    case MoreVertSettings.markAsNonAd:
+      GalleryPage.maybeOf(context)?.markAsAd(false);
+      break;
     default:
       break;
   }
@@ -171,24 +179,23 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     BuildContext context) {
   var list = <PopupMenuEntry<MoreVertSettings>>[];
   var path = GoRouterState.of(context).path;
+  final i18n = AppLocalizations.of(context)!;
   if (auth.status != null &&
       auth.status!.noUser &&
       prefs.getBool("skipCreateRootUser") == true &&
       path != "/create_root_user") {
     list.add(PopupMenuItem(
         value: MoreVertSettings.createRootUser,
-        child: Text(AppLocalizations.of(context)!.createRootUser)));
+        child: Text(i18n.createRootUser)));
   }
   if (path == null ||
       (path != "/settings" && !path!.startsWith("/settings/"))) {
     list.add(PopupMenuItem(
-        value: MoreVertSettings.settings,
-        child: Text(AppLocalizations.of(context)!.settings)));
+        value: MoreVertSettings.settings, child: Text(i18n.settings)));
   }
   if (path != "/task_manager" && auth.canManageTasks == true) {
     list.add(PopupMenuItem(
-        value: MoreVertSettings.taskManager,
-        child: Text(AppLocalizations.of(context)!.taskManager)));
+        value: MoreVertSettings.taskManager, child: Text(i18n.taskManager)));
   }
   var showNsfw = prefs.getBool("showNsfw") ?? false;
   list.add(PopupMenuItem(
@@ -206,7 +213,7 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
           });
         }
       },
-      title: Text(AppLocalizations.of(context)!.showNsfw),
+      title: Text(i18n.showNsfw),
     ),
   )));
   var displayAd = prefs.getBool("displayAd") ?? false;
@@ -225,21 +232,29 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
           });
         }
       },
-      title: Text(AppLocalizations.of(context)!.displayAd),
+      title: Text(i18n.displayAd),
     ),
   )));
   if (path == "/gallery/:gid" && auth.canEditGallery == true) {
     list.add(const PopupMenuDivider());
-    final isAllNsfw = GalleryPage.of(context).isAllNsfw;
-    if (isAllNsfw != null) {
+    final gp = GalleryPage.of(context);
+    if (!gp.isSelectMode && gp.isAllNsfw != null) {
       list.add(PopupMenuItem(
-        value: isAllNsfw
+        value: gp.isAllNsfw!
             ? MoreVertSettings.markAsSfw
             : MoreVertSettings.markAsNsfw,
-        child: Text(isAllNsfw
-            ? AppLocalizations.of(context)!.markAsSfw
-            : AppLocalizations.of(context)!.markAsNsfw),
+        child: Text(gp.isAllNsfw! ? i18n.markAsSfw : i18n.markAsNsfw),
       ));
+    }
+    if (gp.isSelectMode) {
+      list.add(PopupMenuItem(
+          value: MoreVertSettings.markAsNsfw, child: Text(i18n.markAsNsfw)));
+      list.add(PopupMenuItem(
+          value: MoreVertSettings.markAsSfw, child: Text(i18n.markAsSfw)));
+      list.add(PopupMenuItem(
+          value: MoreVertSettings.markAsAd, child: Text(i18n.markAsAd)));
+      list.add(PopupMenuItem(
+          value: MoreVertSettings.markAsNonAd, child: Text(i18n.markAsNonAd)));
     }
   }
   return list;

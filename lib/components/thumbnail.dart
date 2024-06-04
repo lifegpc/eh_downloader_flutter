@@ -28,7 +28,10 @@ class Thumbnail extends StatefulWidget {
       this.gid,
       this.index,
       this.files,
-      this.gdata})
+      this.gdata,
+      this.isSelectMode = false,
+      this.isSelected = false,
+      this.onSelectedChange})
       : _pMeta = pMeta,
         _max = max ?? 1200,
         _width = width,
@@ -43,6 +46,9 @@ class Thumbnail extends StatefulWidget {
   final int? index;
   final EhFiles? files;
   final GalleryData? gdata;
+  final bool isSelectMode;
+  final bool isSelected;
+  final ValueChanged<bool>? onSelectedChange;
 
   int get height => _height != null
       ? _height!
@@ -246,7 +252,8 @@ class _Thumbnail extends State<Thumbnail> {
     }
   }
 
-  bool get showNsfw => _showNsfw || (prefs.getBool("showNsfw") ?? false);
+  bool get showNsfw =>
+      widget.isSelectMode || _showNsfw || (prefs.getBool("showNsfw") ?? false);
 
   @override
   void dispose() {
@@ -391,6 +398,7 @@ class _Thumbnail extends State<Thumbnail> {
             },
             child: timg)
         : timg;
+    final cs = Theme.of(context).colorScheme;
     return SizedBox(
         width: widget.width.toDouble(),
         height: widget.height.toDouble(),
@@ -431,7 +439,21 @@ class _Thumbnail extends State<Thumbnail> {
                             width: widget.width.toDouble(),
                             height: widget.height.toDouble(),
                             child: img),
-                        moreVertMenu
+                        widget.isSelectMode ? Container() : moreVertMenu,
+                        Visibility(
+                            visible: widget.isSelectMode,
+                            child: const ModalBarrier()),
+                        widget.isSelectMode
+                            ? Center(
+                                child: Checkbox(
+                                    value: widget.isSelected,
+                                    onChanged: (v) {
+                                      if (widget.onSelectedChange != null &&
+                                          v != null) {
+                                        widget.onSelectedChange!(v);
+                                      }
+                                    }))
+                            : Container(),
                       ])
                 : Center(
                     child: Column(
