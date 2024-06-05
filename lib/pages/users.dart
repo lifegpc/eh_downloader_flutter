@@ -110,6 +110,7 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
                 dragDevices: {
                   PointerDeviceKind.touch,
                   PointerDeviceKind.mouse,
+                  PointerDeviceKind.trackpad,
                 },
               ),
               child: _buildUserList(context))),

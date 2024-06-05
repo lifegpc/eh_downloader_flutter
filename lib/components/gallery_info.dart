@@ -152,6 +152,7 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
                 dragDevices: {
                   PointerDeviceKind.touch,
                   PointerDeviceKind.mouse,
+                  PointerDeviceKind.trackpad,
                 },
               ),
               child: v));

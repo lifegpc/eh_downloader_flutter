@@ -270,6 +270,7 @@ class _TaskManagerPage extends State<TaskManagerPage>
                     dragDevices: {
                       PointerDeviceKind.touch,
                       PointerDeviceKind.mouse,
+                      PointerDeviceKind.trackpad,
                     },
                   ),
                   child: _buildView(context))),
