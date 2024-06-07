@@ -243,5 +243,6 @@
     "failedLogout": "退出登录失败：",
     "createExportZipTask": "新建导出为ZIP文件任务",
     "outputDir": "输出文件夹",
-    "copyOriImgUrl": "复制原图链接到剪贴板"
+    "copyOriImgUrl": "复制原图链接到剪贴板",
+    "importTask": "导入任务"
 }

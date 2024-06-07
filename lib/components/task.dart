@@ -54,6 +54,9 @@ class _TaskView extends State<TaskView> {
         final progress =
             widget.task.progress as TaskUpdateMeiliSearchDataProgress;
         return progress.updatedGallery / progress.totalGallery;
+      case TaskType.import:
+        final progress = widget.task.progress as TaskImportProgress;
+        return progress.importedPage / progress.totalPage;
     }
   }
 

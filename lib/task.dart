@@ -89,7 +89,8 @@ class TaskManager {
   }
 
   void addToTasksList(Task task, TaskStatus status) {
-    if (task.type == TaskType.download && !meta.containsKey(task.gid)) {
+    if ((task.type == TaskType.download || task.type == TaskType.import) &&
+        !meta.containsKey(task.gid)) {
       if (peddingGids.contains(task.gid)) {
         final index = peddingGids.indexOf(task.gid);
         if (peddingTokens[index]! != task.token) {

@@ -240,6 +240,10 @@ class _TaskPage extends State<TaskPage> {
         final p = task.progress as TaskUpdateMeiliSearchDataProgress;
         now = p.updatedGallery;
         total = p.totalGallery;
+      case TaskType.import:
+        final p = task.progress as TaskImportProgress;
+        now = p.importedPage;
+        total = p.totalPage;
       default:
     }
     if (total == 0) return Container();
@@ -332,7 +336,8 @@ class _TaskPage extends State<TaskPage> {
   bool get haveMetaInfo {
     if (!tasks.tasksList.contains(widget.id)) return false;
     final task = tasks.tasks[widget.id]!;
-    return task.base.type == TaskType.download &&
+    final typ = task.base.type;
+    return (typ == TaskType.download || typ == TaskType.import) &&
         tasks.meta.containsKey(task.base.gid);
   }
 

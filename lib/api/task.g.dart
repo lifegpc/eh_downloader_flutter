@@ -29,6 +29,7 @@ const _$TaskTypeEnumMap = {
   TaskType.exportZip: 1,
   TaskType.updateMeiliSearchData: 2,
   TaskType.fixGalleryPage: 3,
+  TaskType.import: 4,
 };
 
 TaskDownloadSingleProgress _$TaskDownloadSingleProgressFromJson(
@@ -129,6 +130,20 @@ Map<String, dynamic> _$TaskFixGalleryPageProgressToJson(
     <String, dynamic>{
       'total_gallery': instance.totalGallery,
       'checked_gallery': instance.checkedGallery,
+    };
+
+TaskImportProgress _$TaskImportProgressFromJson(Map<String, dynamic> json) =>
+    TaskImportProgress(
+      importedPage: (json['imported_page'] as num).toInt(),
+      failedPage: (json['failed_page'] as num).toInt(),
+      totalPage: (json['total_page'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$TaskImportProgressToJson(TaskImportProgress instance) =>
+    <String, dynamic>{
+      'imported_page': instance.importedPage,
+      'failed_page': instance.failedPage,
+      'total_page': instance.totalPage,
     };
 
 TaskList _$TaskListFromJson(Map<String, dynamic> json) => TaskList(

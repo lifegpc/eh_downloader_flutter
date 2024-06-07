@@ -243,5 +243,6 @@
     "failedLogout": "Failed to log out: ",
     "createExportZipTask": "Create export as ZIP file task",
     "outputDir": "Output directory",
-    "copyOriImgUrl": "Copy original image URL to clipboard"
+    "copyOriImgUrl": "Copy original image URL to clipboard",
+    "importTask": "Import task"
 }
