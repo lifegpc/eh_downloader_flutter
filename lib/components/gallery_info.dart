@@ -134,8 +134,14 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
             : SliverToBoxAdapter(child: Container()),
         ThumbnailGridView(
             widget.gData,
-            SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: useMobile ? 2 : 5),
+            useMobile
+                ? const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2)
+                : const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 400,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10),
             files: widget.files,
             gid: widget.gData.meta.gid,
             isSelectMode: widget.isSelectMode,

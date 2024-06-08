@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
-import 'package:retrofit/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';

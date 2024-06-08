@@ -25,6 +25,13 @@ class ThumbnailGridView extends StatelessWidget {
     final displayAd = prefs.getBool("displayAd") ?? false;
     final npages =
         displayAd ? gdata.pages : gdata.pages.where((e) => !e.isAd).toList();
+    final maxWidth = MediaQuery.of(context).size.width;
+    final baseSize = maxWidth > 810
+        ? 400
+        : maxWidth < 400
+            ? 200
+            : 300;
+    final max = (baseSize * MediaQuery.of(context).devicePixelRatio).toInt();
     return SliverGrid.builder(
         gridDelegate: gridDelegate,
         itemCount: npages.length,
@@ -32,7 +39,7 @@ class ThumbnailGridView extends StatelessWidget {
           final page = npages[index]!;
           final fileId =
               files != null ? files!.files[page.token]!.firstOrNull?.id : null;
-          final key = Key("thumbnail$gid-${page.index}-$fileId");
+          final key = Key("thumbnail$gid-${page.index}-$fileId-$max");
           return Container(
               padding: const EdgeInsets.all(4),
               child: Thumbnail(
@@ -55,6 +62,7 @@ class ThumbnailGridView extends StatelessWidget {
                     onSelectedChange!();
                   }
                 },
+                max: max,
               ));
         });
   }

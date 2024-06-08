@@ -51,6 +51,7 @@ class GalleryInfoDesktop extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final i18n = AppLocalizations.of(context)!;
     final locale = MainApp.of(context).lang.toLocale().toString();
+    final max = (400 * MediaQuery.of(context).devicePixelRatio).toInt();
     return Container(
         alignment: Alignment.topCenter,
         child: SizedBox(
@@ -62,11 +63,14 @@ class GalleryInfoDesktop extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: gData.pages.isNotEmpty
-                          ? Thumbnail(gData.pages.first,
+                          ? Thumbnail(
+                              gData.pages.first,
                               key: Key(
-                                  "thumbnail${gData.meta.gid}-${gData.pages.first.index}-$fileId"),
+                                  "thumbnail${gData.meta.gid}-${gData.pages.first.index}-$fileId-$max"),
                               fileId: fileId,
-                              gid: gData.meta.gid)
+                              gid: gData.meta.gid,
+                              max: max,
+                            )
                           : Container())),
               Expanded(
                   flex: 7,

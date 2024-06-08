@@ -18,6 +18,7 @@ class GalleryBasicInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final max = (300 * MediaQuery.of(context).devicePixelRatio).toInt();
     return SizedBox(
         height: 300,
         child: Column(children: [
@@ -28,11 +29,14 @@ class GalleryBasicInfo extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(right: 8),
                   child: firstPage != null
-                      ? Thumbnail(firstPage!,
+                      ? Thumbnail(
+                          firstPage!,
                           fileId: fileId,
                           gid: gMeta.gid,
                           key: Key(
-                              "thumbnail${gMeta.gid}-${firstPage!.index}-$fileId"))
+                              "thumbnail${gMeta.gid}-${firstPage!.index}-$fileId-$max"),
+                          max: max,
+                        )
                       : Container(),
                 )),
             Expanded(
