@@ -12,7 +12,6 @@ import '../api/file.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../utils.dart';
-import '../utils/clipboard.dart';
 import '../viewer/single.dart';
 import 'image.dart';
 
@@ -63,17 +62,6 @@ class Thumbnail extends StatefulWidget {
 
   @override
   State<Thumbnail> createState() => _Thumbnail();
-}
-
-enum _ThumbnailMenu {
-  copyImage,
-  copyImgUrl,
-  saveAs,
-  markAsNsfw,
-  markAsSfw,
-  markAsAd,
-  markAsNonAd,
-  copyOriImgUrl,
 }
 
 class _Thumbnail extends State<Thumbnail> {
@@ -265,106 +253,13 @@ class _Thumbnail extends State<Thumbnail> {
     super.dispose();
   }
 
-  Future<void> onItemSelected(_ThumbnailMenu v) async {
-    switch (v) {
-      case _ThumbnailMenu.copyImage:
-        try {
-          await copyImageToClipboard(_data!, ImageFmt.jpg);
-        } catch (err, stack) {
-          _log.warning("Failed to copy image to clipboard: $err\n$stack");
-        }
-        break;
-      case _ThumbnailMenu.copyImgUrl:
-        try {
-          await copyTextToClipboard(_uri!);
-        } catch (err, stack) {
-          _log.warning("Failed to copy image url to clipboard: $err\n$stack");
-        }
-        break;
-      case _ThumbnailMenu.saveAs:
-        try {
-          await platformPath.saveFile(_fileName!, "image/jpeg", _data!,
-              dir: _dir);
-        } catch (err, stack) {
-          _log.warning("Failed to save image: $err\n$stack");
-        }
-        break;
-      case _ThumbnailMenu.markAsNsfw:
-        await _markAsNsfw(true);
-        break;
-      case _ThumbnailMenu.markAsSfw:
-        await _markAsNsfw(false);
-        break;
-      case _ThumbnailMenu.markAsAd:
-        await _markAsAd(true);
-        break;
-      case _ThumbnailMenu.markAsNonAd:
-        await _markAsAd(false);
-        break;
-      case _ThumbnailMenu.copyOriImgUrl:
-        try {
-          final uri = api.getFileUrl(_fileId!);
-          await copyTextToClipboard(uri);
-        } catch (err, stack) {
-          _log.warning(
-              "Failed to copy original image url to clipboard: $err\n$stack");
-        }
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
-    final isAd = widget._pMeta.isAd;
     final i18n = AppLocalizations.of(context)!;
     if (isLoading && !_isLoading) _fetchData();
     _iconSize ??= Theme.of(context).iconTheme.size;
-    final iconSize = MediaQuery.of(context).size.width < 400
-        ? 14.0
-        : Theme.of(context).iconTheme.size;
-    final moreVertMenu = Positioned(
-        right: 0,
-        top: 0,
-        width: iconSize,
-        height: iconSize,
-        child: PopupMenuButton(
-            child: Icon(Icons.more_vert, size: iconSize),
-            onSelected: (v) {
-              onItemSelected(v);
-            },
-            itemBuilder: (context) {
-              var list = <PopupMenuEntry<_ThumbnailMenu>>[
-                PopupMenuItem(
-                    value: _ThumbnailMenu.copyImage,
-                    child: Text(i18n.copyImage)),
-                PopupMenuItem(
-                    value: _ThumbnailMenu.copyImgUrl,
-                    child: Text(i18n.copyImgUrl)),
-                PopupMenuItem(
-                    value: _ThumbnailMenu.copyOriImgUrl,
-                    child: Text(i18n.copyOriImgUrl)),
-                PopupMenuItem(
-                    value: _ThumbnailMenu.saveAs, child: Text(i18n.saveAs)),
-              ];
-              if (auth.canEditGallery == true) {
-                list += [
-                  const PopupMenuDivider(),
-                  PopupMenuItem(
-                      value: isNsfw
-                          ? _ThumbnailMenu.markAsSfw
-                          : _ThumbnailMenu.markAsNsfw,
-                      child: Text(isNsfw ? i18n.markAsSfw : i18n.markAsNsfw)),
-                  PopupMenuItem(
-                      value: isAd
-                          ? _ThumbnailMenu.markAsNonAd
-                          : _ThumbnailMenu.markAsAd,
-                      child: Text(isAd ? i18n.markAsNonAd : i18n.markAsAd)),
-                ];
-              }
-              return list;
-            }));
     String? oUri;
     if (_fileId != null) {
       oUri = api.getFileUrl(_fileId!);
@@ -398,7 +293,6 @@ class _Thumbnail extends State<Thumbnail> {
             },
             child: timg)
         : timg;
-    final cs = Theme.of(context).colorScheme;
     return SizedBox(
         width: widget.width.toDouble(),
         height: widget.height.toDouble(),
@@ -431,7 +325,6 @@ class _Thumbnail extends State<Thumbnail> {
                                       color: _iconColor ?? Colors.black),
                                 ),
                               )),
-                          moreVertMenu
                         ],
                       )
                     : Stack(children: [
@@ -439,7 +332,6 @@ class _Thumbnail extends State<Thumbnail> {
                             width: widget.width.toDouble(),
                             height: widget.height.toDouble(),
                             child: img),
-                        widget.isSelectMode ? Container() : moreVertMenu,
                         Visibility(
                             visible: widget.isSelectMode,
                             child: const ModalBarrier(dismissible: false)),

@@ -149,8 +149,8 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
             SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: max.toDouble(),
                 childAspectRatio: 1,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10),
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4),
             files: widget.files,
             gid: widget.gData.meta.gid,
             isSelectMode: widget.isSelectMode,
