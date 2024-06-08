@@ -248,5 +248,13 @@
     "thumbnailSize": "缩略图大小",
     "smail": "小",
     "medium": "中",
-    "big": "大"
+    "big": "大",
+    "usePathBasedImgUrl": "将参数放入图片地址路径。",
+    "checkFileHash": "下载或导入时校验文件完整性。",
+    "importMethod": "导入方式",
+    "copy": "复制",
+    "copyThenDelete": "复制后删除",
+    "move": "移动",
+    "keep": "保留",
+    "maxImportImgCount": "最大图片并行导入数"
 }

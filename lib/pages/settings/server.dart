@@ -295,6 +295,28 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                 }
               },
               label: Text(i18n.redirectToFlutter))),
+          _buildWithVecticalPadding(LabeledCheckbox(
+              value: _now.usePathBasedImgUrl ?? _config!.usePathBasedImgUrl,
+              onChanged: (b) {
+                if (b != null) {
+                  setState(() {
+                    _now.usePathBasedImgUrl = b;
+                    _changed = true;
+                  });
+                }
+              },
+              label: Text(i18n.usePathBasedImgUrl))),
+          _buildWithVecticalPadding(LabeledCheckbox(
+              value: _now.checkFileHash ?? _config!.checkFileHash,
+              onChanged: (b) {
+                if (b != null) {
+                  setState(() {
+                    _now.checkFileHash = b;
+                    _changed = true;
+                  });
+                }
+              },
+              label: Text(i18n.checkFileHash))),
         ]));
   }
 
@@ -717,6 +739,38 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             onChanged: (s) {
               setState(() {
                 _now.randomFileSecret = s;
+                _changed = true;
+              });
+            },
+          )),
+          _buildWithVecticalPadding(DropdownButtonFormField<ImportMethod>(
+              items: ImportMethod.values
+                  .map((e) => DropdownMenuItem(
+                      value: e, child: Text(e.localText(context))))
+                  .toList(),
+              onChanged: (v) {
+                if (v != null) {
+                  setState(() {
+                    _now.importMethod = v;
+                    _changed = true;
+                  });
+                }
+              },
+              value: _now.importMethod ?? _config!.importMethod,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: i18n.importMethod,
+              ))),
+          _buildWithVecticalPadding(NumberFormField(
+            min: 1,
+            initialValue: _now.maxImportImgCount ?? _config!.maxImportImgCount,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: i18n.maxImportImgCount,
+            ),
+            onChanged: (s) {
+              setState(() {
+                _now.maxImportImgCount = s;
                 _changed = true;
               });
             },

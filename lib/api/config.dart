@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'config.g.dart';
@@ -7,6 +9,31 @@ enum ThumbnailMethod {
   ffmpegBinary,
   @JsonValue(1)
   ffmpegApi,
+}
+
+enum ImportMethod {
+  @JsonValue(0)
+  copy,
+  @JsonValue(1)
+  copyThenDelete,
+  @JsonValue(2)
+  move,
+  @JsonValue(3)
+  keep;
+
+  String localText(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case ImportMethod.copy:
+        return i18n.copy;
+      case ImportMethod.copyThenDelete:
+        return i18n.copyThenDelete;
+      case ImportMethod.move:
+        return i18n.move;
+      case ImportMethod.keep:
+        return i18n.keep;
+    }
+  }
 }
 
 @JsonSerializable()
@@ -43,6 +70,10 @@ class Config {
     required this.downloadTimeoutCheckInterval,
     required this.ehMetadataCacheTime,
     this.randomFileSecret,
+    required this.usePathBasedImgUrl,
+    required this.checkFileHash,
+    required this.importMethod,
+    required this.maxImportImgCount,
   });
   bool cookies;
   @JsonKey(name: 'db_path')
@@ -99,6 +130,14 @@ class Config {
   int ehMetadataCacheTime;
   @JsonKey(name: "random_file_secret")
   String? randomFileSecret;
+  @JsonKey(name: 'use_path_based_img_url')
+  bool usePathBasedImgUrl;
+  @JsonKey(name: 'check_file_hash')
+  bool checkFileHash;
+  @JsonKey(name: 'import_method')
+  ImportMethod importMethod;
+  @JsonKey(name: 'max_import_img_count')
+  int maxImportImgCount;
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigToJson(this);
 }
@@ -149,6 +188,10 @@ class ConfigOptional {
     this.downloadTimeoutCheckInterval,
     this.ehMetadataCacheTime,
     this.randomFileSecret,
+    this.usePathBasedImgUrl,
+    this.checkFileHash,
+    this.importMethod,
+    this.maxImportImgCount,
   });
   String? cookies;
   @JsonKey(name: 'db_path')
@@ -205,6 +248,14 @@ class ConfigOptional {
   int? ehMetadataCacheTime;
   @JsonKey(name: "random_file_secret")
   String? randomFileSecret;
+  @JsonKey(name: 'use_path_based_img_url')
+  bool? usePathBasedImgUrl;
+  @JsonKey(name: 'check_file_hash')
+  bool? checkFileHash;
+  @JsonKey(name: 'import_method')
+  ImportMethod? importMethod;
+  @JsonKey(name: 'max_import_img_count')
+  int? maxImportImgCount;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigOptionalToJson(this);

@@ -248,5 +248,13 @@
     "thumbnailSize": "Thumbnail size",
     "smail": "smail",
     "medium": "medium",
-    "big": "big"
+    "big": "big",
+    "usePathBasedImgUrl": "Put parameters to image URL path.",
+    "checkFileHash": "Verify file integrity when downloading or importing.",
+    "importMethod": "Import method",
+    "copy": "Copy",
+    "copyThenDelete": "Copy then delete",
+    "move": "Move",
+    "keep": "Keep",
+    "maxImportImgCount": "Maximum number of images to be imported in parallel"
 }

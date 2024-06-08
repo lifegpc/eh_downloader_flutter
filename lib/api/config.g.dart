@@ -44,6 +44,10 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
           (json['download_timeout_check_interval'] as num).toInt(),
       ehMetadataCacheTime: (json['eh_metadata_cache_time'] as num).toInt(),
       randomFileSecret: json['random_file_secret'] as String?,
+      usePathBasedImgUrl: json['use_path_based_img_url'] as bool,
+      checkFileHash: json['check_file_hash'] as bool,
+      importMethod: $enumDecode(_$ImportMethodEnumMap, json['import_method']),
+      maxImportImgCount: (json['max_import_img_count'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -78,11 +82,22 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'download_timeout_check_interval': instance.downloadTimeoutCheckInterval,
       'eh_metadata_cache_time': instance.ehMetadataCacheTime,
       'random_file_secret': instance.randomFileSecret,
+      'use_path_based_img_url': instance.usePathBasedImgUrl,
+      'check_file_hash': instance.checkFileHash,
+      'import_method': _$ImportMethodEnumMap[instance.importMethod]!,
+      'max_import_img_count': instance.maxImportImgCount,
     };
 
 const _$ThumbnailMethodEnumMap = {
   ThumbnailMethod.ffmpegBinary: 0,
   ThumbnailMethod.ffmpegApi: 1,
+};
+
+const _$ImportMethodEnumMap = {
+  ImportMethod.copy: 0,
+  ImportMethod.copyThenDelete: 1,
+  ImportMethod.move: 2,
+  ImportMethod.keep: 3,
 };
 
 UpdateConfigResult _$UpdateConfigResultFromJson(Map<String, dynamic> json) =>
@@ -134,6 +149,11 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
           (json['download_timeout_check_interval'] as num?)?.toInt(),
       ehMetadataCacheTime: (json['eh_metadata_cache_time'] as num?)?.toInt(),
       randomFileSecret: json['random_file_secret'] as String?,
+      usePathBasedImgUrl: json['use_path_based_img_url'] as bool?,
+      checkFileHash: json['check_file_hash'] as bool?,
+      importMethod:
+          $enumDecodeNullable(_$ImportMethodEnumMap, json['import_method']),
+      maxImportImgCount: (json['max_import_img_count'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
@@ -169,4 +189,8 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'download_timeout_check_interval': instance.downloadTimeoutCheckInterval,
       'eh_metadata_cache_time': instance.ehMetadataCacheTime,
       'random_file_secret': instance.randomFileSecret,
+      'use_path_based_img_url': instance.usePathBasedImgUrl,
+      'check_file_hash': instance.checkFileHash,
+      'import_method': _$ImportMethodEnumMap[instance.importMethod],
+      'max_import_img_count': instance.maxImportImgCount,
     };
