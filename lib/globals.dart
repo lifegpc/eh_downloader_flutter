@@ -339,6 +339,27 @@ enum Lang {
   }
 }
 
+enum ThumbnailSize {
+  smail(200),
+  medium(300),
+  big(400);
+
+  const ThumbnailSize(this.size);
+  final int size;
+
+  String localText(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case ThumbnailSize.smail:
+        return i18n.smail;
+      case ThumbnailSize.medium:
+        return i18n.medium;
+      case ThumbnailSize.big:
+        return i18n.big;
+    }
+  }
+}
+
 final _authLog = Logger("AuthLog");
 
 void clearAllStates(BuildContext context) {

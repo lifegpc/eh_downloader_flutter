@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +66,18 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useMobile = MediaQuery.of(context).size.width <= 810;
+    final maxWidth = MediaQuery.of(context).size.width;
+    bool useMobile = maxWidth <= 810;
+    final thumb = prefs.getInt("thumbnailSize") ?? 1;
+    final tsize = (thumb >= 0 && thumb < ThumbnailSize.values.length
+            ? ThumbnailSize.values[thumb]
+            : ThumbnailSize.medium)
+        .size;
+    final max = maxWidth > 810
+        ? tsize
+        : maxWidth >= 400
+            ? min(tsize, ThumbnailSize.medium.size)
+            : ThumbnailSize.smail.size;
     final firstPage = widget.gData.pages.firstOrNull;
     final int? firstFileId = widget.files != null && firstPage != null
         ? widget.files!.files[firstPage!.token]!.firstOrNull?.id
@@ -134,14 +146,11 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
             : SliverToBoxAdapter(child: Container()),
         ThumbnailGridView(
             widget.gData,
-            useMobile
-                ? const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2)
-                : const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 400,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10),
+            SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: max.toDouble(),
+                childAspectRatio: 1,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10),
             files: widget.files,
             gid: widget.gData.meta.gid,
             isSelectMode: widget.isSelectMode,

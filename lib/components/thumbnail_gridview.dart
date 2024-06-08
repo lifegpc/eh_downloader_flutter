@@ -15,7 +15,7 @@ class ThumbnailGridView extends StatelessWidget {
   final GalleryData gdata;
   final int? gid;
   final EhFiles? files;
-  final SliverGridDelegate gridDelegate;
+  final SliverGridDelegateWithMaxCrossAxisExtent gridDelegate;
   final bool isSelectMode;
   final List<String>? selected;
   final Function? onSelectedChange;
@@ -25,12 +25,7 @@ class ThumbnailGridView extends StatelessWidget {
     final displayAd = prefs.getBool("displayAd") ?? false;
     final npages =
         displayAd ? gdata.pages : gdata.pages.where((e) => !e.isAd).toList();
-    final maxWidth = MediaQuery.of(context).size.width;
-    final baseSize = maxWidth > 810
-        ? 400
-        : maxWidth < 400
-            ? 200
-            : 300;
+    final baseSize = gridDelegate.maxCrossAxisExtent.toInt();
     final max = (baseSize * MediaQuery.of(context).devicePixelRatio).toInt();
     return SliverGrid.builder(
         gridDelegate: gridDelegate,

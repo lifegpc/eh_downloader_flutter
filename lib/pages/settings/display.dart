@@ -26,6 +26,7 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   bool _oriShowTranslatedTag = false;
   bool _oriUseTitleJpn = false;
   bool _oriDlUseAvgSpeed = false;
+  ThumbnailSize _oriThumbnailSize = ThumbnailSize.medium;
   bool _displayAd = false;
   Lang _lang = Lang.system;
   bool _preventScreenCapture = false;
@@ -33,6 +34,7 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   bool _showTranslatedTag = false;
   bool _useTitleJpn = false;
   bool _dlUseAvgSpeed = false;
+  ThumbnailSize _thumbnailSize = ThumbnailSize.medium;
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,15 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
       _oriDlUseAvgSpeed = false;
       _dlUseAvgSpeed = false;
     }
+    try {
+      _oriThumbnailSize =
+          ThumbnailSize.values[prefs.getInt("thumbnailSize") ?? 1];
+      _thumbnailSize = _oriThumbnailSize;
+    } catch (e) {
+      _log.warning("Failed to get thumbnailSize:", e);
+      _oriThumbnailSize = ThumbnailSize.medium;
+      _thumbnailSize = ThumbnailSize.medium;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -111,6 +122,7 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
       _showTranslatedTag = _oriLang.toLocale().languageCode == "zh";
       _preventScreenCapture = false;
       _dlUseAvgSpeed = false;
+      _thumbnailSize = ThumbnailSize.medium;
     });
   }
 
@@ -177,6 +189,14 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
         _log.warning("Failed to save dlUseAvgSpeed.");
       } else {
         _oriDlUseAvgSpeed = _dlUseAvgSpeed;
+      }
+    }
+    if (_thumbnailSize != _oriThumbnailSize) {
+      if (!await prefs.setInt("thumbnailSize", _thumbnailSize.index)) {
+        re = false;
+        _log.warning("Failed to save thumbnailSize");
+      } else {
+        _oriThumbnailSize = _thumbnailSize;
       }
     }
     return re;
@@ -328,6 +348,27 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
                                 child: Text(i18n.dlUseAvgSpeed),
                               ),
                             ),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: DropdownMenu<ThumbnailSize>(
+                                  initialSelection: _thumbnailSize,
+                                  onSelected: (value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        _thumbnailSize = value;
+                                      });
+                                    }
+                                  },
+                                  label: Text(i18n.thumbnailSize),
+                                  dropdownMenuEntries: ThumbnailSize.values
+                                      .map((e) => DropdownMenuEntry(
+                                          value: e,
+                                          label: e.localText(context)))
+                                      .toList(),
+                                  leadingIcon: const Icon(Icons.photo_rounded),
+                                  width: 250,
+                                )),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

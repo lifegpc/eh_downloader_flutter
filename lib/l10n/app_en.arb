@@ -244,5 +244,9 @@
     "createExportZipTask": "Create export as ZIP file task",
     "outputDir": "Output directory",
     "copyOriImgUrl": "Copy original image URL to clipboard",
-    "importTask": "Import task"
+    "importTask": "Import task",
+    "thumbnailSize": "Thumbnail size",
+    "smail": "smail",
+    "medium": "medium",
+    "big": "big"
 }

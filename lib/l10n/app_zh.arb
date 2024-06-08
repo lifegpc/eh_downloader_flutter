@@ -244,5 +244,9 @@
     "createExportZipTask": "新建导出为ZIP文件任务",
     "outputDir": "输出文件夹",
     "copyOriImgUrl": "复制原图链接到剪贴板",
-    "importTask": "导入任务"
+    "importTask": "导入任务",
+    "thumbnailSize": "缩略图大小",
+    "smail": "小",
+    "medium": "中",
+    "big": "大"
 }
