@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -95,8 +96,17 @@ class GalleryInfoDesktop extends StatelessWidget {
                             child: Column(children: [
                               SelectableText(gData.meta.category,
                                   style: TextStyle(color: cs.secondary)),
-                              SelectableText(gData.meta.uploader,
-                                  style: TextStyle(color: cs.secondary)),
+                              SelectableText.rich(TextSpan(
+                                  text: gData.meta.uploader,
+                                  style: TextStyle(color: cs.secondary),
+                                  mouseCursor: SystemMouseCursors.click,
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.pushNamed("/galleries",
+                                          queryParameters: {
+                                            "uploader": gData.meta.uploader
+                                          });
+                                    })),
                               _KeyValue(
                                 "${i18n.posted}${i18n.colon}",
                                 DateFormat.yMd(locale)

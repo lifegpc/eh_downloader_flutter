@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -47,8 +48,15 @@ class GalleryBasicInfo extends StatelessWidget {
                     SelectableText(gMeta.preferredTitle,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: cs.primary)),
-                    SelectableText(gMeta.uploader,
-                        style: TextStyle(color: cs.secondary)),
+                    SelectableText.rich(TextSpan(
+                        text: gMeta.uploader,
+                        style: TextStyle(color: cs.secondary),
+                        mouseCursor: SystemMouseCursors.click,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            context.pushNamed("/galleries",
+                                queryParameters: {"uploader": gMeta.uploader});
+                          })),
                     SelectableText(gMeta.category),
                   ],
                 ))
