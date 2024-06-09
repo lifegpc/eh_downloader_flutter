@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'api_result.dart';
@@ -32,11 +34,25 @@ final _pbkdf2b = Pbkdf2(
 const _utf8Encoder = Utf8Encoder();
 final _salt = _utf8Encoder.convert("eh-downloader-salt");
 
-enum ThumbnailMethod {
+enum ThumbnailGenMethod {
   unknown,
   cover,
   contain,
   fill;
+
+  String localText(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case ThumbnailGenMethod.unknown:
+        return i18n.default0;
+      case ThumbnailGenMethod.cover:
+        return i18n.thumbnailCover;
+      case ThumbnailGenMethod.contain:
+        return i18n.thumbnailContain;
+      case ThumbnailGenMethod.fill:
+        return i18n.thumbnailFill;
+    }
+  }
 }
 
 enum ThumbnailAlign {
@@ -46,6 +62,17 @@ enum ThumbnailAlign {
 
   static const top = left;
   static const bottom = right;
+  String localText(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    switch (this) {
+      case ThumbnailAlign.left:
+        return i18n.leftOrTop;
+      case ThumbnailAlign.center:
+        return i18n.center;
+      case ThumbnailAlign.right:
+        return i18n.rightOrBottom;
+    }
+  }
 }
 
 enum SortByGid {
@@ -193,7 +220,7 @@ abstract class _EHApi {
       @Query("height") int? height,
       @Query("quality") int? quality,
       @Query("force") bool? force,
-      @Query("method") ThumbnailMethod? method,
+      @Query("method") ThumbnailGenMethod? method,
       @Query("align") ThumbnailAlign? align,
       @CancelRequest() CancelToken? cancel});
 
@@ -369,7 +396,7 @@ class EHApi extends __EHApi {
       int? height,
       int? quality,
       bool? force,
-      ThumbnailMethod? method,
+      ThumbnailGenMethod? method,
       ThumbnailAlign? align}) {
     final uri = Uri.parse(_combineBaseUrls(_dio.options.baseUrl, baseUrl));
     final queryParameters = <String, dynamic>{

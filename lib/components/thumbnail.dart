@@ -30,9 +30,11 @@ class Thumbnail extends StatefulWidget {
       this.gdata,
       this.isSelectMode = false,
       this.isSelected = false,
-      this.onSelectedChange})
+      this.onSelectedChange,
+      this.align,
+      this.method})
       : _pMeta = pMeta,
-        _max = max ?? 1200,
+        _max = max ?? 400,
         _width = width,
         _height = height,
         _fileId = fileId;
@@ -48,6 +50,8 @@ class Thumbnail extends StatefulWidget {
   final bool isSelectMode;
   final bool isSelected;
   final ValueChanged<bool>? onSelectedChange;
+  final ThumbnailGenMethod? method;
+  final ThumbnailAlign? align;
 
   int get height => _height != null
       ? _height!
@@ -134,8 +138,8 @@ class _Thumbnail extends State<Thumbnail> {
           max: widget._max,
           width: widget._width,
           height: widget._height,
-          method: ThumbnailMethod.contain,
-          align: ThumbnailAlign.center);
+          method: widget.method,
+          align: widget.align);
       if (isImageCacheEnabled) {
         try {
           final cache = await imageCaches.getCache(_originalUrl!);
@@ -156,8 +160,8 @@ class _Thumbnail extends State<Thumbnail> {
           max: widget._max,
           width: widget._width,
           height: widget._height,
-          method: ThumbnailMethod.contain,
-          align: ThumbnailAlign.center,
+          method: widget.method,
+          align: widget.align,
           cancel: _cancel);
       if (re.response.statusCode != 200) {
         throw Exception(

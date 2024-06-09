@@ -256,5 +256,15 @@
     "copyThenDelete": "复制后删除",
     "move": "移动",
     "keep": "保留",
-    "maxImportImgCount": "最大图片并行导入数"
+    "maxImportImgCount": "最大图片并行导入数",
+    "thumbnailScaleMethod": "缩略图缩放方式",
+    "default0": "默认",
+    "thumbnailFill": "拉伸至整个容器",
+    "thumbnailCover": "缩放以填满容器",
+    "thumbnailContain": "缩放以适合容器",
+    "thumbnailAlign": "缩略图对齐方式",
+    "leftOrTop": "左/上",
+    "center": "居中",
+    "rightOrBottom": "右/下",
+    "thumbnailAlignHelp": "仅当缩放方法是缩放以填满/适合容器时生效。"
 }

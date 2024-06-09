@@ -808,7 +808,7 @@ class __EHApi implements _EHApi {
     int? height,
     int? quality,
     bool? force,
-    ThumbnailMethod? method,
+    ThumbnailGenMethod? method,
     ThumbnailAlign? align,
     CancelToken? cancel,
   }) async {

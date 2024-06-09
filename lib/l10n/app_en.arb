@@ -256,5 +256,15 @@
     "copyThenDelete": "Copy then delete",
     "move": "Move",
     "keep": "Keep",
-    "maxImportImgCount": "Maximum number of images to be imported in parallel"
+    "maxImportImgCount": "Maximum number of images to be imported in parallel",
+    "thumbnailScaleMethod": "Thumbnail scale method",
+    "default0": "Default",
+    "thumbnailFill": "Stretch to container",
+    "thumbnailCover": "Touch container from outside",
+    "thumbnailContain": "Touch container from inside",
+    "thumbnailAlign": "Thumbnail alignment",
+    "leftOrTop": "Left / Top",
+    "center": "Center",
+    "rightOrBottom": "Right / Bottom",
+    "thumbnailAlignHelp": "This only works if the scaling method is to touch container from outside/inside."
 }

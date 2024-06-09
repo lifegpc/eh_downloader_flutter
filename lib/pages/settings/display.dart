@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import '../../api/client.dart';
 import '../../globals.dart';
 import '../../main.dart';
 import '../../utils.dart';
@@ -27,6 +28,8 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   bool _oriUseTitleJpn = false;
   bool _oriDlUseAvgSpeed = false;
   ThumbnailSize _oriThumbnailSize = ThumbnailSize.medium;
+  ThumbnailGenMethod _oriThumbnailMethod = ThumbnailGenMethod.unknown;
+  ThumbnailAlign _oriThumbnailAlign = ThumbnailAlign.center;
   bool _displayAd = false;
   Lang _lang = Lang.system;
   bool _preventScreenCapture = false;
@@ -35,6 +38,8 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   bool _useTitleJpn = false;
   bool _dlUseAvgSpeed = false;
   ThumbnailSize _thumbnailSize = ThumbnailSize.medium;
+  ThumbnailGenMethod _thumbnailMethod = ThumbnailGenMethod.unknown;
+  ThumbnailAlign _thumbnailAlign = ThumbnailAlign.center;
   @override
   void initState() {
     super.initState();
@@ -104,6 +109,24 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
       _oriThumbnailSize = ThumbnailSize.medium;
       _thumbnailSize = ThumbnailSize.medium;
     }
+    try {
+      _oriThumbnailMethod =
+          ThumbnailGenMethod.values[prefs.getInt("thumbnailMethod") ?? 0];
+      _thumbnailMethod = _oriThumbnailMethod;
+    } catch (e) {
+      _log.warning("Failed to get thumbnailMethod:", e);
+      _oriThumbnailMethod = ThumbnailGenMethod.unknown;
+      _thumbnailMethod = ThumbnailGenMethod.unknown;
+    }
+    try {
+      _thumbnailAlign =
+          ThumbnailAlign.values[prefs.getInt("thumbnailAlign") ?? 1];
+      _oriThumbnailAlign = _thumbnailAlign;
+    } catch (e) {
+      _log.warning("Failed to get thumbnailAlign:", e);
+      _oriThumbnailAlign = ThumbnailAlign.center;
+      _thumbnailAlign = ThumbnailAlign.center;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -123,6 +146,8 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
       _preventScreenCapture = false;
       _dlUseAvgSpeed = false;
       _thumbnailSize = ThumbnailSize.medium;
+      _thumbnailMethod = ThumbnailGenMethod.unknown;
+      _thumbnailAlign = ThumbnailAlign.center;
     });
   }
 
@@ -197,6 +222,22 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
         _log.warning("Failed to save thumbnailSize");
       } else {
         _oriThumbnailSize = _thumbnailSize;
+      }
+    }
+    if (_thumbnailMethod != _oriThumbnailMethod) {
+      if (!await prefs.setInt("thumbnailMethod", _thumbnailMethod.index)) {
+        re = false;
+        _log.warning("Failed to save thumbnailMethod");
+      } else {
+        _oriThumbnailMethod = _thumbnailMethod;
+      }
+    }
+    if (_thumbnailAlign != _oriThumbnailAlign) {
+      if (!await prefs.setInt("thumbnailAlign", _thumbnailAlign.index)) {
+        re = false;
+        _log.warning("Failed to save thumbnailAlign");
+      } else {
+        _oriThumbnailAlign = _thumbnailAlign;
       }
     }
     return re;
@@ -351,24 +392,70 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
                             Container(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),
-                                child: DropdownMenu<ThumbnailSize>(
-                                  initialSelection: _thumbnailSize,
-                                  onSelected: (value) {
-                                    if (value != null) {
-                                      setState(() {
-                                        _thumbnailSize = value;
-                                      });
-                                    }
-                                  },
-                                  label: Text(i18n.thumbnailSize),
-                                  dropdownMenuEntries: ThumbnailSize.values
-                                      .map((e) => DropdownMenuEntry(
-                                          value: e,
-                                          label: e.localText(context)))
-                                      .toList(),
-                                  leadingIcon: const Icon(Icons.photo_rounded),
-                                  width: 250,
-                                )),
+                                child: DropdownButtonFormField<ThumbnailSize>(
+                                    items: ThumbnailSize.values
+                                        .map((e) => DropdownMenuItem(
+                                            value: e,
+                                            child: Text(e.localText(context))))
+                                        .toList(),
+                                    value: _thumbnailSize,
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          _thumbnailSize = value;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      labelText: i18n.thumbnailSize,
+                                    ))),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child:
+                                    DropdownButtonFormField<ThumbnailGenMethod>(
+                                        items: ThumbnailGenMethod.values
+                                            .map((e) => DropdownMenuItem(
+                                                value: e,
+                                                child:
+                                                    Text(e.localText(context))))
+                                            .toList(),
+                                        value: _thumbnailMethod,
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              _thumbnailMethod = value;
+                                            });
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          border: const OutlineInputBorder(),
+                                          labelText: i18n.thumbnailScaleMethod,
+                                        ))),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: DropdownButtonFormField<ThumbnailAlign>(
+                                    items: ThumbnailAlign.values
+                                        .map((e) => DropdownMenuItem(
+                                            value: e,
+                                            child: Text(e.localText(context))))
+                                        .toList(),
+                                    value: _thumbnailAlign,
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          _thumbnailAlign = value;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      labelText: i18n.thumbnailAlign,
+                                      helperText: i18n.thumbnailAlignHelp,
+                                      helperMaxLines: 3,
+                                    ))),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
