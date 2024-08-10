@@ -23,12 +23,14 @@ class GalleriesPage extends StatefulWidget {
       this.uploader,
       this.tag,
       this.translatedTag,
+      this.category,
       this.hasExtra = false});
   final SortByGid? sortByGid;
   final String? uploader;
   final String? tag;
   final String? translatedTag;
   final bool hasExtra;
+  final String? category;
   bool _stt(BuildContext context) =>
       prefs.getBool("showTranslatedTag") ??
       MainApp.of(context).lang.toLocale().languageCode == "zh";
@@ -61,6 +63,7 @@ class _GalleriesPage extends State<GalleriesPage>
               limit: _pageSize,
               sortByGid: _sortByGid,
               uploader: widget.uploader,
+              category: widget.category,
               tag: widget.tag))
           .unwrap();
       final isLastPage = list.length < _pageSize;
@@ -140,6 +143,7 @@ class _GalleriesPage extends State<GalleriesPage>
             "sortByGid": [v!.index.toString()],
             "tag": [widget.tag ?? ""],
             "uploader": [widget.uploader ?? ""],
+            "category": [widget.category ?? ""],
           };
           queryParameters.removeWhere((k, v) => v[0].isEmpty);
           context.pushReplacementNamed("/galleries",
@@ -155,12 +159,24 @@ class _GalleriesPage extends State<GalleriesPage>
       ],
       leadingIcon: const Icon(Icons.sort),
     );
-    final title = widget.uploader != null && widget.tag != null
-        ? i18n.tagUploaderGalleries(preferredTag(context)!, widget.uploader!)
+    final title = widget.tag != null
+        ? widget.uploader != null
+            ? widget.category != null
+                ? i18n.tagUploaderCategoryGalleries(
+                    preferredTag(context)!, widget.uploader!, widget.category!)
+                : i18n.tagUploaderGalleries(
+                    preferredTag(context)!, widget.uploader!)
+            : widget.category != null
+                ? i18n.tagCategoryGalleries(
+                    widget.category!, preferredTag(context)!)
+                : i18n.tagGalleries(preferredTag(context)!)
         : widget.uploader != null
-            ? i18n.uploaderGalleries(widget.uploader!)
-            : widget.tag != null
-                ? i18n.tagGalleries(preferredTag(context)!)
+            ? widget.category != null
+                ? i18n.uploaderCategoryGalleries(
+                    widget.category!, widget.uploader!)
+                : i18n.uploaderGalleries(widget.uploader!)
+            : widget.category != null
+                ? i18n.categoryGalleries(widget.category!)
                 : i18n.galleries;
     if (isTop(context)) {
       setCurrentTitle(title, Theme.of(context).primaryColor.value);

@@ -57,7 +57,14 @@ class GalleryBasicInfo extends StatelessWidget {
                             context.pushNamed("/galleries",
                                 queryParameters: {"uploader": gMeta.uploader});
                           })),
-                    SelectableText(gMeta.category),
+                    SelectableText.rich(TextSpan(
+                        text: gMeta.category,
+                        mouseCursor: SystemMouseCursors.click,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            context.pushNamed("/galleries",
+                                queryParameters: {"category": gMeta.category});
+                          })),
                   ],
                 ))
           ])),

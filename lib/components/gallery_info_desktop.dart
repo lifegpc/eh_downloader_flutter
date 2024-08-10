@@ -94,8 +94,17 @@ class GalleryInfoDesktop extends StatelessWidget {
                         SizedBox(
                             width: 170,
                             child: Column(children: [
-                              SelectableText(gData.meta.category,
-                                  style: TextStyle(color: cs.secondary)),
+                              SelectableText.rich(TextSpan(
+                                  text: gData.meta.category,
+                                  style: TextStyle(color: cs.secondary),
+                                  mouseCursor: SystemMouseCursors.click,
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.pushNamed("/galleries",
+                                          queryParameters: {
+                                            "category": gData.meta.category
+                                          });
+                                    })),
                               SelectableText.rich(TextSpan(
                                   text: gData.meta.uploader,
                                   style: TextStyle(color: cs.secondary),

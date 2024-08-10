@@ -61,7 +61,7 @@
             }
         }
     },
-    "tagUploaderGalleries": "Galleries tagged {tag} by {uploader}",
+    "tagUploaderGalleries": "Galleries tagged {tag} uploaded by {uploader}",
     "@tagUploaderGalleries": {
         "placeholders": {
             "tag": {
@@ -269,5 +269,49 @@
     "thumbnailAlignHelp": "This only works if the scaling method is to touch container from outside/inside.",
     "createImportTask": "Create import task",
     "importPath": "Path to the file/directory to import",
-    "importSize": "Image size"
+    "importSize": "Image size",
+    "tagUploaderCategoryGalleries": "Galleries tagged {tag} uploaded by {uploader} in category {category}",
+    "@tagUploaderCategoryGalleries": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            },
+            "uploader": {
+                "type": "String"
+            },
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "categoryGalleries": "Galleries with category {category}",
+    "@categoryGalleries": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "uploaderCategoryGalleries": "Galleries with category {category} uploaded by {uploader}",
+    "@uploaderCategoryGalleries": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            },
+            "uploader": {
+                "type": "String"
+            }
+        }
+    },
+    "tagCategoryGalleries": "Galleries with category {category} tagged {tag}",
+    "@tagCategoryGalleries": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            },
+            "tag": {
+                "type": "String"
+            }
+        }
+    }
 }

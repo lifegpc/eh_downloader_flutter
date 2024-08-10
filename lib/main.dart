@@ -72,6 +72,7 @@ final _router = GoRouter(
           }
           final tag = state.uri.queryParameters["tag"];
           final uploader = state.uri.queryParameters["uploader"];
+          final category = state.uri.queryParameters["category"];
           final extra = state.extra as GalleriesPageExtra?;
           return GalleriesPage(
               key: state.pageKey,
@@ -79,6 +80,7 @@ final _router = GoRouter(
               tag: tag,
               uploader: uploader,
               translatedTag: extra?.translatedTag,
+              category: category,
               hasExtra: extra != null);
         }),
     GoRoute(

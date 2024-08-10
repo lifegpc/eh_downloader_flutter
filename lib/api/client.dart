@@ -240,6 +240,7 @@ abstract class _EHApi {
       @Query("sort_by_gid") bool? sortByGid,
       @Query("uploader") String? uploader,
       @Query("tag") String? tag,
+      @Query("category") String? category,
       @CancelRequest() CancelToken? cancel});
 
   @GET('/tag/{id}')

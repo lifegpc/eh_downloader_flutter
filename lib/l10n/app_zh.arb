@@ -12,9 +12,9 @@
     "networkError": "网络错误。",
     "internalError": "出现了内部错误，请将日志发送给开发者。",
     "setServerUrl": "服务器地址",
-    "createRootUser": "创建根用户",
+    "createRootUser": "新建根用户",
     "skip": "跳过",
-    "create": "创建",
+    "create": "新建",
     "settings": "设置",
     "lang": "语言",
     "systemLang": "系统语言",
@@ -267,7 +267,51 @@
     "center": "居中",
     "rightOrBottom": "右/下",
     "thumbnailAlignHelp": "仅当缩放方法是缩放以填满/适合容器时生效。",
-    "createImportTask": "创建导入任务",
+    "createImportTask": "新建导入任务",
     "importPath": "需要导入的文件/文件夹路径",
-    "importSize": "图像大小"
+    "importSize": "图像大小",
+    "tagUploaderCategoryGalleries": "在分类 {category} 中 {uploader} 上传的带有 {tag} 标签的画廊",
+    "@tagUploaderCategoryGalleries": {
+        "placeholders": {
+            "tag": {
+                "type": "String"
+            },
+            "uploader": {
+                "type": "String"
+            },
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "categoryGalleries": "分类为 {category} 的画廊",
+    "@categoryGalleries": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "uploaderCategoryGalleries": "{uploader} 上传的分类为 {category} 的画廊",
+    "@uploaderCategoryGalleries": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            },
+            "uploader": {
+                "type": "String"
+            }
+        }
+    },
+    "tagCategoryGalleries": "分类为 {category} 的带有 {tag} 标签的画廊",
+    "@tagCategoryGalleries": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            },
+            "tag": {
+                "type": "String"
+            }
+        }
+    }
 }

@@ -6,7 +6,7 @@ part of 'client.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class __EHApi implements _EHApi {
   __EHApi(
@@ -51,11 +51,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<BUser>.fromJson(
+    final _value = ApiResult<BUser>.fromJson(
       _result.data!,
       (json) => BUser.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -101,11 +101,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<dynamic>.fromJson(
+    final _value = ApiResult<dynamic>.fromJson(
       _result.data!,
       (json) => json as dynamic,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -160,11 +160,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<int>.fromJson(
+    final _value = ApiResult<int>.fromJson(
       _result.data!,
       (json) => json as int,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -209,11 +209,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<dynamic>.fromJson(
+    final _value = ApiResult<dynamic>.fromJson(
       _result.data!,
       (json) => json as dynamic,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -248,11 +248,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<BUser>.fromJson(
+    final _value = ApiResult<BUser>.fromJson(
       _result.data!,
       (json) => BUser.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -289,7 +289,7 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<List<BUser>>.fromJson(
+    final _value = ApiResult<List<BUser>>.fromJson(
       _result.data!,
       (json) => json is List<dynamic>
           ? json
@@ -297,7 +297,7 @@ class __EHApi implements _EHApi {
               .toList()
           : List.empty(),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -370,11 +370,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<BUser>.fromJson(
+    final _value = ApiResult<BUser>.fromJson(
       _result.data!,
       (json) => BUser.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -402,11 +402,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<ServerStatus>.fromJson(
+    final _value = ApiResult<ServerStatus>.fromJson(
       _result.data!,
       (json) => ServerStatus.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -501,11 +501,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Token>.fromJson(
+    final _value = ApiResult<Token>.fromJson(
       _result.data!,
       (json) => Token.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -571,11 +571,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Token>.fromJson(
+    final _value = ApiResult<Token>.fromJson(
       _result.data!,
       (json) => Token.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -613,11 +613,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<bool>.fromJson(
+    final _value = ApiResult<bool>.fromJson(
       _result.data!,
       (json) => json as bool,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -648,11 +648,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<TokenWithUserInfo>.fromJson(
+    final _value = ApiResult<TokenWithUserInfo>.fromJson(
       _result.data!,
       (json) => TokenWithUserInfo.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -684,8 +684,8 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data!.cast<int>();
-    final httpResponse = HttpResponse(value, _result);
+    final _value = _result.data!.cast<int>();
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -718,11 +718,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<EhFileExtend>.fromJson(
+    final _value = ApiResult<EhFileExtend>.fromJson(
       _result.data!,
       (json) => EhFileExtend.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -760,8 +760,8 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data!.cast<int>();
-    final httpResponse = HttpResponse(value, _result);
+    final _value = _result.data!.cast<int>();
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -793,11 +793,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<EhFiles>.fromJson(
+    final _value = ApiResult<EhFiles>.fromJson(
       _result.data!,
       (json) => EhFiles.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -844,8 +844,8 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data!.cast<int>();
-    final httpResponse = HttpResponse(value, _result);
+    final _value = _result.data!.cast<int>();
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -877,11 +877,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<GalleryData>.fromJson(
+    final _value = ApiResult<GalleryData>.fromJson(
       _result.data!,
       (json) => GalleryData.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -912,11 +912,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<GMetaInfos>.fromJson(
+    final _value = ApiResult<GMetaInfos>.fromJson(
       _result.data!,
       (json) => GMetaInfos.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -927,6 +927,7 @@ class __EHApi implements _EHApi {
     bool? sortByGid,
     String? uploader,
     String? tag,
+    String? category,
     CancelToken? cancel,
   }) async {
     final _extra = <String, dynamic>{};
@@ -937,6 +938,7 @@ class __EHApi implements _EHApi {
       r'sort_by_gid': sortByGid,
       r'uploader': uploader,
       r'tag': tag,
+      r'category': category,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -959,7 +961,7 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<List<GMeta>>.fromJson(
+    final _value = ApiResult<List<GMeta>>.fromJson(
       _result.data!,
       (json) => json is List<dynamic>
           ? json
@@ -967,7 +969,7 @@ class __EHApi implements _EHApi {
               .toList()
           : List.empty(),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -998,11 +1000,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Tags>.fromJson(
+    final _value = ApiResult<Tags>.fromJson(
       _result.data!,
       (json) => Tags.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1030,7 +1032,7 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<List<Tag>>.fromJson(
+    final _value = ApiResult<List<Tag>>.fromJson(
       _result.data!,
       (json) => json is List<dynamic>
           ? json
@@ -1038,7 +1040,7 @@ class __EHApi implements _EHApi {
               .toList()
           : List.empty(),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1077,8 +1079,8 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
-    final httpResponse = HttpResponse(value, _result);
+    final _value = _result.data;
+    final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
 
@@ -1136,11 +1138,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<dynamic>.fromJson(
+    final _value = ApiResult<dynamic>.fromJson(
       _result.data!,
       (json) => json as dynamic,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1190,11 +1192,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<dynamic>.fromJson(
+    final _value = ApiResult<dynamic>.fromJson(
       _result.data!,
       (json) => json as dynamic,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1244,11 +1246,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<dynamic>.fromJson(
+    final _value = ApiResult<dynamic>.fromJson(
       _result.data!,
       (json) => json as dynamic,
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1279,8 +1281,8 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = Config.fromJson(_result.data!);
-    return value;
+    final _value = Config.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -1312,8 +1314,8 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UpdateConfigResult.fromJson(_result.data!);
-    return value;
+    final _value = UpdateConfigResult.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -1348,11 +1350,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<EHMetaInfo>.fromJson(
+    final _value = ApiResult<EHMetaInfo>.fromJson(
       _result.data!,
       (json) => EHMetaInfo.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1403,11 +1405,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Task>.fromJson(
+    final _value = ApiResult<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1453,11 +1455,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Task>.fromJson(
+    final _value = ApiResult<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1508,11 +1510,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<Task>.fromJson(
+    final _value = ApiResult<Task>.fromJson(
       _result.data!,
       (json) => Task.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1541,11 +1543,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<DownloadConfig>.fromJson(
+    final _value = ApiResult<DownloadConfig>.fromJson(
       _result.data!,
       (json) => DownloadConfig.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1574,11 +1576,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<ExportZipConfig>.fromJson(
+    final _value = ApiResult<ExportZipConfig>.fromJson(
       _result.data!,
       (json) => ExportZipConfig.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   @override
@@ -1607,11 +1609,11 @@ class __EHApi implements _EHApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApiResult<DefaultImportConfig>.fromJson(
+    final _value = ApiResult<DefaultImportConfig>.fromJson(
       _result.data!,
       (json) => DefaultImportConfig.fromJson(json as Map<String, dynamic>),
     );
-    return value;
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
