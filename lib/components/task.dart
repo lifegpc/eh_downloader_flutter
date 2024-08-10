@@ -90,6 +90,14 @@ class _TaskView extends State<TaskView> {
       return Text("${i18n.exportZipTask} $title",
           maxLines: 1, overflow: TextOverflow.ellipsis);
     }
+    if (typ == TaskType.import) {
+      final gid = widget.task.base.gid;
+      final title = tasks.meta.containsKey(gid)
+          ? tasks.meta[gid]!.preferredTitle
+          : gid.toString();
+      return Text("${i18n.importTask} $title",
+          maxLines: 1, overflow: TextOverflow.ellipsis);
+    }
     return Container();
   }
 

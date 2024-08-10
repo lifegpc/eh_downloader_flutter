@@ -205,3 +205,56 @@ Map<String, dynamic> _$ExportZipConfigToJson(ExportZipConfig instance) =>
       'max_length': instance.maxLength,
       'export_ad': instance.exportAd,
     };
+
+ImportConfig _$ImportConfigFromJson(Map<String, dynamic> json) => ImportConfig(
+      json['import_path'] as String,
+      size: $enumDecodeNullable(_$ImportSizeEnumMap, json['size']) ??
+          ImportSize.original,
+      maxImportImgCount: (json['max_import_img_count'] as num?)?.toInt(),
+      mpv: json['mpv'] as bool?,
+      method: $enumDecodeNullable(_$ImportMethodEnumMap, json['method']),
+      removePreviousGallery: json['remove_previous_gallery'] as bool?,
+    );
+
+Map<String, dynamic> _$ImportConfigToJson(ImportConfig instance) =>
+    <String, dynamic>{
+      'max_import_img_count': instance.maxImportImgCount,
+      'mpv': instance.mpv,
+      'method': _$ImportMethodEnumMap[instance.method],
+      'remove_previous_gallery': instance.removePreviousGallery,
+      'import_path': instance.importPath,
+      'size': _$ImportSizeEnumMap[instance.size]!,
+    };
+
+const _$ImportSizeEnumMap = {
+  ImportSize.original: 0,
+  ImportSize.x780: 780,
+  ImportSize.x980: 980,
+  ImportSize.resampled: 1280,
+  ImportSize.x1600: 1600,
+  ImportSize.x2400: 2400,
+};
+
+const _$ImportMethodEnumMap = {
+  ImportMethod.copy: 0,
+  ImportMethod.copyThenDelete: 1,
+  ImportMethod.move: 2,
+  ImportMethod.keep: 3,
+};
+
+DefaultImportConfig _$DefaultImportConfigFromJson(Map<String, dynamic> json) =>
+    DefaultImportConfig(
+      maxImportImgCount: (json['max_import_img_count'] as num?)?.toInt(),
+      method: $enumDecodeNullable(_$ImportMethodEnumMap, json['method']),
+      mpv: json['mpv'] as bool?,
+      removePreviousGallery: json['remove_previous_gallery'] as bool?,
+    );
+
+Map<String, dynamic> _$DefaultImportConfigToJson(
+        DefaultImportConfig instance) =>
+    <String, dynamic>{
+      'max_import_img_count': instance.maxImportImgCount,
+      'method': _$ImportMethodEnumMap[instance.method],
+      'mpv': instance.mpv,
+      'remove_previous_gallery': instance.removePreviousGallery,
+    };

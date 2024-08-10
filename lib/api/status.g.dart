@@ -28,6 +28,8 @@ ServerStatus _$ServerStatusFromJson(Map<String, dynamic> json) => ServerStatus(
               json['meilisearch'] as Map<String, dynamic>),
       noUser: json['no_user'] as bool,
       isDocker: json['is_docker'] as bool,
+      ffprobeBinaryEnabled: json['ffprobe_binary_enabled'] as bool,
+      libzipEnabled: json['libzip_enabled'] as bool,
     );
 
 Map<String, dynamic> _$ServerStatusToJson(ServerStatus instance) =>
@@ -38,4 +40,6 @@ Map<String, dynamic> _$ServerStatusToJson(ServerStatus instance) =>
       'meilisearch': instance.meilisearch,
       'no_user': instance.noUser,
       'is_docker': instance.isDocker,
+      'ffprobe_binary_enabled': instance.ffprobeBinaryEnabled,
+      'libzip_enabled': instance.libzipEnabled,
     };

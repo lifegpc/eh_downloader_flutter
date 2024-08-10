@@ -266,5 +266,8 @@
     "leftOrTop": "Left / Top",
     "center": "Center",
     "rightOrBottom": "Right / Bottom",
-    "thumbnailAlignHelp": "This only works if the scaling method is to touch container from outside/inside."
+    "thumbnailAlignHelp": "This only works if the scaling method is to touch container from outside/inside.",
+    "createImportTask": "Create import task",
+    "importPath": "Path to the file/directory to import",
+    "importSize": "Image size"
 }

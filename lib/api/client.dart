@@ -308,11 +308,23 @@ abstract class _EHApi {
       {@Part(name: 'cfg') ExportZipConfig? cfg,
       @Part(name: "type") String t = "export_zip",
       @CancelRequest() CancelToken? cancel});
+  @PUT('/task')
+  @MultiPart()
+  Future<ApiResult<Task>> createImportTask(
+    @Part(name: "gid") int gid,
+    @Part(name: "token") String token, {
+    @Part(name: "cfg") ImportConfig? cfg,
+    @Part(name: "type") String t = "import",
+    @CancelRequest() CancelToken? cancel,
+  });
   @GET('/task/download_cfg')
   Future<ApiResult<DownloadConfig>> getDefaultDownloadConfig(
       {@CancelRequest() CancelToken? cancel});
   @GET('/task/export_zip_cfg')
   Future<ApiResult<ExportZipConfig>> getDefaultExportZipConfig(
+      {@CancelRequest() CancelToken? cancel});
+  @GET('/task/import_cfg')
+  Future<ApiResult<DefaultImportConfig>> getDefaultImportConfig(
       {@CancelRequest() CancelToken? cancel});
 }
 

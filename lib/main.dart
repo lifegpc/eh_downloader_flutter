@@ -12,6 +12,7 @@ import 'dialog/edit_user_page.dart';
 import 'dialog/gallery_details_page.dart';
 import 'dialog/new_download_task_page.dart';
 import 'dialog/new_export_zip_task_page.dart';
+import 'dialog/new_import_task_page.dart';
 import 'dialog/new_user_page.dart';
 import 'dialog/task_page.dart';
 import 'globals.dart';
@@ -266,6 +267,23 @@ final _router = GoRouter(
               key: state.pageKey,
               builder: (context) {
                 return NewExportZipTaskPage(gid: gid);
+              });
+        }),
+    GoRoute(
+        path: NewImportTaskPage.routeName,
+        pageBuilder: (context, state) {
+          int? gid;
+          String? token;
+          if (state.uri.queryParameters.containsKey("gid")) {
+            gid = int.tryParse(state.uri.queryParameters["gid"]!);
+          }
+          if (state.uri.queryParameters.containsKey("token")) {
+            token = state.uri.queryParameters["token"]!;
+          }
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return NewImportTaskPage(gid: gid, token: token);
               });
         }),
   ],

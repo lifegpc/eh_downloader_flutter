@@ -163,9 +163,13 @@ class _CreateRootUserPage extends State<CreateRootUserPage>
                                 _log.warning(
                                     "Failed to set skipCreateRootUser.");
                               } else {
-                                context.canPop()
-                                    ? context.pop()
-                                    : context.go("/");
+                                if (context.mounted) {
+                                  context.canPop()
+                                      ? context.pop()
+                                      : context.go("/");
+                                } else {
+                                  _log.warning("Context not mounted.");
+                                }
                               }
                             }).catchError((e) {
                               _log.warning(
@@ -183,42 +187,58 @@ class _CreateRootUserPage extends State<CreateRootUserPage>
                                   _createRootUser(_username, _password)
                                       .then((re) {
                                     if (re) {
-                                      clearAllStates(context);
-                                      context.canPop()
-                                          ? context.pop()
-                                          : context.go("/");
-                                    } else {
-                                      if (!_createdUser) {
+                                      if (context.mounted) {
+                                        clearAllStates(context);
                                         context.canPop()
                                             ? context.pop()
                                             : context.go("/");
+                                      } else {
+                                        _log.warning("Context not mounted.");
+                                      }
+                                    } else {
+                                      if (!_createdUser) {
+                                        if (context.mounted) {
+                                          context.canPop()
+                                              ? context.pop()
+                                              : context.go("/");
+                                        } else {
+                                          _log.warning("Context not mounted.");
+                                        }
                                         return;
                                       }
-                                      final snackBar = SnackBar(
-                                          content: Text(
-                                              AppLocalizations.of(context)!
-                                                  .incorrectUserPassword));
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                      setState(() {
-                                        _isCreated = false;
-                                      });
+                                      if (context.mounted) {
+                                        final snackBar = SnackBar(
+                                            content: Text(
+                                                AppLocalizations.of(context)!
+                                                    .incorrectUserPassword));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                        setState(() {
+                                          _isCreated = false;
+                                        });
+                                      } else {
+                                        _log.warning("Context not mounted.");
+                                      }
                                     }
                                   }).catchError((e) {
                                     _log.severe(
                                         "Failed to create root user:", e);
                                     final isNetworkError = e is! (int, String);
-                                    final snackBar = SnackBar(
-                                        content: Text(isNetworkError
-                                            ? AppLocalizations.of(context)!
-                                                .networkError
-                                            : AppLocalizations.of(context)!
-                                                .internalError));
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                    setState(() {
-                                      _isCreated = false;
-                                    });
+                                    if (context.mounted) {
+                                      final snackBar = SnackBar(
+                                          content: Text(isNetworkError
+                                              ? AppLocalizations.of(context)!
+                                                  .networkError
+                                              : AppLocalizations.of(context)!
+                                                  .internalError));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                      setState(() {
+                                        _isCreated = false;
+                                      });
+                                    } else {
+                                      _log.warning("Context not mounted.");
+                                    }
                                   });
                                 }
                               : null,

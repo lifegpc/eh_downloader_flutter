@@ -266,5 +266,8 @@
     "leftOrTop": "左/上",
     "center": "居中",
     "rightOrBottom": "右/下",
-    "thumbnailAlignHelp": "仅当缩放方法是缩放以填满/适合容器时生效。"
+    "thumbnailAlignHelp": "仅当缩放方法是缩放以填满/适合容器时生效。",
+    "createImportTask": "创建导入任务",
+    "importPath": "需要导入的文件/文件夹路径",
+    "importSize": "图像大小"
 }

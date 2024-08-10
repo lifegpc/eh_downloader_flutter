@@ -27,6 +27,8 @@ class ServerStatus {
     this.meilisearch,
     required this.noUser,
     required this.isDocker,
+    required this.ffprobeBinaryEnabled,
+    required this.libzipEnabled,
   });
 
   @JsonKey(name: 'ffmpeg_api_enabled')
@@ -40,6 +42,10 @@ class ServerStatus {
   final bool noUser;
   @JsonKey(name: 'is_docker')
   final bool isDocker;
+  @JsonKey(name: 'ffprobe_binary_enabled')
+  final bool ffprobeBinaryEnabled;
+  @JsonKey(name: 'libzip_enabled')
+  final bool libzipEnabled;
 
   factory ServerStatus.fromJson(Map<String, dynamic> json) =>
       _$ServerStatusFromJson(json);

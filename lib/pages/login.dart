@@ -108,7 +108,11 @@ class _LoginPageState extends State<LoginPage>
       auth.checkAuth().then((re) {
         _checkAuth = false;
         if (re) {
-          build.go("/");
+          if (build.mounted) {
+            build.go("/");
+          } else {
+            _log.warning("Context not mounted.");
+          }
         }
       }).catchError((e) {
         _log.severe("Failed to check auth info:", e);
@@ -190,33 +194,45 @@ class _LoginPageState extends State<LoginPage>
                                     });
                                     login(_username, _password).then((re) {
                                       if (re) {
-                                        clearAllStates(context);
-                                        context.canPop()
-                                            ? context.pop()
-                                            : context.go("/");
+                                        if (context.mounted) {
+                                          clearAllStates(context);
+                                          context.canPop()
+                                              ? context.pop()
+                                              : context.go("/");
+                                        } else {
+                                          _log.warning("Context not mounted.");
+                                        }
                                       } else {
-                                        final snackBar = SnackBar(
-                                            content: Text(
-                                                i18n.incorrectUserPassword));
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                        setState(() {
-                                          _isLogin = false;
-                                        });
+                                        if (context.mounted) {
+                                          final snackBar = SnackBar(
+                                              content: Text(
+                                                  i18n.incorrectUserPassword));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                          setState(() {
+                                            _isLogin = false;
+                                          });
+                                        } else {
+                                          _log.warning("Context not mounted.");
+                                        }
                                       }
                                     }).catchError((e) {
                                       _log.severe("Failed to login:", e);
                                       final isNetworkError =
                                           e is! (int, String);
-                                      final snackBar = SnackBar(
-                                          content: Text(isNetworkError
-                                              ? i18n.networkError
-                                              : i18n.internalError));
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                      setState(() {
-                                        _isLogin = false;
-                                      });
+                                      if (context.mounted) {
+                                        final snackBar = SnackBar(
+                                            content: Text(isNetworkError
+                                                ? i18n.networkError
+                                                : i18n.internalError));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                        setState(() {
+                                          _isLogin = false;
+                                        });
+                                      } else {
+                                        _log.warning("Context not mounted.");
+                                      }
                                     });
                                   }
                                 : null,

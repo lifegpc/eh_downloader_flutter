@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'config.dart';
 
 part 'task.g.dart';
 
@@ -345,4 +346,62 @@ class ExportZipConfig {
   factory ExportZipConfig.fromJson(Map<String, dynamic> json) =>
       _$ExportZipConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ExportZipConfigToJson(this);
+}
+
+enum ImportSize {
+  @JsonValue(0)
+  original,
+  @JsonValue(780)
+  x780,
+  @JsonValue(980)
+  x980,
+  @JsonValue(1280)
+  resampled,
+  @JsonValue(1600)
+  x1600,
+  @JsonValue(2400)
+  x2400,
+}
+
+@JsonSerializable()
+class ImportConfig {
+  ImportConfig(
+    this.importPath, {
+    this.size = ImportSize.original,
+    this.maxImportImgCount,
+    this.mpv,
+    this.method,
+    this.removePreviousGallery,
+  });
+  @JsonKey(name: 'max_import_img_count')
+  int? maxImportImgCount;
+  bool? mpv;
+  ImportMethod? method;
+  @JsonKey(name: 'remove_previous_gallery')
+  bool? removePreviousGallery;
+  @JsonKey(name: 'import_path')
+  String importPath;
+  ImportSize size;
+  factory ImportConfig.fromJson(Map<String, dynamic> json) =>
+      _$ImportConfigFromJson(json);
+  Map<String, dynamic> toJson() => _$ImportConfigToJson(this);
+}
+
+@JsonSerializable()
+class DefaultImportConfig {
+  DefaultImportConfig({
+    this.maxImportImgCount,
+    this.method,
+    this.mpv,
+    this.removePreviousGallery,
+  });
+  @JsonKey(name: 'max_import_img_count')
+  int? maxImportImgCount;
+  ImportMethod? method;
+  bool? mpv;
+  @JsonKey(name: 'remove_previous_gallery')
+  bool? removePreviousGallery;
+  factory DefaultImportConfig.fromJson(Map<String, dynamic> json) =>
+      _$DefaultImportConfigFromJson(json);
+  Map<String, dynamic> toJson() => _$DefaultImportConfigToJson(this);
 }

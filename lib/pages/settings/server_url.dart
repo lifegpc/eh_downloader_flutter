@@ -131,10 +131,14 @@ class _ServerUrlSettingsPage extends State<ServerUrlSettingsPage>
                                   .setString('baseUrl', _serverUrl + _apiPath)
                                   .then((re) {
                                 if (re) {
-                                  tryInitApi(context);
-                                  context.canPop()
-                                      ? context.pop()
-                                      : context.go("/");
+                                  if (context.mounted) {
+                                    tryInitApi(context);
+                                    context.canPop()
+                                        ? context.pop()
+                                        : context.go("/");
+                                  } else {
+                                    _log.warning("Context not mounted.");
+                                  }
                                 }
                               });
                             }
