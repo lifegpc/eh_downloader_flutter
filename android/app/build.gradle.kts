@@ -31,8 +31,8 @@ android {
         applicationId = "com.lifegpc.ehf"
         minSdk = 23
         targetSdk = 34
-        versionCode = flutter.versionCode()
-        versionName = flutter.versionName()
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
     signingConfigs {
