@@ -50,3 +50,15 @@ Map<String, dynamic> _$TokenWithUserInfoToJson(TokenWithUserInfo instance) =>
       'is_admin': instance.isAdmin,
       'permissions': UserPermissions.toJson2(instance.permissions),
     };
+
+GallerySharedTokenInfo _$GallerySharedTokenInfoFromJson(
+        Map<String, dynamic> json) =>
+    GallerySharedTokenInfo(
+      gid: (json['gid'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$GallerySharedTokenInfoToJson(
+        GallerySharedTokenInfo instance) =>
+    <String, dynamic>{
+      'gid': instance.gid,
+    };

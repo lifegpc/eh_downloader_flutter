@@ -58,3 +58,53 @@ class TokenWithUserInfo {
       _$TokenWithUserInfoFromJson(json);
   Map<String, dynamic> toJson() => _$TokenWithUserInfoToJson(this);
 }
+
+enum SharedTokenType {
+  @JsonValue(0)
+  gallery,
+}
+
+sealed class SharedTokenInfoBase {}
+
+@JsonSerializable()
+class GallerySharedTokenInfo implements SharedTokenInfoBase {
+  const GallerySharedTokenInfo({required this.gid});
+  final int gid;
+  factory GallerySharedTokenInfo.fromJson(Map<String, dynamic> json) =>
+      _$GallerySharedTokenInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$GallerySharedTokenInfoToJson(this);
+}
+
+class SharedToken {
+  const SharedToken({
+    required this.id,
+    required this.token,
+    this.expired,
+    required this.type,
+    required this.info,
+  });
+  final int id;
+  final String token;
+  final DateTime? expired;
+  final SharedTokenType type;
+  final SharedTokenInfoBase info;
+  factory SharedToken.fromJson(Map<String, dynamic> json) {
+    final int id = (json["id"] as num).toInt();
+    final String token = json["token"] as String;
+    final tmp = json["expired"] as String?;
+    final expired = tmp != null ? DateTime.parse(tmp) : null;
+    final int type = (json["type"] as num).toInt();
+    final info = json["info"] as Map<String, dynamic>;
+    switch (type) {
+      case 0:
+        return SharedToken(
+            id: id,
+            token: token,
+            expired: expired,
+            type: SharedTokenType.gallery,
+            info: GallerySharedTokenInfo.fromJson(info));
+      default:
+        throw ArgumentError.value(type, 'type', 'Invalid task type');
+    }
+  }
+}

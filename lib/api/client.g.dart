@@ -656,6 +656,38 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<SharedToken>> getSharedToken({CancelToken? cancel}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<SharedToken>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/shared_token',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = ApiResult<SharedToken>.fromJson(
+      _result.data!,
+      (json) => SharedToken.fromJson(json as Map<String, dynamic>),
+    );
+    return _value;
+  }
+
+  @override
   Future<HttpResponse<List<int>>> getFile(
     int id, {
     CancelToken? cancel,

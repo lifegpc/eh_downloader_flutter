@@ -44,6 +44,7 @@ class _NavigatorObserver extends NavigatorObserver {
       try {
         final args = route.settings.arguments as Map<String, String>?;
         queryBaseUrl = args?["base"];
+        shareToken = args?["share"];
       } catch (e) {
         _routerLog.warning("Failed to get arguments.", e);
       }

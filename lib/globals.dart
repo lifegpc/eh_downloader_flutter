@@ -35,12 +35,26 @@ final dio = Dio()
   ..options.validateStatus = (int? _) {
     return true;
   }
-  ..options.extra['withCredentials'] = true;
+  ..options.extra['withCredentials'] = true
+  ..interceptors.add(_TokenInterceptor());
 Config? _prefs;
 EHApi? _api;
 PersistCookieJar? _jar;
 ImageCaches? _imageCaches;
 String? queryBaseUrl;
+String? shareToken;
+
+class _TokenInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (shareToken != null &&
+        _api != null &&
+        options.uri.toString().startsWith(_api!.baseUrl!)) {
+      options.headers["X-Token"] = shareToken;
+    }
+    super.onRequest(options, handler);
+  }
+}
 
 Future<void> prepareJar() async {
   final jar = PersistCookieJar(storage: FileStorage(await getJarPath()));
@@ -86,6 +100,9 @@ bool get isImageCacheEnabled => prefs.getBool("enableImageCache") ?? true;
 
 void initApi(String baseUrl) {
   _api = EHApi(dio, baseUrl: baseUrl);
+  if (shareToken != null) {
+    dio.options.extra['withCredentials'] = false;
+  }
 }
 
 bool tryInitApi(BuildContext context) {

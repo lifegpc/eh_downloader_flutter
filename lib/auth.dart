@@ -15,6 +15,8 @@ class AuthInfo {
   ServerStatus? get status => _status;
   Token? _token;
   Token? get token => _token;
+  SharedToken? _sharedToken;
+  SharedToken? get sharedToken => _sharedToken;
   bool get isAuthed => (_user != null);
   bool _checked = false;
   bool get checked => _checked;
@@ -81,6 +83,21 @@ class AuthInfo {
 
   Future<bool> checkAuth() async {
     _isChecking = true;
+    if (shareToken != null) {
+      try {
+        final re = await api.getSharedToken();
+        if (re.ok) {
+          _sharedToken = re.unwrap();
+          _checked = true;
+          await getServerStatus();
+          return true;
+        } else {
+          shareToken = null;
+        }
+      } catch (e) {
+        _log.warning("Failed to check shareToken.", e);
+      }
+    }
     try {
       final re = await api.getUser();
       if (re.ok) {

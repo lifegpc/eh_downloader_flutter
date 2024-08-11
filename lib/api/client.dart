@@ -189,6 +189,9 @@ abstract class _EHApi {
   @GET('/token')
   Future<ApiResult<TokenWithUserInfo>> getToken(
       {@Query("token") String? token, @CancelRequest() CancelToken? cancel});
+  @GET('/shared_token')
+  Future<ApiResult<SharedToken>> getSharedToken(
+      {@CancelRequest() CancelToken? cancel});
 
   @GET('/file/{id}')
   @DioResponseType(ResponseType.bytes)
