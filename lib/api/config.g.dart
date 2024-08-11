@@ -48,6 +48,7 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       checkFileHash: json['check_file_hash'] as bool,
       importMethod: $enumDecode(_$ImportMethodEnumMap, json['import_method']),
       maxImportImgCount: (json['max_import_img_count'] as num).toInt(),
+      enableServerTiming: json['enable_server_timing'] as bool,
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -86,6 +87,7 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'check_file_hash': instance.checkFileHash,
       'import_method': _$ImportMethodEnumMap[instance.importMethod]!,
       'max_import_img_count': instance.maxImportImgCount,
+      'enable_server_timing': instance.enableServerTiming,
     };
 
 const _$ThumbnailMethodEnumMap = {
@@ -154,6 +156,7 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
       importMethod:
           $enumDecodeNullable(_$ImportMethodEnumMap, json['import_method']),
       maxImportImgCount: (json['max_import_img_count'] as num?)?.toInt(),
+      enableServerTiming: json['enable_server_timing'] as bool?,
     );
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
@@ -193,4 +196,5 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'check_file_hash': instance.checkFileHash,
       'import_method': _$ImportMethodEnumMap[instance.importMethod],
       'max_import_img_count': instance.maxImportImgCount,
+      'enable_server_timing': instance.enableServerTiming,
     };

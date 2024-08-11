@@ -74,6 +74,7 @@ class Config {
     required this.checkFileHash,
     required this.importMethod,
     required this.maxImportImgCount,
+    required this.enableServerTiming,
   });
   bool cookies;
   @JsonKey(name: 'db_path')
@@ -138,6 +139,8 @@ class Config {
   ImportMethod importMethod;
   @JsonKey(name: 'max_import_img_count')
   int maxImportImgCount;
+  @JsonKey(name: 'enable_server_timing')
+  bool enableServerTiming;
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigToJson(this);
 }
@@ -192,6 +195,7 @@ class ConfigOptional {
     this.checkFileHash,
     this.importMethod,
     this.maxImportImgCount,
+    this.enableServerTiming,
   });
   String? cookies;
   @JsonKey(name: 'db_path')
@@ -256,6 +260,8 @@ class ConfigOptional {
   ImportMethod? importMethod;
   @JsonKey(name: 'max_import_img_count')
   int? maxImportImgCount;
+  @JsonKey(name: 'enable_server_timing')
+  bool? enableServerTiming;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigOptionalToJson(this);

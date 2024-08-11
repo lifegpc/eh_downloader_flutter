@@ -317,6 +317,18 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
                 }
               },
               label: Text(i18n.checkFileHash))),
+          _buildWithVecticalPadding(LabeledCheckbox(
+            value: _now.enableServerTiming ?? _config!.enableServerTiming,
+            onChanged: (b) {
+              if (b != null) {
+                setState(() {
+                  _now.enableServerTiming = b;
+                  _changed = true;
+                });
+              }
+            },
+            label: Text(i18n.enableServerTiming),
+          )),
         ]));
   }
 
