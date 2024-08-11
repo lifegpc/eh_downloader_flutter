@@ -40,6 +40,7 @@ Config? _prefs;
 EHApi? _api;
 PersistCookieJar? _jar;
 ImageCaches? _imageCaches;
+String? queryBaseUrl;
 
 Future<void> prepareJar() async {
   final jar = PersistCookieJar(storage: FileStorage(await getJarPath()));
@@ -94,6 +95,14 @@ bool tryInitApi(BuildContext context) {
       return true;
     }
     initApi("${Uri.base.origin}/api/");
+    clearAllStates(context);
+    return true;
+  }
+  if (queryBaseUrl != null) {
+    if (_api != null && _api!.baseUrl == queryBaseUrl) {
+      return true;
+    }
+    initApi(queryBaseUrl!);
     clearAllStates(context);
     return true;
   }

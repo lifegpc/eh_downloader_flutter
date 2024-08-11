@@ -35,6 +35,24 @@ import 'viewer/single.dart';
 
 final _routerLog = Logger("Router");
 
+bool _isFirst = true;
+
+class _NavigatorObserver extends NavigatorObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    if (_isFirst) {
+      try {
+        final args = route.settings.arguments as Map<String, String>?;
+        queryBaseUrl = args?["base"];
+      } catch (e) {
+        _routerLog.warning("Failed to get arguments.", e);
+      }
+      _isFirst = false;
+    }
+    super.didPush(route, previousRoute);
+  }
+}
+
 final _router = GoRouter(
   routes: [
     GoRoute(
@@ -288,6 +306,9 @@ final _router = GoRouter(
                 return NewImportTaskPage(gid: gid, token: token);
               });
         }),
+  ],
+  observers: [
+    _NavigatorObserver(),
   ],
 );
 
