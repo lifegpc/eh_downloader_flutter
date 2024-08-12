@@ -108,3 +108,15 @@ class SharedToken {
     }
   }
 }
+
+@JsonSerializable(createToJson: false)
+class SharedTokenWithUrl {
+  const SharedTokenWithUrl({
+    required this.token,
+    required this.url,
+  });
+  final SharedToken token;
+  final String url;
+  factory SharedTokenWithUrl.fromJson(Map<String, dynamic> json) =>
+      _$SharedTokenWithUrlFromJson(json);
+}

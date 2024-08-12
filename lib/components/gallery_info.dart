@@ -86,18 +86,21 @@ class _GalleryInfo extends State<GalleryInfo> with ThemeModeWidget {
       controller: controller,
       slivers: [
         SliverAppBar(
-          leading: IconButton(
-            icon: Icon(widget.isSelectMode ? Icons.close : Icons.arrow_back),
-            onPressed: () {
-              if (widget.isSelectMode) {
-                if (widget.onSelectChanged != null) {
-                  widget.onSelectChanged!(false);
-                }
-              } else {
-                context.canPop() ? context.pop() : context.go("/");
-              }
-            },
-          ),
+          leading: shareToken != null && !widget.isSelectMode
+              ? Container()
+              : IconButton(
+                  icon: Icon(
+                      widget.isSelectMode ? Icons.close : Icons.arrow_back),
+                  onPressed: () {
+                    if (widget.isSelectMode) {
+                      if (widget.onSelectChanged != null) {
+                        widget.onSelectChanged!(false);
+                      }
+                    } else {
+                      context.canPop() ? context.pop() : context.go("/");
+                    }
+                  },
+                ),
           title: SelectableText(widget.gData.meta.preferredTitle,
               maxLines: 1, minLines: 1),
           actions: [

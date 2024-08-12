@@ -16,6 +16,7 @@ import 'tags.dart';
 import 'task.dart';
 import 'token.dart';
 import 'user.dart';
+import '../globals.dart';
 
 part 'client.g.dart';
 
@@ -245,6 +246,12 @@ abstract class _EHApi {
       @Query("tag") String? tag,
       @Query("category") String? category,
       @CancelRequest() CancelToken? cancel});
+  @PUT('/shared_token')
+  @MultiPart()
+  Future<ApiResult<SharedTokenWithUrl>> shareGallery(@Part(name: "gid") int gid,
+      {@Part(name: "expired") int? expired,
+      @Part(name: "type") String type = "gallery",
+      @CancelRequest() CancelToken? cancel});
 
   @GET('/tag/{id}')
   // ignore: unused_element
@@ -437,6 +444,7 @@ class EHApi extends __EHApi {
       "jpn_title": jpnTitle?.toString(),
       "max_length": maxLength?.toString(),
       "export_ad": exportAd?.toString(),
+      "share": shareToken,
     };
     queries.removeWhere((key, value) => value == null);
     final newUri = uri

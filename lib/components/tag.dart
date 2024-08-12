@@ -10,6 +10,9 @@ class TagWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t =
+        Text(name ?? (tag.tag.contains(':') ? tag.tag.split(':')[1] : tag.tag));
+    if (shareToken != null) return t;
     return InkWell(
         onTap: () {
           context.pushNamed("/galleries",
@@ -18,6 +21,6 @@ class TagWidget extends StatelessWidget {
               },
               extra: GalleriesPageExtra(translatedTag: tag.translated));
         },
-        child: Text(name ?? (tag.tag.contains(':') ? tag.tag.split(':')[1] : tag.tag)));
+        child: t);
   }
 }

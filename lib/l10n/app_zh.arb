@@ -314,5 +314,6 @@
             }
         }
     },
-    "enableServerTiming": "测量服务器所用时间"
+    "enableServerTiming": "测量服务器所用时间",
+    "shareGallery": "分享画廊"
 }

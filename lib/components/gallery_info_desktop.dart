@@ -1,3 +1,4 @@
+import 'package:eh_downloader_flutter/globals.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -94,28 +95,34 @@ class GalleryInfoDesktop extends StatelessWidget {
                         SizedBox(
                             width: 170,
                             child: Column(children: [
-                              SelectableText.rich(TextSpan(
-                                  text: gData.meta.category,
-                                  style: TextStyle(color: cs.secondary),
-                                  mouseCursor: SystemMouseCursors.click,
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      context.pushNamed("/galleries",
-                                          queryParameters: {
-                                            "category": gData.meta.category
-                                          });
-                                    })),
-                              SelectableText.rich(TextSpan(
-                                  text: gData.meta.uploader,
-                                  style: TextStyle(color: cs.secondary),
-                                  mouseCursor: SystemMouseCursors.click,
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      context.pushNamed("/galleries",
-                                          queryParameters: {
-                                            "uploader": gData.meta.uploader
-                                          });
-                                    })),
+                              shareToken != null
+                                  ? SelectableText(gData.meta.category,
+                                      style: TextStyle(color: cs.secondary))
+                                  : SelectableText.rich(TextSpan(
+                                      text: gData.meta.category,
+                                      style: TextStyle(color: cs.secondary),
+                                      mouseCursor: SystemMouseCursors.click,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          context.pushNamed("/galleries",
+                                              queryParameters: {
+                                                "category": gData.meta.category
+                                              });
+                                        })),
+                              shareToken != null
+                                  ? SelectableText(gData.meta.uploader,
+                                      style: TextStyle(color: cs.secondary))
+                                  : SelectableText.rich(TextSpan(
+                                      text: gData.meta.uploader,
+                                      style: TextStyle(color: cs.secondary),
+                                      mouseCursor: SystemMouseCursors.click,
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          context.pushNamed("/galleries",
+                                              queryParameters: {
+                                                "uploader": gData.meta.uploader
+                                              });
+                                        })),
                               _KeyValue(
                                 "${i18n.posted}${i18n.colon}",
                                 DateFormat.yMd(locale)

@@ -62,3 +62,9 @@ Map<String, dynamic> _$GallerySharedTokenInfoToJson(
     <String, dynamic>{
       'gid': instance.gid,
     };
+
+SharedTokenWithUrl _$SharedTokenWithUrlFromJson(Map<String, dynamic> json) =>
+    SharedTokenWithUrl(
+      token: SharedToken.fromJson(json['token'] as Map<String, dynamic>),
+      url: json['url'] as String,
+    );

@@ -314,5 +314,6 @@
             }
         }
     },
-    "enableServerTiming": "Enable server time tracking"
+    "enableServerTiming": "Enable server time tracking",
+    "shareGallery": "Share gallery"
 }
