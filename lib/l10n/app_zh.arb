@@ -315,5 +315,17 @@
         }
     },
     "enableServerTiming": "测量服务器所用时间",
-    "shareGallery": "分享画廊"
+    "shareGallery": "分享画廊",
+    "expireTime": "过期时间",
+    "token": "令牌",
+    "action": "操作",
+    "never": "从不",
+    "oneDayAfter": "1 天后",
+    "oneWeekAfter": "1 周后",
+    "oneMonthAfter": "1 月后",
+    "custom": "自定义",
+    "editExpireTime": "修改过期时间",
+    "share": "分享",
+    "failedChangeExpireTime": "修改过期时间失败：",
+    "failedShareGallery": "分享画廊失败："
 }

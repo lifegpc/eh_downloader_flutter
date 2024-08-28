@@ -1057,6 +1057,102 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<SharedTokenWithUrl>> updateShareGallery(
+    String token, {
+    int? expired,
+    String type = "gallery",
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'token',
+      token,
+    ));
+    if (expired != null) {
+      _data.fields.add(MapEntry(
+        'expired',
+        expired.toString(),
+      ));
+    }
+    _data.fields.add(MapEntry(
+      'type',
+      type,
+    ));
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<SharedTokenWithUrl>>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/shared_token',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = ApiResult<SharedTokenWithUrl>.fromJson(
+      _result.data!,
+      (json) => SharedTokenWithUrl.fromJson(json as Map<String, dynamic>),
+    );
+    return _value;
+  }
+
+  @override
+  Future<ApiResult<List<SharedTokenWithUrl>>> listShareGalleries({
+    int? gid,
+    String type = "gallery",
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'gid': gid,
+      r'type': type,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResult<List<SharedTokenWithUrl>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/shared_token/list',
+              queryParameters: queryParameters,
+              data: _data,
+              cancelToken: cancel,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = ApiResult<List<SharedTokenWithUrl>>.fromJson(
+      _result.data!,
+      (json) => json is List<dynamic>
+          ? json
+              .map<SharedTokenWithUrl>(
+                  (i) => SharedTokenWithUrl.fromJson(i as Map<String, dynamic>))
+              .toList()
+          : List.empty(),
+    );
+    return _value;
+  }
+
+  @override
   Future<ApiResult<Tags>> _getTags(
     String id, {
     CancelToken? cancel,

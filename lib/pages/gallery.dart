@@ -50,6 +50,7 @@ class _GalleryPage extends State<GalleryPage>
   final List<String> _selected = [];
   bool? get isAllNsfw => _data?.isAllNsfw;
   bool get isSelectMode => _isSelectMode;
+  int get gid => widget._gid;
   Future<void> markGalleryAsNsfw(bool isNsfw) async {
     try {
       _markAsNsfwCancel = CancelToken();

@@ -315,5 +315,17 @@
         }
     },
     "enableServerTiming": "Enable server time tracking",
-    "shareGallery": "Share gallery"
+    "shareGallery": "Share gallery",
+    "expireTime": "Expire time",
+    "token": "Token",
+    "action": "Action",
+    "never": "Never",
+    "oneDayAfter": "1 day after",
+    "oneWeekAfter": "1 week after",
+    "oneMonthAfter": "1 month after",
+    "custom": "Custom",
+    "editExpireTime": "Edit expire time",
+    "share": "Share",
+    "failedChangeExpireTime": "Failed to change expired time: ",
+    "failedShareGallery": "Failed to share gallery: "
 }

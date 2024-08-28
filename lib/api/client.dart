@@ -252,6 +252,18 @@ abstract class _EHApi {
       {@Part(name: "expired") int? expired,
       @Part(name: "type") String type = "gallery",
       @CancelRequest() CancelToken? cancel});
+  @PATCH('/shared_token')
+  @MultiPart()
+  Future<ApiResult<SharedTokenWithUrl>> updateShareGallery(
+      @Part(name: "token") String token,
+      {@Part(name: "expired") int? expired,
+      @Part(name: "type") String type = "gallery",
+      @CancelRequest() CancelToken? cancel});
+  @GET('/shared_token/list')
+  Future<ApiResult<List<SharedTokenWithUrl>>> listShareGalleries(
+      {@Query("gid") int? gid,
+      @Query("type") String type = "gallery",
+      @CancelRequest() CancelToken? cancel});
 
   @GET('/tag/{id}')
   // ignore: unused_element

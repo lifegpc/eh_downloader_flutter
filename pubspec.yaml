@@ -16,6 +16,7 @@ dependencies:
   file: ^7.0.0
   flutter:
     sdk: flutter
+  flutter_datetime_picker_plus: ^2.2.0
   flutter_hooks: ^0.20.0
   flutter_localizations:
     sdk: flutter

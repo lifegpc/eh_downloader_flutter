@@ -33,6 +33,8 @@ class AuthInfo {
       _user?.permissions.has(UserPermission.deleteGallery);
   bool? get canManageTasks =>
       _user?.permissions.has(UserPermission.manageTasks);
+  bool? get canShareGallery =>
+      _user?.permissions.has(UserPermission.shareGallery);
 
   void clear() {
     _user = null;

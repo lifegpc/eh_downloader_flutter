@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart'
     show ApplicationSwitcherDescription, SystemChrome;
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    show LocaleType;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -171,6 +173,7 @@ enum MoreVertSettings {
   taskManager,
   markAsAd,
   markAsNonAd,
+  shareGallery,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -195,6 +198,12 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
       break;
     case MoreVertSettings.markAsNonAd:
       GalleryPage.maybeOf(context)?.markAsAd(false);
+      break;
+    case MoreVertSettings.shareGallery:
+      final gid = GalleryPage.maybeOf(context)?.gid;
+      if (gid != null) {
+        context.push("/dialog/gallery/share/$gid");
+      }
       break;
     default:
       break;
@@ -222,6 +231,10 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
   if (path != "/task_manager" && auth.canManageTasks == true) {
     list.add(PopupMenuItem(
         value: MoreVertSettings.taskManager, child: Text(i18n.taskManager)));
+  }
+  if (path == "/gallery/:gid" && auth.canShareGallery == true) {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.shareGallery, child: Text(i18n.shareGallery)));
   }
   var showNsfw = prefs.getBool("showNsfw") ?? false;
   list.add(PopupMenuItem(
@@ -361,6 +374,16 @@ enum Lang {
         return const Locale("zh", "CN");
       default:
         return PlatformDispatcher.instance.locale;
+    }
+  }
+
+  LocaleType toLocaleType() {
+    final l = toLocale();
+    switch (l.languageCode) {
+      case "zh":
+        return LocaleType.zh;
+      default:
+        return LocaleType.en;
     }
   }
 }

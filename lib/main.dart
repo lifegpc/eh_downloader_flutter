@@ -10,6 +10,7 @@ import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
 import 'dialog/edit_user_page.dart';
 import 'dialog/gallery_details_page.dart';
+import 'dialog/gallery_share_page.dart';
 import 'dialog/new_download_task_page.dart';
 import 'dialog/new_export_zip_task_page.dart';
 import 'dialog/new_import_task_page.dart';
@@ -306,6 +307,25 @@ final _router = GoRouter(
               builder: (context) {
                 return NewImportTaskPage(gid: gid, token: token);
               });
+        }),
+    GoRoute(
+        path: GallerySharePage.routeName,
+        pageBuilder: (context, state) {
+          final gid = int.parse(state.pathParameters["gid"]!);
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return GallerySharePage(gid);
+              });
+        },
+        redirect: (context, state) {
+          try {
+            int.parse(state.pathParameters["gid"]!);
+            return null;
+          } catch (e) {
+            _routerLog.warning("Failed to parse gid:", e);
+            return "/";
+          }
         }),
   ],
   observers: [
