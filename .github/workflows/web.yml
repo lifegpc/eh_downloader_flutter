@@ -35,7 +35,7 @@ jobs:
       - name: Install wrangler
         run: npm install wrangler -g
       - name: Build web
-        run: flutter build web
+        run: flutter build web --dart-define=usePathUrl=true
       - name: Upload
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
