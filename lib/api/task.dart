@@ -433,3 +433,12 @@ class DefaultImportConfig {
       _$DefaultImportConfigFromJson(json);
   Map<String, dynamic> toJson() => _$DefaultImportConfigToJson(this);
 }
+
+@JsonSerializable()
+class UpdateTagTranslationConfig {
+  UpdateTagTranslationConfig({this.file});
+  String? file;
+  factory UpdateTagTranslationConfig.fromJson(Map<String, dynamic> json) =>
+      _$UpdateTagTranslationConfigFromJson(json);
+  Map<String, dynamic> toJson() => _$UpdateTagTranslationConfigToJson(this);
+}

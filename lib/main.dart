@@ -14,6 +14,7 @@ import 'dialog/gallery_share_page.dart';
 import 'dialog/new_download_task_page.dart';
 import 'dialog/new_export_zip_task_page.dart';
 import 'dialog/new_import_task_page.dart';
+import 'dialog/new_update_tag_translation_task_page.dart';
 import 'dialog/new_user_page.dart';
 import 'dialog/task_page.dart';
 import 'globals.dart';
@@ -326,6 +327,15 @@ final _router = GoRouter(
             _routerLog.warning("Failed to parse gid:", e);
             return "/";
           }
+        }),
+    GoRoute(
+        path: NewUpdateTagTranslationTaskPage.routeName,
+        pageBuilder: (context, state) {
+          return DialogPage(
+              key: state.pageKey,
+              builder: (context) {
+                return NewUpdateTagTranslationTaskPage();
+              });
         }),
   ],
   observers: [

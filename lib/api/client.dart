@@ -340,6 +340,13 @@ abstract class _EHApi {
     @Part(name: "type") String t = "import",
     @CancelRequest() CancelToken? cancel,
   });
+  @PUT('/task')
+  @MultiPart()
+  Future<ApiResult<Task>> createUpdateTagTranslationTask({
+    @Part(name: "cfg") UpdateTagTranslationConfig? cfg,
+    @Part(name: "type") String t = "update_tag_translation",
+    @CancelRequest() CancelToken? cancel,
+  });
   @GET('/task/download_cfg')
   Future<ApiResult<DownloadConfig>> getDefaultDownloadConfig(
       {@CancelRequest() CancelToken? cancel});

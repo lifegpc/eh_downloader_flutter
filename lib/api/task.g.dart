@@ -273,3 +273,15 @@ Map<String, dynamic> _$DefaultImportConfigToJson(
       'mpv': instance.mpv,
       'remove_previous_gallery': instance.removePreviousGallery,
     };
+
+UpdateTagTranslationConfig _$UpdateTagTranslationConfigFromJson(
+        Map<String, dynamic> json) =>
+    UpdateTagTranslationConfig(
+      file: json['file'] as String?,
+    );
+
+Map<String, dynamic> _$UpdateTagTranslationConfigToJson(
+        UpdateTagTranslationConfig instance) =>
+    <String, dynamic>{
+      'file': instance.file,
+    };

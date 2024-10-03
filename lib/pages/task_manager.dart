@@ -221,6 +221,10 @@ class _TaskManagerPage extends State<TaskManagerPage>
               value: TaskType.import,
               child: Text(i18n.createImportTask),
             ),
+            PopupMenuItem(
+              value: TaskType.updateTagTranslation,
+              child: Text(i18n.createUpdateTagTranslationTask),
+            ),
           ];
         },
         onSelected: (TaskType type) {
@@ -230,6 +234,8 @@ class _TaskManagerPage extends State<TaskManagerPage>
             context.push("/dialog/new_export_zip_task");
           } else if (type == TaskType.import) {
             context.push("/dialog/new_import_task");
+          } else if (type == TaskType.updateTagTranslation) {
+            context.push("/dialog/new_update_tag_translation_task");
           }
         });
   }

@@ -328,5 +328,8 @@
     "share": "分享",
     "failedChangeExpireTime": "修改过期时间失败：",
     "failedShareGallery": "分享画廊失败：",
-    "updateTagTranslation": "更新标签的翻译"
+    "updateTagTranslation": "更新标签的翻译",
+    "createUpdateTagTranslationTask": "创建更新标签翻译的任务",
+    "translationFile": "翻译文件",
+    "translationFileHelp": "包含标签翻译的JSON文件路径。未指定时将从网站上下载。"
 }
