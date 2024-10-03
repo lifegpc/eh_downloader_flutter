@@ -15,7 +15,9 @@ enum TaskType {
   @JsonValue(3)
   fixGalleryPage,
   @JsonValue(4)
-  import;
+  import,
+  @JsonValue(5)
+  updateTagTranslation;
 
   String text(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
@@ -30,6 +32,8 @@ enum TaskType {
         return i18n.fixGalleryPageTask;
       case TaskType.import:
         return i18n.importTask;
+      case TaskType.updateTagTranslation:
+        return i18n.updateTagTranslation;
     }
   }
 }
@@ -183,6 +187,23 @@ class TaskImportProgress implements TaskProgressBasicType {
   Map<String, dynamic> toJson() => _$TaskImportProgressToJson(this);
 }
 
+@JsonSerializable()
+class TaskUpdateTagTranslationProgress implements TaskProgressBasicType {
+  const TaskUpdateTagTranslationProgress({
+    required this.addedTag,
+    required this.totalTag,
+  });
+  @JsonKey(name: 'added_tag')
+  final int addedTag;
+  @JsonKey(name: 'total_tag')
+  final int totalTag;
+  factory TaskUpdateTagTranslationProgress.fromJson(
+          Map<String, dynamic> json) =>
+      _$TaskUpdateTagTranslationProgressFromJson(json);
+  Map<String, dynamic> toJson() =>
+      _$TaskUpdateTagTranslationProgressToJson(this);
+}
+
 class TaskProgress {
   const TaskProgress({
     required this.type,
@@ -229,6 +250,13 @@ class TaskProgress {
           type: TaskType.import,
           taskId: taskId,
           detail: TaskImportProgress.fromJson(
+              json['detail'] as Map<String, dynamic>),
+        );
+      case 5:
+        return TaskProgress(
+          type: TaskType.updateTagTranslation,
+          taskId: taskId,
+          detail: TaskUpdateTagTranslationProgress.fromJson(
               json['detail'] as Map<String, dynamic>),
         );
       default:

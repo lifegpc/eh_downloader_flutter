@@ -57,6 +57,10 @@ class _TaskView extends State<TaskView> {
       case TaskType.import:
         final progress = widget.task.progress as TaskImportProgress;
         return progress.importedPage / progress.totalPage;
+      case TaskType.updateTagTranslation:
+        final progress =
+            widget.task.progress as TaskUpdateTagTranslationProgress;
+        return progress.addedTag / progress.totalTag;
     }
   }
 
@@ -96,6 +100,10 @@ class _TaskView extends State<TaskView> {
           ? tasks.meta[gid]!.preferredTitle
           : gid.toString();
       return Text("${i18n.importTask} $title",
+          maxLines: 1, overflow: TextOverflow.ellipsis);
+    }
+    if (typ == TaskType.updateTagTranslation) {
+      return Text(i18n.updateTagTranslation,
           maxLines: 1, overflow: TextOverflow.ellipsis);
     }
     return Container();

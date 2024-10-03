@@ -12,11 +12,14 @@ class __EHApi implements _EHApi {
   __EHApi(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   });
 
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<ApiResult<BUser>> changeUserName(
@@ -32,29 +35,35 @@ class __EHApi implements _EHApi {
       'username',
       username,
     ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+    final _options = _setStreamType<ApiResult<BUser>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/user/change_name',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<BUser>.fromJson(
-      _result.data!,
-      (json) => BUser.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/user/change_name',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<BUser> _value;
+    try {
+      _value = ApiResult<BUser>.fromJson(
+        _result.data!,
+        (json) => BUser.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -82,29 +91,35 @@ class __EHApi implements _EHApi {
       'new',
       newPassword,
     ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+    final _options = _setStreamType<ApiResult<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/user/change_password',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<dynamic>.fromJson(
-      _result.data!,
-      (json) => json as dynamic,
-    );
+        .compose(
+          _dio.options,
+          '/user/change_password',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<dynamic> _value;
+    try {
+      _value = ApiResult<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -141,29 +156,35 @@ class __EHApi implements _EHApi {
         permissions.toString(),
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<int>>(Options(
+    final _options = _setStreamType<ApiResult<int>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/user',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<int>.fromJson(
-      _result.data!,
-      (json) => json as int,
-    );
+        .compose(
+          _dio.options,
+          '/user',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<int> _value;
+    try {
+      _value = ApiResult<int>.fromJson(
+        _result.data!,
+        (json) => json as int,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -190,29 +211,35 @@ class __EHApi implements _EHApi {
         username,
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+    final _options = _setStreamType<ApiResult<dynamic>>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/user',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<dynamic>.fromJson(
-      _result.data!,
-      (json) => json as dynamic,
-    );
+        .compose(
+          _dio.options,
+          '/user',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<dynamic> _value;
+    try {
+      _value = ApiResult<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -230,28 +257,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+    final _options = _setStreamType<ApiResult<BUser>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/user',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<BUser>.fromJson(
-      _result.data!,
-      (json) => BUser.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/user',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<BUser> _value;
+    try {
+      _value = ApiResult<BUser>.fromJson(
+        _result.data!,
+        (json) => BUser.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -271,32 +304,38 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<List<BUser>>>(Options(
+    final _options = _setStreamType<ApiResult<List<BUser>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/user/list',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<List<BUser>>.fromJson(
-      _result.data!,
-      (json) => json is List<dynamic>
-          ? json
-              .map<BUser>((i) => BUser.fromJson(i as Map<String, dynamic>))
-              .toList()
-          : List.empty(),
-    );
+        .compose(
+          _dio.options,
+          '/user/list',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<List<BUser>> _value;
+    try {
+      _value = ApiResult<List<BUser>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                .map<BUser>((i) => BUser.fromJson(i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -351,29 +390,35 @@ class __EHApi implements _EHApi {
         permissions.toString(),
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<BUser>>(Options(
+    final _options = _setStreamType<ApiResult<BUser>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/user',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<BUser>.fromJson(
-      _result.data!,
-      (json) => BUser.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/user',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<BUser> _value;
+    try {
+      _value = ApiResult<BUser>.fromJson(
+        _result.data!,
+        (json) => BUser.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -384,28 +429,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<ServerStatus>>(Options(
+    final _options = _setStreamType<ApiResult<ServerStatus>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/status',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<ServerStatus>.fromJson(
-      _result.data!,
-      (json) => ServerStatus.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/status',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<ServerStatus> _value;
+    try {
+      _value = ApiResult<ServerStatus>.fromJson(
+        _result.data!,
+        (json) => ServerStatus.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -482,29 +533,35 @@ class __EHApi implements _EHApi {
         clientPlatform,
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
+    final _options = _setStreamType<ApiResult<Token>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<Token>.fromJson(
-      _result.data!,
-      (json) => Token.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Token> _value;
+    try {
+      _value = ApiResult<Token>.fromJson(
+        _result.data!,
+        (json) => Token.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -552,29 +609,35 @@ class __EHApi implements _EHApi {
         clientPlatform,
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Token>>(Options(
+    final _options = _setStreamType<ApiResult<Token>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<Token>.fromJson(
-      _result.data!,
-      (json) => Token.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Token> _value;
+    try {
+      _value = ApiResult<Token>.fromJson(
+        _result.data!,
+        (json) => Token.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -594,29 +657,35 @@ class __EHApi implements _EHApi {
         token,
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<bool>>(Options(
+    final _options = _setStreamType<ApiResult<bool>>(Options(
       method: 'DELETE',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<bool>.fromJson(
-      _result.data!,
-      (json) => json as bool,
-    );
+        .compose(
+          _dio.options,
+          '/token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<bool> _value;
+    try {
+      _value = ApiResult<bool>.fromJson(
+        _result.data!,
+        (json) => json as bool,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -630,28 +699,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<TokenWithUserInfo>>(Options(
+    final _options = _setStreamType<ApiResult<TokenWithUserInfo>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<TokenWithUserInfo>.fromJson(
-      _result.data!,
-      (json) => TokenWithUserInfo.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<TokenWithUserInfo> _value;
+    try {
+      _value = ApiResult<TokenWithUserInfo>.fromJson(
+        _result.data!,
+        (json) => TokenWithUserInfo.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -662,28 +737,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<SharedToken>>(Options(
+    final _options = _setStreamType<ApiResult<SharedToken>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/shared_token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<SharedToken>.fromJson(
-      _result.data!,
-      (json) => SharedToken.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/shared_token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<SharedToken> _value;
+    try {
+      _value = ApiResult<SharedToken>.fromJson(
+        _result.data!,
+        (json) => SharedToken.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -697,26 +778,32 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
+    final _options = _setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
       responseType: ResponseType.bytes,
     )
-            .compose(
-              _dio.options,
-              '/file/${id}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = _result.data!.cast<int>();
+        .compose(
+          _dio.options,
+          '/file/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<int> _value;
+    try {
+      _value = _result.data!.cast<int>();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
@@ -732,28 +819,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<EhFileExtend>>(Options(
+    final _options = _setStreamType<ApiResult<EhFileExtend>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/file/${id}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<EhFileExtend>.fromJson(
-      _result.data!,
-      (json) => EhFileExtend.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/file/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<EhFileExtend> _value;
+    try {
+      _value = ApiResult<EhFileExtend>.fromJson(
+        _result.data!,
+        (json) => EhFileExtend.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -773,26 +866,32 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
+    final _options = _setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
       responseType: ResponseType.bytes,
     )
-            .compose(
-              _dio.options,
-              '/file/random',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = _result.data!.cast<int>();
+        .compose(
+          _dio.options,
+          '/file/random',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<int> _value;
+    try {
+      _value = _result.data!.cast<int>();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
@@ -807,28 +906,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<EhFiles>>(Options(
+    final _options = _setStreamType<ApiResult<EhFiles>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/files/${token}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<EhFiles>.fromJson(
-      _result.data!,
-      (json) => EhFiles.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/files/${token}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<EhFiles> _value;
+    try {
+      _value = ApiResult<EhFiles>.fromJson(
+        _result.data!,
+        (json) => EhFiles.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -857,26 +962,32 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<HttpResponse<List<int>>>(Options(
+    final _options = _setStreamType<HttpResponse<List<int>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
       responseType: ResponseType.bytes,
     )
-            .compose(
-              _dio.options,
-              '/thumbnail/${id}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = _result.data!.cast<int>();
+        .compose(
+          _dio.options,
+          '/thumbnail/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<int> _value;
+    try {
+      _value = _result.data!.cast<int>();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
   }
@@ -891,28 +1002,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<GalleryData>>(Options(
+    final _options = _setStreamType<ApiResult<GalleryData>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/gallery/${gid}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<GalleryData>.fromJson(
-      _result.data!,
-      (json) => GalleryData.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/gallery/${gid}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<GalleryData> _value;
+    try {
+      _value = ApiResult<GalleryData>.fromJson(
+        _result.data!,
+        (json) => GalleryData.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -926,28 +1043,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<GMetaInfos>>(Options(
+    final _options = _setStreamType<ApiResult<GMetaInfos>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/gallery/meta/${gids}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<GMetaInfos>.fromJson(
-      _result.data!,
-      (json) => GMetaInfos.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/gallery/meta/${gids}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<GMetaInfos> _value;
+    try {
+      _value = ApiResult<GMetaInfos>.fromJson(
+        _result.data!,
+        (json) => GMetaInfos.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -975,32 +1098,38 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<List<GMeta>>>(Options(
+    final _options = _setStreamType<ApiResult<List<GMeta>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/gallery/list',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<List<GMeta>>.fromJson(
-      _result.data!,
-      (json) => json is List<dynamic>
-          ? json
-              .map<GMeta>((i) => GMeta.fromJson(i as Map<String, dynamic>))
-              .toList()
-          : List.empty(),
-    );
+        .compose(
+          _dio.options,
+          '/gallery/list',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<List<GMeta>> _value;
+    try {
+      _value = ApiResult<List<GMeta>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                .map<GMeta>((i) => GMeta.fromJson(i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1030,29 +1159,35 @@ class __EHApi implements _EHApi {
       'type',
       type,
     ));
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<SharedTokenWithUrl>>(Options(
+    final _options = _setStreamType<ApiResult<SharedTokenWithUrl>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/shared_token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<SharedTokenWithUrl>.fromJson(
-      _result.data!,
-      (json) => SharedTokenWithUrl.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/shared_token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<SharedTokenWithUrl> _value;
+    try {
+      _value = ApiResult<SharedTokenWithUrl>.fromJson(
+        _result.data!,
+        (json) => SharedTokenWithUrl.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1082,29 +1217,35 @@ class __EHApi implements _EHApi {
       'type',
       type,
     ));
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<SharedTokenWithUrl>>(Options(
+    final _options = _setStreamType<ApiResult<SharedTokenWithUrl>>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/shared_token',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<SharedTokenWithUrl>.fromJson(
-      _result.data!,
-      (json) => SharedTokenWithUrl.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/shared_token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<SharedTokenWithUrl> _value;
+    try {
+      _value = ApiResult<SharedTokenWithUrl>.fromJson(
+        _result.data!,
+        (json) => SharedTokenWithUrl.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1122,7 +1263,7 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
+    final _options =
         _setStreamType<ApiResult<List<SharedTokenWithUrl>>>(Options(
       method: 'GET',
       headers: _headers,
@@ -1139,16 +1280,23 @@ class __EHApi implements _EHApi {
                 baseUrl: _combineBaseUrls(
               _dio.options.baseUrl,
               baseUrl,
-            ))));
-    final _value = ApiResult<List<SharedTokenWithUrl>>.fromJson(
-      _result.data!,
-      (json) => json is List<dynamic>
-          ? json
-              .map<SharedTokenWithUrl>(
-                  (i) => SharedTokenWithUrl.fromJson(i as Map<String, dynamic>))
-              .toList()
-          : List.empty(),
-    );
+            )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<List<SharedTokenWithUrl>> _value;
+    try {
+      _value = ApiResult<List<SharedTokenWithUrl>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                .map<SharedTokenWithUrl>((i) =>
+                    SharedTokenWithUrl.fromJson(i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1162,28 +1310,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Tags>>(Options(
+    final _options = _setStreamType<ApiResult<Tags>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/tag/${id}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<Tags>.fromJson(
-      _result.data!,
-      (json) => Tags.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/tag/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Tags> _value;
+    try {
+      _value = ApiResult<Tags>.fromJson(
+        _result.data!,
+        (json) => Tags.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1194,32 +1348,38 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<List<Tag>>>(Options(
+    final _options = _setStreamType<ApiResult<List<Tag>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/tag/rows',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<List<Tag>>.fromJson(
-      _result.data!,
-      (json) => json is List<dynamic>
-          ? json
-              .map<Tag>((i) => Tag.fromJson(i as Map<String, dynamic>))
-              .toList()
-          : List.empty(),
-    );
+        .compose(
+          _dio.options,
+          '/tag/rows',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<List<Tag>> _value;
+    try {
+      _value = ApiResult<List<Tag>>.fromJson(
+        _result.data!,
+        (json) => json is List<dynamic>
+            ? json
+                .map<Tag>((i) => Tag.fromJson(i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1240,25 +1400,25 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _options = _setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
       responseType: ResponseType.stream,
     )
-            .compose(
-              _dio.options,
-              '/export/gallery/zip/${gid}',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
+        .compose(
+          _dio.options,
+          '/export/gallery/zip/${gid}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
     final _value = _result.data;
     final httpResponse = HttpResponse(_value, _result);
     return httpResponse;
@@ -1299,29 +1459,35 @@ class __EHApi implements _EHApi {
         excludes,
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+    final _options = _setStreamType<ApiResult<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/filemeta',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<dynamic>.fromJson(
-      _result.data!,
-      (json) => json as dynamic,
-    );
+        .compose(
+          _dio.options,
+          '/filemeta',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<dynamic> _value;
+    try {
+      _value = ApiResult<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1353,29 +1519,35 @@ class __EHApi implements _EHApi {
         isAd.toString(),
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+    final _options = _setStreamType<ApiResult<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/filemeta',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<dynamic>.fromJson(
-      _result.data!,
-      (json) => json as dynamic,
-    );
+        .compose(
+          _dio.options,
+          '/filemeta',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<dynamic> _value;
+    try {
+      _value = ApiResult<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1407,29 +1579,35 @@ class __EHApi implements _EHApi {
         isAd.toString(),
       ));
     }
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<dynamic>>(Options(
+    final _options = _setStreamType<ApiResult<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/filemeta',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<dynamic>.fromJson(
-      _result.data!,
-      (json) => json as dynamic,
-    );
+        .compose(
+          _dio.options,
+          '/filemeta',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<dynamic> _value;
+    try {
+      _value = ApiResult<dynamic>.fromJson(
+        _result.data!,
+        (json) => json as dynamic,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1443,25 +1621,31 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Config>(Options(
+    final _options = _setStreamType<Config>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/config',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = Config.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/config',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late Config _value;
+    try {
+      _value = Config.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1476,25 +1660,31 @@ class __EHApi implements _EHApi {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(cfg.toJson());
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UpdateConfigResult>(Options(
+    final _options = _setStreamType<UpdateConfigResult>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/config',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = UpdateConfigResult.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/config',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UpdateConfigResult _value;
+    try {
+      _value = UpdateConfigResult.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1512,28 +1702,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<EHMetaInfo>>(Options(
+    final _options = _setStreamType<ApiResult<EHMetaInfo>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/eh/metadata',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<EHMetaInfo>.fromJson(
-      _result.data!,
-      (json) => EHMetaInfo.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/eh/metadata',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<EHMetaInfo> _value;
+    try {
+      _value = ApiResult<EHMetaInfo>.fromJson(
+        _result.data!,
+        (json) => EHMetaInfo.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1566,29 +1762,35 @@ class __EHApi implements _EHApi {
       'type',
       t,
     ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Task>>(Options(
+    final _options = _setStreamType<ApiResult<Task>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/task',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<Task>.fromJson(
-      _result.data!,
-      (json) => Task.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/task',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Task> _value;
+    try {
+      _value = ApiResult<Task>.fromJson(
+        _result.data!,
+        (json) => Task.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1616,29 +1818,35 @@ class __EHApi implements _EHApi {
       'type',
       t,
     ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Task>>(Options(
+    final _options = _setStreamType<ApiResult<Task>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/task',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<Task>.fromJson(
-      _result.data!,
-      (json) => Task.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/task',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Task> _value;
+    try {
+      _value = ApiResult<Task>.fromJson(
+        _result.data!,
+        (json) => Task.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1671,29 +1879,35 @@ class __EHApi implements _EHApi {
       'type',
       t,
     ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApiResult<Task>>(Options(
+    final _options = _setStreamType<ApiResult<Task>>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/task',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<Task>.fromJson(
-      _result.data!,
-      (json) => Task.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/task',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Task> _value;
+    try {
+      _value = ApiResult<Task>.fromJson(
+        _result.data!,
+        (json) => Task.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1705,28 +1919,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<DownloadConfig>>(Options(
+    final _options = _setStreamType<ApiResult<DownloadConfig>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/task/download_cfg',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<DownloadConfig>.fromJson(
-      _result.data!,
-      (json) => DownloadConfig.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/task/download_cfg',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<DownloadConfig> _value;
+    try {
+      _value = ApiResult<DownloadConfig>.fromJson(
+        _result.data!,
+        (json) => DownloadConfig.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1738,28 +1958,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<ExportZipConfig>>(Options(
+    final _options = _setStreamType<ApiResult<ExportZipConfig>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/task/export_zip_cfg',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<ExportZipConfig>.fromJson(
-      _result.data!,
-      (json) => ExportZipConfig.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/task/export_zip_cfg',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<ExportZipConfig> _value;
+    try {
+      _value = ApiResult<ExportZipConfig>.fromJson(
+        _result.data!,
+        (json) => ExportZipConfig.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -1771,28 +1997,34 @@ class __EHApi implements _EHApi {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResult<DefaultImportConfig>>(Options(
+    final _options = _setStreamType<ApiResult<DefaultImportConfig>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/task/import_cfg',
-              queryParameters: queryParameters,
-              data: _data,
-              cancelToken: cancel,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ApiResult<DefaultImportConfig>.fromJson(
-      _result.data!,
-      (json) => DefaultImportConfig.fromJson(json as Map<String, dynamic>),
-    );
+        .compose(
+          _dio.options,
+          '/task/import_cfg',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<DefaultImportConfig> _value;
+    try {
+      _value = ApiResult<DefaultImportConfig>.fromJson(
+        _result.data!,
+        (json) => DefaultImportConfig.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

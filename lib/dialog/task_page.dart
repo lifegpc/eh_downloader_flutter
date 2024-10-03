@@ -104,28 +104,34 @@ class _TaskPage extends State<TaskPage> {
         _KeyValue(i18n.taskId, widget.id.toString(), fontSize: 16),
         Divider(indent: indent, endIndent: endIndent),
         _KeyValue(i18n.taskType, typ.text(context), fontSize: 16),
-        Divider(indent: indent, endIndent: endIndent),
-        Row(children: [
-          SizedBox(
-              width: 80,
-              child: Center(
-                  child: Text(i18n.gid,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: cs.primary, fontSize: 16)))),
-          Expanded(
-              child: allowLink
-                  ? SelectableText.rich(TextSpan(
-                      text: gid,
-                      style: TextStyle(color: cs.secondary, fontSize: 16),
-                      mouseCursor: SystemMouseCursors.click,
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          context.push("/gallery/${task.base.gid}",
-                              extra: GalleryPageExtra(title: title));
-                        }))
-                  : SelectableText(gid,
-                      style: TextStyle(color: cs.secondary, fontSize: 16))),
-        ]),
+        gid.isEmpty
+            ? Container()
+            : Divider(indent: indent, endIndent: endIndent),
+        gid.isEmpty
+            ? Container()
+            : Row(children: [
+                SizedBox(
+                    width: 80,
+                    child: Center(
+                        child: Text(i18n.gid,
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: cs.primary, fontSize: 16)))),
+                Expanded(
+                    child: allowLink
+                        ? SelectableText.rich(TextSpan(
+                            text: gid,
+                            style: TextStyle(color: cs.secondary, fontSize: 16),
+                            mouseCursor: SystemMouseCursors.click,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                context.push("/gallery/${task.base.gid}",
+                                    extra: GalleryPageExtra(title: title));
+                              }))
+                        : SelectableText(gid,
+                            style:
+                                TextStyle(color: cs.secondary, fontSize: 16))),
+              ]),
         task.base.token.isEmpty
             ? Container()
             : Divider(indent: indent, endIndent: endIndent),
@@ -244,6 +250,10 @@ class _TaskPage extends State<TaskPage> {
         final p = task.progress as TaskImportProgress;
         now = p.importedPage;
         total = p.totalPage;
+      case TaskType.updateTagTranslation:
+        final p = task.progress as TaskUpdateTagTranslationProgress;
+        now = p.addedTag;
+        total = p.totalTag;
       default:
     }
     if (total == 0) return Container();

@@ -327,5 +327,6 @@
     "editExpireTime": "修改过期时间",
     "share": "分享",
     "failedChangeExpireTime": "修改过期时间失败：",
-    "failedShareGallery": "分享画廊失败："
+    "failedShareGallery": "分享画廊失败：",
+    "updateTagTranslation": "更新标签的翻译"
 }

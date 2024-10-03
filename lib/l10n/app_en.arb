@@ -327,5 +327,6 @@
     "editExpireTime": "Edit expire time",
     "share": "Share",
     "failedChangeExpireTime": "Failed to change expired time: ",
-    "failedShareGallery": "Failed to share gallery: "
+    "failedShareGallery": "Failed to share gallery: ",
+    "updateTagTranslation": "Update tag's translation"
 }
