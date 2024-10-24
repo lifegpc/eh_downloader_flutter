@@ -15,6 +15,7 @@ import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
+import 'api/gallery.dart';
 import 'auth.dart';
 import 'config/base.dart';
 import 'config/shared_preferences.dart';
@@ -307,6 +308,31 @@ Widget buildMoreVertSettingsButon(BuildContext context) {
     },
     itemBuilder: buildMoreVertSettings,
   );
+}
+
+Widget buildSearchButton(BuildContext context, {bool openGallery = true}) {
+  return auth.meilisearch != null
+      ? SearchAnchor(builder: (context, controller) {
+          return IconButton(
+              onPressed: () {
+                controller.openView();
+              },
+              icon: const Icon(Icons.search));
+        }, suggestionsBuilder: (context, controller) async {
+          final c = auth.meiliSearchClient!;
+          final re = await c.index("gmeta").search(controller.text);
+          return re.asSearchResult().hits.map((e) {
+            final m = GMetaSearchInfo.fromJson(e);
+            return ListTile(
+              title: Text(m.preferredTitle),
+              onTap: () {
+                controller.closeView(m.preferredTitle);
+                if (openGallery) context.push("/gallery/${m.gid}");
+              },
+            );
+          }).toList();
+        })
+      : Container();
 }
 
 ThemeMode themeModeNext(ThemeMode mode) {

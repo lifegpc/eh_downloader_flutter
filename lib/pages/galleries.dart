@@ -119,6 +119,7 @@ class _GalleriesPage extends State<GalleriesPage>
     });
     _translatedTag = widget.translatedTag;
     listener.on("user_logined", _onStateChanged);
+    listener.on("meilisearch_enabled", _onStateChanged);
     super.initState();
   }
 
@@ -202,6 +203,7 @@ class _GalleriesPage extends State<GalleriesPage>
                   icon: const Icon(Icons.sort),
                   itemBuilder: (context) =>
                       [PopupMenuItem(child: sortByGidMenu)]),
+              buildSearchButton(context),
               buildThemeModeIcon(context),
               buildMoreVertSettingsButon(context),
             ]),
@@ -226,6 +228,7 @@ class _GalleriesPage extends State<GalleriesPage>
     _pagingController.dispose();
     _tagCancel?.cancel();
     listener.removeEventListener("user_logined", _onStateChanged);
+    listener.removeEventListener("meilisearch_enabled", _onStateChanged);
     super.dispose();
   }
 }

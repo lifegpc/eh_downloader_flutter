@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'api/status.dart';
 import 'api/token.dart';
 import 'api/user.dart';
@@ -35,16 +36,25 @@ class AuthInfo {
       _user?.permissions.has(UserPermission.manageTasks);
   bool? get canShareGallery =>
       _user?.permissions.has(UserPermission.shareGallery);
+  MeilisearchInfo? get meilisearch => _status?.meilisearch;
+  MeiliSearchClient? _meiliSearchClient;
+  MeiliSearchClient? get meiliSearchClient => _meiliSearchClient;
 
   void clear() {
     _user = null;
     _status = null;
+    _meiliSearchClient = null;
     _token = null;
     _checked = false;
   }
 
   Future<void> getServerStatus() async {
     _status = (await api.getStatus()).unwrap();
+    if (_status?.meilisearch != null) {
+      _meiliSearchClient = MeiliSearchClient(
+          _status!.meilisearch!.host, _status!.meilisearch!.key);
+      listener.tryEmit("meilisearch_enabled", null);
+    }
   }
 
   Future<void> checkSessionInfo() async {

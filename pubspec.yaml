@@ -29,6 +29,7 @@ dependencies:
   json_annotation: ^4.9.0
   keymap: ^0.0.92
   logging: ^1.2.0
+  meilisearch: ^0.16.0
   mutex: ^3.1.0
   package_info_plus: ^8.0.0
   palette_generator: ^0.3.3+3

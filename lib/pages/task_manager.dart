@@ -192,6 +192,7 @@ class _TaskManagerPage extends State<TaskManagerPage>
           ),
           title: Text(i18n.taskManager),
           actions: [
+            buildSearchButton(context),
             buildThemeModeIcon(context),
             buildMoreVertSettingsButon(context),
           ],

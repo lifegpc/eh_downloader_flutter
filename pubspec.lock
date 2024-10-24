@@ -563,6 +563,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.1"
+  meilisearch:
+    dependency: "direct main"
+    description:
+      name: meilisearch
+      sha256: "0567639a4cccca84bf7c13fc34c9d8a277f896a57388d1afde69ad0084f49a46"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.0"
   meta:
     dependency: transitive
     description:

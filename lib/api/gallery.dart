@@ -181,3 +181,59 @@ class GMetaInfos {
           ApiResult<GMeta>.fromJson(value as Map<String, dynamic>,
               (json) => GMeta.fromJson(json as Map<String, dynamic>)))));
 }
+
+@JsonSerializable()
+class GMetaSearchInfo {
+  const GMetaSearchInfo({
+    required this.gid,
+    required this.token,
+    required this.title,
+    required this.titleJpn,
+    required this.category,
+    required this.uploader,
+    required this.posted,
+    required this.filecount,
+    required this.filesize,
+    required this.expunged,
+    required this.rating,
+    required this.tags,
+    this.parentGid,
+    this.parentToken,
+    this.firstGid,
+    this.firstToken,
+  });
+  final int gid;
+  final String token;
+  final String title;
+  @JsonKey(name: 'title_jpn')
+  final String titleJpn;
+  final String category;
+  final String uploader;
+  @JsonKey(fromJson: _fromJson, toJson: _toJson)
+  final DateTime posted;
+  final int filecount;
+  final int filesize;
+  final bool expunged;
+  final double rating;
+  final List<Tag> tags;
+  @JsonKey(name: 'parent_gid')
+  final int? parentGid;
+  @JsonKey(name: 'parent_token')
+  final String? parentToken;
+  @JsonKey(name: 'first_gid')
+  final int? firstGid;
+  @JsonKey(name: 'first_token')
+  final String? firstToken;
+
+  static DateTime _fromJson(int posted) =>
+      DateTime.fromMillisecondsSinceEpoch(posted * 1000);
+  static int _toJson(DateTime posted) => posted.millisecondsSinceEpoch ~/ 1000;
+  factory GMetaSearchInfo.fromJson(Map<String, dynamic> json) =>
+      _$GMetaSearchInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$GMetaSearchInfoToJson(this);
+  String get preferredTitle => prefs.getBool("useTitleJpn") == true
+      ? titleJpn.isEmpty
+          ? title
+          : titleJpn
+      : title;
+}

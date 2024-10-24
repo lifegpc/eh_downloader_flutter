@@ -134,3 +134,45 @@ Map<String, dynamic> _$GalleryDataToJson(GalleryData instance) =>
       'tags': instance.tags,
       'pages': instance.pages,
     };
+
+GMetaSearchInfo _$GMetaSearchInfoFromJson(Map<String, dynamic> json) =>
+    GMetaSearchInfo(
+      gid: (json['gid'] as num).toInt(),
+      token: json['token'] as String,
+      title: json['title'] as String,
+      titleJpn: json['title_jpn'] as String,
+      category: json['category'] as String,
+      uploader: json['uploader'] as String,
+      posted: GMetaSearchInfo._fromJson((json['posted'] as num).toInt()),
+      filecount: (json['filecount'] as num).toInt(),
+      filesize: (json['filesize'] as num).toInt(),
+      expunged: json['expunged'] as bool,
+      rating: (json['rating'] as num).toDouble(),
+      tags: (json['tags'] as List<dynamic>)
+          .map((e) => Tag.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      parentGid: (json['parent_gid'] as num?)?.toInt(),
+      parentToken: json['parent_token'] as String?,
+      firstGid: (json['first_gid'] as num?)?.toInt(),
+      firstToken: json['first_token'] as String?,
+    );
+
+Map<String, dynamic> _$GMetaSearchInfoToJson(GMetaSearchInfo instance) =>
+    <String, dynamic>{
+      'gid': instance.gid,
+      'token': instance.token,
+      'title': instance.title,
+      'title_jpn': instance.titleJpn,
+      'category': instance.category,
+      'uploader': instance.uploader,
+      'posted': GMetaSearchInfo._toJson(instance.posted),
+      'filecount': instance.filecount,
+      'filesize': instance.filesize,
+      'expunged': instance.expunged,
+      'rating': instance.rating,
+      'tags': instance.tags,
+      'parent_gid': instance.parentGid,
+      'parent_token': instance.parentToken,
+      'first_gid': instance.firstGid,
+      'first_token': instance.firstToken,
+    };

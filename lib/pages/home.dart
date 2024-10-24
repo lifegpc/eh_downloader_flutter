@@ -83,6 +83,7 @@ class HomePage extends HookWidget with IsTopWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.titleBar),
         actions: [
+          buildSearchButton(context),
           IconButton(
               onPressed: () {
                 final n = themeModeNext(mode.value);
