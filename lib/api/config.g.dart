@@ -49,6 +49,8 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       importMethod: $enumDecode(_$ImportMethodEnumMap, json['import_method']),
       maxImportImgCount: (json['max_import_img_count'] as num).toInt(),
       enableServerTiming: json['enable_server_timing'] as bool,
+      thumbnailFormat:
+          $enumDecode(_$ThumbnailFormatEnumMap, json['thumbnail_format']),
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -88,6 +90,7 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'import_method': _$ImportMethodEnumMap[instance.importMethod]!,
       'max_import_img_count': instance.maxImportImgCount,
       'enable_server_timing': instance.enableServerTiming,
+      'thumbnail_format': _$ThumbnailFormatEnumMap[instance.thumbnailFormat]!,
     };
 
 const _$ThumbnailMethodEnumMap = {
@@ -100,6 +103,11 @@ const _$ImportMethodEnumMap = {
   ImportMethod.copyThenDelete: 1,
   ImportMethod.move: 2,
   ImportMethod.keep: 3,
+};
+
+const _$ThumbnailFormatEnumMap = {
+  ThumbnailFormat.jpeg: 0,
+  ThumbnailFormat.webp: 1,
 };
 
 UpdateConfigResult _$UpdateConfigResultFromJson(Map<String, dynamic> json) =>
@@ -157,7 +165,8 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$ImportMethodEnumMap, json['import_method']),
       maxImportImgCount: (json['max_import_img_count'] as num?)?.toInt(),
       enableServerTiming: json['enable_server_timing'] as bool?,
-    );
+    )..thumbnailFormat =
+        $enumDecodeNullable(_$ThumbnailFormatEnumMap, json['thumbnail_format']);
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
     <String, dynamic>{
@@ -197,4 +206,5 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'import_method': _$ImportMethodEnumMap[instance.importMethod],
       'max_import_img_count': instance.maxImportImgCount,
       'enable_server_timing': instance.enableServerTiming,
+      'thumbnail_format': _$ThumbnailFormatEnumMap[instance.thumbnailFormat],
     };

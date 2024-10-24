@@ -11,6 +11,13 @@ enum ThumbnailMethod {
   ffmpegApi,
 }
 
+enum ThumbnailFormat {
+  @JsonValue(0)
+  jpeg,
+  @JsonValue(1)
+  webp,
+}
+
 enum ImportMethod {
   @JsonValue(0)
   copy,
@@ -75,6 +82,7 @@ class Config {
     required this.importMethod,
     required this.maxImportImgCount,
     required this.enableServerTiming,
+    required this.thumbnailFormat,
   });
   bool cookies;
   @JsonKey(name: 'db_path')
@@ -141,6 +149,8 @@ class Config {
   int maxImportImgCount;
   @JsonKey(name: 'enable_server_timing')
   bool enableServerTiming;
+  @JsonKey(name: 'thumbnail_format')
+  ThumbnailFormat thumbnailFormat;
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigToJson(this);
 }
@@ -262,6 +272,8 @@ class ConfigOptional {
   int? maxImportImgCount;
   @JsonKey(name: 'enable_server_timing')
   bool? enableServerTiming;
+  @JsonKey(name: 'thumbnail_format')
+  ThumbnailFormat? thumbnailFormat;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigOptionalToJson(this);

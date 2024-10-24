@@ -331,5 +331,7 @@
     "updateTagTranslation": "Update tag's translation",
     "createUpdateTagTranslationTask": "Create update tag's translation task",
     "translationFile": "Tnanslation file",
-    "translationFileHelp": "The path to json file contains tag's translation. Will download from website if this is empty."
+    "translationFileHelp": "The path to json file contains tag's translation. Will download from website if this is empty.",
+    "thumbnailFormat": "Thumbnail format",
+    "thumbnailFormatHelp": "Webp is not supported in ffmpeg API method."
 }

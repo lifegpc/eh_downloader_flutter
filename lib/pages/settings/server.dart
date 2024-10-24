@@ -787,6 +787,27 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
               });
             },
           )),
+          _buildWithVecticalPadding(DropdownButtonFormField<ThumbnailFormat>(
+              items: ThumbnailFormat.values
+                  .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(
+                          e.toString().replaceFirst("ThumbnailFormat.", ""))))
+                  .toList(),
+              onChanged: (v) {
+                if (v != null) {
+                  setState(() {
+                    _now.thumbnailFormat = v;
+                    _changed = true;
+                  });
+                }
+              },
+              value: _now.thumbnailFormat ?? _config!.thumbnailFormat,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: i18n.thumbnailFormat,
+                helperText: i18n.thumbnailFormatHelp,
+              ))),
         ]));
   }
 
