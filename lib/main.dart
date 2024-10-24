@@ -27,6 +27,7 @@ import 'pages/login.dart';
 import 'pages/settings.dart';
 import 'pages/settings/cache.dart';
 import 'pages/settings/display.dart';
+import 'pages/settings/search.dart';
 import 'pages/settings/server.dart';
 import 'pages/settings/server_url.dart';
 import 'pages/settings/user.dart';
@@ -337,6 +338,10 @@ final _router = GoRouter(
                 return NewUpdateTagTranslationTaskPage();
               });
         }),
+    GoRoute(
+      path: SearchSettingsPage.routeName,
+      builder: (context, state) => SearchSettingsPage(key: state.pageKey),
+    ),
   ],
   observers: [
     _NavigatorObserver(),

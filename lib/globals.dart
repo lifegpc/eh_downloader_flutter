@@ -12,6 +12,7 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'package:meilisearch/meilisearch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
@@ -312,26 +313,34 @@ Widget buildMoreVertSettingsButon(BuildContext context) {
 
 Widget buildSearchButton(BuildContext context, {bool openGallery = true}) {
   return auth.meilisearch != null
-      ? SearchAnchor(builder: (context, controller) {
-          return IconButton(
-              onPressed: () {
-                controller.openView();
-              },
-              icon: const Icon(Icons.search));
-        }, suggestionsBuilder: (context, controller) async {
-          final c = auth.meiliSearchClient!;
-          final re = await c.index("gmeta").search(controller.text);
-          return re.asSearchResult().hits.map((e) {
-            final m = GMetaSearchInfo.fromJson(e);
-            return ListTile(
-              title: Text(m.preferredTitle),
-              onTap: () {
-                controller.closeView(m.preferredTitle);
-                if (openGallery) context.push("/gallery/${m.gid}");
-              },
-            );
-          }).toList();
-        })
+      ? SearchAnchor(
+          builder: (context, controller) {
+            return IconButton(
+                onPressed: () {
+                  controller.openView();
+                },
+                icon: const Icon(Icons.search));
+          },
+          suggestionsBuilder: (context, controller) async {
+            if (controller.text.isEmpty) return [];
+            final c = auth.meiliSearchClient!;
+            final max = prefs.getInt("maxSearchSuggestions") ?? 100;
+            final re = await c
+                .index("gmeta")
+                .search(controller.text, SearchQuery(limit: max));
+            return re.asSearchResult().hits.map((e) {
+              final m = GMetaSearchInfo.fromJson(e);
+              return ListTile(
+                title: Text(m.preferredTitle),
+                onTap: () {
+                  controller.closeView(controller.text);
+                  if (openGallery) context.push("/gallery/${m.gid}");
+                },
+              );
+            }).toList();
+          },
+          isFullScreen: true,
+        )
       : Container();
 }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import '../globals.dart';
@@ -65,16 +64,35 @@ class HomeDrawer extends StatelessWidget {
   }
 }
 
-class HomePage extends HookWidget with IsTopWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   static const String routeName = '/';
 
   @override
+  State<StatefulWidget> createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage> with ThemeModeWidget, IsTopWidget2 {
+  void _onStateChanged(dynamic _) {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    listener.on("meilisearch_enabled", _onStateChanged);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    listener.removeEventListener("meilisearch_enabled", _onStateChanged);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     tryInitApi(context);
-    var mode = useState(MainApp.of(context).themeMode);
-    mode.value = MainApp.of(context).themeMode;
     if (isTop(context)) {
       setCurrentTitle("", Theme.of(context).primaryColor.value,
           usePrefix: true);
@@ -84,17 +102,7 @@ class HomePage extends HookWidget with IsTopWidget {
         title: Text(AppLocalizations.of(context)!.titleBar),
         actions: [
           buildSearchButton(context),
-          IconButton(
-              onPressed: () {
-                final n = themeModeNext(mode.value);
-                MainApp.of(context).changeThemeMode(n);
-                mode.value = n;
-              },
-              icon: Icon(mode.value == ThemeMode.system
-                  ? Icons.brightness_auto
-                  : mode.value == ThemeMode.dark
-                      ? Icons.dark_mode
-                      : Icons.light_mode)),
+          buildThemeModeIcon(context),
           buildMoreVertSettingsButon(context),
         ],
       ),

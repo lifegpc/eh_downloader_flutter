@@ -333,5 +333,9 @@
     "translationFile": "翻译文件",
     "translationFileHelp": "包含标签翻译的JSON文件路径。未指定时将从网站上下载。",
     "thumbnailFormat": "缩略图格式",
-    "thumbnailFormatHelp": "ffmpeg API方式不支持webp格式。"
+    "thumbnailFormatHelp": "ffmpeg API方式不支持webp格式。",
+    "search": "搜索",
+    "maxSearchSuggestions": "最大搜索建议结果数量",
+    "ok": "确定",
+    "changeSettings": "修改设置"
 }

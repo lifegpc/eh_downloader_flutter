@@ -94,6 +94,12 @@ class _SettingsPage extends State<SettingsPage>
                         },
                       )
                     : Container(),
+                ListTile(
+                    leading: const Icon(Icons.search),
+                    title: Text(i18n.search),
+                    onTap: () {
+                      context.push("/settings/search");
+                    }),
               ],
             ));
           },

@@ -333,5 +333,9 @@
     "translationFile": "Tnanslation file",
     "translationFileHelp": "The path to json file contains tag's translation. Will download from website if this is empty.",
     "thumbnailFormat": "Thumbnail format",
-    "thumbnailFormatHelp": "Webp is not supported in ffmpeg API method."
+    "thumbnailFormatHelp": "Webp is not supported in ffmpeg API method.",
+    "search": "Search",
+    "maxSearchSuggestions": "Maximum results of search suggestions",
+    "ok": "Ok",
+    "changeSettings": "Change settings"
 }
