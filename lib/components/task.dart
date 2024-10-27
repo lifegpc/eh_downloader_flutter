@@ -106,6 +106,10 @@ class _TaskView extends State<TaskView> {
       return Text(i18n.updateTagTranslation,
           maxLines: 1, overflow: TextOverflow.ellipsis);
     }
+    if (typ == TaskType.updateMeiliSearchData) {
+      return Text(i18n.updateMeiliSearchDataTask,
+          maxLines: 1, overflow: TextOverflow.ellipsis);
+    }
     return Container();
   }
 

@@ -223,6 +223,10 @@ class _TaskManagerPage extends State<TaskManagerPage>
               child: Text(i18n.createImportTask),
             ),
             PopupMenuItem(
+              value: TaskType.updateMeiliSearchData,
+              child: Text(i18n.createUpdateMeiliSearchDataTask),
+            ),
+            PopupMenuItem(
               value: TaskType.updateTagTranslation,
               child: Text(i18n.createUpdateTagTranslationTask),
             ),
@@ -235,6 +239,8 @@ class _TaskManagerPage extends State<TaskManagerPage>
             context.push("/dialog/new_export_zip_task");
           } else if (type == TaskType.import) {
             context.push("/dialog/new_import_task");
+          } else if (type == TaskType.updateMeiliSearchData) {
+            context.push("/dialog/new_update_meili_search_data_task");
           } else if (type == TaskType.updateTagTranslation) {
             context.push("/dialog/new_update_tag_translation_task");
           }

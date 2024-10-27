@@ -1912,6 +1912,59 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<Task>> createUpdateMeiliSearchDataTask({
+    int? gid,
+    String t = "update_meili_search_data",
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    if (gid != null) {
+      _data.fields.add(MapEntry(
+        'gid',
+        gid.toString(),
+      ));
+    }
+    _data.fields.add(MapEntry(
+      'type',
+      t,
+    ));
+    final _options = _setStreamType<ApiResult<Task>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          '/task',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<Task> _value;
+    try {
+      _value = ApiResult<Task>.fromJson(
+        _result.data!,
+        (json) => Task.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ApiResult<Task>> createUpdateTagTranslationTask({
     UpdateTagTranslationConfig? cfg,
     String t = "update_tag_translation",

@@ -337,5 +337,7 @@
     "search": "搜索",
     "maxSearchSuggestions": "最大搜索建议结果数量",
     "ok": "确定",
-    "changeSettings": "修改设置"
+    "changeSettings": "修改设置",
+    "createUpdateMeiliSearchDataTask": "创建同步meilisearch服务器数据任务",
+    "updateMeiliSearchDataGidHelp": "如果画廊ID非空，只有指定的画廊会同步至meilisearch服务器。"
 }

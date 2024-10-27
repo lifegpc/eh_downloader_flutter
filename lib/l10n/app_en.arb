@@ -337,5 +337,7 @@
     "search": "Search",
     "maxSearchSuggestions": "Maximum results of search suggestions",
     "ok": "Ok",
-    "changeSettings": "Change settings"
+    "changeSettings": "Change settings",
+    "createUpdateMeiliSearchDataTask": "Create sync meilisearch server's data task",
+    "updateMeiliSearchDataGidHelp": "If gallery id is not empty, only specified gallery will sync to meilisearch server."
 }

@@ -342,6 +342,13 @@ abstract class _EHApi {
   });
   @PUT('/task')
   @MultiPart()
+  Future<ApiResult<Task>> createUpdateMeiliSearchDataTask({
+    @Part(name: "gid") int? gid,
+    @Part(name: "type") String t = "update_meili_search_data",
+    @CancelRequest() CancelToken? cancel,
+  });
+  @PUT('/task')
+  @MultiPart()
   Future<ApiResult<Task>> createUpdateTagTranslationTask({
     @Part(name: "cfg") UpdateTagTranslationConfig? cfg,
     @Part(name: "type") String t = "update_tag_translation",
