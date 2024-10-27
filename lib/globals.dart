@@ -333,7 +333,6 @@ Widget buildSearchButton(BuildContext context, {bool openGallery = true}) {
               return ListTile(
                 title: Text(m.preferredTitle),
                 onTap: () {
-                  controller.closeView(controller.text);
                   if (openGallery) context.push("/gallery/${m.gid}");
                 },
               );
