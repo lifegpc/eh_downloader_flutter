@@ -47,6 +47,7 @@ class SinglePageViewer extends StatefulWidget {
 
 class _SinglePageViewer extends State<SinglePageViewer>
     with ThemeModeWidget, IsTopWidget2 {
+  final Key _key = GlobalKey();
   late PageController _pageController;
   late int _index;
   late GalleryData? _data;
@@ -143,8 +144,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
           _photoViewController.reset();
         }
         return PhotoViewGalleryPageOptions(
-          imageProvider: DioImage.string(api.getFileUrl(f.id), dio: dio,
-              onData: (data, headers, url) {
+          imageProvider: DioImage.string(api.getFileUrl(f.id),
+              dio: dio, key: _key, onData: (data, headers, url) {
             _imgData[index] = (data, headers.value("content-type"), url);
           }),
           initialScale: PhotoViewComputedScale.contained,

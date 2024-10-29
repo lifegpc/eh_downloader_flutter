@@ -29,7 +29,7 @@ class DioImage extends ImageProvider<DioImage> {
   /// The arguments [url] and [scale] must not be null.
   /// [dio] will be the default [Dio] if not set.
   DioImage.string(String url,
-      {this.scale = 1.0, this.headers, this.onData, Dio? dio})
+      {this.scale = 1.0, this.headers, this.onData, Dio? dio, this.key})
       : dio = dio ?? defaultDio,
         url = Uri.parse(url);
 
@@ -37,7 +37,8 @@ class DioImage extends ImageProvider<DioImage> {
   ///
   /// The arguments [url] and [scale] must not be null.
   /// [dio] will be the default [Dio] if not set.
-  DioImage(this.url, {this.scale = 1.0, this.headers, this.onData, Dio? dio})
+  DioImage(this.url,
+      {this.scale = 1.0, this.headers, this.onData, this.key, Dio? dio})
       : dio = dio ?? defaultDio;
 
   /// The URL from which the image will be fetched.
@@ -55,6 +56,8 @@ class DioImage extends ImageProvider<DioImage> {
   final Dio dio;
 
   final void Function(Uint8List, Headers, String)? onData;
+
+  final Key? key;
 
   @override
   Future<DioImage> obtainKey(ImageConfiguration configuration) {
@@ -164,11 +167,14 @@ class DioImage extends ImageProvider<DioImage> {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is DioImage && other.url == url && other.scale == scale;
+    return other is DioImage &&
+        other.url == url &&
+        other.scale == scale &&
+        other.key == key;
   }
 
   @override
-  int get hashCode => Object.hash(url, scale);
+  int get hashCode => Object.hash(url, scale, key);
 
   @override
   String toString() =>
