@@ -10,12 +10,15 @@ import 'package:keymap/keymap.dart';
 import 'package:logging/logging.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:quiver/collection.dart';
+import 'package:super_context_menu/super_context_menu.dart';
 import '../api/file.dart';
 import '../api/gallery.dart';
 import '../components/fit_text.dart';
 import '../globals.dart';
 import '../platform/media_query.dart';
 import '../provider/dio_image_provider.dart';
+import '../utils/clipboard.dart';
 
 final _log = Logger("SinglePageViewer");
 
@@ -57,6 +60,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
   bool _inited = false;
   bool _showMenu = false;
   late PhotoViewController _photoViewController;
+  final LruMap<int, (Uint8List, String?, String)> _imgData =
+      LruMap(maximumSize: 20);
   void _updatePages() {
     if (_data == null) return;
     final displayAd = prefs.getBool("displayAd") ?? false;
@@ -138,10 +143,10 @@ class _SinglePageViewer extends State<SinglePageViewer>
           _photoViewController.reset();
         }
         return PhotoViewGalleryPageOptions(
-          imageProvider: DioImage.string(
-            api.getFileUrl(f.id),
-            dio: dio,
-          ),
+          imageProvider: DioImage.string(api.getFileUrl(f.id), dio: dio,
+              onData: (data, headers, url) {
+            _imgData[index] = (data, headers.value("content-type"), url);
+          }),
           initialScale: PhotoViewComputedScale.contained,
           heroAttributes: PhotoViewHeroAttributes(
             tag: data.token,
@@ -216,11 +221,44 @@ class _SinglePageViewer extends State<SinglePageViewer>
     );
   }
 
+  Widget _buildWithContextMenu(BuildContext context, {required Widget child}) {
+    final i18n = AppLocalizations.of(context)!;
+    return ContextMenuWidget(
+        menuProvider: (_) {
+          var list = <MenuElement>[];
+          final url = _imgData[_index]?.$3;
+          if (url != null) {
+            list.add(MenuAction(
+                title: i18n.copyImgUrl,
+                callback: () {
+                  copyTextToClipboard(url!).catchError((err) {
+                    _log.warning("Failed to copy image to clipboard:", err);
+                  });
+                }));
+          }
+          final data = _imgData[_index]?.$1;
+          if (data != null) {
+            final fmt =
+                ImageFmt.fromMimeType(_imgData[_index]?.$2) ?? ImageFmt.jpg;
+            list.add(MenuAction(
+                title: i18n.copyImage,
+                callback: () {
+                  copyImageToClipboard(data!, fmt).catchError((err) {
+                    _log.warning("Failed to copy image to clipboard:", err);
+                  });
+                }));
+          }
+          return Menu(children: list);
+        },
+        child: child);
+  }
+
   Widget _buildViewer(BuildContext context) {
     return _buildWithTap(context,
         child: _buildWithKeyboardSupport(context,
             child: _buildWithScrollSupport(context,
-                child: _buildGallery(context))));
+                child: _buildWithContextMenu(context,
+                    child: _buildGallery(context)))));
   }
 
   Widget _buildTopAppBar(BuildContext context) {

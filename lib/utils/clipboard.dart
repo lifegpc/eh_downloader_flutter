@@ -20,6 +20,20 @@ enum ImageFmt {
         return "image/gif";
     }
   }
+
+  static ImageFmt? fromMimeType(String? mime) {
+    if (mime == null) return null;
+    switch (mime) {
+      case "image/jpeg":
+        return ImageFmt.jpg;
+      case "image/png":
+        return ImageFmt.png;
+      case "image/gif":
+        return ImageFmt.gif;
+      default:
+        return null;
+    }
+  }
 }
 
 Future<void> copyImageToClipboard(Uint8List data, ImageFmt fmt) async {

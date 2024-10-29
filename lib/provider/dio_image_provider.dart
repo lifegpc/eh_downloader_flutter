@@ -28,7 +28,8 @@ class DioImage extends ImageProvider<DioImage> {
   ///
   /// The arguments [url] and [scale] must not be null.
   /// [dio] will be the default [Dio] if not set.
-  DioImage.string(String url, {this.scale = 1.0, this.headers, Dio? dio})
+  DioImage.string(String url,
+      {this.scale = 1.0, this.headers, this.onData, Dio? dio})
       : dio = dio ?? defaultDio,
         url = Uri.parse(url);
 
@@ -36,7 +37,7 @@ class DioImage extends ImageProvider<DioImage> {
   ///
   /// The arguments [url] and [scale] must not be null.
   /// [dio] will be the default [Dio] if not set.
-  DioImage(this.url, {this.scale = 1.0, this.headers, Dio? dio})
+  DioImage(this.url, {this.scale = 1.0, this.headers, this.onData, Dio? dio})
       : dio = dio ?? defaultDio;
 
   /// The URL from which the image will be fetched.
@@ -52,6 +53,8 @@ class DioImage extends ImageProvider<DioImage> {
 
   /// [dio] will be the default [Dio] if not set.
   final Dio dio;
+
+  final void Function(Uint8List, Headers, String)? onData;
 
   @override
   Future<DioImage> obtainKey(ImageConfiguration configuration) {
@@ -89,6 +92,10 @@ class DioImage extends ImageProvider<DioImage> {
         try {
           final cache = await imageCaches.getCache(url.toString());
           if (cache != null) {
+            if (onData != null) {
+              onData!(cache!.$1, Headers.fromMap(cache!.$2),
+                  cache!.$3 ?? url.toString());
+            }
             final buffer = await ui.ImmutableBuffer.fromUint8List(cache!.$1);
             return decode(buffer);
           }
@@ -122,6 +129,10 @@ class DioImage extends ImageProvider<DioImage> {
           uri: url,
           statusCode: response.statusCode!,
         );
+      }
+
+      if (onData != null) {
+        onData!(bytes, response.headers, response.realUri.toString());
       }
 
       if (isImageCacheEnabled) {
