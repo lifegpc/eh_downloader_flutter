@@ -187,9 +187,20 @@ abstract class _EHApi {
   Future<ApiResult<bool>> deleteToken(
       {@Part(name: "token") String? token,
       @CancelRequest() CancelToken? cancel});
+  @DELETE('/token/manage')
+  @MultiPart()
+  Future<ApiResult<bool>> deleteTokenById(@Part(name: "id") int id,
+      {@CancelRequest() CancelToken? cancel});
   @GET('/token')
   Future<ApiResult<TokenWithUserInfo>> getToken(
       {@Query("token") String? token, @CancelRequest() CancelToken? cancel});
+  @GET('/token/manage')
+  Future<ApiResult<List<TokenWithoutToken>>> getTokens(
+      {@Query("uid") int? uid,
+      @Query("offset") int? offset,
+      @Query("limit") int? limit,
+      @Query("all_user") bool? allUser,
+      @CancelRequest() CancelToken? cancel});
   @GET('/shared_token')
   Future<ApiResult<SharedToken>> getSharedToken(
       {@CancelRequest() CancelToken? cancel});

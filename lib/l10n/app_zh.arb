@@ -339,5 +339,21 @@
     "ok": "确定",
     "changeSettings": "修改设置",
     "createUpdateMeiliSearchDataTask": "创建同步meilisearch服务器数据任务",
-    "updateMeiliSearchDataGidHelp": "如果画廊ID非空，只有指定的画廊会同步至meilisearch服务器。"
+    "updateMeiliSearchDataGidHelp": "如果画廊ID非空，只有指定的画廊会同步至meilisearch服务器。",
+    "sessionManagemant": "会话管理",
+    "deleteSession": "删除会话",
+    "deleteSessionConfirm": "是否删除会话？",
+    "deleteSessionForUserConfirm": "是否为用户 {user} 删除会话？",
+    "@deleteSessionForUserConfirm": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "sessionId": "会话 ID",
+    "lastUsedTime": "上次使用时间",
+    "device": "设备",
+    "failedDeleteSession": "删除会话失败：",
+    "allUser": "所有用户"
 }

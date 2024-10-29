@@ -25,6 +25,7 @@ import 'pages/galleries.dart';
 import 'pages/gallery.dart';
 import 'pages/home.dart';
 import 'pages/login.dart';
+import 'pages/sessions.dart';
 import 'pages/settings.dart';
 import 'pages/settings/cache.dart';
 import 'pages/settings/display.dart';
@@ -356,6 +357,10 @@ final _router = GoRouter(
                 return NewUpdateMeiliSearchDataTaskPage(gid: gid);
               });
         }),
+    GoRoute(
+      path: SessionsPage.routeName,
+      builder: (context, state) => SessionsPage(key: state.pageKey),
+    ),
   ],
   observers: [
     _NavigatorObserver(),

@@ -60,6 +60,7 @@ class AuthInfo {
   Future<void> checkSessionInfo() async {
     final data = (await api.getToken()).unwrap();
     _token = data.token;
+    listener.tryEmit("auth_token_updated", null);
     final d = await device;
     final cv = await clientVersion;
     final cp = clientPlatform;
@@ -87,6 +88,7 @@ class AuthInfo {
             clientVersion: ecv,
             clientPlatform: ecp);
         _token = re.unwrap();
+        listener.tryEmit("auth_token_updated", null);
       } catch (e) {
         _log.warning("Failed to update token:", e);
       }

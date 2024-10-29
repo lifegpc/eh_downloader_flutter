@@ -41,6 +41,42 @@ class Token {
 }
 
 @JsonSerializable()
+class TokenWithoutToken {
+  const TokenWithoutToken({
+    required this.id,
+    required this.uid,
+    required this.expired,
+    required this.httpOnly,
+    required this.secure,
+    required this.lastUsed,
+    this.client,
+    this.device,
+    this.clientVersion,
+    this.clientPlatform,
+  });
+  final int id;
+  final int uid;
+  @JsonKey(fromJson: _fromJson, toJson: _toJson)
+  final DateTime expired;
+  @JsonKey(name: 'http_only')
+  final bool httpOnly;
+  final bool secure;
+  @JsonKey(fromJson: _fromJson, toJson: _toJson, name: 'last_used')
+  final DateTime lastUsed;
+  final String? client;
+  final String? device;
+  @JsonKey(name: 'client_version')
+  final String? clientVersion;
+  @JsonKey(name: 'client_platform')
+  final String? clientPlatform;
+  static DateTime _fromJson(String d) => DateTime.parse(d);
+  static String _toJson(DateTime d) => d.toIso8601String();
+  factory TokenWithoutToken.fromJson(Map<String, dynamic> json) =>
+      _$TokenWithoutTokenFromJson(json);
+  Map<String, dynamic> toJson() => _$TokenWithoutTokenToJson(this);
+}
+
+@JsonSerializable()
 class TokenWithUserInfo {
   const TokenWithUserInfo({
     required this.token,

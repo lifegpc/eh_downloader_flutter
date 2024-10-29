@@ -176,6 +176,7 @@ enum MoreVertSettings {
   markAsAd,
   markAsNonAd,
   shareGallery,
+  sessions,
 }
 
 void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
@@ -207,6 +208,9 @@ void onMoreVertSettingsSelected(BuildContext context, MoreVertSettings value) {
         context.push("/dialog/gallery/share/$gid");
       }
       break;
+    case MoreVertSettings.sessions:
+      context.push("/sessions");
+      break;
     default:
       break;
   }
@@ -233,6 +237,10 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
   if (path != "/task_manager" && auth.canManageTasks == true) {
     list.add(PopupMenuItem(
         value: MoreVertSettings.taskManager, child: Text(i18n.taskManager)));
+  }
+  if (path != "/sessions") {
+    list.add(PopupMenuItem(
+        value: MoreVertSettings.sessions, child: Text(i18n.sessionManagemant)));
   }
   if (path == "/gallery/:gid" && auth.canShareGallery == true) {
     list.add(PopupMenuItem(
