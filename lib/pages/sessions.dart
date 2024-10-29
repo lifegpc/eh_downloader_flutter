@@ -177,11 +177,14 @@ class _SessionsPage extends State<SessionsPage>
   }
 
   Widget _buildIconList(BuildContext context) {
-    return Row(children: [
-      isDesktop || (kIsWeb && pointerIsMouse)
-          ? _buildRefreshIcon(context)
-          : Container(),
-    ]);
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+        color: cs.surface,
+        child: Row(children: [
+          isDesktop || (kIsWeb && pointerIsMouse)
+              ? _buildRefreshIcon(context)
+              : Container(),
+        ]));
   }
 
   Widget _buildTokenList(BuildContext context) {
@@ -211,7 +214,7 @@ class _SessionsPage extends State<SessionsPage>
     final i18n = AppLocalizations.of(context)!;
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        constraints: const BoxConstraints(maxWidth: 500),
+        constraints: const BoxConstraints(maxWidth: 200),
         child: LabeledCheckbox(
             label: Text(i18n.allUser),
             value: _allUser,
@@ -269,10 +272,12 @@ class _SessionsPage extends State<SessionsPage>
                         _buildAllUserCheckbox(context),
                         Expanded(child: _buildUserSelectBox(context)),
                       ])
-                    : Column(children: [
-                        _buildAllUserCheckbox(context),
-                        _buildUserSelectBox(context),
-                      ]))));
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            _buildAllUserCheckbox(context),
+                            _buildUserSelectBox(context),
+                          ]))));
   }
 
   Widget _buildSliverGrid(BuildContext context) {

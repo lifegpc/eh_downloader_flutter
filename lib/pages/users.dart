@@ -142,12 +142,15 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
   }
 
   Widget _buildIconList(BuildContext context) {
-    return Row(children: [
-      isDesktop || (kIsWeb && pointerIsMouse)
-          ? _buildRefreshIcon(context)
-          : Container(),
-      _buildAddIcon(context),
-    ]);
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+        color: cs.surface,
+        child: Row(children: [
+          isDesktop || (kIsWeb && pointerIsMouse)
+              ? _buildRefreshIcon(context)
+              : Container(),
+          _buildAddIcon(context),
+        ]));
   }
 
   Widget _buildUserList(BuildContext context) {

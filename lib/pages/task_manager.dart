@@ -258,12 +258,15 @@ class _TaskManagerPage extends State<TaskManagerPage>
   }
 
   Widget _buildIconList(BuildContext context) {
-    return Row(children: [
-      isDesktop || (kIsWeb && pointerIsMouse)
-          ? _buildRefreshIcon(context)
-          : Container(),
-      _buildAddMenu(context),
-    ]);
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+        color: cs.surface,
+        child: Row(children: [
+          isDesktop || (kIsWeb && pointerIsMouse)
+              ? _buildRefreshIcon(context)
+              : Container(),
+          _buildAddMenu(context),
+        ]));
   }
 
   @override

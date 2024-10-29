@@ -72,14 +72,21 @@ class SessionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("${i18n.sessionId}${i18n.colon}${token.id}"),
-                  Text("${i18n.expireTime}${i18n.colon}$expiredTime"),
-                  Text("${i18n.lastUsedTime}${i18n.colon}$lastUsed"),
+                  SelectableText("${i18n.sessionId}${i18n.colon}${token.id}",
+                      maxLines: 2, minLines: 1),
+                  SelectableText("${i18n.expireTime}${i18n.colon}$expiredTime",
+                      maxLines: 2, minLines: 1),
+                  SelectableText("${i18n.lastUsedTime}${i18n.colon}$lastUsed",
+                      maxLines: 2, minLines: 1),
                   device.isEmpty
                       ? Container()
-                      : Text("${i18n.device}${i18n.colon}$device"),
+                      : SelectableText("${i18n.device}${i18n.colon}$device",
+                          maxLines: 2, minLines: 1),
                   user != null
-                      ? Text("${i18n.username}${i18n.colon}${user!.username}")
+                      ? SelectableText(
+                          "${i18n.username}${i18n.colon}${user!.username}",
+                          maxLines: 2,
+                          minLines: 1)
                       : Container(),
                 ],
               )),
