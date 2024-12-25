@@ -42,7 +42,7 @@ class HomeDrawer extends StatelessWidget {
                 },
               )
             : Container(),
-        auth.isAdmin == true
+        auth.isAdmin == true || auth.noUser == true
             ? ListTile(
                 leading: const Icon(Icons.manage_accounts),
                 title: Text(i18n.userManagemant),

@@ -92,6 +92,9 @@ class _NewUserPage extends State<NewUserPage> {
     }
     final i18n = AppLocalizations.of(context)!;
     final maxWidth = MediaQuery.of(context).size.width;
+    if (auth.noUser == true) {
+      _isAdmin = true;
+    }
     return Container(
       padding: maxWidth < 400
           ? const EdgeInsets.symmetric(vertical: 20, horizontal: 5)
@@ -159,16 +162,18 @@ class _NewUserPage extends State<NewUserPage> {
                     },
                     obscureText: !_passwordVisible,
                   )),
-                  auth.isRoot == true
+                  auth.isRoot == true || auth.noUser == true
                       ? _buildWithVecticalPadding(LabeledCheckbox(
                           value: _isAdmin,
-                          onChanged: (b) {
-                            if (b != null) {
-                              setState(() {
-                                _isAdmin = b;
-                              });
-                            }
-                          },
+                          onChanged: auth.noUser == true
+                              ? null
+                              : (b) {
+                                  if (b != null) {
+                                    setState(() {
+                                      _isAdmin = b;
+                                    });
+                                  }
+                                },
                           label: Text(i18n.admin)))
                       : Container(),
                   !_isAdmin

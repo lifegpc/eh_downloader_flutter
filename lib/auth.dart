@@ -16,6 +16,7 @@ class AuthInfo {
   ServerStatus? get status => _status;
   Token? _token;
   Token? get token => _token;
+  bool? get noUser => _status?.noUser;
   SharedToken? _sharedToken;
   SharedToken? get sharedToken => _sharedToken;
   bool get isAuthed => (_user != null);
@@ -26,14 +27,18 @@ class AuthInfo {
   bool? get isAdmin => _user?.isAdmin;
   bool? get isRoot => _user != null ? _user!.id == 0 : null;
   bool? get isDocker => _status?.isDocker;
-  bool? get canReadGallery =>
-      _user?.permissions.has(UserPermission.readGallery);
-  bool? get canEditGallery =>
-      _user?.permissions.has(UserPermission.editGallery);
-  bool? get canDeleteGallery =>
-      _user?.permissions.has(UserPermission.deleteGallery);
-  bool? get canManageTasks =>
-      _user?.permissions.has(UserPermission.manageTasks);
+  bool? get canReadGallery => noUser == true
+      ? true
+      : _user?.permissions.has(UserPermission.readGallery);
+  bool? get canEditGallery => noUser == true
+      ? true
+      : _user?.permissions.has(UserPermission.editGallery);
+  bool? get canDeleteGallery => noUser == true
+      ? true
+      : _user?.permissions.has(UserPermission.deleteGallery);
+  bool? get canManageTasks => noUser == true
+      ? true
+      : _user?.permissions.has(UserPermission.manageTasks);
   bool? get canShareGallery =>
       _user?.permissions.has(UserPermission.shareGallery);
   MeilisearchInfo? get meilisearch => _status?.meilisearch;

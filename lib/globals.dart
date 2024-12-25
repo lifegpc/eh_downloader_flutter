@@ -238,7 +238,7 @@ List<PopupMenuEntry<MoreVertSettings>> buildMoreVertSettings(
     list.add(PopupMenuItem(
         value: MoreVertSettings.taskManager, child: Text(i18n.taskManager)));
   }
-  if (path != "/sessions") {
+  if (path != "/sessions" && auth.noUser != true) {
     list.add(PopupMenuItem(
         value: MoreVertSettings.sessions, child: Text(i18n.sessionManagemant)));
   }

@@ -85,7 +85,7 @@ class _SettingsPage extends State<SettingsPage>
                     onTap: () {
                       context.push("/settings/cache");
                     }),
-                auth.isAdmin == true
+                auth.isAdmin == true || auth.noUser == true
                     ? ListTile(
                         leading: const Icon(Icons.admin_panel_settings),
                         title: Text(i18n.server),
