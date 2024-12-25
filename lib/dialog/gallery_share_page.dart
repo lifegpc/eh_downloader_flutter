@@ -53,6 +53,22 @@ Future<void> _add(int gid, DateTime? expired, AppLocalizations i18n) async {
   }
 }
 
+Future<void> _delete(String token, AppLocalizations i18n) async {
+  try {
+    (await api.deleteSharedToken(token, "gallery")).unwrap();
+    listener.tryEmit("gallery_share_token_removed", token);
+  } catch (e, stack) {
+    String errmsg = "${i18n.failedDeleteShare}$e";
+    if (e is (int, String)) {
+      _log.warning("Failed to delete shared token: $e");
+    } else {
+      _log.severe("Failed to delete shared token: $e\n$stack");
+    }
+    final snack = SnackBar(content: Text(errmsg));
+    rootScaffoldMessengerKey.currentState?.showSnackBar(snack);
+  }
+}
+
 class _ChangeDialog extends StatefulWidget {
   const _ChangeDialog(this.gid, {this.token});
   final int gid;
@@ -230,10 +246,22 @@ class _GallerySharePage extends State<GallerySharePage> {
     }
   }
 
+  void onTokenRemoved(dynamic arg) {
+    if (_lists == null) return;
+    final t = arg as String;
+    final ind = _lists!.indexWhere((a) => a.token.token == t);
+    if (ind != -1) {
+      setState(() {
+        _lists!.removeAt(ind);
+      });
+    }
+  }
+
   @override
   void initState() {
     listener.on("gallery_share_token_changed", onTokenChanged);
     listener.on("gallery_share_token_added", onTokenAdded);
+    listener.on("gallery_share_token_removed", onTokenRemoved);
     super.initState();
   }
 
@@ -242,6 +270,7 @@ class _GallerySharePage extends State<GallerySharePage> {
     _cancel?.cancel();
     listener.removeEventListener("gallery_share_token_changed", onTokenChanged);
     listener.removeEventListener("gallery_share_token_added", onTokenAdded);
+    listener.removeEventListener("gallery_share_token_removed", onTokenRemoved);
     super.dispose();
   }
 
@@ -319,7 +348,22 @@ class _GallerySharePage extends State<GallerySharePage> {
                           onPressed: () => showDialog(
                               context: context,
                               builder: (context) {
-                                return AlertDialog(title: Text(i18n.delete));
+                                return AlertDialog(
+                                    title: Text(i18n.delete),
+                                    content: Text(i18n.deleteShareConfirm),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            context.pop();
+                                            _delete(item.token.token, i18n);
+                                          },
+                                          child: Text(i18n.yes)),
+                                      TextButton(
+                                          onPressed: () {
+                                            context.pop();
+                                          },
+                                          child: Text(i18n.no)),
+                                    ]);
                               }),
                           icon: const Icon(Icons.delete)),
                     ]),

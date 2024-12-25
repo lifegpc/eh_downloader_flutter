@@ -355,5 +355,7 @@
     "lastUsedTime": "上次使用时间",
     "device": "设备",
     "failedDeleteSession": "删除会话失败：",
-    "allUser": "所有用户"
+    "allUser": "所有用户",
+    "deleteShareConfirm": "是否删除分享令牌？",
+    "failedDeleteShare": "删除分享令牌失败："
 }

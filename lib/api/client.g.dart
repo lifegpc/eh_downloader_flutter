@@ -1234,6 +1234,57 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<bool>> deleteSharedToken(
+    String token,
+    String type, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'token',
+      token,
+    ));
+    _data.fields.add(MapEntry(
+      'type',
+      type,
+    ));
+    final _options = _setStreamType<ApiResult<bool>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          '/shared_token',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<bool> _value;
+    try {
+      _value = ApiResult<bool>.fromJson(
+        _result.data!,
+        (json) => json as bool,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ApiResult<SharedTokenWithUrl>> shareGallery(
     int gid, {
     int? expired,

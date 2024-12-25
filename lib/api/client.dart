@@ -257,6 +257,11 @@ abstract class _EHApi {
       @Query("tag") String? tag,
       @Query("category") String? category,
       @CancelRequest() CancelToken? cancel});
+  @DELETE('/shared_token')
+  @MultiPart()
+  Future<ApiResult<bool>> deleteSharedToken(
+      @Part(name: "token") String token, @Part(name: "type") String type,
+      {@CancelRequest() CancelToken? cancel});
   @PUT('/shared_token')
   @MultiPart()
   Future<ApiResult<SharedTokenWithUrl>> shareGallery(@Part(name: "gid") int gid,

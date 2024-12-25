@@ -355,5 +355,7 @@
     "lastUsedTime": "Last used time",
     "device": "Device",
     "failedDeleteSession": "Failed to delete session: ",
-    "allUser": "All users"
+    "allUser": "All users",
+    "deleteShareConfirm": "Do you want to delete shared token?",
+    "failedDeleteShare": "Failed to delete shared token: "
 }
