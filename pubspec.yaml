@@ -41,11 +41,11 @@ dependencies:
   shared_preferences: ^2.2.0
   sqflite_common_ffi: ^2.3.3
   sqlite3_flutter_libs: any
-  super_clipboard: ^0.8.15
-  super_context_menu: ^0.8.15
+  super_clipboard: ^0.8.24
+  super_context_menu: ^0.8.24
   ua_parser_js: ^1.0.1
   user_agent_analyzer: ^5.0.0
-  web: ^0.5.0
+  web: ^1.1.0
   web_socket_channel: ^3.0.0
   window_manager: ^0.3.6
 
