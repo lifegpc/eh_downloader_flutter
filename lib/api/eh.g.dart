@@ -31,7 +31,7 @@ GalleryMetadataSingle _$GalleryMetadataSingleFromJson(
     GalleryMetadataSingle(
       gid: (json['gid'] as num).toInt(),
       token: json['token'] as String,
-      archiverKey: json['archiver_key'] as String,
+      archiverKey: json['archiver_key'] as String?,
       title: json['title'] as String,
       titleJpn: json['title_jpn'] as String,
       category: json['category'] as String,

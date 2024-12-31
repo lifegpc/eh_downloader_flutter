@@ -28,7 +28,7 @@ class GalleryMetadataSingle {
   const GalleryMetadataSingle({
     required this.gid,
     required this.token,
-    required this.archiverKey,
+    this.archiverKey,
     required this.title,
     required this.titleJpn,
     required this.category,
@@ -50,7 +50,7 @@ class GalleryMetadataSingle {
   final int gid;
   final String token;
   @JsonKey(name: 'archiver_key')
-  final String archiverKey;
+  final String? archiverKey;
   final String title;
   @JsonKey(name: 'title_jpn')
   final String titleJpn;
