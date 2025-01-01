@@ -10,7 +10,8 @@ enum UserPermission with EnumFlag {
   editGallery,
   deleteGallery,
   manageTasks,
-  shareGallery;
+  shareGallery,
+  queryLog;
 
   String localText(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
@@ -25,11 +26,13 @@ enum UserPermission with EnumFlag {
         return i18n.manageTasks;
       case UserPermission.shareGallery:
         return i18n.shareGallery;
+      case UserPermission.queryLog:
+        return i18n.queryLog;
     }
   }
 }
 
-const userPermissionAll = 31;
+const userPermissionAll = 63;
 
 class UserPermissions {
   UserPermissions(this.code);

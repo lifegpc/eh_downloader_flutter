@@ -357,5 +357,6 @@
     "failedDeleteSession": "删除会话失败：",
     "allUser": "所有用户",
     "deleteShareConfirm": "是否删除分享令牌？",
-    "failedDeleteShare": "删除分享令牌失败："
+    "failedDeleteShare": "删除分享令牌失败：",
+    "queryLog": "查询日志"
 }

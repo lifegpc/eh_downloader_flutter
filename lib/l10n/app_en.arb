@@ -357,5 +357,6 @@
     "failedDeleteSession": "Failed to delete session: ",
     "allUser": "All users",
     "deleteShareConfirm": "Do you want to delete shared token?",
-    "failedDeleteShare": "Failed to delete shared token: "
+    "failedDeleteShare": "Failed to delete shared token: ",
+    "queryLog": "Query log"
 }
