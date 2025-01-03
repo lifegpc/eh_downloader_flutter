@@ -358,5 +358,6 @@
     "allUser": "所有用户",
     "deleteShareConfirm": "是否删除分享令牌？",
     "failedDeleteShare": "删除分享令牌失败：",
-    "queryLog": "查询日志"
+    "queryLog": "查询日志",
+    "loggingStack": "为所有日志级别启用堆栈记录"
 }

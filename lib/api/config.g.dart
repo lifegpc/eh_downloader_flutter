@@ -51,6 +51,7 @@ Config _$ConfigFromJson(Map<String, dynamic> json) => Config(
       enableServerTiming: json['enable_server_timing'] as bool,
       thumbnailFormat:
           $enumDecode(_$ThumbnailFormatEnumMap, json['thumbnail_format']),
+      loggingStack: json['logging_stack'] as bool,
     );
 
 Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
@@ -91,6 +92,7 @@ Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
       'max_import_img_count': instance.maxImportImgCount,
       'enable_server_timing': instance.enableServerTiming,
       'thumbnail_format': _$ThumbnailFormatEnumMap[instance.thumbnailFormat]!,
+      'logging_stack': instance.loggingStack,
     };
 
 const _$ThumbnailMethodEnumMap = {
@@ -165,8 +167,10 @@ ConfigOptional _$ConfigOptionalFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$ImportMethodEnumMap, json['import_method']),
       maxImportImgCount: (json['max_import_img_count'] as num?)?.toInt(),
       enableServerTiming: json['enable_server_timing'] as bool?,
-    )..thumbnailFormat =
-        $enumDecodeNullable(_$ThumbnailFormatEnumMap, json['thumbnail_format']);
+      thumbnailFormat: $enumDecodeNullable(
+          _$ThumbnailFormatEnumMap, json['thumbnail_format']),
+      loggingStack: json['logging_stack'] as bool?,
+    );
 
 Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
     <String, dynamic>{
@@ -207,4 +211,5 @@ Map<String, dynamic> _$ConfigOptionalToJson(ConfigOptional instance) =>
       'max_import_img_count': instance.maxImportImgCount,
       'enable_server_timing': instance.enableServerTiming,
       'thumbnail_format': _$ThumbnailFormatEnumMap[instance.thumbnailFormat],
+      'logging_stack': instance.loggingStack,
     };

@@ -2283,6 +2283,218 @@ class __EHApi implements _EHApi {
     return _value;
   }
 
+  @override
+  Future<ApiResult<LogEntries>> queryLog({
+    int? page,
+    int? limit,
+    int? offset,
+    String? type,
+    int? minLevel,
+    String? allowedLevel,
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'limit': limit,
+      r'offset': offset,
+      r'type': type,
+      r'min_level': minLevel,
+      r'allowed_level': allowedLevel,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResult<LogEntries>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/log',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<LogEntries> _value;
+    try {
+      _value = ApiResult<LogEntries>.fromJson(
+        _result.data!,
+        (json) => LogEntries.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResult<bool>> clearLog({
+    String? type,
+    int? minLevel,
+    int? maxLevel,
+    String? deletedLevel,
+    String? endTime,
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    if (type != null) {
+      _data.fields.add(MapEntry(
+        'type',
+        type,
+      ));
+    }
+    if (minLevel != null) {
+      _data.fields.add(MapEntry(
+        'min_level',
+        minLevel.toString(),
+      ));
+    }
+    if (maxLevel != null) {
+      _data.fields.add(MapEntry(
+        'max_level',
+        maxLevel.toString(),
+      ));
+    }
+    if (deletedLevel != null) {
+      _data.fields.add(MapEntry(
+        'deleted_level',
+        deletedLevel,
+      ));
+    }
+    if (endTime != null) {
+      _data.fields.add(MapEntry(
+        'end_time',
+        endTime,
+      ));
+    }
+    final _options = _setStreamType<ApiResult<bool>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          '/log',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<bool> _value;
+    try {
+      _value = ApiResult<bool>.fromJson(
+        _result.data!,
+        (json) => json as bool,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResult<LogEntry>> getLog(
+    int id, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResult<LogEntry>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/log/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<LogEntry> _value;
+    try {
+      _value = ApiResult<LogEntry>.fromJson(
+        _result.data!,
+        (json) => LogEntry.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResult<bool>> deleteLog(
+    int id, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResult<bool>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          '/log/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<bool> _value;
+    try {
+      _value = ApiResult<bool>.fromJson(
+        _result.data!,
+        (json) => json as bool,
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

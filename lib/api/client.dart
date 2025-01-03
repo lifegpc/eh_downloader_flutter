@@ -11,6 +11,7 @@ import 'config.dart';
 import 'eh.dart';
 import 'file.dart';
 import 'gallery.dart';
+import 'log.dart';
 import 'status.dart';
 import 'tags.dart';
 import 'task.dart';
@@ -378,6 +379,32 @@ abstract class _EHApi {
       {@CancelRequest() CancelToken? cancel});
   @GET('/task/import_cfg')
   Future<ApiResult<DefaultImportConfig>> getDefaultImportConfig(
+      {@CancelRequest() CancelToken? cancel});
+
+  @GET('/log')
+  Future<ApiResult<LogEntries>> queryLog(
+      {@Query("page") int? page,
+      @Query("limit") int? limit,
+      @Query("offset") int? offset,
+      @Query("type") String? type,
+      @Query("min_level") int? minLevel,
+      @Query("allowed_level") String? allowedLevel,
+      @CancelRequest() CancelToken? cancel});
+  @DELETE('/log')
+  @MultiPart()
+  Future<ApiResult<bool>> clearLog(
+      {@Part(name: "type") String? type,
+      @Part(name: "min_level") int? minLevel,
+      @Part(name: "max_level") int? maxLevel,
+      @Part(name: "deleted_level") String? deletedLevel,
+      @Part(name: "end_time") String? endTime,
+      @CancelRequest() CancelToken? cancel});
+  @GET('/log/{id}')
+  Future<ApiResult<LogEntry>> getLog(@Path("id") int id,
+      {@CancelRequest() CancelToken? cancel});
+  @DELETE('/log/{id}')
+  @MultiPart()
+  Future<ApiResult<bool>> deleteLog(@Path("id") int id,
       {@CancelRequest() CancelToken? cancel});
 }
 

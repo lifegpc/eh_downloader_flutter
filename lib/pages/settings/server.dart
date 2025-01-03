@@ -329,6 +329,18 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
             },
             label: Text(i18n.enableServerTiming),
           )),
+          _buildWithVecticalPadding(LabeledCheckbox(
+            value: _now.loggingStack ?? _config!.loggingStack,
+            onChanged: (b) {
+              if (b != null) {
+                setState(() {
+                  _now.loggingStack = b;
+                  _changed = true;
+                });
+              }
+            },
+            label: Text(i18n.loggingStack),
+          )),
         ]));
   }
 

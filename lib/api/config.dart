@@ -83,6 +83,7 @@ class Config {
     required this.maxImportImgCount,
     required this.enableServerTiming,
     required this.thumbnailFormat,
+    required this.loggingStack,
   });
   bool cookies;
   @JsonKey(name: 'db_path')
@@ -151,6 +152,8 @@ class Config {
   bool enableServerTiming;
   @JsonKey(name: 'thumbnail_format')
   ThumbnailFormat thumbnailFormat;
+  @JsonKey(name: 'logging_stack')
+  bool loggingStack;
   factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigToJson(this);
 }
@@ -206,6 +209,8 @@ class ConfigOptional {
     this.importMethod,
     this.maxImportImgCount,
     this.enableServerTiming,
+    this.thumbnailFormat,
+    this.loggingStack,
   });
   String? cookies;
   @JsonKey(name: 'db_path')
@@ -274,6 +279,8 @@ class ConfigOptional {
   bool? enableServerTiming;
   @JsonKey(name: 'thumbnail_format')
   ThumbnailFormat? thumbnailFormat;
+  @JsonKey(name: 'logging_stack')
+  bool? loggingStack;
   factory ConfigOptional.fromJson(Map<String, dynamic> json) =>
       _$ConfigOptionalFromJson(json);
   Map<String, dynamic> toJson() => _$ConfigOptionalToJson(this);
