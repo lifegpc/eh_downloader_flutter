@@ -12,6 +12,7 @@ import '../api/file.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../utils.dart';
+import '../utils/clipboard.dart';
 import '../viewer/single.dart';
 import 'image.dart';
 
@@ -84,6 +85,7 @@ class _Thumbnail extends State<Thumbnail> {
   double? _iconSize;
   bool _disposed = false;
   String? _originalUrl;
+  ImageFmt _fmt = ImageFmt.jpg;
   void _onNsfwChanged(dynamic args) {
     final arguments = args as (String, bool)?;
     if (arguments == null) return;
@@ -146,6 +148,9 @@ class _Thumbnail extends State<Thumbnail> {
           if (cache != null) {
             setState(() {
               _data = cache!.$1;
+              var headers = Headers.fromMap(cache!.$2);
+              _fmt = ImageFmt.fromMimeType(headers.value("content-type")) ??
+                  ImageFmt.jpg;
               _uri = cache!.$3 ?? _originalUrl;
               _isLoading = false;
               _cancel = null;
@@ -168,6 +173,8 @@ class _Thumbnail extends State<Thumbnail> {
             'Failed to get thumbnail: ${re.response.statusCode} ${re.response.statusMessage}');
       }
       _uri = re.response.realUri.toString();
+      _fmt = ImageFmt.fromMimeType(re.response.headers.value("content-type")) ??
+          ImageFmt.jpg;
       final data = Uint8List.fromList(re.data);
       if (!_cancel!.isCancelled) {
         if (isImageCacheEnabled) {
@@ -273,6 +280,7 @@ class _Thumbnail extends State<Thumbnail> {
             uri: _uri,
             originalUri: oUri,
             fileName: _fileName,
+            fmt: _fmt,
             dir: _dir,
             isNsfw:
                 auth.canEditGallery == true ? () => widget._pMeta.isNsfw : null,

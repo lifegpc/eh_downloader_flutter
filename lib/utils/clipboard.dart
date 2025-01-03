@@ -8,7 +8,8 @@ import '../utils.dart';
 enum ImageFmt {
   jpg,
   png,
-  gif;
+  gif,
+  webp;
 
   String toMimeType() {
     switch (this) {
@@ -18,6 +19,8 @@ enum ImageFmt {
         return "image/png";
       case ImageFmt.gif:
         return "image/gif";
+      case ImageFmt.webp:
+        return "image/webp";
     }
   }
 
@@ -26,6 +29,8 @@ enum ImageFmt {
     switch (mime) {
       case "image/jpeg":
         return ImageFmt.jpg;
+      case "image/webp":
+        return ImageFmt.webp;
       case "image/png":
         return ImageFmt.png;
       case "image/gif":
@@ -46,11 +51,17 @@ Future<void> copyImageToClipboard(Uint8List data, ImageFmt fmt) async {
         ? Formats.jpeg(data)
         : fmt == ImageFmt.gif
             ? Formats.gif(data)
-            : Formats.png(data));
+            : fmt == ImageFmt.png
+                ? Formats.png(data)
+                : Formats.webp(data));
   } else {
     item.add(fmt == ImageFmt.gif
         ? Formats.gif(data)
-        : Formats.png(fmt == ImageFmt.jpg ? await jpgToPng(data) : data));
+        : Formats.png(fmt == ImageFmt.jpg
+            ? await jpgToPng(data)
+            : fmt == ImageFmt.webp
+                ? await webpToPng(data)
+                : data));
   }
   await SystemClipboard.instance!.write([item]);
 }
