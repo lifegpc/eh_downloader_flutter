@@ -15,6 +15,33 @@ enum LogLevel {
   warn,
   @JsonValue(6)
   error;
+
+  static LogLevel? tryParse(String level) {
+    int? levnum = int.tryParse(level);
+    if (levnum != null && levnum <= 6 && levnum >= 1) {
+      return LogLevel.values[levnum - 1];
+    }
+    switch (level) {
+      case 'trace':
+        return LogLevel.trace;
+      case 'debug':
+        return LogLevel.debug;
+      case 'log':
+        return LogLevel.log;
+      case 'info':
+        return LogLevel.info;
+      case 'warn':
+        return LogLevel.warn;
+      case 'error':
+        return LogLevel.error;
+      default:
+        return null;
+    }
+  }
+
+  int toInt() {
+    return index + 1;
+  }
 }
 
 @JsonSerializable()

@@ -51,6 +51,15 @@ class HomeDrawer extends StatelessWidget {
                   context.push("/users");
                 })
             : Container(),
+        auth.canQueryLog == true
+            ? ListTile(
+                leading: const Icon(Icons.list),
+                title: Text(i18n.serverLogs),
+                onTap: () {
+                  Scaffold.of(context).closeDrawer();
+                  context.push("/logs");
+                })
+            : Container(),
         ListTile(
           leading: const Icon(Icons.settings),
           title: Text(AppLocalizations.of(context)!.settings),

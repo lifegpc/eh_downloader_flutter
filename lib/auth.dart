@@ -41,7 +41,8 @@ class AuthInfo {
       : _user?.permissions.has(UserPermission.manageTasks);
   bool? get canShareGallery =>
       _user?.permissions.has(UserPermission.shareGallery);
-  bool? get canQueryLog => _user?.permissions.has(UserPermission.queryLog);
+  bool? get canQueryLog =>
+      noUser == true ? true : _user?.permissions.has(UserPermission.queryLog);
   MeilisearchInfo? get meilisearch => _status?.meilisearch;
   MeiliSearchClient? _meiliSearchClient;
   MeiliSearchClient? get meiliSearchClient => _meiliSearchClient;

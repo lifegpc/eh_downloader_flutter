@@ -14,6 +14,14 @@ packages:
     description: dart
     source: sdk
     version: "0.3.3"
+  advanced_datatable:
+    dependency: "direct main"
+    description:
+      name: advanced_datatable
+      sha256: "3537a9a811769c121e9c9d49006357d9e99af4bac030ce059825f5c904a0fb47"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   analyzer:
     dependency: transitive
     description:

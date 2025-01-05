@@ -359,5 +359,10 @@
     "deleteShareConfirm": "Do you want to delete shared token?",
     "failedDeleteShare": "Failed to delete shared token: ",
     "queryLog": "Query log",
-    "loggingStack": "Enable logging stack for all log levels"
+    "loggingStack": "Enable logging stack for all log levels",
+    "serverLogs": "Server logs",
+    "time": "Time",
+    "message": "Message",
+    "type": "Type",
+    "level": "Level"
 }

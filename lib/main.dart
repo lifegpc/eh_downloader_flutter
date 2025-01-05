@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'api/client.dart';
+import 'api/log.dart';
 import 'dialog/dialog_page.dart';
 import 'dialog/download_zip_page.dart';
 import 'dialog/edit_user_page.dart';
@@ -25,6 +26,7 @@ import 'pages/galleries.dart';
 import 'pages/gallery.dart';
 import 'pages/home.dart';
 import 'pages/login.dart';
+import 'pages/logs.dart';
 import 'pages/sessions.dart';
 import 'pages/settings.dart';
 import 'pages/settings/cache.dart';
@@ -361,6 +363,43 @@ final _router = GoRouter(
       path: SessionsPage.routeName,
       builder: (context, state) => SessionsPage(key: state.pageKey),
     ),
+    GoRoute(
+        name: LogsPage.routeName,
+        path: LogsPage.routeName,
+        builder: (context, state) {
+          int? page;
+          String? type;
+          LogLevel? minLevel;
+          List<LogLevel>? allowedLevel;
+          int? size;
+          if (state.uri.queryParameters.containsKey("page")) {
+            page = int.tryParse(state.uri.queryParameters["page"]!);
+          }
+          if (state.uri.queryParameters.containsKey("type")) {
+            type = state.uri.queryParameters["type"]!;
+          }
+          if (state.uri.queryParameters.containsKey("min_level")) {
+            minLevel =
+                LogLevel.tryParse(state.uri.queryParameters["min_level"]!);
+          }
+          if (state.uri.queryParameters.containsKey("allowed_level")) {
+            allowedLevel = state.uri.queryParameters["allowed_level"]!
+                .split(",")
+                .map((e) => LogLevel.tryParse(e))
+                .nonNulls
+                .toList();
+          }
+          if (state.uri.queryParameters.containsKey("size")) {
+            size = int.tryParse(state.uri.queryParameters["size"]!);
+          }
+          return LogsPage(
+              key: state.pageKey,
+              page: page,
+              type: type,
+              minLevel: minLevel,
+              allowedLevel: allowedLevel,
+              size: size);
+        }),
   ],
   observers: [
     _NavigatorObserver(),
