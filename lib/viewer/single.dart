@@ -299,8 +299,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
         : AppLocalizations.of(context)!.loading;
     if (isTop(context)) {
       if (!kIsWeb || (_data != null && kIsWeb)) {
-        setCurrentTitle(title, Theme.of(context).primaryColor.value,
-            includePrefix: false);
+        setCurrentTitle(title, includePrefix: false);
       }
     }
     if (_data == null || _files == null) {

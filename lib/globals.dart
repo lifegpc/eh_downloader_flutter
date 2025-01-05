@@ -494,7 +494,7 @@ String? _currentTitle;
 String? _prefix;
 final _titleLog = Logger("Title");
 
-void setCurrentTitle(String title, int primaryColor,
+void setCurrentTitle(String title,
     {bool isPrefix = false,
     bool includePrefix = true,
     bool usePrefix = false}) {
@@ -519,8 +519,7 @@ void setCurrentTitle(String title, int primaryColor,
     if (isPrefix) _prefix = title;
   } else {
     SystemChrome.setApplicationSwitcherDescription(
-            ApplicationSwitcherDescription(
-                label: title, primaryColor: primaryColor))
+            ApplicationSwitcherDescription(label: title))
         .then((_) {
       _currentTitle = title;
       if (isPrefix) _prefix = title;

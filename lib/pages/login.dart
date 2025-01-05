@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage>
     }
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle(i18n.login, Theme.of(context).primaryColor.value);
+      setCurrentTitle(i18n.login);
     }
     return Scaffold(
       appBar: AppBar(

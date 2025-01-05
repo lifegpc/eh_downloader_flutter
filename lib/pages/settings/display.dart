@@ -247,8 +247,7 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle("${i18n.settings} - ${i18n.display}",
-          Theme.of(context).primaryColor.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.display}");
     }
     return Scaffold(
         appBar: AppBar(

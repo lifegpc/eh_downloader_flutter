@@ -477,8 +477,7 @@ class _MainApp extends State<MainApp> with WidgetsBindingObserver {
       routerConfig: _router,
       onGenerateTitle: (context) {
         final title = AppLocalizations.of(context)!.title;
-        setCurrentTitle(title, Theme.of(context).primaryColor.value,
-            isPrefix: true);
+        setCurrentTitle(title, isPrefix: true);
         return title;
       },
       locale: _lang.toLocale(),

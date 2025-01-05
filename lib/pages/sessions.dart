@@ -113,9 +113,8 @@ class _SessionsPage extends State<SessionsPage>
     final isLoading = _tokens == null && _error == null;
     if (isLoading && !_isLoading) _fetchData();
     final i18n = AppLocalizations.of(context)!;
-    final th = Theme.of(context);
     if (isTop(context)) {
-      setCurrentTitle(i18n.sessionManagemant, th.primaryColor.value);
+      setCurrentTitle(i18n.sessionManagemant);
     }
     return Scaffold(
         appBar: _tokens == null && (auth.isAdmin != true || _users == null)

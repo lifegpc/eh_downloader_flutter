@@ -276,7 +276,7 @@ class _TaskManagerPage extends State<TaskManagerPage>
     }
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle(i18n.taskManager, Theme.of(context).primaryColor.value);
+      setCurrentTitle(i18n.taskManager);
     }
     final size = MediaQuery.of(context).size;
     return Scaffold(

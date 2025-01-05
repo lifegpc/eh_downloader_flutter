@@ -94,8 +94,7 @@ class _HomePage extends State<HomePage> with ThemeModeWidget, IsTopWidget2 {
   Widget build(BuildContext context) {
     tryInitApi(context);
     if (isTop(context)) {
-      setCurrentTitle("", Theme.of(context).primaryColor.value,
-          usePrefix: true);
+      setCurrentTitle("", usePrefix: true);
     }
     return Scaffold(
       appBar: AppBar(

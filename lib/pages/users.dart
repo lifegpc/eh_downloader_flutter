@@ -68,9 +68,8 @@ class _UsersPage extends State<UsersPage> with ThemeModeWidget, IsTopWidget2 {
     final isLoading = _users == null && _error == null;
     if (isLoading && !_isLoading) _fetchData();
     final i18n = AppLocalizations.of(context)!;
-    final th = Theme.of(context);
     if (isTop(context)) {
-      setCurrentTitle(i18n.userManagemant, th.primaryColor.value);
+      setCurrentTitle(i18n.userManagemant);
     }
     return Scaffold(
         appBar: _users == null

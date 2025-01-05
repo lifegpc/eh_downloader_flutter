@@ -180,7 +180,7 @@ class _GalleriesPage extends State<GalleriesPage>
                 ? i18n.categoryGalleries(widget.category!)
                 : i18n.galleries;
     if (isTop(context)) {
-      setCurrentTitle(title, Theme.of(context).primaryColor.value);
+      setCurrentTitle(title);
     }
     if (auth.canManageTasks == true &&
         !widget.hasExtra &&

@@ -312,8 +312,7 @@ class _UserSettingsPage extends State<UserSettingsPage>
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle("${i18n.settings} - ${i18n.user}",
-          Theme.of(context).primaryColor.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.user}");
     }
     return Scaffold(
       appBar: AppBar(

@@ -79,8 +79,7 @@ class _ServerUrlSettingsPage extends State<ServerUrlSettingsPage>
     ];
     if (hasBaseUrl) actions.add(buildMoreVertSettingsButon(context));
     if (isTop(context)) {
-      setCurrentTitle("${i18n.settings} - ${i18n.setServerUrl}",
-          Theme.of(context).primaryColor.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.setServerUrl}");
     }
     return Scaffold(
       appBar: AppBar(

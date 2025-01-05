@@ -105,8 +105,7 @@ class _CacheSettingsPage extends State<CacheSettingsPage>
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle("${i18n.settings} - ${i18n.cache}",
-          Theme.of(context).primaryColor.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.cache}");
     }
     return Scaffold(
         appBar: AppBar(

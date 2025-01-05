@@ -140,13 +140,11 @@ class _GalleryPage extends State<GalleryPage>
             : i18n.gallery;
     if (isTop(context)) {
       if (!kIsWeb || (_data != null && kIsWeb)) {
-        setCurrentTitle(title, Theme.of(context).primaryColor.value,
-            includePrefix: false);
+        setCurrentTitle(title, includePrefix: false);
       } else if (kIsWeb && widget.title != null) {
         // 设置预加载标题
         // Chrome 和 Firefox 必须尽快设置标题以确保在历史记录菜单显示正确的标题
-        setCurrentTitle(widget.title!, Theme.of(context).primaryColor.value,
-            includePrefix: false);
+        setCurrentTitle(widget.title!, includePrefix: false);
       }
     }
     return Scaffold(

@@ -119,9 +119,8 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
     final isLoading = _config == null && _error == null;
     if (isLoading && !_isLoading) _fetchData();
     final i18n = AppLocalizations.of(context)!;
-    final cs = Theme.of(context).colorScheme;
     if (isTop(context)) {
-      setCurrentTitle("${i18n.settings} - ${i18n.server}", cs.primary.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.server}");
     }
     return Scaffold(
         appBar: isLoading
@@ -167,7 +166,9 @@ class _ServerSettingsPage extends State<ServerSettingsPage>
           u.userInfo.isNotEmpty ||
           u.hasFragment ||
           !u.hasEmptyPath ||
-          !u.hasScheme) return i18n.invalidURLOrigin;
+          !u.hasScheme) {
+        return i18n.invalidURLOrigin;
+      }
       if (u.scheme != "http" && u.scheme != "https") {
         return i18n.httpHttpsNeeded;
       }

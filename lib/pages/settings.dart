@@ -35,7 +35,7 @@ class _SettingsPage extends State<SettingsPage>
     tryInitApi(context);
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle(i18n.settings, Theme.of(context).primaryColor.value);
+      setCurrentTitle(i18n.settings);
     }
     return Scaffold(
         appBar: AppBar(

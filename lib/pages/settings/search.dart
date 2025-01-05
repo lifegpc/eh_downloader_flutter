@@ -60,8 +60,7 @@ class _SearchSettingsPage extends State<SearchSettingsPage>
   Widget build(BuildContext context) {
     final i18n = AppLocalizations.of(context)!;
     if (isTop(context)) {
-      setCurrentTitle("${i18n.settings} - ${i18n.search}",
-          Theme.of(context).primaryColor.value);
+      setCurrentTitle("${i18n.settings} - ${i18n.search}");
     }
     return Scaffold(
       appBar: AppBar(
