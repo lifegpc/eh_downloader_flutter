@@ -58,11 +58,11 @@ class SessionCard extends StatelessWidget {
     final expiredTime =
         DateFormat.yMd(MainApp.of(context).lang.toLocale().toString())
             .add_jms()
-            .format(token.expired);
+            .format(token.expired.toLocal());
     final lastUsed =
         DateFormat.yMd(MainApp.of(context).lang.toLocale().toString())
             .add_jms()
-            .format(token.lastUsed);
+            .format(token.lastUsed.toLocal());
     return Card.outlined(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

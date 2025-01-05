@@ -383,8 +383,8 @@ class _TaskPage extends State<TaskPage> {
           ? Divider(indent: indent, endIndent: endIndent)
           : Container(),
       posted != null
-          ? _KeyValue(
-              i18n.posted, DateFormat.yMd(locale).add_jms().format(posted),
+          ? _KeyValue(i18n.posted,
+              DateFormat.yMd(locale).add_jms().format(posted.toLocal()),
               fontSize: 16)
           : Container(),
       Divider(indent: indent, endIndent: endIndent),

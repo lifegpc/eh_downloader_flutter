@@ -32,7 +32,7 @@ class GalleryInfoDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Rate(meta.rating, fontSize: 14),
-            Text(DateFormat.yMd(locale).add_jms().format(meta.posted),
+            Text(DateFormat.yMd(locale).add_jms().format(meta.posted.toLocal()),
                 style: TextStyle(color: cs.secondary)),
           ],
         ),

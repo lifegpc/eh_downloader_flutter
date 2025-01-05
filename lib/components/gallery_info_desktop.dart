@@ -127,7 +127,7 @@ class GalleryInfoDesktop extends StatelessWidget {
                                 "${i18n.posted}${i18n.colon}",
                                 DateFormat.yMd(locale)
                                     .add_jms()
-                                    .format(gData.meta.posted),
+                                    .format(gData.meta.posted.toLocal()),
                                 maxLines: 2,
                                 minLines: 1,
                                 fontSize: 12,
