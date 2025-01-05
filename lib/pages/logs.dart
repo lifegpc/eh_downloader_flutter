@@ -1,11 +1,11 @@
 import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:intl/intl.dart';
+import 'package:quiver/collection.dart';
 import '../api/log.dart';
 import '../globals.dart';
 import '../main.dart';
@@ -34,39 +34,54 @@ class LogsPage extends StatefulWidget {
 }
 
 class _LogDataSource extends AdvancedDataTableSource<LogEntry> {
-  _LogDataSource(this.logs,
+  _LogDataSource(
       {this.type,
       this.minLevel,
       this.allowedLevel,
       this.size = 10,
-      this.count,
       this.page = 1,
-      this.locale,
-      this.start = 0});
+      this.locale});
   final String? type;
   final LogLevel? minLevel;
   final List<LogLevel>? allowedLevel;
-  final int size;
+  int size;
   final String? locale;
   int? count;
-  int start;
   int page;
-  List<LogEntry> logs;
+  LruMap<int, List<LogEntry>> logs = LruMap(maximumSize: 20);
+  bool offsetMode = false;
+  List<LogEntry> offsetData = [];
   @override
-  bool get isRowCountApproximate => count == null;
+  bool get isRowCountApproximate => count != null;
   @override
-  int get rowCount => count ?? 10;
+  int get rowCount => count ?? 0;
   @override
   int get selectedRowCount => 0;
   @override
   Future<RemoteDataSourceDetails<LogEntry>> getNextPage(
       NextPageRequest pageRequest) async {
+    if (size != pageRequest.pageSize) {
+      size = pageRequest.pageSize;
+      logs.clear();
+    }
+    if (pageRequest.offset % size != 0) {
+      offsetMode = true;
+      offsetData = (await api.queryLog(
+              offset: pageRequest.offset,
+              limit: size,
+              minLevel: minLevel?.toInt(),
+              allowedLevel: allowedLevel?.map((e) => e.toInt()).join(","),
+              type: type))
+          .unwrap()
+          .datas;
+      return RemoteDataSourceDetails(count ?? offsetData.length, offsetData);
+    }
+    offsetMode = false;
     int npage = pageRequest.offset ~/ pageRequest.pageSize + 1;
     page = npage;
-    if ((logs.length >= pageRequest.offset + pageRequest.pageSize - start &&
-            pageRequest.offset >= start) ||
-        logs.length == count) {
-      return RemoteDataSourceDetails(count ?? logs.length, logs);
+    var log = logs[page];
+    if (log != null) {
+      return RemoteDataSourceDetails(count ?? log.length, log);
     }
     var data = (await api.queryLog(
             page: page,
@@ -75,29 +90,35 @@ class _LogDataSource extends AdvancedDataTableSource<LogEntry> {
             allowedLevel: allowedLevel?.map((e) => e.toInt()).join(","),
             limit: size))
         .unwrap();
-    count = data.count;
-    if (pageRequest.offset < start) {
-      logs.insertAll(0, data.datas);
-      start -= data.datas.length;
-    } else {
-      logs.addAll(data.datas);
+    if (count != data.count) {
+      logs.clear();
     }
-    return RemoteDataSourceDetails(count ?? logs.length, logs);
+    count = data.count;
+    logs[page] = data.datas;
+    return RemoteDataSourceDetails(count ?? data.datas.length, data.datas);
   }
 
-  @override
-  DataRow? getRow(int index) {
-    index += (page - 1) * size;
-    index -= start;
-    var log = logs.elementAtOrNull(index);
+  DataRow? getDataRow(LogEntry? log) {
     if (log == null) return null;
     return DataRow(cells: [
       DataCell(
           Text(DateFormat.yMd(locale).add_jms().format(log.time.toLocal()))),
-      DataCell(Text(log.message)),
+      DataCell(Text(log.message, maxLines: 2)),
       DataCell(Text(log.level.name)),
       DataCell(Text(log.type)),
     ]);
+  }
+
+  @override
+  DataRow? getRow(int index) {
+    if (offsetMode) {
+      var log = offsetData.elementAtOrNull(index);
+      return getDataRow(log);
+    }
+    var vlog = logs[page];
+    if (vlog == null) return null;
+    var log = vlog.elementAtOrNull(index);
+    return getDataRow(log);
   }
 }
 
@@ -106,39 +127,10 @@ class _LogsPage extends State<LogsPage> with ThemeModeWidget, IsTopWidget2 {
   String? _type;
   LogLevel? _minLevel;
   List<LogLevel>? _allowedLevel;
-  int _size = 50;
+  int _size = 10;
+  int _offset = 0;
   bool _pageMode = false;
   _LogDataSource? _dataSource;
-  CancelToken? _cancel;
-  bool _isLoading = false;
-  LogEntries? _firstPage;
-
-  Future<void> _fetchFirstPage() async {
-    try {
-      _cancel = CancelToken();
-      _isLoading = true;
-      _firstPage = (await api.queryLog(
-              page: _page ?? 1,
-              type: _type,
-              minLevel: _minLevel?.toInt(),
-              allowedLevel: _allowedLevel?.map((e) => e.toInt()).join(","),
-              limit: _size,
-              cancel: _cancel))
-          .unwrap();
-      if (!_cancel!.isCancelled) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (!_cancel!.isCancelled) {
-        _log.severe("Failed to load first page:", e);
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -152,10 +144,16 @@ class _LogsPage extends State<LogsPage> with ThemeModeWidget, IsTopWidget2 {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _cancel?.cancel();
-    super.dispose();
+  void updateRoute(BuildContext context) {
+    var params = {
+      "page": _page?.toString(),
+      "type": _type,
+      "min_level": _minLevel?.name,
+      "allowed_level": _allowedLevel?.map((e) => e.name).join(","),
+      "size": _size.toString(),
+    };
+    params.removeWhere((key, value) => value == null || value!.isEmpty);
+    context.replaceNamed("/logs", queryParameters: params);
   }
 
   @override
@@ -166,21 +164,15 @@ class _LogsPage extends State<LogsPage> with ThemeModeWidget, IsTopWidget2 {
       setCurrentTitle(i18n.serverLogs);
     }
     final locale = MainApp.of(context).lang.toLocale().toString();
-    bool isLoading = false;
     if (_pageMode) {
-      isLoading = _firstPage == null;
-      if (isLoading && !_isLoading) _fetchFirstPage();
-      if (_dataSource == null && _firstPage != null) {
-        _dataSource = _LogDataSource(_firstPage!.datas,
-            page: _page ?? 1,
-            type: _type,
-            minLevel: _minLevel,
-            allowedLevel: _allowedLevel,
-            size: _size,
-            count: _firstPage!.count,
-            locale: locale,
-            start: (_page ?? 1 - 1) * _size);
-      }
+      _dataSource ??= _LogDataSource(
+          page: _page ?? 1,
+          type: _type,
+          minLevel: _minLevel,
+          allowedLevel: _allowedLevel,
+          size: _size,
+          locale: locale);
+      _offset = ((_page ?? 1) - 1) * _size;
     }
     return Scaffold(
         appBar: AppBar(
@@ -198,29 +190,30 @@ class _LogsPage extends State<LogsPage> with ThemeModeWidget, IsTopWidget2 {
         ),
         body: _pageMode
             ? _dataSource != null
-                ? AdvancedPaginatedDataTable(
-                    columns: <DataColumn>[
+                ? SingleChildScrollView(
+                    child: AdvancedPaginatedDataTable(
+                        columns: <DataColumn>[
                         DataColumn(label: Text(i18n.time)),
                         DataColumn(label: Text(i18n.message)),
                         DataColumn(label: Text(i18n.level)),
                         DataColumn(label: Text(i18n.type)),
                       ],
-                    source: _dataSource!,
-                    rowsPerPage: _size,
-                    onPageChanged: (page) {
-                      _page = page ~/ _size + 1;
-                      var params = {
-                        "page": _page?.toString(),
-                        "type": _type,
-                        "min_level": _minLevel?.name,
-                        "allowed_level":
-                            _allowedLevel?.map((e) => e.name).join(","),
-                        "size": _size.toString(),
-                      };
-                      params.removeWhere(
-                          (key, value) => value == null || value!.isEmpty);
-                      context.replaceNamed("/logs", queryParameters: params);
-                    })
+                        source: _dataSource!,
+                        rowsPerPage: _size,
+                        onPageChanged: (page) {
+                          _page = page ~/ _size + 1;
+                          updateRoute(context);
+                        },
+                        showHorizontalScrollbarAlways: true,
+                        showFirstLastButtons: true,
+                        initialFirstRowIndex: _offset,
+                        onRowsPerPageChanged: (size) {
+                          setState(() {
+                            _size = size ?? 10;
+                            _page = _offset ~/ _size + 1;
+                            updateRoute(context);
+                          });
+                        }))
                 : const Center(child: CircularProgressIndicator())
             : Container());
   }
