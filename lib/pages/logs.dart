@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'dart:ui';
 import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
 import 'package:flutter/material.dart';
@@ -100,12 +102,14 @@ class _LogDataSource extends AdvancedDataTableSource<LogEntry> {
 
   DataRow? getDataRow(LogEntry? log) {
     if (log == null) return null;
+    var messages = log.message.split("\n");
+    var message = messages.getRange(0, min(messages.length, 2)).join("\n");
     return DataRow(cells: [
-      DataCell(
-          Text(DateFormat.yMd(locale).add_jms().format(log.time.toLocal()))),
-      DataCell(Text(log.message, maxLines: 2)),
-      DataCell(Text(log.level.name)),
-      DataCell(Text(log.type)),
+      DataCell(SelectableText(
+          DateFormat.yMd(locale).add_jms().format(log.time.toLocal()))),
+      DataCell(SelectableText(message, minLines: 1, maxLines: 2)),
+      DataCell(SelectableText(log.level.name)),
+      DataCell(SelectableText(log.type)),
     ]);
   }
 
@@ -191,29 +195,38 @@ class _LogsPage extends State<LogsPage> with ThemeModeWidget, IsTopWidget2 {
         body: _pageMode
             ? _dataSource != null
                 ? SingleChildScrollView(
-                    child: AdvancedPaginatedDataTable(
-                        columns: <DataColumn>[
-                        DataColumn(label: Text(i18n.time)),
-                        DataColumn(label: Text(i18n.message)),
-                        DataColumn(label: Text(i18n.level)),
-                        DataColumn(label: Text(i18n.type)),
-                      ],
-                        source: _dataSource!,
-                        rowsPerPage: _size,
-                        onPageChanged: (page) {
-                          _page = page ~/ _size + 1;
-                          updateRoute(context);
-                        },
-                        showHorizontalScrollbarAlways: true,
-                        showFirstLastButtons: true,
-                        initialFirstRowIndex: _offset,
-                        onRowsPerPageChanged: (size) {
-                          setState(() {
-                            _size = size ?? 10;
-                            _page = _offset ~/ _size + 1;
-                            updateRoute(context);
-                          });
-                        }))
+                    child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context).copyWith(
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse,
+                            PointerDeviceKind.trackpad,
+                          },
+                        ),
+                        child: (AdvancedPaginatedDataTable(
+                            columns: <DataColumn>[
+                              DataColumn(label: Text(i18n.time)),
+                              DataColumn(label: Text(i18n.message)),
+                              DataColumn(label: Text(i18n.level)),
+                              DataColumn(label: Text(i18n.type)),
+                            ],
+                            source: _dataSource!,
+                            rowsPerPage: _size,
+                            onPageChanged: (page) {
+                              _page = page ~/ _size + 1;
+                              updateRoute(context);
+                            },
+                            showHorizontalScrollbarAlways: true,
+                            showFirstLastButtons: true,
+                            initialFirstRowIndex: _offset,
+                            onRowsPerPageChanged: (size) {
+                              setState(() {
+                                _size = size ?? 10;
+                                _page = _offset ~/ _size + 1;
+                                updateRoute(context);
+                              });
+                            },
+                            addEmptyRows: false))))
                 : const Center(child: CircularProgressIndicator())
             : Container());
   }
