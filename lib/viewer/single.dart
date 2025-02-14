@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keymap/keymap.dart';
 import 'package:logging/logging.dart';
+import 'package:path/path.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:quiver/collection.dart';
@@ -18,6 +19,7 @@ import '../components/fit_text.dart';
 import '../globals.dart';
 import '../platform/media_query.dart';
 import '../provider/dio_image_provider.dart';
+import '../utils.dart';
 import '../utils/clipboard.dart';
 
 final _log = Logger("SinglePageViewer");
@@ -247,6 +249,19 @@ class _SinglePageViewer extends State<SinglePageViewer>
                   copyImageToClipboard(data!, fmt).catchError((err) {
                     _log.warning("Failed to copy image to clipboard:", err);
                   });
+                }));
+            list.add(MenuAction(
+                title: i18n.saveAs,
+                callback: () {
+                  try {
+                    platformPath.saveFile(
+                        basenameWithoutExtension(_pages![_index].name),
+                        fmt.toMimeType(),
+                        data,
+                        dir: isAndroid ? widget.gid!.toString() : "");
+                  } catch (err, stack) {
+                    _log.warning("Failed to save image: $err\n$stack");
+                  }
                 }));
           }
           return Menu(children: list);
