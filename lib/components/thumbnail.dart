@@ -56,14 +56,18 @@ class Thumbnail extends StatefulWidget {
 
   int get height => _height != null
       ? _height!
-      : _pMeta.height > _pMeta.width
-          ? _max
-          : _max * _pMeta.height ~/ _pMeta.width;
+      : _width != null
+          ? _width! * _pMeta.height ~/ _pMeta.width
+          : _pMeta.height > _pMeta.width
+              ? _max
+              : _max * _pMeta.height ~/ _pMeta.width;
   int get width => _width != null
       ? _width!
-      : _pMeta.width > _pMeta.height
-          ? _max
-          : _max * _pMeta.width ~/ _pMeta.height;
+      : _height != null
+          ? _height! * _pMeta.width ~/ _pMeta.height
+          : _pMeta.width > _pMeta.height
+              ? _max
+              : _max * _pMeta.width ~/ _pMeta.height;
 
   @override
   State<Thumbnail> createState() => _Thumbnail();
