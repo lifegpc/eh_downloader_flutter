@@ -49,7 +49,7 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
         : Container();
     final mainWidget = Padding(
         padding: useMobile
-            ? const EdgeInsets.symmetric(vertical: 2, horizontal: 4)
+            ? EdgeInsets.symmetric(vertical: 2 / dpr, horizontal: 4 / dpr)
             : EdgeInsets.all(8 / dpr),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           SelectableText(

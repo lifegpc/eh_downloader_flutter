@@ -311,8 +311,8 @@ class _Thumbnail extends State<Thumbnail> {
             child: timg)
         : timg;
     return SizedBox(
-        width: widget.width * dpr,
-        height: widget.height * dpr,
+        width: widget.width / dpr,
+        height: widget.height / dpr,
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
