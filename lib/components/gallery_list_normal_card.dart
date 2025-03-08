@@ -33,9 +33,8 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width;
     bool useMobile = maxWidth <= 810;
-    final max =
-        ((useMobile ? 150 : 200) * MediaQuery.of(context).devicePixelRatio)
-            .toInt();
+    final dpr = MediaQuery.of(context).devicePixelRatio;
+    final max = ((useMobile ? 150 : 200) * dpr).toInt();
     final fileId =
         _pMeta != null ? _files?.files[_pMeta!.token]?.firstOrNull?.id : null;
     final locale = MainApp.of(context).lang.toLocale().toString();
@@ -50,8 +49,8 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
         : Container();
     final mainWidget = Padding(
         padding: useMobile
-            ? const EdgeInsets.symmetric(vertical: 2, horizontal: 8)
-            : const EdgeInsets.all(16),
+            ? const EdgeInsets.symmetric(vertical: 2, horizontal: 4)
+            : EdgeInsets.all(8 / dpr),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           SelectableText(
               useMobile ? widget.gMeta.preferredTitle : widget.gMeta.title,
