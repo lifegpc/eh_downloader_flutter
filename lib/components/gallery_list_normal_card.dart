@@ -46,7 +46,7 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
             files: _files,
             gid: widget.gMeta.gid,
             fileId: fileId,
-            max: max)
+            height: max)
         : Container();
     final mainWidget = Padding(
         padding: useMobile
@@ -58,13 +58,21 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 16, color: cs.primary),
               textAlign: TextAlign.center,
-              minLines: useMobile ? 1 : null,
-              maxLines: useMobile ? 3 : null),
+              minLines: useMobile ? 1 : 1,
+              maxLines: useMobile
+                  ? 3
+                  : widget.gMeta.titleJpn.isEmpty
+                      ? 4
+                      : 2),
           useMobile || widget.gMeta.titleJpn.isEmpty
               ? Container()
-              : SelectableText(widget.gMeta.titleJpn,
+              : SelectableText(
+                  widget.gMeta.titleJpn,
                   style: TextStyle(color: cs.secondary),
-                  textAlign: TextAlign.center),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  minLines: 1,
+                ),
           Expanded(child: Container()),
           Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
