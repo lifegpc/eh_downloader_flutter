@@ -273,6 +273,7 @@ class _Thumbnail extends State<Thumbnail> {
     final isLoading = _data == null && _error == null;
     final isNsfw = widget._pMeta.isNsfw;
     final i18n = AppLocalizations.of(context)!;
+    final dpr = MediaQuery.of(context).devicePixelRatio;
     if (isLoading && !_isLoading) _fetchData();
     _iconSize ??= Theme.of(context).iconTheme.size;
     String? oUri;
@@ -310,8 +311,8 @@ class _Thumbnail extends State<Thumbnail> {
             child: timg)
         : timg;
     return SizedBox(
-        width: widget.width.toDouble(),
-        height: widget.height.toDouble(),
+        width: widget.width * dpr,
+        height: widget.height * dpr,
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : _data != null
