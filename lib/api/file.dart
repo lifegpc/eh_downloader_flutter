@@ -41,8 +41,8 @@ class EhFileExtend {
 }
 
 class EhFiles {
-  const EhFiles({required this.files});
-  final Map<String, List<EhFileBasic>> files;
+  EhFiles({required this.files});
+  Map<String, List<EhFileBasic>> files;
   factory EhFiles.fromJson(Map<String, dynamic> json) => EhFiles(
         files: (json).map(
           (k, e) => MapEntry(
@@ -52,4 +52,7 @@ class EhFiles {
                   .toList()),
         ),
       );
+  void merge(EhFiles another) {
+    files.addAll(another.files);
+  }
 }

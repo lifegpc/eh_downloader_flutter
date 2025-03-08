@@ -364,5 +364,6 @@
     "time": "Time",
     "message": "Message",
     "type": "Type",
-    "level": "Level"
+    "level": "Level",
+    "galleryListDisplayMode": "Display mode for gallery list"
 }

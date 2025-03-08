@@ -30,6 +30,8 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   ThumbnailSize _oriThumbnailSize = ThumbnailSize.medium;
   ThumbnailGenMethod _oriThumbnailMethod = ThumbnailGenMethod.unknown;
   ThumbnailAlign _oriThumbnailAlign = ThumbnailAlign.center;
+  GalleryListDisplayMode _oriGalleryListDisplayMode =
+      GalleryListDisplayMode.normal;
   bool _displayAd = false;
   Lang _lang = Lang.system;
   bool _preventScreenCapture = false;
@@ -40,6 +42,8 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
   ThumbnailSize _thumbnailSize = ThumbnailSize.medium;
   ThumbnailGenMethod _thumbnailMethod = ThumbnailGenMethod.unknown;
   ThumbnailAlign _thumbnailAlign = ThumbnailAlign.center;
+  GalleryListDisplayMode _galleryListDisplayMode =
+      GalleryListDisplayMode.normal;
   @override
   void initState() {
     super.initState();
@@ -127,6 +131,14 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
       _oriThumbnailAlign = ThumbnailAlign.center;
       _thumbnailAlign = ThumbnailAlign.center;
     }
+    try {
+      _galleryListDisplayMode = GalleryListDisplayMode
+          .values[prefs.getInt("galleryListDisplayMode") ?? 1];
+      _oriGalleryListDisplayMode = _galleryListDisplayMode;
+    } catch (e) {
+      _log.warning("Failed to get galleryListDisplayMode:", e);
+      _galleryListDisplayMode = GalleryListDisplayMode.normal;
+    }
   }
 
   void fallback(BuildContext context) {
@@ -148,6 +160,7 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
       _thumbnailSize = ThumbnailSize.medium;
       _thumbnailMethod = ThumbnailGenMethod.unknown;
       _thumbnailAlign = ThumbnailAlign.center;
+      _galleryListDisplayMode = GalleryListDisplayMode.normal;
     });
   }
 
@@ -238,6 +251,13 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
         _log.warning("Failed to save thumbnailAlign");
       } else {
         _oriThumbnailAlign = _thumbnailAlign;
+      }
+    }
+    if (_galleryListDisplayMode != _oriGalleryListDisplayMode) {
+      if (!await prefs.setInt(
+          "galleryListDisplayMode", _galleryListDisplayMode.index)) {
+        re = false;
+        _log.warning("Failed to save galleryListDisplayMode");
       }
     }
     return re;
@@ -454,6 +474,27 @@ class _DisplaySettingsPage extends State<DisplaySettingsPage>
                                       labelText: i18n.thumbnailAlign,
                                       helperText: i18n.thumbnailAlignHelp,
                                       helperMaxLines: 3,
+                                    ))),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                child: DropdownButtonFormField<
+                                        GalleryListDisplayMode>(
+                                    items: GalleryListDisplayMode.values
+                                        .map((e) => DropdownMenuItem(
+                                            value: e, child: Text(e.name)))
+                                        .toList(),
+                                    value: _galleryListDisplayMode,
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          _galleryListDisplayMode = value;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      labelText: i18n.galleryListDisplayMode,
                                     ))),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

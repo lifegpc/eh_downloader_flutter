@@ -27,6 +27,14 @@ class ApiResult<T> {
     }
   }
 
+  T? unwrapOrNull() {
+    if (ok) {
+      return data;
+    } else {
+      return null;
+    }
+  }
+
   (int, String) unwrapErr() {
     if (ok) {
       return throw 'unwrap_err called on ok ApiResult';

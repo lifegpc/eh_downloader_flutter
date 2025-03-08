@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:logging/logging.dart';
 import '../api/client.dart';
+import '../api/file.dart';
 import '../api/gallery.dart';
+import '../components/gallery_list_normal_card.dart';
 import '../globals.dart';
 import '../main.dart';
 
@@ -52,6 +54,8 @@ class _GalleriesPage extends State<GalleriesPage>
   CancelToken? _tagCancel;
   bool _isFetchingTag = false;
   bool _fetchedTag = false;
+  late GalleryThumbnails _thumbnails;
+  late EhFiles _files;
 
   final PagingController<int, GMeta> _pagingController =
       PagingController(firstPageKey: 0);
@@ -66,6 +70,22 @@ class _GalleriesPage extends State<GalleriesPage>
               category: widget.category,
               tag: widget.tag))
           .unwrap();
+      final thumbnails =
+          (await api.getGalleriesThumbnail(list.map((e) => e.gid).toList()))
+              .unwrap();
+      _thumbnails.merge(thumbnails);
+      final files = (await api.getFiles(list
+              .map((e) {
+                var thumbnail = _thumbnails.thumbnails[e.gid];
+                if (thumbnail != null && thumbnail.ok) {
+                  return thumbnail.unwrap().token;
+                }
+              })
+              .where((t) => t != null)
+              .cast<String>()
+              .toList()))
+          .unwrap();
+      _files.merge(files);
       final isLastPage = list.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(list);
@@ -118,6 +138,8 @@ class _GalleriesPage extends State<GalleriesPage>
       _fetchPage(pageKey);
     });
     _translatedTag = widget.translatedTag;
+    _thumbnails = GalleryThumbnails(thumbnails: {});
+    _files = EhFiles(files: {});
     listener.on("user_logined", _onStateChanged);
     listener.on("meilisearch_enabled", _onStateChanged);
     super.initState();
@@ -212,6 +234,13 @@ class _GalleriesPage extends State<GalleriesPage>
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<GMeta>(
               itemBuilder: (context, item, index) {
+            final displayMode = GalleryListDisplayMode
+                .values[prefs.getInt("galleryListDisplayMode") ?? 1];
+            if (displayMode == GalleryListDisplayMode.normal) {
+              return GalleryListNormalCard(item,
+                  files: _files,
+                  pMeta: _thumbnails.thumbnails[item.gid]?.unwrapOrNull());
+            }
             return ListTile(
               title: Text(item.preferredTitle),
               onTap: () {

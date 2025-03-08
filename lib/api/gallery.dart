@@ -239,10 +239,10 @@ class GMetaSearchInfo {
 }
 
 class GalleryThumbnails {
-  const GalleryThumbnails({
+  GalleryThumbnails({
     required this.thumbnails,
   });
-  final Map<int, ApiResult<ExtendedPMeta>> thumbnails;
+  Map<int, ApiResult<ExtendedPMeta>> thumbnails;
   factory GalleryThumbnails.fromJson(Map<String, dynamic> json) =>
       GalleryThumbnails(
           thumbnails: json.map((key, value) => MapEntry(
@@ -251,4 +251,17 @@ class GalleryThumbnails {
                   value as Map<String, dynamic>,
                   (json) =>
                       ExtendedPMeta.fromJson(json as Map<String, dynamic>)))));
+  void merge(GalleryThumbnails another) {
+    another.thumbnails.forEach((key, value) {
+      if (thumbnails.containsKey(key)) {
+        if (value.ok) {
+          thumbnails[key] = value;
+        } else if (!thumbnails[key]!.ok) {
+          thumbnails[key] = value;
+        }
+      } else {
+        thumbnails[key] = value;
+      }
+    });
+  }
 }

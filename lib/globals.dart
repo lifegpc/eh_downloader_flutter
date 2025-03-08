@@ -451,6 +451,12 @@ enum ThumbnailSize {
   }
 }
 
+enum GalleryListDisplayMode {
+  minimal,
+  normal,
+  extended;
+}
+
 final _authLog = Logger("AuthLog");
 
 void clearAllStates(BuildContext context) {
