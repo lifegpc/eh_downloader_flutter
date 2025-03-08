@@ -237,9 +237,15 @@ class _GalleriesPage extends State<GalleriesPage>
             final displayMode = GalleryListDisplayMode
                 .values[prefs.getInt("galleryListDisplayMode") ?? 1];
             if (displayMode == GalleryListDisplayMode.normal) {
-              return GalleryListNormalCard(item,
-                  files: _files,
-                  pMeta: _thumbnails.thumbnails[item.gid]?.unwrapOrNull());
+              return InkWell(
+                  onTap: () {
+                    context.push("/gallery/${item.gid}",
+                        extra: GalleryPageExtra(title: item.preferredTitle));
+                  },
+                  mouseCursor: SystemMouseCursors.basic,
+                  child: GalleryListNormalCard(item,
+                      files: _files,
+                      pMeta: _thumbnails.thumbnails[item.gid]?.unwrapOrNull()));
             }
             return ListTile(
               title: Text(item.preferredTitle),
