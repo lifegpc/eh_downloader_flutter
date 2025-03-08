@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,12 +7,17 @@ import '../api/file.dart';
 import '../api/gallery.dart';
 import '../globals.dart';
 import '../main.dart';
+import '../platform/ua.dart' as ua;
+import '../utils.dart';
 import 'rate.dart';
+import 'scroll_parent.dart';
 import 'thumbnail.dart';
 
 class GalleryListNormalCard extends StatefulWidget {
-  const GalleryListNormalCard(this.gMeta, {super.key, this.files, this.pMeta});
+  const GalleryListNormalCard(this.gMeta,
+      {super.key, this.controller, this.files, this.pMeta});
   final GMeta gMeta;
+  final ScrollController? controller;
   final ExtendedPMeta? pMeta;
   final EhFiles? files;
 
@@ -52,42 +58,66 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
             ? EdgeInsets.symmetric(vertical: 2 / dpr, horizontal: 4 / dpr)
             : EdgeInsets.all(8 / dpr),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SelectableText(
-              useMobile ? widget.gMeta.preferredTitle : widget.gMeta.title,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 16, color: cs.primary),
-              textAlign: TextAlign.center,
-              minLines: useMobile ? 1 : 1,
-              maxLines: useMobile
-                  ? 3
-                  : widget.gMeta.titleJpn.isEmpty
-                      ? 4
-                      : 2),
+          ScrollParent(
+              controller: widget.controller,
+              child: SelectableText(
+                  useMobile ? widget.gMeta.preferredTitle : widget.gMeta.title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: cs.primary),
+                  textAlign: TextAlign.center,
+                  minLines: useMobile ? 1 : 1,
+                  maxLines: useMobile
+                      ? 3
+                      : widget.gMeta.titleJpn.isEmpty
+                          ? 4
+                          : 2,
+                  scrollPhysics: isIOS || ua.isSafari
+                      ? const ClampingScrollPhysics()
+                      : null)),
           useMobile || widget.gMeta.titleJpn.isEmpty
               ? Container()
-              : SelectableText(
-                  widget.gMeta.titleJpn,
-                  style: TextStyle(color: cs.secondary),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  minLines: 1,
-                ),
+              : ScrollParent(
+                  controller: widget.controller,
+                  child: SelectableText(widget.gMeta.titleJpn,
+                      style: TextStyle(color: cs.secondary),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      minLines: 1,
+                      scrollPhysics: isIOS || ua.isSafari
+                          ? const ClampingScrollPhysics()
+                          : null)),
           Expanded(child: Container()),
           Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            SelectableText.rich(TextSpan(
+                text: widget.gMeta.uploader,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: cs.primary),
+                mouseCursor: SystemMouseCursors.click,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    context.pushNamed("/galleries",
+                        queryParameters: {"uploader": widget.gMeta.uploader});
+                  })),
+          ]),
+          Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SelectableText.rich(TextSpan(
-                  text: widget.gMeta.uploader,
+              Rate(widget.gMeta.rating, fontSize: 14, selectable: true),
+            ]),
+            Expanded(child: Container()),
+            Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              SelectableText("${widget.gMeta.filecount}P",
                   style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: cs.primary),
-                  mouseCursor: SystemMouseCursors.click,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      context.pushNamed("/galleries",
-                          queryParameters: {"uploader": widget.gMeta.uploader});
-                    })),
-              Rate(widget.gMeta.rating, fontSize: 14, selectable: true),
+                      color: cs.primary,
+                      fontWeight: FontWeight.bold)),
+            ]),
+          ]),
+          Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SelectableText.rich(TextSpan(
                   text: widget.gMeta.category,
                   style: TextStyle(
@@ -103,11 +133,6 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
             ]),
             Expanded(child: Container()),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              SelectableText("${widget.gMeta.filecount}P",
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: cs.primary,
-                      fontWeight: FontWeight.bold)),
               SelectableText(
                   DateFormat.yMd(locale)
                       .add_jms()
@@ -127,7 +152,8 @@ class _GalleryListNormalCard extends State<GalleryListNormalCard> {
             child: Row(children: [
               useMobile
                   ? ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth / 2),
+                      constraints: BoxConstraints(
+                          maxWidth: min(maxWidth / 2, maxWidth - 260)),
                       child: thumbnailWidget)
                   : thumbnailWidget,
               Expanded(child: mainWidget),

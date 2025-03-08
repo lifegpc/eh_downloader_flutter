@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -45,6 +46,7 @@ class GalleriesPage extends StatefulWidget {
 
 class _GalleriesPage extends State<GalleriesPage>
     with ThemeModeWidget, IsTopWidget2 {
+  final ScrollController controller = ScrollController();
   static const int _pageSize = 20;
   bool? _sortByGid;
   SortByGid _sortByGid2 = SortByGid.none;
@@ -229,33 +231,45 @@ class _GalleriesPage extends State<GalleriesPage>
               buildThemeModeIcon(context),
               buildMoreVertSettingsButon(context),
             ]),
-        body: PagedListView<int, GMeta>(
-          physics: const AlwaysScrollableScrollPhysics(),
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<GMeta>(
-              itemBuilder: (context, item, index) {
-            final displayMode = GalleryListDisplayMode
-                .values[prefs.getInt("galleryListDisplayMode") ?? 1];
-            if (displayMode == GalleryListDisplayMode.normal) {
-              return InkWell(
+        body: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.trackpad,
+              },
+            ),
+            child: PagedListView<int, GMeta>(
+              physics: const AlwaysScrollableScrollPhysics(),
+              pagingController: _pagingController,
+              scrollController: controller,
+              builderDelegate: PagedChildBuilderDelegate<GMeta>(
+                  itemBuilder: (context, item, index) {
+                final displayMode = GalleryListDisplayMode
+                    .values[prefs.getInt("galleryListDisplayMode") ?? 1];
+                if (displayMode == GalleryListDisplayMode.normal) {
+                  return InkWell(
+                      onTap: () {
+                        context.push("/gallery/${item.gid}",
+                            extra:
+                                GalleryPageExtra(title: item.preferredTitle));
+                      },
+                      mouseCursor: SystemMouseCursors.basic,
+                      child: GalleryListNormalCard(item,
+                          controller: controller,
+                          files: _files,
+                          pMeta: _thumbnails.thumbnails[item.gid]
+                              ?.unwrapOrNull()));
+                }
+                return ListTile(
+                  title: Text(item.preferredTitle),
                   onTap: () {
                     context.push("/gallery/${item.gid}",
                         extra: GalleryPageExtra(title: item.preferredTitle));
                   },
-                  mouseCursor: SystemMouseCursors.basic,
-                  child: GalleryListNormalCard(item,
-                      files: _files,
-                      pMeta: _thumbnails.thumbnails[item.gid]?.unwrapOrNull()));
-            }
-            return ListTile(
-              title: Text(item.preferredTitle),
-              onTap: () {
-                context.push("/gallery/${item.gid}",
-                    extra: GalleryPageExtra(title: item.preferredTitle));
-              },
-            );
-          }),
-        ));
+                );
+              }),
+            )));
   }
 
   @override

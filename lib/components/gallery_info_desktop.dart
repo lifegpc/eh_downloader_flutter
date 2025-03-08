@@ -165,7 +165,9 @@ class GalleryInfoDesktop extends StatelessWidget {
                               )
                             ])),
                         const VerticalDivider(indent: 10, endIndent: 10),
-                        Expanded(child: TagsPanel(gData.tags)),
+                        Expanded(
+                            child:
+                                TagsPanel(gData.tags, controller: controller)),
                         const VerticalDivider(indent: 10, endIndent: 10),
                         SizedBox(
                             width: 150,
