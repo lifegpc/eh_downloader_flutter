@@ -248,6 +248,12 @@ abstract class _EHApi {
   Future<ApiResult<GMetaInfos>> _getGalleriesMeta(@Path("gids") String gids,
       // ignore: unused_element
       {@CancelRequest() CancelToken? cancel});
+  @GET('/gallery/thumbnail/{gids}')
+  // ignore: unused_element
+  Future<ApiResult<GalleryThumbnails>> _getGalleriesThumbnail(
+      @Path("gids") String gids,
+      // ignore: unused_element
+      {@CancelRequest() CancelToken? cancel});
   @GET('/gallery/list')
   Future<ApiResult<List<GMeta>>> listGalleries(
       {@Query("all") bool? all,
@@ -453,6 +459,11 @@ class EHApi extends __EHApi {
   Future<ApiResult<GMetaInfos>> getGalleriesMeta(List<int> gids,
       {@CancelRequest() CancelToken? cancel}) {
     return _getGalleriesMeta(gids.join(","), cancel: cancel);
+  }
+
+  Future<ApiResult<GalleryThumbnails>> getGalleriesThumbnail(List<int> gids,
+      {CancelToken? cancel}) {
+    return _getGalleriesThumbnail(gids.join(","), cancel: cancel);
   }
 
   Future<ApiResult<Tags>> getTags(List<int> ids, {CancelToken? cancel}) {

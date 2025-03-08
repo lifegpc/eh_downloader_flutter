@@ -1175,6 +1175,47 @@ class __EHApi implements _EHApi {
   }
 
   @override
+  Future<ApiResult<GalleryThumbnails>> _getGalleriesThumbnail(
+    String gids, {
+    CancelToken? cancel,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResult<GalleryThumbnails>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/gallery/thumbnail/${gids}',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancel,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResult<GalleryThumbnails> _value;
+    try {
+      _value = ApiResult<GalleryThumbnails>.fromJson(
+        _result.data!,
+        (json) => GalleryThumbnails.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ApiResult<List<GMeta>>> listGalleries({
     bool? all,
     int? offset,

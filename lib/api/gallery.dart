@@ -237,3 +237,18 @@ class GMetaSearchInfo {
           : titleJpn
       : title;
 }
+
+class GalleryThumbnails {
+  const GalleryThumbnails({
+    required this.thumbnails,
+  });
+  final Map<int, ApiResult<ExtendedPMeta>> thumbnails;
+  factory GalleryThumbnails.fromJson(Map<String, dynamic> json) =>
+      GalleryThumbnails(
+          thumbnails: json.map((key, value) => MapEntry(
+              int.parse(key),
+              ApiResult<ExtendedPMeta>.fromJson(
+                  value as Map<String, dynamic>,
+                  (json) =>
+                      ExtendedPMeta.fromJson(json as Map<String, dynamic>)))));
+}
