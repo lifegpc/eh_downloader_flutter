@@ -140,6 +140,10 @@ class AuthInfo {
       }
       _checked = true;
       await getServerStatus();
+      if (noUser == true) {
+        if (!tasks.inited) tasks.init();
+        await tasks.connect();
+      }
       return re.ok;
     } finally {
       _isChecking = false;
