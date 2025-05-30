@@ -1,7 +1,7 @@
 import 'package:eh_downloader_flutter/globals.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:eh_downloader_flutter/l10n_gen/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../api/file.dart';

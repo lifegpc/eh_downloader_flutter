@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:enum_flag/enum_flag.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:eh_downloader_flutter/l10n_gen/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../api/task.dart';
 import '../components/task.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:eh_downloader_flutter/l10n_gen/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keymap/keymap.dart';
 import 'package:logging/logging.dart';

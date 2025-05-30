@@ -9,7 +9,7 @@ import 'package:flutter/services.dart'
     show ApplicationSwitcherDescription, SystemChrome;
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     show LocaleType;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:eh_downloader_flutter/l10n_gen/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:meilisearch/meilisearch.dart';
