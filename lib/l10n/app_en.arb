@@ -365,5 +365,6 @@
     "message": "Message",
     "type": "Type",
     "level": "Level",
-    "galleryListDisplayMode": "Display mode for gallery list"
+    "galleryListDisplayMode": "Display mode for gallery list",
+    "noGalleriesFound": "No galleries found."
 }

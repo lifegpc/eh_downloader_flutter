@@ -365,5 +365,6 @@
     "message": "消息",
     "type": "类型",
     "level": "级别",
-    "galleryListDisplayMode": "画廊列表的显示模式"
+    "galleryListDisplayMode": "画廊列表的显示模式",
+    "noGalleriesFound": "找不到画廊"
 }

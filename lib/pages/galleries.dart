@@ -72,22 +72,24 @@ class _GalleriesPage extends State<GalleriesPage>
               category: widget.category,
               tag: widget.tag))
           .unwrap();
-      final thumbnails =
-          (await api.getGalleriesThumbnail(list.map((e) => e.gid).toList()))
-              .unwrap();
-      _thumbnails.merge(thumbnails);
-      final files = (await api.getFiles(list
-              .map((e) {
-                var thumbnail = _thumbnails.thumbnails[e.gid];
-                if (thumbnail != null && thumbnail.ok) {
-                  return thumbnail.unwrap().token;
-                }
-              })
-              .where((t) => t != null)
-              .cast<String>()
-              .toList()))
-          .unwrap();
-      _files.merge(files);
+      if (list.isNotEmpty) {
+        final thumbnails =
+            (await api.getGalleriesThumbnail(list.map((e) => e.gid).toList()))
+                .unwrap();
+        _thumbnails.merge(thumbnails);
+        final files = (await api.getFiles(list
+                .map((e) {
+                  var thumbnail = _thumbnails.thumbnails[e.gid];
+                  if (thumbnail != null && thumbnail.ok) {
+                    return thumbnail.unwrap().token;
+                  }
+                })
+                .where((t) => t != null)
+                .cast<String>()
+                .toList()))
+            .unwrap();
+        _files.merge(files);
+      }
       final isLastPage = list.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(list);
@@ -268,6 +270,10 @@ class _GalleriesPage extends State<GalleriesPage>
                         extra: GalleryPageExtra(title: item.preferredTitle));
                   },
                 );
+              }, noItemsFoundIndicatorBuilder: (context) {
+                return Center(
+                    child: Text(i18n.noGalleriesFound,
+                        style: Theme.of(context).textTheme.titleLarge));
               }),
             )));
   }
