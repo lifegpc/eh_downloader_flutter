@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.lifegpc.ehf"
-    compileSdk = 34
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId = "com.lifegpc.ehf"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
