@@ -62,9 +62,158 @@ class _SinglePageViewer extends State<SinglePageViewer>
   Object? _error;
   bool _inited = false;
   bool _showMenu = false;
+  int _scrollMethod = 0;
+  double? _sliderValue;
   late PhotoViewController _photoViewController;
   final LruMap<int, (Uint8List, String?, String)> _imgData =
       LruMap(maximumSize: 20);
+  Axis get _scrollAxis => _scrollMethod >= 2 ? Axis.vertical : Axis.horizontal;
+  bool get _isReverseScroll => _scrollMethod == 1 || _scrollMethod == 3;
+  void _showPageSettings(BuildContext context) {
+    final i18n = AppLocalizations.of(context)!;
+    final options = [
+      MapEntry(0, i18n.scrollDirectionDefault),
+      MapEntry(1, i18n.scrollDirectionRtl),
+      MapEntry(2, i18n.scrollDirectionDown),
+      MapEntry(3, i18n.scrollDirectionUp)
+    ];
+
+    showModalBottomSheet(
+        context: context,
+        builder: (sheetContext) {
+          var selected = _scrollMethod;
+          return StatefulBuilder(builder: (context, setSheetState) {
+            return SafeArea(
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  ListTile(
+                    dense: true,
+                    title: Text(i18n.scrollDirection),
+                  ),
+                  for (final entry in options)
+                    RadioListTile<int>(
+                        title: Text(entry.value),
+                        value: entry.key,
+                        groupValue: selected,
+                        onChanged: (value) async {
+                          if (value == null) return;
+                          setSheetState(() {
+                            selected = value;
+                          });
+                          Navigator.of(sheetContext).pop();
+                          final saved =
+                              await prefs.setInt("single_viewer_scroll_method", value);
+                          if (!saved) {
+                            _log.warning(
+                                "Failed to save single_viewer_scroll_method.");
+                            return;
+                          }
+                          if (!mounted) return;
+                          setState(() {
+                            _scrollMethod = value;
+                          });
+                        })
+                ]));
+          });
+        });
+  }
+
+  Widget _buildBottomBar(BuildContext context) {
+    if (!_showMenu || _pages == null) return Container();
+    final theme = Theme.of(context);
+    final textStyle = theme.textTheme.bodyMedium;
+    final pagesCount = _pages!.length;
+    if (pagesCount == 0) return Container();
+    final double maxPage = (pagesCount - 1).toDouble();
+    final double currentValue =
+        (_sliderValue ?? _index.toDouble()).clamp(0.0, maxPage).toDouble();
+    final displayIndex = currentValue.round().clamp(0, pagesCount - 1);
+
+    Slider buildSlider() {
+      return Slider(
+        value: currentValue,
+        min: 0,
+        max: maxPage,
+        divisions: pagesCount - 1,
+        onChanged: (value) {
+          setState(() {
+            _sliderValue = value;
+          });
+        },
+        onChangeEnd: (value) {
+          final target = value.round().clamp(0, pagesCount - 1);
+          if (target != _index) {
+            _pageController.animateToPage(target,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut);
+          }
+          setState(() {
+            _sliderValue = target.toDouble();
+          });
+        },
+      );
+    }
+
+    return Positioned(
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: SafeArea(
+            minimum: const EdgeInsets.all(16),
+            child: LayoutBuilder(builder: (context, constraints) {
+              final isWide = constraints.maxWidth > 480;
+              return Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                      color: theme.colorScheme.surface.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(16)),
+                  child: isWide
+                      ? Row(children: [
+                          Text(
+                            "${displayIndex + 1} / $pagesCount",
+                            style: textStyle,
+                          ),
+                          if (pagesCount > 1) ...[
+                            const SizedBox(width: 16),
+                            Expanded(child: buildSlider()),
+                            const SizedBox(width: 16),
+                          ] else ...[
+                            const Spacer(),
+                            const SizedBox(width: 16),
+                          ],
+                          IconButton(
+                              onPressed: () {
+                                _showPageSettings(context);
+                              },
+                              icon: const Icon(Icons.settings))
+                        ])
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (pagesCount > 1) ...[
+                              buildSlider(),
+                              const SizedBox(height: 12),
+                            ],
+                            Row(children: [
+                              Text(
+                                "${displayIndex + 1} / $pagesCount",
+                                style: textStyle,
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                  onPressed: () {
+                                    _showPageSettings(context);
+                                  },
+                                  icon: const Icon(Icons.settings))
+                            ])
+                          ],
+                        ));
+            })));
+  }
   void _updatePages() {
     if (_data == null) return;
     final displayAd = prefs.getBool("displayAd") ?? false;
@@ -76,6 +225,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
       _pageController = PageController(initialPage: _index);
       _inited = true;
     }
+    _sliderValue = _index.toDouble();
   }
 
   @override
@@ -84,6 +234,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
     _updatePages();
     _files = widget.files;
     _back = "/gallery/${widget.gid}";
+    _scrollMethod = prefs.getInt("single_viewer_scroll_method") ?? 0;
     _photoViewController = PhotoViewController();
     super.initState();
   }
@@ -139,6 +290,8 @@ class _SinglePageViewer extends State<SinglePageViewer>
       scrollPhysics: const BouncingScrollPhysics(),
       pageController: _pageController,
       itemCount: _pages!.length,
+      scrollDirection: _scrollAxis,
+      reverse: _isReverseScroll,
       builder: (BuildContext context, int index) {
         final data = _pages![index];
         final f = _files!.files[data.token]!.first;
@@ -160,7 +313,10 @@ class _SinglePageViewer extends State<SinglePageViewer>
         );
       },
       onPageChanged: (index) {
-        _index = index;
+        setState(() {
+          _index = index;
+          _sliderValue = index.toDouble();
+        });
         SchedulerBinding.instance.addPostFrameCallback((_) {
           _onPageChanged(context);
         });
@@ -170,26 +326,55 @@ class _SinglePageViewer extends State<SinglePageViewer>
 
   Widget _buildWithKeyboardSupport(BuildContext context,
       {required Widget child}) {
+    void goPrevious() {
+      if (_index > 0) {
+        _pageController.previousPage(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut);
+      }
+    }
+
+    void goNext() {
+      if (_index < _pages!.length - 1) {
+        _pageController.nextPage(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut);
+      }
+    }
+
+    final bindings = <KeyAction>[];
+    if (_scrollAxis == Axis.horizontal) {
+      if (_isReverseScroll) {
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowLeft, "next page", () => goNext()));
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowRight, "previous page", () => goPrevious()));
+      } else {
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowLeft, "previous page", () => goPrevious()));
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowRight, "next page", () => goNext()));
+      }
+    } else {
+      if (_isReverseScroll) {
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowUp, "next page", () => goNext()));
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowDown, "previous page", () => goPrevious()));
+      } else {
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowUp, "previous page", () => goPrevious()));
+        bindings.add(KeyAction(
+            LogicalKeyboardKey.arrowDown, "next page", () => goNext()));
+      }
+    }
+
+    bindings.add(KeyAction(LogicalKeyboardKey.backspace, "back", () {
+      context.canPop() ? context.pop() : context.go(_back);
+    }));
+
     return KeyboardWidget(
-      bindings: [
-        KeyAction(LogicalKeyboardKey.arrowLeft, "previous page", () {
-          if (_index > 0) {
-            _pageController.previousPage(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut);
-          }
-        }),
-        KeyAction(LogicalKeyboardKey.arrowRight, "next page", () {
-          if (_index < _pages!.length - 1) {
-            _pageController.nextPage(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut);
-          }
-        }),
-        KeyAction(LogicalKeyboardKey.backspace, "back", () {
-          context.canPop() ? context.pop() : context.go(_back);
-        }),
-      ],
+      bindings: bindings,
       child: child,
     );
   }
@@ -254,11 +439,11 @@ class _SinglePageViewer extends State<SinglePageViewer>
                 title: i18n.saveAs,
                 callback: () {
                   try {
-                    platformPath.saveFile(
-                        basenameWithoutExtension(_pages![_index].name),
-                        fmt.toMimeType(),
-                        data,
-                        dir: isAndroid ? widget.gid!.toString() : "");
+                        platformPath.saveFile(
+                            basenameWithoutExtension(_pages![_index].name),
+                            fmt.toMimeType(),
+                            data,
+                            dir: isAndroid ? widget.gid.toString() : "");
                   } catch (err, stack) {
                     _log.warning("Failed to save image: $err\n$stack");
                   }
@@ -360,6 +545,7 @@ class _SinglePageViewer extends State<SinglePageViewer>
       body: Stack(children: [
         _buildViewer(context),
         _buildTopAppBar(context),
+        _buildBottomBar(context),
       ]),
     );
   }
